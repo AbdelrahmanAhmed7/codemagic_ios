@@ -71,11 +71,12 @@ Widget build(BuildContext context) {
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               obscureText: _obscure,
-              onChanged: (value) {
-                widget.onChanged?.call(value);
-                // Revalidate when user types
-                fieldState.validate();
-              },
+          onChanged: (value) {
+            widget.onChanged?.call(value);
+            // Trigger FormField state updates so validation and error clearing happen while typing
+            fieldState.didChange(value);
+            fieldState.validate();
+          },
               style: TextStyle(fontSize: 14.sp),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
@@ -116,6 +117,9 @@ Widget build(BuildContext context) {
                 focusedBorder: _buildBorder(AppColors.primaryClr),
                 errorBorder: _buildBorder(AppColors.errorClr),
                 focusedErrorBorder: _buildBorder(AppColors.errorClr),
+                // Hide internal error render space; we show error text below the field
+                errorStyle: const TextStyle(height: 0, fontSize: 0),
+                errorMaxLines: 1,
               ),
             ),
           ),
