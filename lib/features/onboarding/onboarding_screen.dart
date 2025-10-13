@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           children: [
             Align(
-              alignment: Alignment.topRight,
+              alignment: Alignment.topLeft,
               child: TextButton(onPressed: _finish, child: const Text("Skip")),
             ),
             Expanded(
@@ -168,12 +168,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   GestureDetector(
                     onTap: _nextPage,
                     child: Container(
-                      width: 120,
-                      height: 45,
+                      width: 245.w,
+                      height: 56.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF0139FE), Color(0xFF0C0C0F)],
+                          colors: [Color(0xFF4285F4), Color(0xFF0139FE)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),

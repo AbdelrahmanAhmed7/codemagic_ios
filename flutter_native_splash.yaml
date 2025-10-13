@@ -2,7 +2,7 @@ flutter_native_splash:
   color: "#EAF4FE"
   image: assets/logo/Logo.png
   branding: assets/logo/We Care.png
-  branding_mode: bottom
+  branding_mode: center
   android_gravity: center
   ios_content_mode: center
   android_12:

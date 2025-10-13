@@ -1,4 +1,3 @@
-// file: widgets/app_text_field.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -52,62 +51,79 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: _width.w,
-      height: _height.h,
-      child: TextFormField(
-        enabled: widget.enabled,
-        validator: widget.validator,
-        controller: widget.controller,
-        keyboardType: widget.keyboardType,
-        obscureText: _obscure,
-        onChanged: widget.onChanged,
-        style: TextStyle(fontSize: 14.sp),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-          hintText: widget.hintText,
-          hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
-          filled: true,
-          fillColor: Colors.transparent,
-          isDense: true,
-          // prefix image
-          prefixIcon: widget.prefixImagePath != null
-              ? Padding(
-                  padding: EdgeInsets.only(left: 12.w, right: 8.w),
-                  child: Image.asset(
-                    widget.prefixImagePath!,
-                    width: 24.w,
-                    height: 30.h,
-                    fit: BoxFit.contain,
-                  ),
-                )
-              : null,
-          prefixIconConstraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
-          // suffix eye for password
-          suffixIcon: widget.isPassword
-              ? IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
-                  icon: Icon(
-                    _obscure ? Icons.visibility_off : Icons.visibility,
-                    size: 20.w,
-                    color: Colors.grey[700],
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscure = !_obscure;
-                    });
-                  },
-                )
-              : null,
-          enabledBorder: _buildBorder(widget.errorText == null ? Colors.grey.shade300 : AppColors.errorClr),
-          focusedBorder: _buildBorder(AppColors.primaryClr),
-          errorBorder: _buildBorder(AppColors.errorClr),
-          focusedErrorBorder: _buildBorder(AppColors.errorClr),
-          errorText: widget.errorText,
+Widget build(BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SizedBox(
+        width: _width.w,
+        height: _height.h,
+        child: TextFormField(
+          enabled: widget.enabled,
+          validator: widget.validator,
+          controller: widget.controller,
+          keyboardType: widget.keyboardType,
+          obscureText: _obscure,
+          onChanged: widget.onChanged,
+          style: TextStyle(fontSize: 14.sp),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+            hintText: widget.hintText,
+            hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
+            filled: true,
+            fillColor: Colors.transparent,
+            isDense: true,
+            prefixIcon: widget.prefixImagePath != null
+                ? Padding(
+                    padding: EdgeInsets.only(left: 12.w, right: 8.w),
+                    child: Image.asset(
+                      widget.prefixImagePath!,
+                      width: 24.w,
+                      height: 30.h,
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                : null,
+            prefixIconConstraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+                    icon: Icon(
+                      _obscure ? Icons.visibility_off : Icons.visibility,
+                      size: 20.w,
+                      color: Colors.grey[700],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscure = !_obscure;
+                      });
+                    },
+                  )
+                : null,
+            enabledBorder: _buildBorder(Colors.grey.shade300),
+            focusedBorder: _buildBorder(AppColors.primaryClr),
+            errorBorder: _buildBorder(AppColors.errorClr),
+            focusedErrorBorder: _buildBorder(AppColors.errorClr),
+
+            errorStyle: const TextStyle(height: 0),
+            errorMaxLines: 1,
+          ),
         ),
       ),
-    );
-  }
+      if (widget.errorText != null)
+        Padding(
+          padding: EdgeInsets.only(top: 6.h, left: 8.w),
+          child: Text(
+            widget.errorText!,
+            style: TextStyle(
+              color: AppColors.errorClr,
+              fontSize: 12.sp,
+              height: 1.2,
+            ),
+          ),
+        ),
+    ],
+  );
+}
 }

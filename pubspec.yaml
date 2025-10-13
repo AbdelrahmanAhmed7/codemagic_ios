@@ -66,6 +66,7 @@ flutter:
   assets:
     - assets/logo/
     - assets/onboarding/
+    - assets/signup/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -84,7 +85,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/Roboto-SemiBold.ttf
           weight: 600
         - asset: assets/fonts/Roboto-Medium.ttf
           weight: 500

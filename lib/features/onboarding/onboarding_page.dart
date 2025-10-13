@@ -10,28 +10,50 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 68.h),
-        Image.asset(
-          model.image,
-          width: 238.w,
-          height: 272.h,
-          fit: BoxFit.contain,
+    return SafeArea(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 40.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Image.asset(
+                model.image,
+                width: 280.w,
+                height: 280.h,
+                fit: BoxFit.contain,
+              ),
+            ),
+            SizedBox(height: 40.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Text(
+                model.title,
+                style: AppTextStyles.font20BlackSemiBold.copyWith(
+                  fontSize: 22.sp,
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Text(
+                model.description,
+                style: AppTextStyles.font16GreyRegular.copyWith(
+                  fontSize: 16.sp,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(height: 40.h),
+          ],
         ),
-        SizedBox(height: 48.h),
-        Text(
-          model.title,
-          style: AppTextStyles.font20BlackSemiBold,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 16.h),
-        Text(
-          model.description,
-          style: AppTextStyles.font16GreyRegular,
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
     );
   }
 }
