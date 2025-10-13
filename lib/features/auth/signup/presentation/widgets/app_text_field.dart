@@ -73,7 +73,6 @@ Widget build(BuildContext context) {
               obscureText: _obscure,
           onChanged: (value) {
             widget.onChanged?.call(value);
-            // Trigger FormField state updates so validation and error clearing happen while typing
             fieldState.didChange(value);
             fieldState.validate();
           },
@@ -117,7 +116,6 @@ Widget build(BuildContext context) {
                 focusedBorder: _buildBorder(AppColors.primaryClr),
                 errorBorder: _buildBorder(AppColors.errorClr),
                 focusedErrorBorder: _buildBorder(AppColors.errorClr),
-                // Hide internal error render space; we show error text below the field
                 errorStyle: const TextStyle(height: 0, fontSize: 0),
                 errorMaxLines: 1,
               ),

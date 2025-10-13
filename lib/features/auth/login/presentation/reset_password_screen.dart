@@ -54,12 +54,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   "Congratulations!",
                   style: AppTextStyles.font20BlackSemiBold.copyWith(
                     fontSize: 24.sp,
+                    decoration: TextDecoration.none,
                   ),
                 ),
                 SizedBox(height: 16.h),
                 Text(
                   "Password changed successfully You’ll be redirected to the login screen now",
-                  style: AppTextStyles.font14GreyRegular,
+                  style: AppTextStyles.font14GreyRegular.copyWith(
+                    decoration: TextDecoration.none,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -79,8 +82,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     });
   }
-
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

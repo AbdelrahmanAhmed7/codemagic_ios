@@ -75,11 +75,12 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
             children: [
               Row(
                 children: [
-                  SizedBox(height: 30.w,),
+                  SizedBox(height: 60.w,),
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.go('/forget-password'),
                   ),
+                  SizedBox(width: 30.w,),
                   Text(
                     'Forgot Password',
                     style: AppTextStyles.font20BlackSemiBold,
