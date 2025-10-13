@@ -38,11 +38,20 @@ dependencies:
   go_router: ^16.2.4
   flutter_screenutil: ^5.9.3
   flutter_native_splash: ^2.4.6
+  firebase_core: ^4.1.1
+  json_serializable: ^6.11.1
+  freezed: ^3.2.3
+  equatable: ^2.0.7
+  retrofit:
+  json_annotation:
+  freezed_annotation: ^3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner:
+  retrofit_generator:
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

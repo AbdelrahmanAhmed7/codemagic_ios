@@ -52,78 +52,88 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
 Widget build(BuildContext context) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SizedBox(
-        width: _width.w,
-        height: _height.h,
-        child: TextFormField(
-          enabled: widget.enabled,
-          validator: widget.validator,
-          controller: widget.controller,
-          keyboardType: widget.keyboardType,
-          obscureText: _obscure,
-          onChanged: widget.onChanged,
-          style: TextStyle(fontSize: 14.sp),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-            hintText: widget.hintText,
-            hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
-            filled: true,
-            fillColor: Colors.transparent,
-            isDense: true,
-            prefixIcon: widget.prefixImagePath != null
-                ? Padding(
-                    padding: EdgeInsets.only(left: 12.w, right: 8.w),
-                    child: Image.asset(
-                      widget.prefixImagePath!,
-                      width: 16.w,
-                      height: 24.h,
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                : null,
-            prefixIconConstraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
-            suffixIcon: widget.isPassword
-                ? IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
-                    icon: Icon(
-                      _obscure ? Icons.visibility_off : Icons.visibility,
-                      size: 20.w,
-                      color: Colors.grey[700],
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscure = !_obscure;
-                      });
-                    },
-                  )
-                : null,
-            enabledBorder: _buildBorder(Colors.grey.shade300),
-            focusedBorder: _buildBorder(AppColors.primaryClr),
-            errorBorder: _buildBorder(AppColors.errorClr),
-            focusedErrorBorder: _buildBorder(AppColors.errorClr),
+  return FormField<String>(
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    validator: widget.validator,
+    builder: (fieldState) {
+      final String? localError = fieldState.errorText;
+      final String? externalError = widget.errorText;
+      final String? effectiveError = externalError ?? localError;
 
-            errorStyle: const TextStyle(height: 0),
-            errorMaxLines: 1,
-          ),
-        ),
-      ),
-      if (widget.errorText != null)
-        Padding(
-          padding: EdgeInsets.only(top: 6.h, left: 8.w),
-          child: Text(
-            widget.errorText!,
-            style: TextStyle(
-              color: AppColors.errorClr,
-              fontSize: 12.sp,
-              height: 1.2,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: _width.w,
+            height: _height.h,
+            child: TextField(
+              enabled: widget.enabled,
+              controller: widget.controller,
+              keyboardType: widget.keyboardType,
+              obscureText: _obscure,
+              onChanged: (value) {
+                widget.onChanged?.call(value);
+                // Revalidate when user types
+                fieldState.validate();
+              },
+              style: TextStyle(fontSize: 14.sp),
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                hintText: widget.hintText,
+                hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                filled: true,
+                fillColor: Colors.transparent,
+                isDense: true,
+                prefixIcon: widget.prefixImagePath != null
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 12.w, right: 8.w),
+                        child: Image.asset(
+                          widget.prefixImagePath!,
+                          width: 16.w,
+                          height: 24.h,
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    : null,
+                prefixIconConstraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+                suffixIcon: widget.isPassword
+                    ? IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+                        icon: Icon(
+                          _obscure ? Icons.visibility_off : Icons.visibility,
+                          size: 20.w,
+                          color: Colors.grey[700],
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscure = !_obscure;
+                          });
+                        },
+                      )
+                    : null,
+                enabledBorder: _buildBorder(Colors.grey.shade300),
+                focusedBorder: _buildBorder(AppColors.primaryClr),
+                errorBorder: _buildBorder(AppColors.errorClr),
+                focusedErrorBorder: _buildBorder(AppColors.errorClr),
+              ),
             ),
           ),
-        ),
-    ],
+          if (effectiveError != null)
+            Padding(
+              padding: EdgeInsets.only(top: 6.h, left: 8.w),
+              child: Text(
+                effectiveError,
+                style: TextStyle(
+                  color: AppColors.errorClr,
+                  fontSize: 12.sp,
+                  height: 1.2,
+                ),
+              ),
+            ),
+        ],
+      );
+    },
   );
 }
 }
