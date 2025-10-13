@@ -5,16 +5,16 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
 
-class OtpScreen extends StatefulWidget {
+class PasswordOtpScreen extends StatefulWidget {
   final String phoneNumber;
 
-  const OtpScreen({super.key, required this.phoneNumber});
+  const PasswordOtpScreen({super.key, required this.phoneNumber});
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  State<PasswordOtpScreen> createState() => _PasswordOtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
   final _formKey = GlobalKey<FormState>();
   final List<TextEditingController> _controllers =
       List.generate(4, (_) => TextEditingController());
@@ -59,7 +59,7 @@ class _OtpScreenState extends State<OtpScreen> {
     if (_formKey.currentState!.validate()) {
       final otp = _controllers.map((c) => c.text).join();
       // TODO: handle OTP verification logic
-      context.go('/account-verified');
+      context.go('/reset-password');
     }
   }
 
@@ -75,20 +75,20 @@ class _OtpScreenState extends State<OtpScreen> {
             children: [
               Row(
                 children: [
+                  SizedBox(height: 30.w,),
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                   ),
-                  SizedBox(width: 30.w,),
                   Text(
-                    'Account Verification',
+                    'Forgot Password',
                     style: AppTextStyles.font20BlackSemiBold,
                   ),
                 ],
               ),
               SizedBox(height: 44 .h),
               Text(
-                'Verify Account',
+                'OTP Verification',
                 style: AppTextStyles.font20BlackSemiBold,
               ),
               SizedBox(height: 12.h),

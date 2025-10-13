@@ -78,8 +78,8 @@ Widget build(BuildContext context) {
                     padding: EdgeInsets.only(left: 12.w, right: 8.w),
                     child: Image.asset(
                       widget.prefixImagePath!,
-                      width: 24.w,
-                      height: 30.h,
+                      width: 16.w,
+                      height: 24.h,
                       fit: BoxFit.contain,
                     ),
                   )

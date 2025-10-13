@@ -16,13 +16,13 @@ class OnboardingPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 40.h),
+            SizedBox(height: 50.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Image.asset(
                 model.image,
-                width: 280.w,
-                height: 280.h,
+                width: 250.w,
+                height: 250.h,
                 fit: BoxFit.contain,
               ),
             ),
@@ -44,7 +44,7 @@ class OnboardingPage extends StatelessWidget {
               child: Text(
                 model.description,
                 style: AppTextStyles.font16GreyRegular.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,

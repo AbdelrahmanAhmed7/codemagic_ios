@@ -48,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
+                    SizedBox(width: 50.w,),
                     Image.asset(
                       AppAssets.logo,
                       width: 172.w,
@@ -108,7 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.go('/forget-password');
+                    },
                     child: Text(
                       'Forgot Password?',
                       style: TextStyle(

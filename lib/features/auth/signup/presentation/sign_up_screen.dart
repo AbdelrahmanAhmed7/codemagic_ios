@@ -36,22 +36,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    Image.asset(
-                      'assets/logo/Logo.png',
-                      width: 140.w,
-                      height: 50.h,
-                      fit: BoxFit.contain,
-                    ),
-                  ],
+                SizedBox(width: 60.w),
+                Center(
+                  child: Image.asset(
+                    'assets/logo/Logo.png',
+                    width: 140.w,
+                    height: 50.h,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 SizedBox(height: 40.h),
                 Text(

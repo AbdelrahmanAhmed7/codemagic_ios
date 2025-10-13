@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/core/utils/app_button.dart';
 
-class AccountVerifiedScreen extends StatefulWidget {
+class AccountVerifiedScreen extends StatelessWidget {
   const AccountVerifiedScreen({super.key});
 
-  @override
-  State<AccountVerifiedScreen> createState() => _AccountVerifiedScreenState();
-}
-
-class _AccountVerifiedScreenState extends State<AccountVerifiedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +23,7 @@ class _AccountVerifiedScreenState extends State<AccountVerifiedScreen> {
                 icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
                 onPressed: () => Navigator.pop(context),
               ),
-              SizedBox(height: 4.h),
+              SizedBox(height: 40.h),
               Center(
                 child: Column(
                   children: [
@@ -46,6 +43,10 @@ class _AccountVerifiedScreenState extends State<AccountVerifiedScreen> {
                       style: AppTextStyles.font14GreyRegular,
                       textAlign: TextAlign.center,
                     ),
+                    SizedBox(height: 57.h,),
+                    AppButton(text: 'Continue', onPressed: (){
+                      context.go('/home');
+                    }),
                   ],
                 ),
               ),

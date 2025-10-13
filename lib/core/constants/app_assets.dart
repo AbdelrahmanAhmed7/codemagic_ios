@@ -11,4 +11,7 @@ class AppAssets {
   static const String passwordIcon = 'assets/signup/password.png';
   static const String accountVerified = 'assets/signup/account_ver.png';
   static const String wecareIcon = 'assets/logo/We Care.png';
+  static const String forgetPassword = 'assets/login/forget_password.png';
+  static const String resetPassword = 'assets/login/reset_password.png';
+  static const String backward = 'assets/onboarding/backward.png';
 }
