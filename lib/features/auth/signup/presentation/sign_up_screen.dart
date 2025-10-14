@@ -57,7 +57,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: 24.h),
 
-                Text('Card ID', style: AppTextStyles.font14BlackMedium),
+                Text.rich(
+                  TextSpan(
+                    text: 'National ID ',
+                    style: AppTextStyles.font14BlackMedium,
+                    children: [
+                      TextSpan(
+                        text: '*',
+                        style: TextStyle(color: Colors.red, fontSize: 14.sp),
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: cardController,

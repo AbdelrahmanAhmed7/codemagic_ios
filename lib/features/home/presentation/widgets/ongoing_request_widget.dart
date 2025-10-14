@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/core/constants/app_assets.dart'; // لازم يكون فيه مسارات الصور
+import 'package:mediconsult/core/constants/app_assets.dart';
 
 class OngoingRequestWidget extends StatelessWidget {
   const OngoingRequestWidget({super.key});
@@ -12,7 +12,6 @@ class OngoingRequestWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header with See All
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -28,13 +27,10 @@ class OngoingRequestWidget extends StatelessWidget {
             ),
           ],
         ),
-
         SizedBox(height: 16.h),
-
-        // Request Card
         Container(
           width: double.infinity,
-          height: 90.h,
+          height: 120.h,
           decoration: BoxDecoration(
             color: AppColors.whiteClr,
             borderRadius: BorderRadius.circular(12.r),
@@ -53,10 +49,9 @@ class OngoingRequestWidget extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // 🟧 Yellow Side Bar
               Container(
                 width: 6.w,
-                height: 90.h,
+                height: 120.h,
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFC888),
                   borderRadius: BorderRadius.only(
@@ -65,7 +60,6 @@ class OngoingRequestWidget extends StatelessWidget {
                   ),
                 ),
               ),
-
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -74,23 +68,19 @@ class OngoingRequestWidget extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      // محتوى الكارد الأساسي
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // 🔴 Provider Logo
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8.r),
                             child: Image.asset(
                               AppAssets.alfaLogo,
-                              width: 40.w,
-                              height: 40.h,
+                              width: 48.w,
+                              height: 60.h,
                               fit: BoxFit.cover,
                             ),
                           ),
                           SizedBox(width: 12.w),
-
-                          // النصوص
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +88,9 @@ class OngoingRequestWidget extends StatelessWidget {
                               children: [
                                 Text(
                                   'Alfa Lab',
-                                  style: AppTextStyles.font14BlackMedium,
+                                  style: AppTextStyles.font14BlackMedium.copyWith(
+                                    color: Color(0xff062860),
+                                  ),
                                 ),
                                 SizedBox(height: 4.h),
                                 Row(
@@ -123,10 +115,14 @@ class OngoingRequestWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Image.asset(
-                            AppAssets.arrowRight,
-                            width: 15.w,
-                            height: 16.h,
+                          SizedBox(height: 22.h),
+                          Padding(
+                            padding: EdgeInsets.only(right: 16.w, top: 22.h),
+                            child: Image.asset(
+                              AppAssets.arrowRight,
+                              width: 25.w,
+                              height: 20.h,
+                            ),
                           ),
                         ],
                       ),
@@ -137,9 +133,7 @@ class OngoingRequestWidget extends StatelessWidget {
                           width: 100.w,
                           height: 20.h,
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0x6BFFC888,
-                            ), 
+                            color: const Color(0x6BFFC888),
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           alignment: Alignment.center,
