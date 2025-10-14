@@ -7,10 +7,11 @@ import 'package:mediconsult/features/auth/signup/presentation/account_verified_s
 import 'package:mediconsult/features/auth/signup/presentation/otp_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
+import 'package:mediconsult/features/home/presentation/home_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/home',
     routes: [
       GoRoute(
         path: '/',
@@ -57,6 +58,12 @@ class AppRouter {
         path: '/reset-password',
         builder: (context, state) {
           return const ResetPasswordScreen();
+        },
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) {
+          return const HomeScreen();
         },
       ),
     ],

@@ -46,6 +46,7 @@ dependencies:
   json_annotation:
   freezed_annotation: ^3.1.0
   get_it: ^8.2.0
+  animated_bottom_navigation_bar: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,7 @@ flutter:
     - assets/signup/
     - assets/fonts/
     - assets/login/
+    - assets/home/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
