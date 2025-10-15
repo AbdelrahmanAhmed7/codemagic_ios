@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -31,7 +32,7 @@ class QuickAccessWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -46,7 +47,9 @@ class QuickAccessWidget extends StatelessWidget {
                 label: 'Approval',
                 color: AppColors.approvalColor,
                 textColor: AppColors.approvalTextColor,
-                onTap: () {},
+                onTap: () {
+                  context.go('/approval-request');
+                },
               ),
               _buildQuickAccessButton(
                 image: AppAssets.refund,
@@ -89,7 +92,7 @@ class QuickAccessWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.12),
+                  color: Colors.black.withValues(alpha: 0.12),
                   blurRadius: 10,
                   offset: const Offset(0, 6),
                 ),

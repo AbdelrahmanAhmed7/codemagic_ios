@@ -129,7 +129,7 @@ class KhusmPromotionWidget extends StatelessWidget {
                 Positioned(
                   bottom: 12.h,
                   child: Image.asset(
-                    AppAssets.qr_Code,
+                    AppAssets.qrcode,
                     width: 35.w,
                     height: 35.h,
                     fit: BoxFit.contain,

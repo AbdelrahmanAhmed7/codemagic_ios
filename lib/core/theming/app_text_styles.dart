@@ -69,4 +69,16 @@ class AppTextStyles {
     color: AppColors.greyClr,
     fontFamily: 'Roboto',
   );
+  static final font12BlueMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blueClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font14WhiteMedium = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.whiteClr,
+    fontFamily: 'Roboto',
+  );
 }

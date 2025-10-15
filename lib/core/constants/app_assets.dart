@@ -42,17 +42,32 @@ class AppAssets {
   static const String family = 'assets/home/family.png';
   static const String stethoscope = 'assets/home/stethoscope.png';
   static const String syringe = 'assets/home/syringe.png';
-  static const String qr_Code= 'assets/home/qr_code.png';
+  static const String qrcode = 'assets/home/qr_code.png';
 
   // bottom navigation bar assets
   static const String homeActive = 'assets/bottomnavbar/home_active.png';
   static const String homeInactive = 'assets/bottomnavbar/home_inactive.png';
-  static const String providerActive = 'assets/bottomnavbar/provider_active.png';
+  static const String providerActive =
+      'assets/bottomnavbar/provider_active.png';
   static const String providerInactive =
       'assets/bottomnavbar/provider_inactive.png';
   static const String requestActive = 'assets/bottomnavbar/request_active.png';
   static const String requestInactive =
       'assets/bottomnavbar/request_inactive.png';
   static const String profileActive = 'assets/bottomnavbar/profile_active.png';
-  static const String profileInactive = 'assets/bottomnavbar/profile_inactive.png';
+  static const String profileInactive =
+      'assets/bottomnavbar/profile_inactive.png';
+
+  // approval request assets
+  static const String ahmed = 'assets/approval/ahmed.png';
+  static const String ali = 'assets/approval/ali.png';
+  static const String noha = 'assets/approval/noha.png';
+  static const String laila = 'assets/approval/laila.png';
+  static const String shifa = 'assets/approval/shifa.png';
+  static const String elezaby = 'assets/approval/el_ezaby.png';
+  static const String misrScan = 'assets/approval/misr_scan.png';
+  static const String camera = 'assets/approval/camera.png';
+  static const String upload = 'assets/approval/upload.png';
+  static const String delete = 'assets/approval/delete.png';
+  static const String success = 'assets/approval/success.png';
 }

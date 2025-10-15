@@ -24,7 +24,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, anim1, anim2) {
         return Center(
