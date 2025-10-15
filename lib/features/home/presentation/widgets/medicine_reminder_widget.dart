@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
@@ -11,44 +12,39 @@ class MedicineReminderWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header with See All
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Medicine Reminder',
-              style: AppTextStyles.font18BlackSemiBold,
-            ),
+            Text('Medicine Reminder', style: AppTextStyles.font14BlackMedium),
             GestureDetector(
-              onTap: () {
-                // Handle see all tap
-              },
+              onTap: () {},
               child: Text(
                 'See All',
-                style: AppTextStyles.font14PrimaryMedium,
+                style: AppTextStyles.font14PrimaryMedium.copyWith(
+                  fontSize: 12.sp,
+                ),
               ),
             ),
           ],
         ),
-        
         SizedBox(height: 16.h),
-        
-        // Medicine Cards (horizontal scroll)
         SizedBox(
-          height: 120.h,
+          height: 110.h,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
               _buildMedicineCard(
                 medicineName: 'Paracetamol',
-                time: '1 PM | After Meal',
-                timeDisplay: '02:00 PM',
+                dosage: '1 Pill',
+                note: 'After Meal',
+                time: '02:00 PM',
               ),
               SizedBox(width: 12.w),
               _buildMedicineCard(
                 medicineName: 'Vitamin C',
-                time: '1 PM',
-                timeDisplay: '05:50 PM',
+                dosage: '1 Pill',
+                note: 'Before Meal',
+                time: '05:50 PM',
               ),
             ],
           ),
@@ -59,89 +55,89 @@ class MedicineReminderWidget extends StatelessWidget {
 
   Widget _buildMedicineCard({
     required String medicineName,
+    required String dosage,
+    required String note,
     required String time,
-    required String timeDisplay,
   }) {
     return Container(
-      width: 160.w,
+      width: 280.w,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: AppColors.whiteClr,
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.15),
-            blurRadius: 15,
+            color: AppColors.greyClr.withValues(alpha: 0.1),
+            blurRadius: 10,
             offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.05),
-            blurRadius: 30,
-            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          // Medicine Icon and Time
-          Row(
-            children: [
-              Container(
+          Container(
+            width: 60.w,
+            height: 76.h,
+            decoration: BoxDecoration(
+              color: AppColors.primaryClr.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Center(
+              child: Image.asset(
+                AppAssets.medicines,
                 width: 24.w,
                 height: 24.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryClr.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6.r),
-                ),
-                child: Icon(
-                  Icons.medication,
-                  color: AppColors.primaryClr,
-                  size: 14.sp,
-                ),
+                fit: BoxFit.contain,
               ),
-              const Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                decoration: BoxDecoration(
-                  color: AppColors.lightGreyClr,
-                  borderRadius: BorderRadius.circular(4.r),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  medicineName,
+                  style: AppTextStyles.font14PrimaryMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                SizedBox(height: 6.h),
+                Row(
+                  children: [
+                    Image.asset(
+                      AppAssets.pillIcon,
+                      width: 16.w,
+                      height: 16.h,
+                      fit: BoxFit.contain,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(dosage, style: AppTextStyles.font12GreyRegular),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 6.w),
+                      child: Text(
+                        "|",
+                        style: TextStyle(color: AppColors.greyClr),
+                      ),
+                    ),
+                    Text(note, style: AppTextStyles.font12GreyRegular),
+                  ],
+                ),
+                SizedBox(height: 6.h),
+                Row(
                   children: [
                     Icon(
                       Icons.access_time,
+                      size: 14.sp,
                       color: AppColors.greyClr,
-                      size: 10.sp,
                     ),
-                    SizedBox(width: 2.w),
-                    Text(
-                      timeDisplay,
-                      style: AppTextStyles.font10GreyRegular,
-                    ),
+                    SizedBox(width: 4.w),
+                    Text(time, style: AppTextStyles.font12GreyRegular),
                   ],
                 ),
-              ),
-            ],
-          ),
-          
-          SizedBox(height: 12.h),
-          
-          // Medicine Name
-          Text(
-            medicineName,
-            style: AppTextStyles.font14BlackMedium,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          
-          SizedBox(height: 4.h),
-          
-          // Time
-          Text(
-            time,
-            style: AppTextStyles.font12GreyRegular,
+              ],
+            ),
           ),
         ],
       ),

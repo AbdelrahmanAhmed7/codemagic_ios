@@ -20,80 +20,64 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-
-  // Sample data - سيتم استبدالها بـ API لاحقاً
-  final bool _hasOngoingRequests = true; // سيتم التحكم بها من الـ API
-  final bool _hasMedicineReminders = true; // سيتم التحكم بها من الـ API
+  final bool _hasOngoingRequests = true;
+  final bool _hasMedicineReminders = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteClr,
+      backgroundColor: AppColors.lightGreyClr,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Header
               const HomeHeaderWidget(),
-              
-              // Blue background extension
-              Container(
-                width: double.infinity,
-                height: 110.h,
-                color: AppColors.primaryClr,
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 130.h, 
+                    color: AppColors.primaryClr,
+                  ),
+                  Positioned(
+                    bottom: -60.h,
+                    left: 16.w,
+                    right: 16.w,
+                    child: UserPlanCardWidget(
+                      planType: PlanType.gold,
+                      userName: 'Ahmed Mohamed Adel Amin',
+                      cardId: '976875',
+                      expireDate: '12/2028',
+                    ),
+                  ),
+                ],
               ),
-              
-              // Main Content
+              SizedBox(
+                height: 80.h,
+              ), 
               Container(
-                color: AppColors.whiteClr,
+                color: AppColors.lightGreyClr,
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // User Plan Card with negative margin to overlap blue
-                    Transform.translate(
-                      offset: Offset(0, -80.h),
-                      child: UserPlanCardWidget(
-                        planType: PlanType.gold, // يمكن تغييرها
-                        userName: 'Ahmed Mohamed Adel Amin',
-                        cardId: '976875',
-                        expireDate: '12/2028',
-                      ),
-                    ),
-                    
-                    SizedBox(height: 0.h),
-                    
-                    // Quick Access
                     const QuickAccessWidget(),
-                    
                     SizedBox(height: 24.h),
-                    
-                    // Khusm Promotion
                     const KhusmPromotionWidget(),
-                    
                     SizedBox(height: 24.h),
-                    
-                    // Ongoing Request (conditional)
                     if (_hasOngoingRequests) ...[
                       const OngoingRequestWidget(),
                       SizedBox(height: 24.h),
                     ],
-                    
-                    // Medicine Reminder (conditional)
                     if (_hasMedicineReminders) ...[
                       const MedicineReminderWidget(),
                       SizedBox(height: 24.h),
                     ],
-                    
-                    // Health Tips
                     const HealthTipsWidget(),
-                    
                     SizedBox(height: 24.h),
-                    
-                    // Explore
                     const ExploreWidget(),
-                    
-                    SizedBox(height: 100.h), // Bottom padding for navigation bar
+                    SizedBox(height: 40.h),
                   ],
                 ),
               ),
@@ -113,11 +97,4 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// أنواع الخطط المختلفة
-enum PlanType {
-  gold,
-  silver,
-  bronze,
-  platinum,
-  diamond,
-}
+enum PlanType { gold, silver, bronze, platinum, diamond }

@@ -34,4 +34,25 @@ class AppAssets {
   static const String alfaLogo = 'assets/home/lab.png';
   static const String bloodIcon = 'assets/home/hokna.png';
   static const String arrowRight = 'assets/home/arrow.png';
+  static const String medicines = 'assets/home/medicin.png';
+  static const String pillIcon = 'assets/home/pill_icon.png';
+  static const String checkUp = 'assets/home/check_up.png';
+  static const String providers = 'assets/home/providers.png';
+  static const String policy = 'assets/home/policy.png';
+  static const String family = 'assets/home/family.png';
+  static const String stethoscope = 'assets/home/stethoscope.png';
+  static const String syringe = 'assets/home/syringe.png';
+  static const String qr_Code= 'assets/home/qr_code.png';
+
+  // bottom navigation bar assets
+  static const String homeActive = 'assets/bottomnavbar/home_active.png';
+  static const String homeInactive = 'assets/bottomnavbar/home_inactive.png';
+  static const String providerActive = 'assets/bottomnavbar/provider_active.png';
+  static const String providerInactive =
+      'assets/bottomnavbar/provider_inactive.png';
+  static const String requestActive = 'assets/bottomnavbar/request_active.png';
+  static const String requestInactive =
+      'assets/bottomnavbar/request_inactive.png';
+  static const String profileActive = 'assets/bottomnavbar/profile_active.png';
+  static const String profileInactive = 'assets/bottomnavbar/profile_inactive.png';
 }

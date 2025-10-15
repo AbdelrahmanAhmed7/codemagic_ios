@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
@@ -15,40 +15,125 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.whiteClr,
-        borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.2),
-            blurRadius: 20,
-            offset: const Offset(0, 5),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
+      child: SizedBox(
+        height: 80.h, 
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              height: 65.h,
+              decoration: BoxDecoration(
+                color: AppColors.whiteClr,
+                borderRadius: BorderRadius.circular(40.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(4, (index) {
+                  return _buildNavItem(index);
+                }),
+              ),
+            ),
+
+            Positioned(
+              top: -25.h,
+              left: (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
+                  ((MediaQuery.of(context).size.width - 32.w) / 8) -
+                  25.w,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                width: 50.w,
+                height: 50.w,
+                decoration: BoxDecoration(
+                  color: AppColors.whiteClr,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryClr.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.all(10.w),
+                child: Image.asset(
+                  _getIconPath(currentIndex, true),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(int index) {
+    final bool isSelected = currentIndex == index;
+
+    return GestureDetector(
+      onTap: () => onTap(index),
+      behavior: HitTestBehavior.translucent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 10.h),
+          Image.asset(
+            _getIconPath(index, false),
+            width: 22.w,
+            height: 22.h,
+            color: isSelected ? Colors.transparent : AppColors.greyClr,
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            _getLabel(index),
+            style: TextStyle(
+              fontSize: 11.sp,
+              color: isSelected ? AppColors.primaryClr : AppColors.greyClr,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            ),
           ),
         ],
       ),
-      child: AnimatedBottomNavigationBar(
-        icons: const [
-          Icons.home,
-          Icons.business,
-          Icons.description,
-          Icons.person,
-        ],
-        activeIndex: currentIndex,
-        gapLocation: GapLocation.center,
-        leftCornerRadius: 20.r,
-        rightCornerRadius: 20.r,
-        onTap: onTap,
-        backgroundColor: AppColors.whiteClr,
-        activeColor: AppColors.primaryClr,
-        inactiveColor: AppColors.greyClr,
-        iconSize: 24.sp,
-        elevation: 0,
-        notchMargin: 8.w,
-        splashColor: AppColors.primaryClr.withValues(alpha: 0.1),
-        splashRadius: 30.r,
-      ),
     );
+  }
+
+  String _getLabel(int index) {
+    switch (index) {
+      case 0:
+        return 'Home';
+      case 1:
+        return 'Provider';
+      case 2:
+        return 'Request';
+      case 3:
+        return 'Profile';
+      default:
+        return '';
+    }
+  }
+
+  String _getIconPath(int index, bool isActive) {
+    switch (index) {
+      case 0:
+        return isActive ? AppAssets.homeActive : AppAssets.homeInactive;
+      case 1:
+        return isActive ? AppAssets.providerActive : AppAssets.providerInactive;
+      case 2:
+        return isActive ? AppAssets.requestActive : AppAssets.requestInactive;
+      case 3:
+        return isActive ? AppAssets.profileActive : AppAssets.profileInactive;
+      default:
+        return '';
+    }
   }
 }

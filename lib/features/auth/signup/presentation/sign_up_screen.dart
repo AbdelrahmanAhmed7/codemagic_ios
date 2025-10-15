@@ -59,7 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 Text.rich(
                   TextSpan(
-                    text: 'National ID ',
+                    text: 'Card ID ',
                     style: AppTextStyles.font14BlackMedium,
                     children: [
                       TextSpan(

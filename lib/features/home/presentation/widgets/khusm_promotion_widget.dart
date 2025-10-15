@@ -31,13 +31,13 @@ class KhusmPromotionWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Left Side - Logo and Text
+          // Left Side — Logo + Text + Button
           Expanded(
             flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Khusm Logo 
+                // Khusm Logo
                 Image.asset(
                   AppAssets.khusmLogo,
                   width: 133.w,
@@ -50,7 +50,7 @@ class KhusmPromotionWidget extends StatelessWidget {
                   'Save up to 30% on Medications & Lab Tests...etc!',
                   style: AppTextStyles.font14BlackMedium.copyWith(
                     fontSize: 12.sp,
-                    color: Color(0xff484848),
+                    color: const Color(0xff484848),
                     fontWeight: FontWeight.w400,
                     height: 1.4,
                   ),
@@ -83,17 +83,59 @@ class KhusmPromotionWidget extends StatelessWidget {
 
           SizedBox(width: 12.w),
 
-          // Right Side - Phone image فقط بدون container رمادي
+          // Right Side — phone + QR + icons stacked
           Expanded(
             flex: 1,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Image.asset(
-                AppAssets.mobile,
-                width: 100.w,
-                height: 130.h,
-                fit: BoxFit.contain,
-              ),
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                // الموبايل
+                Align(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    AppAssets.mobile, 
+                    width: 100.w,
+                    height: 130.h,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+
+                // السماعة (stethoscope)
+                Positioned(
+                  top: 10.h,
+                  left: 5.w,
+                  child: Image.asset(
+                    AppAssets.stethoscope,
+                    width: 35.w,
+                    height: 35.h,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+
+                // السرنجة (syringe)
+                Positioned(
+                  top: -10.h,
+                  right: 0.w,
+                  child: Image.asset(
+                    AppAssets.syringe,
+                    width: 35.w,
+                    height: 35.h,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+
+                // QR Code
+                Positioned(
+                  bottom: 12.h,
+                  child: Image.asset(
+                    AppAssets.qr_Code,
+                    width: 35.w,
+                    height: 35.h,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
