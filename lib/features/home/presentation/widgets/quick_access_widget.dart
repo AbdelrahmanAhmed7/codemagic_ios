@@ -65,7 +65,9 @@ class QuickAccessWidget extends StatelessWidget {
                 label: 'Chronic\nMedicine',
                 color: AppColors.chronicMedicineColor,
                 textColor: AppColors.chronicMedicineTextColor,
-                onTap: () {},
+                onTap: () {
+                  context.go('/chronic-medicines');
+                },
               ),
             ],
           ),

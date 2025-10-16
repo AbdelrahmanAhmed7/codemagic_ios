@@ -6,6 +6,7 @@ import 'package:mediconsult/features/auth/login/presentation/reset_password_scre
 import 'package:mediconsult/features/auth/signup/presentation/account_verified_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/otp_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
+import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
@@ -75,9 +76,21 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/approval-request/form',
+        builder: (context, state) {
+          return const ApprovalRequestScreen();
+        },
+      ),
+      GoRoute(
         path: '/refund-request',
         builder: (context, state) {
           return const RefundRequestScreen();
+        },
+      ),
+      GoRoute(
+        path: '/chronic-medicines',
+        builder: (context, state) {
+          return const ChronicMedicinesScreen();
         },
       ),
     ],

@@ -70,6 +70,8 @@ class AppAssets {
   static const String upload = 'assets/approval/upload.png';
   static const String delete = 'assets/approval/delete.png';
   static const String success = 'assets/approval/success.png';
+  static const String emptyState = 'assets/approval/approval_request_empty.png';
+  static const String arrow = 'assets/approval/arrow.png';
 
   // refund request assets
   static const String emergency = 'assets/refund/emergency.png';
@@ -81,4 +83,14 @@ class AppAssets {
   static const String physiotherapy = 'assets/refund/physiotherapy.png';
   static const String examinations = 'assets/refund/examinations.png';
   static const String uploadIcon = 'assets/refund/upload.png';
+
+  // chronic medicines assets
+  static const String mdeiSelector = 'assets/chronic/mediscelector.png';
+  static const String upcoming = 'assets/chronic/upcoming_lab.png';
+  static const String aalem = 'assets/chronic/3alem.png';
+  static const String tests = 'assets/chronic/tests.png';
+  static const String uploadLabResults = 'assets/chronic/upload_lab.png';
+  static const String labDoctor = 'assets/chronic/lab_test_de.png';
+  static const String actionRequired = 'assets/chronic/action.png';
+  static const String familySelect = 'assets/chronic/family.png';
 }
