@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mediconsult/features/home/presentation/widgets/home_header_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/user_plan_card_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/quick_access_widget.dart';
@@ -91,6 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentIndex = index;
           });
+          if (index == 3) {
+            context.go('/profile');
+          }
         },
       ),
     );

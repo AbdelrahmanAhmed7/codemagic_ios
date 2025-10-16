@@ -6,10 +6,11 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 class PageHeader extends StatelessWidget {
-  const PageHeader({super.key, required this.title, this.onBack});
+  const PageHeader({super.key, required this.title, this.onBack, this.backPath});
 
   final String title;
   final VoidCallback? onBack;
+  final String? backPath;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class PageHeader extends StatelessWidget {
               ),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                onPressed: onBack ?? () => context.pop(),
+                onPressed: onBack ?? () => backPath != null ? context.go(backPath!) : context.pop(),
               ),
             ),
             SizedBox(width: 28.w),
