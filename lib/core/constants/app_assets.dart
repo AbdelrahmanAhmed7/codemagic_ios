@@ -93,4 +93,16 @@ class AppAssets {
   static const String labDoctor = 'assets/chronic/lab_test_de.png';
   static const String actionRequired = 'assets/chronic/action.png';
   static const String familySelect = 'assets/chronic/family.png';
+
+  // profile assets
+  static const String personal = 'assets/profile/personal_info.png';
+  static const String familyMembers = 'assets/profile/family_members.png';
+  static const String insurance = 'assets/profile/insurance.png';
+  static const String change_password = 'assets/profile/change_password.png';
+  static const String language = 'assets/profile/language.png';
+  static const String faq = 'assets/profile/faq.png';
+  static const String contactUs = 'assets/profile/contact_us.png';
+  static const String terms = 'assets/profile/terms.png';
+  static const String logout = 'assets/profile/log_out.png';
+  static const String chevronRight = 'assets/profile/chevron-right.png';
 }

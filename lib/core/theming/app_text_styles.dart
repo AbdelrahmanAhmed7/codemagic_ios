@@ -33,6 +33,12 @@ class AppTextStyles {
     color: AppColors.blackClr,
     fontFamily: 'Roboto',
   );
+  static final TextStyle font1BlackRegular = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.blackClr,
+    fontFamily: 'Roboto',
+  );
   static final TextStyle font12GreyRegular = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,

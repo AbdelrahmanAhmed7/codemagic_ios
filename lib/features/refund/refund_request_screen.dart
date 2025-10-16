@@ -12,6 +12,7 @@ import 'package:mediconsult/features/approval_request/presentation/widgets/note_
 import 'package:mediconsult/features/refund/widgets/add_attachment_widget.dart';
 import 'package:mediconsult/features/refund/widgets/reason_selector.dart';
 import 'package:mediconsult/features/refund/widgets/refund_type_selector.dart';
+import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class RefundRequestScreen extends StatefulWidget {
   const RefundRequestScreen({super.key});
@@ -89,64 +90,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                height: 136.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryClr,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(24.r),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 16.h),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 36.w,
-                        height: 36.w,
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteClr,
-                          borderRadius: BorderRadius.circular(10.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.greyClr.withValues(alpha: 0.08),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                          onPressed: () => context.go('/home'),
-                        ),
-                      ),
-                      SizedBox(width: 28.w),
-                      Expanded(
-                        child: Text(
-                          'Refund Request',
-                          style: AppTextStyles.font18BlackSemiBold.copyWith(
-                            color: AppColors.whiteClr,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 28.w,
-                        height: 28.w,
-                        decoration: const BoxDecoration(
-                          color: AppColors.whiteClr,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          CupertinoIcons.question,
-                          color: AppColors.blackClr,
-                          size: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              const PageHeader(title: 'Refund Request'),
               Transform.translate(
                 offset: Offset(0, -20.h),
                 child: Padding(

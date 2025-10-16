@@ -254,7 +254,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
       decoration: BoxDecoration(
         color: AppColors.whiteClr,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.greyClr.withOpacity(0.2)),
+        border: Border.all(color: AppColors.greyClr.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +443,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.greyClr.withOpacity(0.5),
+                  color: AppColors.greyClr.withValues(alpha: 0.5),
                   width: 1.5,
                 ),
               ),
@@ -452,7 +452,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
               Container(
                 width: 1.5,
                 height: 40.h,
-                color: AppColors.greyClr.withOpacity(0.5),
+                color: AppColors.greyClr.withValues(alpha: 0.5),
               ),
           ],
         ),

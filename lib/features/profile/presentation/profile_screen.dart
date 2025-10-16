@@ -1,0 +1,168 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
+import 'package:mediconsult/core/theming/app_colors.dart';
+import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/shared/widgets/page_header.dart';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.lightGreyClr,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const PageHeader(title: 'Profile'),
+              Transform.translate(
+                offset: Offset(0, -20.h),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteClr,
+                      borderRadius: BorderRadius.circular(16.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.greyClr.withValues(alpha: 0.08),
+                          blurRadius: 24,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(12.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 74.w,
+                                height: 90.w,
+                                child: Image.asset(AppAssets.profile),
+                              ),
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Ahmed Mohamed Adel Amin',
+                                      style: AppTextStyles.font14BlackMedium,
+                                    ),
+                                    Text(
+                                      'Software engineer',
+                                      style: AppTextStyles.font10GreyRegular,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        style: AppTextStyles.font10GreyRegular,
+                                        children: [
+                                          const TextSpan(text: 'Card ID: '),
+                                          TextSpan(
+                                            text: 'MED-2025-1234',
+                                            style:
+                                                AppTextStyles.font12BlueRegular,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16.h),
+                          _Section(
+                            title: 'Account',
+                            tiles: const [
+                              _Tile(title: 'Personal Information', image: AppAssets.personal),
+                              _Tile(title: 'Family Members', image: AppAssets.familyMembers),
+                              _Tile(title: 'Insurance Plan', image: AppAssets.insurance),
+                            ],
+                          ),
+                          _Section(
+                            title: 'Setting',
+                            tiles: const [
+                              _Tile(title: 'Change Password', image: AppAssets.change_password),
+                              _Tile(title: 'Language', image: AppAssets.language),
+                            ],
+                          ),
+                          _Section(
+                            title: 'Help & Support',
+                            tiles: const [
+                              _Tile(title: 'FAQ', image: AppAssets.faq),
+                              _Tile(title: 'Contact us', image: AppAssets.contactUs),
+                              _Tile(title: 'Terms & Privacy Policy', image: AppAssets.terms),
+                            ],
+                          ),
+                          _Section(
+                            title: '',
+                            tiles: const [_Tile(title: 'Log Out', image: AppAssets.logout)],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Section extends StatelessWidget {
+  const _Section({required this.title, required this.tiles});
+  final String title;
+  final List<_Tile> tiles;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+              child: Text(title, style: AppTextStyles.font12BlueRegular),
+            ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.whiteClr,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: const Color(0xffECECEC)),
+            ),
+            child: Column(children: tiles),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Tile extends StatelessWidget {
+  const _Tile({required this.title, required this.image});
+  final String title;
+  final String image;
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Image.asset(image,width: 24.h,height: 24.h,),
+      title: Text(title, style: AppTextStyles.font12BlackRegular),
+      trailing: Image.asset(AppAssets.chevronRight,width: 24.w,height: 29.h,),
+      onTap: () {},
+    );
+  }
+}

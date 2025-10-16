@@ -11,10 +11,11 @@ import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
 import 'package:mediconsult/features/refund/refund_request_screen.dart';
+import 'package:mediconsult/features/profile/presentation/profile_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/profile',
     routes: [
       GoRoute(
         path: '/',
@@ -91,6 +92,12 @@ class AppRouter {
         path: '/chronic-medicines',
         builder: (context, state) {
           return const ChronicMedicinesScreen();
+        },
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) {
+          return const ProfileScreen();
         },
       ),
     ],
