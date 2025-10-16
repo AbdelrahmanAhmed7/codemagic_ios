@@ -81,4 +81,35 @@ class AppTextStyles {
     color: AppColors.whiteClr,
     fontFamily: 'Roboto',
   );
+  static final TextStyle font18BlackMedium = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font12BlackRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.blackClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font14BlackRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.blackClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font12BlueRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.blueClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font8GreyRegular = TextStyle(
+    fontSize: 8.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.greyClr,
+    fontFamily: 'Roboto',
+  );
+  
 }

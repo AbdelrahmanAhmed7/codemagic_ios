@@ -27,4 +27,5 @@ class AppColors {
   static const whiteClr = Color(0xFFFFFFFF);
   static const lightGreyClr = Color(0xFFF8F9FA);
   static const blueClr = Color(0xFF0B51C1);
+  static const successClr = Color(0xFF35BA83);
 }

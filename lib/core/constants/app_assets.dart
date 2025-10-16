@@ -70,4 +70,15 @@ class AppAssets {
   static const String upload = 'assets/approval/upload.png';
   static const String delete = 'assets/approval/delete.png';
   static const String success = 'assets/approval/success.png';
+
+  // refund request assets
+  static const String emergency = 'assets/refund/emergency.png';
+  static const String glasses = 'assets/refund/glasses.png';
+  static const String dental = 'assets/refund/dental.png';
+  static const String laboratory = 'assets/refund/laboratory.png';
+  static const String scan = 'assets/refund/scan.png';
+  static const String medi = 'assets/refund/medi.png';
+  static const String physiotherapy = 'assets/refund/physiotherapy.png';
+  static const String examinations = 'assets/refund/examinations.png';
+  static const String uploadIcon = 'assets/refund/upload.png';
 }
