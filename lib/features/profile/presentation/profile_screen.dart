@@ -200,6 +200,8 @@ class _Tile extends StatelessWidget {
           context.go('/terms-policy');
         } else if (title == 'Change Password') {
           context.go('/change-password');
+        } else if (title == 'Language') {
+          context.go('/language');
         }
       },
     );

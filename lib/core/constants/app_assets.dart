@@ -106,6 +106,7 @@ class AppAssets {
   static const String logout = 'assets/profile/log_out.png';
   static const String chevronRight = 'assets/profile/chevron-right.png';
   static const String jewelry = 'assets/profile/Frame.png';
+  static const String languageSelect = 'assets/profile/language_select.png';
 
   //family members assets
   static const String user = 'assets/familymem/user.png';

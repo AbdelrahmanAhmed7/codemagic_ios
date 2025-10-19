@@ -21,6 +21,7 @@ import 'package:mediconsult/features/profile/presentation/profile_screen.dart';
 import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart';
 import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/language_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -164,6 +165,12 @@ class AppRouter {
         path: '/change-password',
         builder: (context, state) {
           return const ChangePasswordScreen();
+        },
+      ),
+      GoRoute(
+        path: '/language',
+        builder: (context, state) {
+          return const LanguageScreen();
         },
       ),
     ],
