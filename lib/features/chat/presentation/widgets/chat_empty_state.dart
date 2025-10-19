@@ -10,7 +10,7 @@ class ChatEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: EdgeInsets.all(24.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -33,28 +33,9 @@ class ChatEmptyState extends StatelessWidget {
             SizedBox(height: 12.h),
             
             // Subtitle with icon
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Start by typing your question below!',
-                  style: AppTextStyles.font12GreyRegular,
-                ),
-                SizedBox(width: 8.w),
-                Container(
-                  width: 20.w,
-                  height: 20.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryClr,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                  child: Icon(
-                    Icons.arrow_forward,
-                    color: AppColors.whiteClr,
-                    size: 12.sp,
-                  ),
-                ),
-              ],
+            Text(
+              'Start by typing your question below! ⬇️',
+              style: AppTextStyles.font12GreyRegular,
             ),
             SizedBox(height: 32.h),
             

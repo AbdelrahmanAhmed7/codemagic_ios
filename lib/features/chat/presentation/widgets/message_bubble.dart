@@ -19,6 +19,7 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (!isUser) ...[
           Container(
@@ -38,10 +39,25 @@ class MessageBubble extends StatelessWidget {
         ],
         Flexible(
           child: Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.7,
+            ),
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
               color: isUser ? AppColors.primaryClr : AppColors.lightGreyClr,
-              borderRadius: BorderRadius.circular(16.r),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
+                bottomLeft: Radius.circular(isUser ? 16.r : 4.r),
+                bottomRight: Radius.circular(isUser ? 4.r : 16.r),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +65,8 @@ class MessageBubble extends StatelessWidget {
                 Text(
                   text,
                   style: isUser 
-                      ? AppTextStyles.font12WhiteRegular
-                      : AppTextStyles.font12BlackRegular,
+                      ? AppTextStyles.font14WhiteMedium
+                      : AppTextStyles.font14BlackMedium,
                 ),
                 SizedBox(height: 4.h),
                 Text(

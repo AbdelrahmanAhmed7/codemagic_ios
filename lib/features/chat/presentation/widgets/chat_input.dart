@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
-class ChatInput extends StatelessWidget {
+class ChatInput extends StatefulWidget {
   final TextEditingController controller;
   final Function(String) onSendMessage;
 
@@ -14,9 +14,35 @@ class ChatInput extends StatelessWidget {
   });
 
   @override
+  State<ChatInput> createState() => _ChatInputState();
+}
+
+class _ChatInputState extends State<ChatInput> {
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onTextChanged);
+    _hasText = widget.controller.text.isNotEmpty;
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onTextChanged);
+    super.dispose();
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      _hasText = widget.controller.text.trim().isNotEmpty;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h + MediaQuery.of(context).viewInsets.bottom),
       decoration: BoxDecoration(
         color: AppColors.lightGreyClr,
         borderRadius: BorderRadius.only(
@@ -32,9 +58,12 @@ class ChatInput extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.whiteClr,
                 borderRadius: BorderRadius.circular(24.r),
+                border: Border.all(color: AppColors.borderClr),
               ),
               child: TextField(
-                controller: controller,
+                controller: widget.controller,
+                maxLines: null,
+                textInputAction: TextInputAction.send,
                 decoration: InputDecoration(
                   hintText: 'Message...',
                   hintStyle: AppTextStyles.font12GreyRegular,
@@ -44,7 +73,7 @@ class ChatInput extends StatelessWidget {
                     vertical: 12.h,
                   ),
                 ),
-                onSubmitted: onSendMessage,
+                onSubmitted: widget.onSendMessage,
               ),
             ),
           ),
@@ -53,8 +82,9 @@ class ChatInput extends StatelessWidget {
             width: 40.w,
             height: 40.w,
             decoration: BoxDecoration(
-              color: AppColors.lightGreyClr,
+              color: AppColors.whiteClr,
               borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: AppColors.borderClr),
             ),
             child: Icon(
               Icons.attach_file,
@@ -64,7 +94,14 @@ class ChatInput extends StatelessWidget {
           ),
           SizedBox(width: 8.w),
           GestureDetector(
-            onTap: () => onSendMessage(controller.text),
+            onTap: () {
+              if (_hasText) {
+                widget.onSendMessage(widget.controller.text);
+              } else {
+                // TODO: Implement voice recording functionality
+                print('Start voice recording...');
+              }
+            },
             child: Container(
               width: 48.w,
               height: 48.w,
@@ -73,7 +110,7 @@ class ChatInput extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                Icons.send,
+                _hasText ? Icons.send : Icons.mic,
                 color: AppColors.whiteClr,
                 size: 24.sp,
               ),
