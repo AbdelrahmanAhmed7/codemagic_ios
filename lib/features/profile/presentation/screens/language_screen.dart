@@ -138,7 +138,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
             Expanded(
               child: Text(
                 language['nativeName']!,
-                style: AppTextStyles.font14BlackMedium,
+                style: AppTextStyles.font14BlackRegular,
               ),
             ),
             Container(
