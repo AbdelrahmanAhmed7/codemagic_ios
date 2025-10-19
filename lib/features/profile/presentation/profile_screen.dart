@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -82,29 +83,52 @@ class ProfileScreen extends StatelessWidget {
                           _Section(
                             title: 'Account',
                             tiles: const [
-                              _Tile(title: 'Personal Information', image: AppAssets.personal),
-                              _Tile(title: 'Family Members', image: AppAssets.familyMembers),
-                              _Tile(title: 'Insurance Plan', image: AppAssets.insurance),
+                              _Tile(
+                                title: 'Personal Information',
+                                image: AppAssets.personal,
+                              ),
+                              _Tile(
+                                title: 'Family Members',
+                                image: AppAssets.familyMembers,
+                              ),
+                              _Tile(
+                                title: 'Insurance Plan',
+                                image: AppAssets.insurance,
+                              ),
                             ],
                           ),
                           _Section(
                             title: 'Setting',
                             tiles: const [
-                              _Tile(title: 'Change Password', image: AppAssets.change_password),
-                              _Tile(title: 'Language', image: AppAssets.language),
+                              _Tile(
+                                title: 'Change Password',
+                                image: AppAssets.change_password,
+                              ),
+                              _Tile(
+                                title: 'Language',
+                                image: AppAssets.language,
+                              ),
                             ],
                           ),
                           _Section(
                             title: 'Help & Support',
                             tiles: const [
                               _Tile(title: 'FAQ', image: AppAssets.faq),
-                              _Tile(title: 'Contact us', image: AppAssets.contactUs),
-                              _Tile(title: 'Terms & Privacy Policy', image: AppAssets.terms),
+                              _Tile(
+                                title: 'Contact us',
+                                image: AppAssets.contactUs,
+                              ),
+                              _Tile(
+                                title: 'Terms & Privacy Policy',
+                                image: AppAssets.terms,
+                              ),
                             ],
                           ),
                           _Section(
                             title: '',
-                            tiles: const [_Tile(title: 'Log Out', image: AppAssets.logout)],
+                            tiles: const [
+                              _Tile(title: 'Log Out', image: AppAssets.logout),
+                            ],
                           ),
                         ],
                       ),
@@ -158,10 +182,26 @@ class _Tile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.asset(image,width: 24.h,height: 24.h,),
+      leading: Image.asset(image, width: 24.h, height: 24.h),
       title: Text(title, style: AppTextStyles.font12BlackRegular),
-      trailing: Image.asset(AppAssets.chevronRight,width: 24.w,height: 29.h,),
-      onTap: () {},
+      trailing: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
+      onTap: () {
+        if (title == 'Personal Information') {
+          context.go('/personal-information');
+        } else if (title == 'Family Members') {
+          context.go('/family-members');
+        } else if (title == 'Insurance Plan') {
+          context.go('/insurance-plan');
+        } else if (title == 'FAQ') {
+          context.go('/faq');
+        } else if (title == 'Contact us') {
+          context.go('/contact-us');
+        } else if (title == 'Terms & Privacy Policy') {
+          context.go('/terms-policy');
+        } else if (title == 'Change Password') {
+          context.go('/change-password');
+        }
+      },
     );
   }
 }

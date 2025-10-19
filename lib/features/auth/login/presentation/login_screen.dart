@@ -129,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // TODO: Handle login API here
+                      context.go('/home');
                     }
                   },
                 ),

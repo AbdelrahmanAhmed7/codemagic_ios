@@ -135,5 +135,52 @@ class AppTextStyles {
     color: AppColors.greyClr,
     fontFamily: 'Roboto',
   );
-
+  static final TextStyle font12BlackMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font20WhiteSemiBold = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.whiteClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font14WhiteRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.whiteClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font14GreenRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.greenClrW,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font16GreenMedium = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.greenClrW,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font12WhiteRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.whiteClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font10WhiteRegular = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.whiteClr,
+    fontFamily: 'Roboto',
+  );
+  static final TextStyle font16WhiteMedium = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.whiteClr,
+    fontFamily: 'Roboto',
+  );
 }

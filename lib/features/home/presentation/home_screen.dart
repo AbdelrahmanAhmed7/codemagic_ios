@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.primaryClr,
                   ),
                   Positioned(
-                    bottom: -60.h,
+                    bottom: -70.h,
                     left: 16.w,
                     right: 16.w,
                     child: UserPlanCardWidget(

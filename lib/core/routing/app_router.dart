@@ -10,12 +10,21 @@ import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/add_family_member_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/contact_us_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/family_members_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/faq_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/insurance_plan_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/personal_info_screen.dart';
 import 'package:mediconsult/features/refund/refund_request_screen.dart';
 import 'package:mediconsult/features/profile/presentation/profile_screen.dart';
+import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart';
+import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
+import 'package:mediconsult/features/profile/presentation/screens/change_password_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/profile',
+    initialLocation: '/home',
     routes: [
       GoRoute(
         path: '/',
@@ -29,9 +38,12 @@ class AppRouter {
           return const SignUpScreen();
         },
       ),
-      GoRoute(path: '/login', builder: (context, state) {
-        return const LoginScreen();
-      }),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) {
+          return const LoginScreen();
+        },
+      ),
       GoRoute(
         path: '/otp',
         builder: (context, state) {
@@ -98,6 +110,60 @@ class AppRouter {
         path: '/profile',
         builder: (context, state) {
           return const ProfileScreen();
+        },
+      ),
+      GoRoute(
+        path: '/personal-information',
+        builder: (context, state) {
+          return const PersonalInformationScreen();
+        },
+      ),
+      GoRoute(
+        path: '/family-members',
+        builder: (context, state) {
+          return const FamilyMembersScreen();
+        },
+      ),
+      GoRoute(
+        path: '/add-member',
+        builder: (context, state) {
+          return const AddFamilyMemberScreen();
+        },
+      ),
+      GoRoute(
+        path: '/faq',
+        builder: (context, state) {
+          return const FAQScreen();
+        },
+      ),
+      GoRoute(
+        path: '/insurance-plan',
+        builder: (context, state) {
+          return const InsurancePlanScreen();
+        },
+      ),
+      GoRoute(
+        path: '/contact-us',
+        builder: (context, state) {
+          return const ContactUsScreen();
+        },
+      ),
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) {
+          return const ChatScreen();
+        },
+      ),
+      GoRoute(
+        path: '/terms-policy',
+        builder: (context, state) {
+          return const TermsPolicyScreen();
+        },
+      ),
+      GoRoute(
+        path: '/change-password',
+        builder: (context, state) {
+          return const ChangePasswordScreen();
         },
       ),
     ],

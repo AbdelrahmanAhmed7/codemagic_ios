@@ -105,4 +105,22 @@ class AppAssets {
   static const String terms = 'assets/profile/terms.png';
   static const String logout = 'assets/profile/log_out.png';
   static const String chevronRight = 'assets/profile/chevron-right.png';
+  static const String jewelry = 'assets/profile/Frame.png';
+
+  //family members assets
+  static const String user = 'assets/familymem/user.png';
+  static const String goldPlan = 'assets/familymem/goldplan.png';
+  static const String deleteIcon = 'assets/familymem/Trash.png';
+
+  // contact us assets
+  static const String chatIcon = 'assets/contact/chat.png';
+  static const String emailIcon = 'assets/contact/email.png';
+  static const String phoneContactIcon = 'assets/contact/phone.png';
+  static const String whatsappIcon = 'assets/contact/whatsapp.png';
+  static const String instagramIcon = 'assets/contact/insta.png';
+  static const String websiteIcon = 'assets/contact/website.png';
+  static const String linkedInIcon = 'assets/contact/linkedin.png';
+  static const String chatAgent = 'assets/contact/Call_Center.png';
+  static const String passwordChanged = 'assets/contact/change_password.png';
+  static const String shieldIcon = 'assets/contact/policy.png';
 }

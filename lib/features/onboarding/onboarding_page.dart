@@ -22,7 +22,7 @@ class OnboardingPage extends StatelessWidget {
               child: Image.asset(
                 model.image,
                 width: 250.w,
-                height: 250.h,
+                height: 220.h,
                 fit: BoxFit.contain,
               ),
             ),
@@ -50,7 +50,7 @@ class OnboardingPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 40.h),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
