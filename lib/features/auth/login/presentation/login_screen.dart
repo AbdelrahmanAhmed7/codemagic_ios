@@ -1,12 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/login_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: () => context.go('/signup'),
                     ),
-                    SizedBox(width: 50.w,),
+                    SizedBox(width: 50.w),
                     Image.asset(
                       AppAssets.logo,
                       width: 172.w,
@@ -124,13 +128,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 28.h),
 
-                AppButton(
-                  text: 'Login',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // TODO: Handle login API here
-                      context.go('/home');
+                BlocConsumer<LoginCubit, LoginState>(
+                  listener: (context, state) {
+                    if (state is Success) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showAppSnackBar(context, 'Login Successful');
+                        context.go('/home');
+                      });
+                    } else if (state is Failed) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showAppSnackBar(context, state.error, isError: true);
+                      });
                     }
+                  },
+                  builder: (context, state) {
+                    return AppButton(
+                      text: 'Login',
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<LoginCubit>().login(
+                            cardOrPhoneController.text.trim(),
+                            passwordController.text.trim(),
+                            'en',
+                          );
+                        }
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 31.h),

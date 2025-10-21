@@ -1,9 +1,13 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/features/auth/login/presentation/forget_password_screen.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/login_screen.dart';
 import 'package:mediconsult/features/auth/login/presentation/password_otp.dart';
 import 'package:mediconsult/features/auth/login/presentation/reset_password_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/account_verified_screen.dart';
+import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
 import 'package:mediconsult/features/auth/signup/presentation/otp_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
@@ -25,7 +29,7 @@ import 'package:mediconsult/features/profile/presentation/screens/language_scree
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -36,13 +40,19 @@ class AppRouter {
       GoRoute(
         path: '/signup',
         builder: (context, state) {
-          return const SignUpScreen();
+          return BlocProvider(
+            create: (context) => sl<SignupCubit>(),
+            child: const SignUpScreen(),
+          );
         },
       ),
       GoRoute(
         path: '/login',
         builder: (context, state) {
-          return const LoginScreen();
+          return BlocProvider(
+            create: (context) => sl<LoginCubit>(),
+            child: const LoginScreen(),
+          );
         },
       ),
       GoRoute(
