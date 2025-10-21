@@ -13,7 +13,6 @@ import 'package:mediconsult/features/auth/login/presentation/password_otp.dart';
 import 'package:mediconsult/features/auth/login/presentation/reset_password_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/account_verified_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
-import 'package:mediconsult/features/auth/signup/presentation/otp_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
@@ -60,13 +59,13 @@ class AppRouter {
           );
         },
       ),
-      GoRoute(
-        path: '/otp',
-        builder: (context, state) {
-          final phoneNumber = state.extra as String;
-          return OtpScreen(phoneNumber: phoneNumber);
-        },
-      ),
+      // GoRoute(
+      //   path: '/otp',
+      //   builder: (context, state) {
+      //     final phoneNumber = state.extra as String;
+      //     return OtpScreen(phoneNumber: phoneNumber);
+      //   },
+      // ),
       GoRoute(
         path: '/account-verified',
         builder: (context, state) {
