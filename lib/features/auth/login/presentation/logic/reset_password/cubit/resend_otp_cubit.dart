@@ -7,20 +7,20 @@ import 'package:mediconsult/features/auth/login/repository/reset_password_reposi
 class ResendOtpCubit extends Cubit<ResendOtpState> {
   final ResetPasswordRepository resetPasswordRepository;
 
-  ResendOtpCubit({required this.resetPasswordRepository})
-      : super(const ResendOtpState.initial());
+  ResendOtpCubit(this.resetPasswordRepository)
+      : super(const ResendOtpState.resendinitial());
 
   Future<void> resendOtp(String phoneNumber, String lang) async {
-    emit(const ResendOtpState.loading());
+    emit(const ResendOtpState.resendloading());
     final request = ResendOtpRequestModel(mobileNumber: phoneNumber);
     final result =
         await resetPasswordRepository.resendOtp(request, lang);
     result.when(
       success: (data) {
-        emit(ResendOtpState.success(data));
+        emit(ResendOtpState.resendsuccess(data));
       },
       failure: (error) {
-        emit(ResendOtpState.failed(error: error));
+        emit(ResendOtpState.resendfailed(error: error));
       },
     );
   }

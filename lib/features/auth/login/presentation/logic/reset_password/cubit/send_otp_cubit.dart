@@ -7,7 +7,7 @@ import 'package:mediconsult/features/auth/login/repository/reset_password_reposi
 class SendOtpCubit extends Cubit<SendOtpState> {
   final ResetPasswordRepository resetPasswordRepository;
 
-  SendOtpCubit({required this.resetPasswordRepository})
+  SendOtpCubit(this.resetPasswordRepository)
       : super(const SendOtpState.initial());
 
   Future<void> sendOtp(String phoneNumber, String lang) async {

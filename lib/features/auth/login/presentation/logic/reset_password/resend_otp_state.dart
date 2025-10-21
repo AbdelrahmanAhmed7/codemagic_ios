@@ -4,8 +4,8 @@ part 'resend_otp_state.freezed.dart';
 
 @freezed
 class ResendOtpState<T> with _$ResendOtpState<T> {
-  const factory ResendOtpState.initial() = _Initial;
-  const factory ResendOtpState.loading() = Loading;
-  const factory ResendOtpState.success(T data) = Success<T>;
-  const factory ResendOtpState.failed({required String error}) = Failed;
+  const factory ResendOtpState.resendinitial() = _ResendInitial;
+  const factory ResendOtpState.resendloading() = ResendLoading;
+  const factory ResendOtpState.resendsuccess(T data) = ResendSuccess<T>;
+  const factory ResendOtpState.resendfailed({required String error}) = ResendFailed;
 }

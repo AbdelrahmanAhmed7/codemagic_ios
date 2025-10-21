@@ -53,6 +53,7 @@ dependencies:
   shared_preferences: ^2.5.3
   flutter_secure_storage: ^9.2.4
   pretty_dio_logger: ^1.4.0
+  pinput: ^3.0.1
 
 dev_dependencies:
   flutter_test:

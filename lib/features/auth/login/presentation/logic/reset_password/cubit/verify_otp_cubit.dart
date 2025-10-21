@@ -7,7 +7,7 @@ import 'package:mediconsult/features/auth/login/repository/reset_password_reposi
 class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   final ResetPasswordRepository resetPasswordRepository;
 
-  VerifyOtpCubit({required this.resetPasswordRepository})
+  VerifyOtpCubit(this.resetPasswordRepository)
       : super(const VerifyOtpState.initial());
 
   Future<void> verifyOtp(String phoneNumber, String otpCode, String lang) async {

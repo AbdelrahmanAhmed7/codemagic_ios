@@ -142,17 +142,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   },
                   builder: (context, state) {
+                    final isLoading = state is Loading;
+                    
                     return AppButton(
-                      text: 'Login',
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<LoginCubit>().login(
-                            cardOrPhoneController.text.trim(),
-                            passwordController.text.trim(),
-                            'en',
-                          );
-                        }
-                      },
+                      text: isLoading ? 'Logging in...' : 'Login',
+                      isLoading: isLoading,
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<LoginCubit>().login(
+                                  cardOrPhoneController.text.trim(),
+                                  passwordController.text.trim(),
+                                  'en',
+                                );
+                              }
+                            },
                     );
                   },
                 ),

@@ -115,22 +115,35 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     SizedBox(height: 40.h),
                     BlocConsumer<SendOtpCubit, SendOtpState>(
                       builder: (BuildContext context, state) {
+                        final isLoading = state is Loading;
+                        
                         return AppButton(
-                          text: 'Send',
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<SendOtpCubit>().sendOtp(
-                                    phoneNumberController.text,
-                                    'en',
-                                  );
-                            }
-                          },
+                          text: isLoading ? 'Sending...' : 'Send',
+                          isLoading: isLoading,
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<SendOtpCubit>().sendOtp(
+                                          phoneNumberController.text,
+                                          'en',
+                                        );
+                                  }
+                                },
                         );
                       },
                       listener: (BuildContext context, state) {
                         if(state is Success) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            showAppSnackBar(context, 'OTP Sent Successfully');
+                            // Show OTP in snackbar for 10 seconds
+                            final otpMessage = state.data?.data?.otp != null 
+                                ? 'OTP: ${state.data!.data!.otp!}' 
+                                : 'OTP Sent Successfully';
+                            showAppSnackBar(
+                              context, 
+                              otpMessage,
+                              duration: const Duration(seconds: 10),
+                            );
                             context.go(
                               '/otp-password',
                               extra: phoneNumberController.text,
