@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/constants/constants.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/features/auth/login/presentation/forget_password_screen.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
@@ -33,7 +34,7 @@ import 'package:mediconsult/features/profile/presentation/screens/language_scree
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: isLoggedInUser? '/home' : '/login',
     routes: [
       GoRoute(
         path: '/',

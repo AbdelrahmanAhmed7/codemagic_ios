@@ -7,7 +7,6 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/reset_password_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/reset_password_state.dart';
-import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 
 class ResetPasswordScreen extends StatefulWidget {

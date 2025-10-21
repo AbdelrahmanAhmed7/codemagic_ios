@@ -192,7 +192,6 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
               ),
               if (hasHistory)
                 // TODO: approval history list here later
-                const SizedBox.shrink(),
               SizedBox(height: 8.h),
             ],
           ),

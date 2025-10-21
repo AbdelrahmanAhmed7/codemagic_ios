@@ -74,18 +74,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 40.h),
 
-                Text(
-                  'Card ID , National ID or Phone Number',
-                  style: AppTextStyles.font16BlackMedium,
-                ),
+                Text('Card ID', style: AppTextStyles.font16BlackMedium),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: cardOrPhoneController,
-                  hintText: 'Enter card number or Phone Number',
+                  hintText: 'Enter card number',
                   prefixImagePath: AppAssets.cardIcon,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your Card ID, National ID, or Phone Number';
+                      return 'Please enter your Card ID';
+                    }
+                    if (!value.startsWith('20')) {
+                      return 'Card ID must start with 20';
+                    }
+                    if (value.length != 7) {
+                      return 'Card ID must be exactly 7 digits';
+                    }
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Card ID must contain only numbers';
                     }
                     return null;
                   },
@@ -143,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   builder: (context, state) {
                     final isLoading = state is Loading;
-                    
+
                     return AppButton(
                       text: isLoading ? 'Logging in...' : 'Login',
                       isLoading: isLoading,
