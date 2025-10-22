@@ -13,12 +13,18 @@ import 'package:mediconsult/features/auth/login/service/reset_password_api_servi
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
 import 'package:mediconsult/features/auth/signup/repository/register_repository.dart';
 import 'package:mediconsult/features/auth/signup/service/register_api_service.dart';
+import 'package:mediconsult/features/family_members/presentation/cubit/family_members_cubit.dart';
+import 'package:mediconsult/features/family_members/repository/family_member_repo.dart';
+import 'package:mediconsult/features/family_members/service/family_member_api_service.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/home/repository/home_repository.dart';
 import 'package:mediconsult/features/home/service/home_api_service.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_cubit.dart';
 import 'package:mediconsult/features/providers/service/providers_api_service.dart';
 import 'package:mediconsult/features/providers/repository/providers_repository.dart';
+import 'package:mediconsult/features/approval_request/service/approval_request_api_service.dart';
+import 'package:mediconsult/features/approval_request/repository/approval_request_repository.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -30,6 +36,8 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ResetPasswordApiService>(() => ResetPasswordApiService(dio));
   sl.registerLazySingleton<HomeApiService>(() => HomeApiService(dio));
   sl.registerLazySingleton<ProvidersApiService>(() => ProvidersApiService(dio));
+  sl.registerLazySingleton<FamilyMemberApiService>(() => FamilyMemberApiService(dio));
+  sl.registerLazySingleton<ApprovalRequestApiService>(() => ApprovalRequestApiService(dio));
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -37,6 +45,8 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<RegisterRepository>(() => RegisterRepository(sl()));
   sl.registerLazySingleton<ResetPasswordRepository>(() => ResetPasswordRepository(sl()));
   sl.registerLazySingleton<HomeRepository>(() => HomeRepository(sl()));
+  sl.registerLazySingleton<FamilyMemberRepository>(() => FamilyMemberRepository(sl()));
+  sl.registerLazySingleton<ApprovalRequestRepository>(() => ApprovalRequestRepository(sl()));
   // Cubits
   sl.registerFactory<LoginCubit>(() => LoginCubit(sl()));
   sl.registerFactory<SignupCubit>(() => SignupCubit(sl()));
@@ -46,4 +56,6 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<VerifyOtpCubit>(() => VerifyOtpCubit(sl()));
   sl.registerFactory<HomeCubit>(() => HomeCubit(sl()));
   sl.registerFactory<ProvidersCubit>(() => ProvidersCubit(sl()));
+  sl.registerFactory<FamilyMembersCubit>(() => FamilyMembersCubit(sl()));
+  sl.registerFactory<ApprovalRequestCubit>(() => ApprovalRequestCubit(sl()));
 }

@@ -17,6 +17,7 @@ import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dar
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
 import 'package:mediconsult/features/family_members/presentation/cubit/family_members_cubit.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
@@ -121,6 +122,7 @@ class AppRouter {
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => sl<FamilyMembersCubit>()),
+              BlocProvider(create: (context) => sl<ApprovalRequestCubit>()),
             ],
             child: const ApprovalRequestScreen(),
           );

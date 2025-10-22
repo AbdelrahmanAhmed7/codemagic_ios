@@ -12,7 +12,14 @@ import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/features/providers/repository/providers_repository.dart';
 
 class ProviderSelector extends StatefulWidget {
-  const ProviderSelector({super.key});
+  final Function(ProviderItem?)? onProviderSelected;
+  final ProviderItem? selectedProvider;
+
+  const ProviderSelector({
+    super.key,
+    this.onProviderSelected,
+    this.selectedProvider,
+  });
 
   @override
   State<ProviderSelector> createState() => _ProviderSelectorState();
@@ -21,6 +28,12 @@ class ProviderSelector extends StatefulWidget {
 class _ProviderSelectorState extends State<ProviderSelector> {
   ProviderItem? _selectedProvider;
   bool _chronic = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedProvider = widget.selectedProvider;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +133,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
           _chronic = false;
         }
       });
+      widget.onProviderSelected?.call(_selectedProvider);
     }
   }
 

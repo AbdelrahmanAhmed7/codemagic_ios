@@ -4,19 +4,39 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 class NoteTextField extends StatefulWidget {
-  const NoteTextField({super.key, required this.maxLength});
+  const NoteTextField({
+    super.key, 
+    required this.maxLength,
+    this.controller,
+  });
   final int maxLength;
+  final TextEditingController? controller;
 
   @override
   State<NoteTextField> createState() => _NoteTextFieldState();
 }
 
 class _NoteTextFieldState extends State<NoteTextField> {
-  final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
+  bool _isExternalController = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.controller != null) {
+      _controller = widget.controller!;
+      _isExternalController = true;
+    } else {
+      _controller = TextEditingController();
+      _isExternalController = false;
+    }
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (!_isExternalController) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 

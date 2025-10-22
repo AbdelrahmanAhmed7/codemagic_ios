@@ -13,6 +13,10 @@ import 'package:mediconsult/features/approval_request/presentation/widgets/appro
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_cubit.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_state.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_state.dart';
+import 'package:mediconsult/features/family_members/data/family_response_model.dart';
+import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class ApprovalRequestScreen extends StatefulWidget {
@@ -23,61 +27,59 @@ class ApprovalRequestScreen extends StatefulWidget {
 }
 
 class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
-  bool _isLoading = false;
+  FamilyMember? _selectedFamilyMember;
+  ProviderItem? _selectedProvider;
+  final TextEditingController _noteController = TextEditingController();
+  final List<String> _attachments = [];
 
-  // TODO: API Integration
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
+
   // Method to handle approval request submission
   Future<void> _submitApprovalRequest() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // TODO: Replace with actual API call
-      // Example:
-      // final response = await approvalRepository.submitRequest(
-      //   familyMemberId: selectedFamilyMemberId,
-      //   providerId: selectedProviderId,
-      //   note: noteController.text,
-      //   attachments: attachmentsList,
-      // );
-      // 
-      // if (response.isSuccess) {
-      //   if (mounted) {
-      //     SuccessDialog.show(context);
-      //   }
-      // } else {
-      //   // Show error snackbar or dialog
-      //   if (mounted) {
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //       SnackBar(content: Text(response.message)),
-      //     );
-      //   }
-      // }
-
-      // Temporary: Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
-      
-      if (mounted) {
-        SuccessDialog.show(context);
-      }
-    } catch (e) {
-      // Handle error
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    // Validation
+    if (_selectedFamilyMember == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a family member')),
+      );
+      return;
     }
+
+    if (_selectedProvider == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a provider')),
+      );
+      return;
+    }
+
+    if (_attachments.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('At least 1 attachment is required')),
+      );
+      return;
+    }
+
+    // Submit approval request
+    context.read<ApprovalRequestCubit>().createApprovalRequest(
+      lang: 'en',
+      memberId: _selectedFamilyMember!.memberId,
+      providerId: _selectedProvider!.id,
+      notes: _noteController.text.isNotEmpty ? _noteController.text : null,
+      attachmentPaths: _attachments,
+    );
+  }
+
+  void _resetForm() {
+    setState(() {
+      _selectedFamilyMember = null;
+      _selectedProvider = null;
+      _noteController.clear();
+      _attachments.clear();
+    });
+    context.read<ApprovalRequestCubit>().reset();
   }
 
   @override
@@ -153,33 +155,80 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                     style: AppTextStyles.font14BlackMedium,
                                   ),
                                   SizedBox(height: 12.h),
-                                  const FamilyMembersSelector(),
+                                  FamilyMembersSelector(
+                                    onMemberSelected: (member) {
+                                      setState(() {
+                                        _selectedFamilyMember = member;
+                                      });
+                                    },
+                                    selectedMember: _selectedFamilyMember,
+                                  ),
                                   SizedBox(height: 24.h),
                                   Text(
                                     'Provider',
                                     style: AppTextStyles.font14BlackMedium,
                                   ),
                                   SizedBox(height: 8.h),
-                                  const ProviderSelector(),
+                                  ProviderSelector(
+                                    onProviderSelected: (provider) {
+                                      setState(() {
+                                        _selectedProvider = provider;
+                                      });
+                                    },
+                                    selectedProvider: _selectedProvider,
+                                  ),
                                   SizedBox(height: 16.h),
                                   Text(
                                     'Note',
                                     style: AppTextStyles.font14BlackMedium,
                                   ),
                                   SizedBox(height: 8.h),
-                                  const NoteTextField(maxLength: 300),
+                                  NoteTextField(
+                                    maxLength: 300,
+                                    controller: _noteController,
+                                  ),
                                   SizedBox(height: 21.h),
-                                  const AttachmentsSection(),
+                                  AttachmentsSection(
+                                    onAttachmentsChanged: (attachments) {
+                                      setState(() {
+                                        _attachments.clear();
+                                        _attachments.addAll(attachments);
+                                      });
+                                    },
+                                  ),
                                   SizedBox(height: 20.h),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    height: 48.h,
-                                    child: _isLoading
-                                        ? const Center(child: CircularProgressIndicator())
-                                        : AppButton(
-                                            text: 'Submit',
-                                            onPressed: _submitApprovalRequest,
-                                          ),
+                                  BlocConsumer<ApprovalRequestCubit, ApprovalRequestState>(
+                                    listener: (context, state) {
+                                      state.when(
+                                        initial: () {},
+                                        loading: () {},
+                                        success: (data) {
+                                          SuccessDialog.show(context);
+                                          _resetForm();
+                                        },
+                                        failed: (message) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(message),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    builder: (context, state) {
+                                      final isLoading = state is Loading;
+                                      return SizedBox(
+                                        width: double.infinity,
+                                        height: 48.h,
+                                        child: isLoading
+                                            ? const Center(child: CircularProgressIndicator())
+                                            : AppButton(
+                                                text: 'Submit',
+                                                onPressed: _submitApprovalRequest,
+                                              ),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
