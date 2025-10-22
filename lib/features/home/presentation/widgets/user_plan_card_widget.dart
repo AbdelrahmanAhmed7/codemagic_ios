@@ -3,52 +3,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/features/home/presentation/home_screen.dart';
+import 'package:mediconsult/features/home/data/home_response_model.dart';
 
 class UserPlanCardWidget extends StatelessWidget {
-  final PlanType planType;
-  final String userName;
-  final String cardId;
-  final String expireDate;
-  final String? profileImage;
+  final HomeData data;
 
   const UserPlanCardWidget({
     super.key,
-    required this.planType,
-    required this.userName,
-    required this.cardId,
-    required this.expireDate,
-    this.profileImage,
+    required this.data,
   });
 
   Color get planColor {
-    switch (planType) {
-      case PlanType.gold:
-        return AppColors.goldPlanColor;
-      case PlanType.silver:
-        return AppColors.silverPlanColor;
-      case PlanType.bronze:
-        return AppColors.bronzePlanColor;
-      case PlanType.platinum:
-        return AppColors.platinumPlanColor;
-      case PlanType.diamond:
-        return AppColors.diamondPlanColor;
-    }
+    final name = (data.programName.isEmpty)
+        ? 'gold'
+        : data.programName.toLowerCase();
+
+    if (name.contains('gold')) return AppColors.goldPlanColor;
+    if (name.contains('silver')) return AppColors.silverPlanColor;
+    if (name.contains('bronze')) return AppColors.bronzePlanColor;
+    if (name.contains('platinum')) return AppColors.platinumPlanColor;
+    if (name.contains('diamond')) return AppColors.diamondPlanColor;
+    return AppColors.goldPlanColor;
   }
 
   String get planName {
-    switch (planType) {
-      case PlanType.gold:
-        return 'Gold Plan';
-      case PlanType.silver:
-        return 'Silver Plan';
-      case PlanType.bronze:
-        return 'Bronze Plan';
-      case PlanType.platinum:
-        return 'Platinum Plan';
-      case PlanType.diamond:
-        return 'Diamond Plan';
-    }
+    if (data.programName.isEmpty) return 'Gold Plan';
+    return data.programName;
   }
 
   @override
@@ -62,21 +42,16 @@ class UserPlanCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.15),
-            blurRadius: 15,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.05),
-            blurRadius: 30,
-            offset: const Offset(0, 8),
+            color: AppColors.greyClr.withValues(alpha: 0.10),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Plan type card
+          // Plan type label
           Positioned(
             top: -16.h,
             left: -16.w,
@@ -98,9 +73,10 @@ class UserPlanCardWidget extends StatelessWidget {
               ),
             ),
           ),
+
           // User Info
           Padding(
-            padding: EdgeInsets.only(top: 16.h),
+            padding: EdgeInsets.only(top: 4.h),
             child: Row(
               children: [
                 Container(
@@ -109,15 +85,12 @@ class UserPlanCardWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.lightGreyClr,
-                    image: profileImage != null
-                        ? DecorationImage(
-                            image: AssetImage(AppAssets.card),
-                            fit: BoxFit.cover,
-                          )
-                        : const DecorationImage(
-                            image: AssetImage(AppAssets.profile),
-                            fit: BoxFit.cover,
-                          ),
+                    image: DecorationImage(
+                      image: (data.memberPhoto != null &&
+                              data.memberPhoto!.isNotEmpty)
+                          ? NetworkImage(data.memberPhoto!)
+                          : const AssetImage(AppAssets.logo) as ImageProvider,
+                    ),
                   ),
                 ),
                 SizedBox(width: 18.w),
@@ -127,7 +100,7 @@ class UserPlanCardWidget extends StatelessWidget {
                     children: [
                       SizedBox(height: 18.h),
                       Text(
-                        userName,
+                        data.memberName,
                         style: AppTextStyles.font14BlackMedium,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -136,14 +109,14 @@ class UserPlanCardWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Card ID',
+                            'Member ID',
                             style: AppTextStyles.font14GreyRegular.copyWith(
                               color: const Color(0xff484848),
                             ),
                           ),
-                          SizedBox(width: 30.w),
+                          SizedBox(width: 20.w),
                           Text(
-                            cardId,
+                            data.memberId.toString(),
                             style: AppTextStyles.font14GreyRegular.copyWith(
                               color: const Color(0xff484848),
                             ),
@@ -155,14 +128,14 @@ class UserPlanCardWidget extends StatelessWidget {
                         children: [
                           Text(
                             'Expire Date',
-                            style: AppTextStyles.font14GreyRegular.copyWith(
+                            style: AppTextStyles.font10GreyRegular.copyWith(
                               color: const Color(0xff484848),
                             ),
                           ),
-                          SizedBox(width: 10.w),
+                          SizedBox(width: 6.w),
                           Text(
-                            expireDate,
-                            style: AppTextStyles.font14GreyRegular.copyWith(
+                            data.policyExpireDate,
+                            style: AppTextStyles.font8GreyRegular.copyWith(
                               color: const Color(0xff484848),
                               fontSize: 12.sp,
                             ),
@@ -175,7 +148,8 @@ class UserPlanCardWidget extends StatelessWidget {
               ],
             ),
           ),
-          // QR Code image at bottom right
+
+          // QR Code at bottom right
           Positioned(
             bottom: 8.h,
             right: 8.w,

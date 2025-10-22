@@ -3,9 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/features/home/data/home_response_model.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
-  const HomeHeaderWidget({super.key});
+  final HomeData data;
+
+  const HomeHeaderWidget({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +31,25 @@ class HomeHeaderWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.whiteClr,
-                    image: const DecorationImage(
-                      image: AssetImage(AppAssets.profile),
-                      fit: BoxFit.cover,
+                    image: DecorationImage(
+                      image: (data.memberPhoto != null && data.memberPhoto!.isNotEmpty)
+                          ? NetworkImage(data.memberPhoto!)
+                          : const AssetImage(AppAssets.logo) as ImageProvider,
                     ),
                   ),
                 ),
-                
                 SizedBox(width: 12.w),
-                
+
                 // Greeting Text
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hello, Ahmed',
-                        style: AppTextStyles.font16WhiteRegular,
+                        'Hello, ${data.memberName.split(" ").first}',
+                        style: AppTextStyles.font16WhiteRegular.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Text(
                         'How is your health now?',
@@ -56,21 +61,48 @@ class HomeHeaderWidget extends StatelessWidget {
               ],
             ),
           ),
-          
-          // Notification Icon
-          Container(
-            width: 30.w,
-            height: 30.h,
-            decoration: BoxDecoration(
-              color: AppColors.whiteClr,
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              AppAssets.notification,
-              width: 15.w,
-              height: 15.h,
-              fit: BoxFit.scaleDown,
-            )
+
+          // Notification Icon with Badge
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: 30.w,
+                height: 30.h,
+                decoration: const BoxDecoration(
+                  color: AppColors.whiteClr,
+                  shape: BoxShape.circle,
+                ),
+                child: Image.asset(
+                  AppAssets.notification,
+                  width: 15.w,
+                  height: 15.h,
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
+              if (data.notificationsCount > 0)
+                Positioned(
+                  top: -2.h,
+                  right: -2.w,
+                  child: Container(
+                    width: 14.w,
+                    height: 14.w,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      data.notificationsCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
