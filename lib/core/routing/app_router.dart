@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/constants.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/forget_password_screen.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/resend_otp_cubit.dart';
@@ -16,8 +17,10 @@ import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
 import 'package:mediconsult/features/family_members/presentation/cubit/family_members_cubit.dart';
+import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approval_cubit.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
@@ -123,6 +126,8 @@ class AppRouter {
             providers: [
               BlocProvider(create: (context) => sl<FamilyMembersCubit>()),
               BlocProvider(create: (context) => sl<ApprovalRequestCubit>()),
+              BlocProvider(create: (context) => sl<ApprovalsCubit>()),
+              BlocProvider(create: (context) => sl<ApprovalCubit>()),
             ],
             child: const ApprovalRequestScreen(),
           );
