@@ -42,7 +42,7 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
           initial: () => _buildLoading(),
           loading: () => _buildLoading(),
           loaded: (response) {
-            final members = response.data?.familyMembers ?? [];
+            final members = response.data.familyMembers;
             
             // Auto-select first member if none selected
             if (_selectedMember == null && members.isNotEmpty) {
@@ -128,7 +128,7 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
               boxShadow: isSelected
                   ? [
                       BoxShadow(
-                        color: AppColors.primaryClr.withOpacity(0.3),
+                        color: AppColors.primaryClr.withValues(alpha: 0.3),
                         blurRadius: 8,
                         spreadRadius: 2,
                       ),
@@ -163,7 +163,7 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
           ),
           SizedBox(height: 4.h),
           Text(
-            member.memberName ?? 'Unknown',
+            member.memberName,
             style: isSelected 
                 ? AppTextStyles.font12BlueMedium 
                 : AppTextStyles.font12GreyRegular,

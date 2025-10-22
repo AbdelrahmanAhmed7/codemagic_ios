@@ -43,7 +43,7 @@ class ProvidersCubit extends Cubit<ProvidersState> {
     }
 
     // Prevent duplicate requests
-    if (isLoadMore && current is Loaded && current.isLoadingMore) {
+    if (isLoadMore && current.isLoadingMore) {
       return;
     }
 
@@ -65,7 +65,7 @@ class ProvidersCubit extends Cubit<ProvidersState> {
       result.when(
         success: (response) {
           final data = response.data!;
-          if (isLoadMore && current is Loaded) {
+          if (isLoadMore) {
             // Use Set to avoid duplicates, then convert back to List
             final existingIds = current.providers.map((p) => p.id).toSet();
             final newProviders = data.providers.where((p) => !existingIds.contains(p.id)).toList();

@@ -9,7 +9,6 @@ import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_cubit.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_state.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
-import 'package:mediconsult/features/providers/repository/providers_repository.dart';
 
 class ProviderSelector extends StatefulWidget {
   final Function(ProviderItem?)? onProviderSelected;
@@ -350,8 +349,6 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
       ),
     );
   }
-
-  String _assetFor(String name) => _ProviderSelectorState()._assetForProvider(name);
 }
 
 class _ProviderListItem extends StatefulWidget {

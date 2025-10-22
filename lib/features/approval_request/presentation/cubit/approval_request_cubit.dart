@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
-import 'package:mediconsult/features/approval_request/data/approval_request_models.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_state.dart';
 import 'package:mediconsult/features/approval_request/repository/approval_request_repository.dart';
 

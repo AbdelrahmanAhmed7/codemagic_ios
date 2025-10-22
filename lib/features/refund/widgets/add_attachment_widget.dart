@@ -240,12 +240,6 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
     );
   }
 
-  void _removeAttachmentAt(int index) {
-    setState(() {
-      _attachments.removeAt(index);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
