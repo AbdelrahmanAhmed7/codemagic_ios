@@ -284,7 +284,7 @@ class _ApprovalCard extends StatelessWidget {
               color: AppColors.primaryClr,
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: item.providerLogo != null
+            child: (item.providerLogo != null && item.providerLogo!.isNotEmpty && item.providerLogo!.startsWith('http'))
                 ? ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
               child: CachedNetworkImage(
@@ -301,26 +301,20 @@ class _ApprovalCard extends StatelessWidget {
                     child: const CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),
-                errorWidget: (context, url, error) => Center(
-                  child: Text(
-                    item.providerName.substring(0, 1).toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                errorWidget: (context, url, error) => Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: Image.asset(
+                    AppAssets.logo,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
             )
-                : Center(
-              child: Text(
-                item.providerName.substring(0, 1).toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                : Padding(
+              padding: EdgeInsets.all(8.w),
+              child: Image.asset(
+                AppAssets.logo,
+                fit: BoxFit.contain,
               ),
             ),
           ),
