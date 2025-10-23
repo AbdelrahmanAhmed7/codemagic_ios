@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:mediconsult/features/family_members/data/family_response_model.dart';
 import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
+import 'package:mediconsult/features/notifications/data/notification_models.dart';
 
 class CacheService {
   // Home Cache
@@ -19,6 +20,11 @@ class CacheService {
   static const String _approvalsDataKey = 'approvals_data';
   static const String _approvalsLastUpdateKey = 'approvals_last_update';
   static const int _approvalsCacheExpiryMinutes = 10;
+
+  // Notifications Cache
+  static const String _notificationsDataKey = 'notifications_data';
+  static const String _notificationsLastUpdateKey = 'notifications_last_update';
+  static const int _notificationsCacheExpiryMinutes = 5;
 
     // cache home data
   static Future<void> cacheHomeData(HomeResponse data) async {
@@ -164,5 +170,48 @@ class CacheService {
         await prefs.remove(key);
       }
     }
+  }
+
+  // ==================== Notifications Cache ====================
+  
+  static Future<void> cacheNotificationsData(NotificationsResponse data) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = jsonEncode(data.toJson());
+    await prefs.setString(_notificationsDataKey, jsonString);
+    await prefs.setInt(_notificationsLastUpdateKey, DateTime.now().millisecondsSinceEpoch);
+  }
+
+  static Future<NotificationsResponse?> getCachedNotificationsData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString(_notificationsDataKey);
+    final lastUpdate = prefs.getInt(_notificationsLastUpdateKey);
+    
+    if (jsonString == null || lastUpdate == null) {
+      return null;
+    }
+
+    // check if cache is expired (5 minutes)
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final cacheAge = now - lastUpdate;
+    final cacheExpiryMs = _notificationsCacheExpiryMinutes * 60 * 1000;
+
+    if (cacheAge > cacheExpiryMs) {
+      await clearNotificationsCache();
+      return null;
+    }
+
+    try {
+      final jsonData = jsonDecode(jsonString);
+      return NotificationsResponse.fromJson(jsonData);
+    } catch (e) {
+      await clearNotificationsCache();
+      return null;
+    }
+  }
+
+  static Future<void> clearNotificationsCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_notificationsDataKey);
+    await prefs.remove(_notificationsLastUpdateKey);
   }
 }

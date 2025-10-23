@@ -10,6 +10,7 @@ import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_cubit.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_state.dart';
 import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
+import 'package:mediconsult/features/approval_request/presentation/widgets/approval_details_bottom_sheet.dart';
 
 class ApprovalHistoryScreen extends StatefulWidget {
   const ApprovalHistoryScreen({super.key});
@@ -101,8 +102,6 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                               return state.when(
                                 initial: () => const Center(child: CircularProgressIndicator()),
                                 loading: () => const Center(child: CircularProgressIndicator()),
-                                empty: () => _buildEmptyState(),
-                                formMode: () => _buildEmptyState(),
                                 failed: (message) => Center(
                                   child: Text(message, style: AppTextStyles.font14GreyRegular),
                                 ),
@@ -211,48 +210,52 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
   }
 
   Widget _buildEmptyState() {
-    return Column(
-      children: [
-        SizedBox(height: 100.h),
-        Image.asset(
-          AppAssets.emptyState,
-          width: 300.w,
-          height: 250.h,
-        ),
-        SizedBox(height: 16.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              style: AppTextStyles.font14BlackMedium,
-              children: [
-                const TextSpan(
-                    text: "You don't have any requests click\nbutton "),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    width: 24.w,
-                    height: 24.w,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFF2563EB),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 50.h),
+          Image.asset(
+            AppAssets.emptyState,
+            width: 250.w,
+            height: 200.h,
+          ),
+          SizedBox(height: 16.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: AppTextStyles.font14BlackMedium,
+                children: [
+                  const TextSpan(
+                      text: "You don't have any requests click\nbutton "),
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Container(
+                      width: 24.w,
+                      height: 24.w,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF2563EB),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white, size: 16),
                     ),
-                    child: const Icon(Icons.add, color: Colors.white, size: 16),
                   ),
-                ),
-                const TextSpan(text: " to request approval"),
-              ],
+                  const TextSpan(text: " to request approval"),
+                ],
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 12.h),
-        Image.asset(
-          AppAssets.arrow,
-          width: 162.w,
-          height: 162.h,
-        ),
-      ],
+          SizedBox(height: 12.h),
+          Image.asset(
+            AppAssets.arrow,
+            width: 130.w,
+            height: 130.h,
+          ),
+          SizedBox(height: 20.h),
+        ],
+      ),
     );
   }
 }
@@ -267,13 +270,18 @@ class _ApprovalCard extends StatelessWidget {
     final Color backgroundColor = _backgroundColorForStatus(item.statusChar);
     final String statusLabel = _statusLabel(item.statusChar);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      padding: EdgeInsets.all(12.w),
-      child: Row(
+    return GestureDetector(
+      onTap: () {
+        // Show approval details bottom sheet
+        ApprovalDetailsBottomSheet.show(context, item);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        padding: EdgeInsets.all(12.w),
+        child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // logo
@@ -397,6 +405,7 @@ class _ApprovalCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 

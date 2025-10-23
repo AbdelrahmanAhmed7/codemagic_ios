@@ -35,6 +35,8 @@ import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart'
 import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/language_screen.dart';
+import 'package:mediconsult/features/notifications/presentation/notifications_screen.dart';
+import 'package:mediconsult/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -142,13 +144,19 @@ class AppRouter {
       GoRoute(
         path: '/refund-request',
         builder: (context, state) {
-          return const RefundRequestScreen();
+          return BlocProvider(
+            create: (context) => sl<FamilyMembersCubit>(),
+            child: const RefundRequestScreen(),
+          );
         },
       ),
       GoRoute(
         path: '/chronic-medicines',
         builder: (context, state) {
-          return const ChronicMedicinesScreen();
+          return BlocProvider(
+            create: (context) => sl<FamilyMembersCubit>(),
+            child: const ChronicMedicinesScreen(),
+          );
         },
       ),
       GoRoute(
@@ -218,6 +226,15 @@ class AppRouter {
         path: '/language',
         builder: (context, state) {
           return const LanguageScreen();
+        },
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) {
+          return BlocProvider(
+            create: (context) => sl<NotificationsCubit>(),
+            child: const NotificationsScreen(),
+          );
         },
       ),
     ],

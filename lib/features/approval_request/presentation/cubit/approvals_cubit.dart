@@ -16,7 +16,6 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
   int _pageSize = 10;
   bool _loadingMore = false;
   final List<ApprovalItem> _items = [];
-  bool _usedCache = false;
 
   Future<void> load({
     required String lang,
@@ -27,7 +26,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
     bool forceRefresh = false,
   }) async {
     if (reset) {
-      _page = 1; _items.clear(); _usedCache = false;
+      _page = 1; _items.clear();
     }
     _status = status ?? _status;
     _key = key;
@@ -40,7 +39,6 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
         final data = cachedData.data!;
         _items.clear();
         _items.addAll(data.approvals);
-        _usedCache = true;
         emit(ApprovalsState.loaded(
           approvals: List.of(_items),
           pagination: data.pagination,
