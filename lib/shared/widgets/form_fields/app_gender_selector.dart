@@ -74,7 +74,6 @@ class AppGenderSelector extends StatelessWidget {
   }
 
   Widget _buildGenderOption(String gender, FormFieldState<String> fieldState) {
-    final isSelected = selectedGender == gender;
     return GestureDetector(
       onTap: () {
         onGenderChanged(gender);
@@ -89,9 +88,11 @@ class AppGenderSelector extends StatelessWidget {
             groupValue: selectedGender,
             activeColor: AppColors.primaryClr,
             onChanged: (value) {
-              onGenderChanged(gender);
-              fieldState.didChange(gender);
-              fieldState.validate();
+              if (value != null) {
+                onGenderChanged(value);
+                fieldState.didChange(value);
+                fieldState.validate();
+              }
             },
           ),
           Text(gender, style: AppTextStyles.font12BlackRegular),

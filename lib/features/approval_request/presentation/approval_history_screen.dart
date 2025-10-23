@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -112,6 +113,9 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                                   return ListView.separated(
                                     controller: _controller,
                                     physics: const BouncingScrollPhysics(),
+                                    cacheExtent: 500,
+                                    addAutomaticKeepAlives: true,
+                                    addRepaintBoundaries: true,
                                     itemCount: approvals.length + (pagination.hasNextPage ? 1 : 0),
                                     separatorBuilder: (_, __) => SizedBox(height: 12.h),
                                     itemBuilder: (context, index) {
@@ -123,7 +127,12 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                                           ),
                                         );
                                       }
-                                      return _ApprovalCard(item: approvals[index]);
+                                      return RepaintBoundary(
+                                        child: _ApprovalCard(
+                                          key: ValueKey(approvals[index].id),
+                                          item: approvals[index],
+                                        ),
+                                      );
                                     },
                                   );
                                 },
@@ -250,7 +259,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
 
 class _ApprovalCard extends StatelessWidget {
   final ApprovalItem item;
-  const _ApprovalCard({required this.item});
+  const _ApprovalCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -278,10 +287,21 @@ class _ApprovalCard extends StatelessWidget {
             child: item.providerLogo != null
                 ? ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: Image.network(
-                item.providerLogo!,
+              child: CachedNetworkImage(
+                imageUrl: item.providerLogo!,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stack) => Center(
+                memCacheWidth: 138,
+                memCacheHeight: 138,
+                maxWidthDiskCache: 138,
+                maxHeightDiskCache: 138,
+                placeholder: (context, url) => Center(
+                  child: SizedBox(
+                    width: 20.w,
+                    height: 20.w,
+                    child: const CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Center(
                   child: Text(
                     item.providerName.substring(0, 1).toUpperCase(),
                     style: TextStyle(

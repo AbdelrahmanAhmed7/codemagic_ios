@@ -61,7 +61,7 @@ class AppDropdownField<T> extends StatelessWidget {
                 border: Border.all(color: AppColors.lightGreyClr),
               ),
               child: DropdownButtonFormField<T>(
-                value: value,
+                initialValue: value,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12.w,

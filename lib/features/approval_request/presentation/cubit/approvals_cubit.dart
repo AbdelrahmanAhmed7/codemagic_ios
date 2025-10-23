@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_state.dart';
@@ -14,6 +16,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
   int _pageSize = 10;
   bool _loadingMore = false;
   final List<ApprovalItem> _items = [];
+  bool _usedCache = false;
 
   Future<void> load({
     required String lang,
@@ -21,13 +24,35 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
     String? key,
     int? pageSize,
     bool reset = false,
+    bool forceRefresh = false,
   }) async {
     if (reset) {
-      _page = 1; _items.clear();
+      _page = 1; _items.clear(); _usedCache = false;
     }
     _status = status ?? _status;
     _key = key;
     _pageSize = pageSize ?? _pageSize;
+
+    // Try cache for first page only
+    if (_page == 1 && !forceRefresh && _key == null) {
+      final cachedData = await CacheService.getCachedApprovalsData(_status);
+      if (cachedData != null && cachedData.data != null) {
+        final data = cachedData.data!;
+        _items.clear();
+        _items.addAll(data.approvals);
+        _usedCache = true;
+        emit(ApprovalsState.loaded(
+          approvals: List.of(_items),
+          pagination: data.pagination,
+          status: data.filter.status,
+          loadingMore: false,
+        ));
+        
+        // Background refresh
+        unawaited(_fetchAndCacheData(lang));
+        return;
+      }
+    }
 
     if (_page == 1) {
       emit(const ApprovalsState.loading());
@@ -48,6 +73,10 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
       ));
     }
 
+    await _fetchAndCacheData(lang);
+  }
+
+  Future<void> _fetchAndCacheData(String lang) async {
     final res = await _repository.getApprovals(
       lang: lang,
       status: _status,
@@ -57,9 +86,15 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
     );
 
     res.when(
-      success: (response) {
+      success: (response) async {
         final data = response.data!;
-        if (_page == 1) _items.clear();
+        if (_page == 1) {
+          _items.clear();
+          // Cache only first page
+          if (_key == null) {
+            await CacheService.cacheApprovalsData(response, _status);
+          }
+        }
         _items.addAll(data.approvals);
         _loadingMore = false;
         emit(ApprovalsState.loaded(
@@ -87,6 +122,14 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
   void changeStatus(String status, {required String lang}) {
     _status = status;
     load(lang: lang, status: status, reset: true);
+  }
+
+  Future<void> refreshApprovals({required String lang}) async {
+    await load(lang: lang, forceRefresh: true, reset: true);
+  }
+
+  Future<void> clearCache() async {
+    await CacheService.clearAllApprovalsCache();
   }
 }
 
