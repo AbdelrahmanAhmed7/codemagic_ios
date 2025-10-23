@@ -61,6 +61,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
         final data = response.data!;
         if (_page == 1) _items.clear();
         _items.addAll(data.approvals);
+        _loadingMore = false;
         emit(ApprovalsState.loaded(
           approvals: List.of(_items),
           pagination: data.pagination,
@@ -69,6 +70,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
         ));
       },
       failure: (message) {
+        _loadingMore = false;
         emit(ApprovalsState.failed(message));
       },
     );
@@ -78,7 +80,6 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
     final current = state;
     if (current is Loaded && current.pagination.hasNextPage && !_loadingMore) {
       _page = current.pagination.currentPage + 1;
-      _loadingMore = true;
       await load(lang: lang);
     }
   }

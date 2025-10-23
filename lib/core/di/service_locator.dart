@@ -27,7 +27,6 @@ import 'package:mediconsult/features/approval_request/repository/approval_reques
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
 import 'package:mediconsult/features/approval_request/repository/approvals_repository.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_cubit.dart';
-import 'package:mediconsult/features/approval_request/presentation/cubit/approval_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -63,5 +62,4 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<FamilyMembersCubit>(() => FamilyMembersCubit(sl()));
   sl.registerFactory<ApprovalRequestCubit>(() => ApprovalRequestCubit(sl()));
   sl.registerFactory<ApprovalsCubit>(() => ApprovalsCubit(sl()));
-  sl.registerFactory<ApprovalCubit>(() => ApprovalCubit());
 }
