@@ -30,6 +30,9 @@ import 'package:mediconsult/features/approval_request/presentation/cubit/approva
 import 'package:mediconsult/features/notifications/service/notification_service.dart';
 import 'package:mediconsult/features/notifications/repository/notification_repository.dart';
 import 'package:mediconsult/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:mediconsult/features/network/service/network_api_service.dart';
+import 'package:mediconsult/features/network/repository/network_repository.dart';
+import 'package:mediconsult/features/network/logic/network_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -44,6 +47,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<FamilyMemberApiService>(() => FamilyMemberApiService(dio));
   sl.registerLazySingleton<ApprovalRequestApiService>(() => ApprovalRequestApiService(dio));
   sl.registerLazySingleton<NotificationService>(() => NotificationService(dio));
+  sl.registerLazySingleton<NetworkApiService>(() => NetworkApiService(dio));
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -55,6 +59,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ApprovalRequestRepository>(() => ApprovalRequestRepository(sl()));
   sl.registerLazySingleton<ApprovalsRepository>(() => ApprovalsRepository(sl()));
   sl.registerLazySingleton<NotificationRepository>(() => NotificationRepository(sl()));
+  sl.registerLazySingleton<NetworkRepository>(() => NetworkRepository(sl()));
   // Cubits
   sl.registerFactory<LoginCubit>(() => LoginCubit(sl()));
   sl.registerFactory<SignupCubit>(() => SignupCubit(sl()));
@@ -68,4 +73,5 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<ApprovalRequestCubit>(() => ApprovalRequestCubit(sl()));
   sl.registerFactory<ApprovalsCubit>(() => ApprovalsCubit(sl()));
   sl.registerFactory<NotificationsCubit>(() => NotificationsCubit(sl()));
+  sl.registerFactory<NetworkCubit>(() => NetworkCubit(sl()));
 }

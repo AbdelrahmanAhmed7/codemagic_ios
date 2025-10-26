@@ -149,7 +149,11 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentIndex = index;
           });
-          if (index == 3) context.go('/profile');
+          if (index == 1) {
+            context.push('/network');
+          } else if (index == 3) {
+            context.go('/profile');
+          }
         },
       ),
     );

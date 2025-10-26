@@ -37,6 +37,8 @@ import 'package:mediconsult/features/profile/presentation/screens/change_passwor
 import 'package:mediconsult/features/profile/presentation/screens/language_screen.dart';
 import 'package:mediconsult/features/notifications/presentation/notifications_screen.dart';
 import 'package:mediconsult/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:mediconsult/features/network/presentation/network_screen.dart';
+import 'package:mediconsult/features/network/logic/network_cubit.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -234,6 +236,15 @@ class AppRouter {
           return BlocProvider(
             create: (context) => sl<NotificationsCubit>(),
             child: const NotificationsScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/network',
+        builder: (context, state) {
+          return BlocProvider(
+            create: (context) => sl<NetworkCubit>(),
+            child: const NetworkScreen(),
           );
         },
       ),

@@ -1,0 +1,355 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mediconsult/core/constants/api_result.dart';
+import 'package:mediconsult/features/network/data/city_response_model.dart';
+import 'package:mediconsult/features/network/data/government_response_model.dart';
+import 'package:mediconsult/features/network/data/network_category_response_model.dart';
+import 'package:mediconsult/features/network/data/network_provider_response_model.dart' as provider_model;
+import 'package:mediconsult/features/network/logic/network_state.dart';
+import 'package:mediconsult/features/network/repository/network_repository.dart';
+
+class NetworkCubit extends Cubit<NetworkState> {
+  final NetworkRepository _repository;
+  
+  // Cache data
+  List<NetworkCategory> _categories = [];
+  List<Government> _governments = [];
+  List<City> _cities = [];
+  provider_model.NetworkProviderData? _currentProviderData;
+  
+  // Current filters
+  String? _searchKey;
+  int? _selectedCategoryId;
+  int? _selectedGovernmentId;
+  int? _selectedCityId;
+  double? _userLatitude;
+  double? _userLongitude;
+  
+  // Pagination
+  int _currentPage = 1;
+  static const int _pageSize = 20;
+
+  NetworkCubit(this._repository) : super(const NetworkState.initial());
+
+  // Getters for cached data
+  List<NetworkCategory> get categories => _categories;
+  List<Government> get governments => _governments;
+  List<City> get cities => _cities;
+  provider_model.NetworkProviderData? get currentProviderData => _currentProviderData;
+  
+  // Getters for filters
+  String? get searchKey => _searchKey;
+  int? get selectedCategoryId => _selectedCategoryId;
+  int? get selectedGovernmentId => _selectedGovernmentId;
+  int? get selectedCityId => _selectedCityId;
+  double? get userLatitude => _userLatitude;
+  double? get userLongitude => _userLongitude;
+  List<provider_model.NetworkProvider> get currentProviders => _currentProviderData?.providers ?? [];
+  bool get hasActiveFilters => 
+      _selectedCategoryId != null || 
+      _selectedGovernmentId != null || 
+      _selectedCityId != null ||
+      (_searchKey != null && _searchKey!.isNotEmpty);
+
+  /// Get all categories
+  Future<void> getCategories() async {
+    emit(const NetworkState.categoriesLoading());
+    
+    final result = await _repository.getCategories('en');
+    
+    result.when(
+      success: (response) {
+        _categories = response.data.categories;
+        emit(NetworkState.categoriesSuccess(_categories));
+      },
+      failure: (message) {
+        emit(NetworkState.categoriesError(message));
+      },
+    );
+  }
+
+  /// Get user's current location
+  Future<void> getUserLocation() async {
+    print('📍 Starting getUserLocation...');
+    emit(const NetworkState.locationLoading());
+    
+    try {
+      // Check if location services are enabled
+      print('📍 Checking if location services are enabled...');
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      print('📍 Location services enabled: $serviceEnabled');
+      
+      if (!serviceEnabled) {
+        print('❌ Location services are disabled');
+        emit(const NetworkState.locationError('Location services are disabled'));
+        return;
+      }
+
+      // Check location permissions
+      print('📍 Checking location permissions...');
+      LocationPermission permission = await Geolocator.checkPermission();
+      print('📍 Current permission: $permission');
+      
+      if (permission == LocationPermission.denied) {
+        print('📍 Requesting location permission...');
+        permission = await Geolocator.requestPermission();
+        print('📍 Permission after request: $permission');
+        
+        if (permission == LocationPermission.denied) {
+          print('❌ Location permission denied');
+          emit(const NetworkState.locationPermissionDenied());
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print('❌ Location permission denied forever');
+        emit(const NetworkState.locationPermissionDenied());
+        return;
+      }
+
+      // Get current position
+      print('📍 Getting current position...');
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+
+      _userLatitude = position.latitude;
+      _userLongitude = position.longitude;
+      
+      print('✅ Location success: lat=$_userLatitude, lng=$_userLongitude');
+      emit(NetworkState.locationSuccess(position.latitude, position.longitude));
+    } catch (e) {
+      print('❌ Location error: $e');
+      emit(NetworkState.locationError(e.toString()));
+    }
+  }
+
+  /// Search providers with filters
+  Future<void> searchProviders({
+    String? searchKey,
+    int? categoryId,
+    int? governmentId,
+    int? cityId,
+    bool resetPage = true,
+  }) async {
+    if (resetPage) {
+      _currentPage = 1;
+    }
+    
+    // Update filters
+    _searchKey = searchKey;
+    _selectedCategoryId = categoryId;
+    _selectedGovernmentId = governmentId;
+    _selectedCityId = cityId;
+    
+    // Debug: Print location before API call
+    print('🔍 Searching with location: lat=$_userLatitude, lng=$_userLongitude');
+    print('🔍 Search filters: key=$_searchKey, category=$_selectedCategoryId, gov=$_selectedGovernmentId, city=$_selectedCityId');
+    
+    emit(const NetworkState.providersLoading());
+    
+    final result = await _repository.searchProviders(
+      'en',
+      searchKey: _searchKey,
+      categoryId: _selectedCategoryId,
+      governmentId: _selectedGovernmentId,
+      cityId: _selectedCityId,
+      latitude: _userLatitude,
+      longitude: _userLongitude,
+      page: _currentPage,
+      pageSize: _pageSize,
+    );
+    
+    result.when(
+      success: (response) {
+        if (response.data == null || response.data!.providers.isEmpty) {
+          emit(const NetworkState.providersEmpty());
+        } else {
+          // Client-side filtering (temporary fix until backend is fixed)
+          var filteredProviders = response.data!.providers;
+          
+          if (_searchKey != null && _searchKey!.isNotEmpty) {
+            final searchLower = _searchKey!.toLowerCase();
+            filteredProviders = filteredProviders.where((provider) {
+              return provider.providerName.toLowerCase().contains(searchLower) ||
+                     provider.categoryName.toLowerCase().contains(searchLower) ||
+                     provider.address.toLowerCase().contains(searchLower) ||
+                     provider.area.toLowerCase().contains(searchLower) ||
+                     provider.city.toLowerCase().contains(searchLower);
+            }).toList();
+            
+            print('🔍 Client-side filter: ${response.data!.providers.length} → ${filteredProviders.length} providers');
+          }
+          
+          if (filteredProviders.isEmpty) {
+            emit(const NetworkState.providersEmpty());
+          } else {
+            // Create new pagination with filtered count
+            final filteredPagination = provider_model.Pagination(
+              currentPage: response.data!.pagination.currentPage,
+              pageSize: response.data!.pagination.pageSize,
+              totalCount: filteredProviders.length,
+              totalPages: (filteredProviders.length / _pageSize).ceil(),
+              hasNextPage: false, // Disable pagination for filtered results
+              hasPreviousPage: false,
+            );
+            
+            // Create new data with filtered providers
+            final filteredData = provider_model.NetworkProviderData(
+              categories: response.data!.categories,
+              providers: filteredProviders,
+              pagination: filteredPagination,
+              userLocation: response.data!.userLocation,
+              searchTerm: _searchKey,
+              categoryId: _selectedCategoryId,
+              governmentId: _selectedGovernmentId,
+              cityId: _selectedCityId,
+            );
+            
+            _currentProviderData = filteredData;
+            emit(NetworkState.providersSuccess(filteredData));
+          }
+        }
+      },
+      failure: (message) {
+        emit(NetworkState.providersError(message));
+      },
+    );
+  }
+
+  /// Load more providers (pagination)
+  Future<void> loadMoreProviders() async {
+    if (_currentProviderData == null || 
+        !_currentProviderData!.pagination.hasNextPage) {
+      return;
+    }
+    
+    _currentPage++;
+    
+    final result = await _repository.searchProviders(
+      'en',
+      searchKey: _searchKey,
+      categoryId: _selectedCategoryId,
+      governmentId: _selectedGovernmentId,
+      cityId: _selectedCityId,
+      latitude: _userLatitude,
+      longitude: _userLongitude,
+      page: _currentPage,
+      pageSize: _pageSize,
+    );
+    
+    result.when(
+      success: (response) {
+        if (response.data != null) {
+          // Merge providers
+          final updatedProviders = [
+            ..._currentProviderData!.providers,
+            ...response.data!.providers,
+          ];
+          
+          _currentProviderData = provider_model.NetworkProviderData(
+            categories: response.data!.categories,
+            providers: updatedProviders,
+            pagination: response.data!.pagination,
+            userLocation: response.data!.userLocation,
+            searchTerm: response.data!.searchTerm,
+            categoryId: response.data!.categoryId,
+            governmentId: response.data!.governmentId,
+            cityId: response.data!.cityId,
+          );
+          
+          emit(NetworkState.providersSuccess(_currentProviderData!));
+        }
+      },
+      failure: (message) {
+        // Keep current state on pagination error
+        _currentPage--;
+      },
+    );
+  }
+
+  /// Get all governments
+  Future<void> getGovernments() async {
+    emit(const NetworkState.governmentsLoading());
+    
+    final result = await _repository.getGovernments(
+      'en',
+      page: 1,
+      pageSize: 100,
+    );
+    
+    result.when(
+      success: (response) {
+        _governments = response.data.governments;
+        emit(NetworkState.governmentsSuccess(_governments));
+      },
+      failure: (message) {
+        emit(NetworkState.governmentsError(message));
+      },
+    );
+  }
+
+  /// Get cities by government
+  Future<void> getCitiesByGovernment(int governmentId) async {
+    emit(const NetworkState.citiesLoading());
+    
+    final result = await _repository.getCitiesByGovernment(
+      'en',
+      governmentId: governmentId,
+      page: 1,
+      pageSize: 100,
+    );
+    
+    result.when(
+      success: (response) {
+        _cities = response.data?.cities ?? [];
+        emit(NetworkState.citiesSuccess(_cities));
+      },
+      failure: (message) {
+        emit(NetworkState.citiesError(message));
+      },
+    );
+  }
+
+  /// Clear all filters
+  void clearFilters() {
+    _searchKey = null;
+    _selectedCategoryId = null;
+    _selectedGovernmentId = null;
+    _selectedCityId = null;
+    _cities = [];
+    searchProviders(resetPage: true);
+  }
+
+  /// Clear specific filter
+  void clearCategoryFilter() {
+    _selectedCategoryId = null;
+    searchProviders(resetPage: true);
+  }
+
+  void clearGovernmentFilter() {
+    _selectedGovernmentId = null;
+    _selectedCityId = null;
+    _cities = [];
+    searchProviders(resetPage: true);
+  }
+
+  void clearCityFilter() {
+    _selectedCityId = null;
+    searchProviders(resetPage: true);
+  }
+
+  /// Reset to initial state
+  void reset() {
+    _searchKey = null;
+    _selectedCategoryId = null;
+    _selectedGovernmentId = null;
+    _selectedCityId = null;
+    _currentPage = 1;
+    _currentProviderData = null;
+    emit(const NetworkState.initial());
+  }
+}

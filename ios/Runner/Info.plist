@@ -51,5 +51,9 @@
 		<string>This app requires camera access to take photos for attachments.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>This app requires photo library access to upload attachments.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>This app requires location access to find nearby healthcare providers.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>This app requires location access to find nearby healthcare providers.</string>
 	</dict>
 </plist>
