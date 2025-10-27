@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
