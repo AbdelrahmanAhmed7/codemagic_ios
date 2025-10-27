@@ -20,6 +20,7 @@ class NetworkState with _$NetworkState {
   const factory NetworkState.providersSuccess(NetworkProviderData data) = ProvidersSuccess;
   const factory NetworkState.providersError(String error) = ProvidersError;
   const factory NetworkState.providersEmpty() = ProvidersEmpty;
+  const factory NetworkState.providersLoadingMore(NetworkProviderData data) = ProvidersLoadingMore;
   
   // Governments states
   const factory NetworkState.governmentsLoading() = GovernmentsLoading;

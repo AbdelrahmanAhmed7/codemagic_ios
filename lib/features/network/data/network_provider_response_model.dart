@@ -25,7 +25,7 @@ class NetworkProviderResponse {
 
 @JsonSerializable(explicitToJson: true)
 class NetworkProviderData {
-  final List<NetworkCategory> categories; // ✅ Will use the imported one
+  final List<NetworkCategory> categories;
   final List<NetworkProvider> providers;
   final Pagination pagination;
   final UserLocation? userLocation;
@@ -119,8 +119,6 @@ class NetworkProvider {
     return '${distance!.toStringAsFixed(1)} km';
   }
 }
-
-// ✅ Remove NetworkCategory class from here - it's imported
 
 @JsonSerializable()
 class UserLocation {

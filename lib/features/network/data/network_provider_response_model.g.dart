@@ -99,20 +99,6 @@ Map<String, dynamic> _$NetworkProviderToJson(NetworkProvider instance) =>
       'distance': instance.distance,
     };
 
-NetworkCategory _$NetworkCategoryFromJson(Map<String, dynamic> json) =>
-    NetworkCategory(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      image: json['image'] as String,
-    );
-
-Map<String, dynamic> _$NetworkCategoryToJson(NetworkCategory instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'image': instance.image,
-    };
-
 UserLocation _$UserLocationFromJson(Map<String, dynamic> json) => UserLocation(
   latitude: (json['latitude'] as num).toDouble(),
   longitude: (json['longitude'] as num).toDouble(),

@@ -29,7 +29,7 @@ import 'package:mediconsult/features/profile/presentation/screens/contact_us_scr
 import 'package:mediconsult/features/profile/presentation/screens/faq_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/insurance_plan_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/personal_info_screen.dart';
-import 'package:mediconsult/features/refund/refund_request_screen.dart';
+import 'package:mediconsult/features/refund/presentation/screens/refund_request_screen.dart';
 import 'package:mediconsult/features/profile/presentation/profile_screen.dart';
 import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart';
 import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
@@ -164,7 +164,10 @@ class AppRouter {
       GoRoute(
         path: '/profile',
         builder: (context, state) {
-          return const ProfileScreen();
+          return BlocProvider(
+            create: (context) => sl<HomeCubit>(),
+            child: const ProfileScreen(),
+          );
         },
       ),
       GoRoute(

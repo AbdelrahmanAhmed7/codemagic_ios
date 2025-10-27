@@ -62,7 +62,7 @@ class _NetworkApiService implements NetworkApiService {
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'key': searchKey,
+      r'search': searchKey,
       r'categoryId': categoryId,
       r'governmentId': governmentId,
       r'cityId': cityId,

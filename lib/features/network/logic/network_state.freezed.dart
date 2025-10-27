@@ -55,7 +55,7 @@ extension NetworkStatePatterns on NetworkState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( CategoriesLoading value)?  categoriesLoading,TResult Function( CategoriesSuccess value)?  categoriesSuccess,TResult Function( CategoriesError value)?  categoriesError,TResult Function( ProvidersLoading value)?  providersLoading,TResult Function( ProvidersSuccess value)?  providersSuccess,TResult Function( ProvidersError value)?  providersError,TResult Function( ProvidersEmpty value)?  providersEmpty,TResult Function( GovernmentsLoading value)?  governmentsLoading,TResult Function( GovernmentsSuccess value)?  governmentsSuccess,TResult Function( GovernmentsError value)?  governmentsError,TResult Function( CitiesLoading value)?  citiesLoading,TResult Function( CitiesSuccess value)?  citiesSuccess,TResult Function( CitiesError value)?  citiesError,TResult Function( LocationLoading value)?  locationLoading,TResult Function( LocationSuccess value)?  locationSuccess,TResult Function( LocationError value)?  locationError,TResult Function( LocationPermissionDenied value)?  locationPermissionDenied,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( CategoriesLoading value)?  categoriesLoading,TResult Function( CategoriesSuccess value)?  categoriesSuccess,TResult Function( CategoriesError value)?  categoriesError,TResult Function( ProvidersLoading value)?  providersLoading,TResult Function( ProvidersSuccess value)?  providersSuccess,TResult Function( ProvidersError value)?  providersError,TResult Function( ProvidersEmpty value)?  providersEmpty,TResult Function( ProvidersLoadingMore value)?  providersLoadingMore,TResult Function( GovernmentsLoading value)?  governmentsLoading,TResult Function( GovernmentsSuccess value)?  governmentsSuccess,TResult Function( GovernmentsError value)?  governmentsError,TResult Function( CitiesLoading value)?  citiesLoading,TResult Function( CitiesSuccess value)?  citiesSuccess,TResult Function( CitiesError value)?  citiesError,TResult Function( LocationLoading value)?  locationLoading,TResult Function( LocationSuccess value)?  locationSuccess,TResult Function( LocationError value)?  locationError,TResult Function( LocationPermissionDenied value)?  locationPermissionDenied,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -66,7 +66,8 @@ return categoriesError(_that);case ProvidersLoading() when providersLoading != n
 return providersLoading(_that);case ProvidersSuccess() when providersSuccess != null:
 return providersSuccess(_that);case ProvidersError() when providersError != null:
 return providersError(_that);case ProvidersEmpty() when providersEmpty != null:
-return providersEmpty(_that);case GovernmentsLoading() when governmentsLoading != null:
+return providersEmpty(_that);case ProvidersLoadingMore() when providersLoadingMore != null:
+return providersLoadingMore(_that);case GovernmentsLoading() when governmentsLoading != null:
 return governmentsLoading(_that);case GovernmentsSuccess() when governmentsSuccess != null:
 return governmentsSuccess(_that);case GovernmentsError() when governmentsError != null:
 return governmentsError(_that);case CitiesLoading() when citiesLoading != null:
@@ -94,7 +95,7 @@ return locationPermissionDenied(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( CategoriesLoading value)  categoriesLoading,required TResult Function( CategoriesSuccess value)  categoriesSuccess,required TResult Function( CategoriesError value)  categoriesError,required TResult Function( ProvidersLoading value)  providersLoading,required TResult Function( ProvidersSuccess value)  providersSuccess,required TResult Function( ProvidersError value)  providersError,required TResult Function( ProvidersEmpty value)  providersEmpty,required TResult Function( GovernmentsLoading value)  governmentsLoading,required TResult Function( GovernmentsSuccess value)  governmentsSuccess,required TResult Function( GovernmentsError value)  governmentsError,required TResult Function( CitiesLoading value)  citiesLoading,required TResult Function( CitiesSuccess value)  citiesSuccess,required TResult Function( CitiesError value)  citiesError,required TResult Function( LocationLoading value)  locationLoading,required TResult Function( LocationSuccess value)  locationSuccess,required TResult Function( LocationError value)  locationError,required TResult Function( LocationPermissionDenied value)  locationPermissionDenied,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( CategoriesLoading value)  categoriesLoading,required TResult Function( CategoriesSuccess value)  categoriesSuccess,required TResult Function( CategoriesError value)  categoriesError,required TResult Function( ProvidersLoading value)  providersLoading,required TResult Function( ProvidersSuccess value)  providersSuccess,required TResult Function( ProvidersError value)  providersError,required TResult Function( ProvidersEmpty value)  providersEmpty,required TResult Function( ProvidersLoadingMore value)  providersLoadingMore,required TResult Function( GovernmentsLoading value)  governmentsLoading,required TResult Function( GovernmentsSuccess value)  governmentsSuccess,required TResult Function( GovernmentsError value)  governmentsError,required TResult Function( CitiesLoading value)  citiesLoading,required TResult Function( CitiesSuccess value)  citiesSuccess,required TResult Function( CitiesError value)  citiesError,required TResult Function( LocationLoading value)  locationLoading,required TResult Function( LocationSuccess value)  locationSuccess,required TResult Function( LocationError value)  locationError,required TResult Function( LocationPermissionDenied value)  locationPermissionDenied,}){
 final _that = this;
 switch (_that) {
 case _Initial():
@@ -105,7 +106,8 @@ return categoriesError(_that);case ProvidersLoading():
 return providersLoading(_that);case ProvidersSuccess():
 return providersSuccess(_that);case ProvidersError():
 return providersError(_that);case ProvidersEmpty():
-return providersEmpty(_that);case GovernmentsLoading():
+return providersEmpty(_that);case ProvidersLoadingMore():
+return providersLoadingMore(_that);case GovernmentsLoading():
 return governmentsLoading(_that);case GovernmentsSuccess():
 return governmentsSuccess(_that);case GovernmentsError():
 return governmentsError(_that);case CitiesLoading():
@@ -132,7 +134,7 @@ return locationPermissionDenied(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( CategoriesLoading value)?  categoriesLoading,TResult? Function( CategoriesSuccess value)?  categoriesSuccess,TResult? Function( CategoriesError value)?  categoriesError,TResult? Function( ProvidersLoading value)?  providersLoading,TResult? Function( ProvidersSuccess value)?  providersSuccess,TResult? Function( ProvidersError value)?  providersError,TResult? Function( ProvidersEmpty value)?  providersEmpty,TResult? Function( GovernmentsLoading value)?  governmentsLoading,TResult? Function( GovernmentsSuccess value)?  governmentsSuccess,TResult? Function( GovernmentsError value)?  governmentsError,TResult? Function( CitiesLoading value)?  citiesLoading,TResult? Function( CitiesSuccess value)?  citiesSuccess,TResult? Function( CitiesError value)?  citiesError,TResult? Function( LocationLoading value)?  locationLoading,TResult? Function( LocationSuccess value)?  locationSuccess,TResult? Function( LocationError value)?  locationError,TResult? Function( LocationPermissionDenied value)?  locationPermissionDenied,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( CategoriesLoading value)?  categoriesLoading,TResult? Function( CategoriesSuccess value)?  categoriesSuccess,TResult? Function( CategoriesError value)?  categoriesError,TResult? Function( ProvidersLoading value)?  providersLoading,TResult? Function( ProvidersSuccess value)?  providersSuccess,TResult? Function( ProvidersError value)?  providersError,TResult? Function( ProvidersEmpty value)?  providersEmpty,TResult? Function( ProvidersLoadingMore value)?  providersLoadingMore,TResult? Function( GovernmentsLoading value)?  governmentsLoading,TResult? Function( GovernmentsSuccess value)?  governmentsSuccess,TResult? Function( GovernmentsError value)?  governmentsError,TResult? Function( CitiesLoading value)?  citiesLoading,TResult? Function( CitiesSuccess value)?  citiesSuccess,TResult? Function( CitiesError value)?  citiesError,TResult? Function( LocationLoading value)?  locationLoading,TResult? Function( LocationSuccess value)?  locationSuccess,TResult? Function( LocationError value)?  locationError,TResult? Function( LocationPermissionDenied value)?  locationPermissionDenied,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -143,7 +145,8 @@ return categoriesError(_that);case ProvidersLoading() when providersLoading != n
 return providersLoading(_that);case ProvidersSuccess() when providersSuccess != null:
 return providersSuccess(_that);case ProvidersError() when providersError != null:
 return providersError(_that);case ProvidersEmpty() when providersEmpty != null:
-return providersEmpty(_that);case GovernmentsLoading() when governmentsLoading != null:
+return providersEmpty(_that);case ProvidersLoadingMore() when providersLoadingMore != null:
+return providersLoadingMore(_that);case GovernmentsLoading() when governmentsLoading != null:
 return governmentsLoading(_that);case GovernmentsSuccess() when governmentsSuccess != null:
 return governmentsSuccess(_that);case GovernmentsError() when governmentsError != null:
 return governmentsError(_that);case CitiesLoading() when citiesLoading != null:
@@ -170,7 +173,7 @@ return locationPermissionDenied(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  categoriesLoading,TResult Function( List<NetworkCategory> categories)?  categoriesSuccess,TResult Function( String error)?  categoriesError,TResult Function()?  providersLoading,TResult Function( NetworkProviderData data)?  providersSuccess,TResult Function( String error)?  providersError,TResult Function()?  providersEmpty,TResult Function()?  governmentsLoading,TResult Function( List<Government> governments)?  governmentsSuccess,TResult Function( String error)?  governmentsError,TResult Function()?  citiesLoading,TResult Function( List<City> cities)?  citiesSuccess,TResult Function( String error)?  citiesError,TResult Function()?  locationLoading,TResult Function( double latitude,  double longitude)?  locationSuccess,TResult Function( String error)?  locationError,TResult Function()?  locationPermissionDenied,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  categoriesLoading,TResult Function( List<NetworkCategory> categories)?  categoriesSuccess,TResult Function( String error)?  categoriesError,TResult Function()?  providersLoading,TResult Function( NetworkProviderData data)?  providersSuccess,TResult Function( String error)?  providersError,TResult Function()?  providersEmpty,TResult Function( NetworkProviderData data)?  providersLoadingMore,TResult Function()?  governmentsLoading,TResult Function( List<Government> governments)?  governmentsSuccess,TResult Function( String error)?  governmentsError,TResult Function()?  citiesLoading,TResult Function( List<City> cities)?  citiesSuccess,TResult Function( String error)?  citiesError,TResult Function()?  locationLoading,TResult Function( double latitude,  double longitude)?  locationSuccess,TResult Function( String error)?  locationError,TResult Function()?  locationPermissionDenied,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case CategoriesLoading() when categoriesLoading != null:
@@ -180,7 +183,8 @@ return categoriesError(_that.error);case ProvidersLoading() when providersLoadin
 return providersLoading();case ProvidersSuccess() when providersSuccess != null:
 return providersSuccess(_that.data);case ProvidersError() when providersError != null:
 return providersError(_that.error);case ProvidersEmpty() when providersEmpty != null:
-return providersEmpty();case GovernmentsLoading() when governmentsLoading != null:
+return providersEmpty();case ProvidersLoadingMore() when providersLoadingMore != null:
+return providersLoadingMore(_that.data);case GovernmentsLoading() when governmentsLoading != null:
 return governmentsLoading();case GovernmentsSuccess() when governmentsSuccess != null:
 return governmentsSuccess(_that.governments);case GovernmentsError() when governmentsError != null:
 return governmentsError(_that.error);case CitiesLoading() when citiesLoading != null:
@@ -208,7 +212,7 @@ return locationPermissionDenied();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  categoriesLoading,required TResult Function( List<NetworkCategory> categories)  categoriesSuccess,required TResult Function( String error)  categoriesError,required TResult Function()  providersLoading,required TResult Function( NetworkProviderData data)  providersSuccess,required TResult Function( String error)  providersError,required TResult Function()  providersEmpty,required TResult Function()  governmentsLoading,required TResult Function( List<Government> governments)  governmentsSuccess,required TResult Function( String error)  governmentsError,required TResult Function()  citiesLoading,required TResult Function( List<City> cities)  citiesSuccess,required TResult Function( String error)  citiesError,required TResult Function()  locationLoading,required TResult Function( double latitude,  double longitude)  locationSuccess,required TResult Function( String error)  locationError,required TResult Function()  locationPermissionDenied,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  categoriesLoading,required TResult Function( List<NetworkCategory> categories)  categoriesSuccess,required TResult Function( String error)  categoriesError,required TResult Function()  providersLoading,required TResult Function( NetworkProviderData data)  providersSuccess,required TResult Function( String error)  providersError,required TResult Function()  providersEmpty,required TResult Function( NetworkProviderData data)  providersLoadingMore,required TResult Function()  governmentsLoading,required TResult Function( List<Government> governments)  governmentsSuccess,required TResult Function( String error)  governmentsError,required TResult Function()  citiesLoading,required TResult Function( List<City> cities)  citiesSuccess,required TResult Function( String error)  citiesError,required TResult Function()  locationLoading,required TResult Function( double latitude,  double longitude)  locationSuccess,required TResult Function( String error)  locationError,required TResult Function()  locationPermissionDenied,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case CategoriesLoading():
@@ -218,7 +222,8 @@ return categoriesError(_that.error);case ProvidersLoading():
 return providersLoading();case ProvidersSuccess():
 return providersSuccess(_that.data);case ProvidersError():
 return providersError(_that.error);case ProvidersEmpty():
-return providersEmpty();case GovernmentsLoading():
+return providersEmpty();case ProvidersLoadingMore():
+return providersLoadingMore(_that.data);case GovernmentsLoading():
 return governmentsLoading();case GovernmentsSuccess():
 return governmentsSuccess(_that.governments);case GovernmentsError():
 return governmentsError(_that.error);case CitiesLoading():
@@ -245,7 +250,7 @@ return locationPermissionDenied();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  categoriesLoading,TResult? Function( List<NetworkCategory> categories)?  categoriesSuccess,TResult? Function( String error)?  categoriesError,TResult? Function()?  providersLoading,TResult? Function( NetworkProviderData data)?  providersSuccess,TResult? Function( String error)?  providersError,TResult? Function()?  providersEmpty,TResult? Function()?  governmentsLoading,TResult? Function( List<Government> governments)?  governmentsSuccess,TResult? Function( String error)?  governmentsError,TResult? Function()?  citiesLoading,TResult? Function( List<City> cities)?  citiesSuccess,TResult? Function( String error)?  citiesError,TResult? Function()?  locationLoading,TResult? Function( double latitude,  double longitude)?  locationSuccess,TResult? Function( String error)?  locationError,TResult? Function()?  locationPermissionDenied,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  categoriesLoading,TResult? Function( List<NetworkCategory> categories)?  categoriesSuccess,TResult? Function( String error)?  categoriesError,TResult? Function()?  providersLoading,TResult? Function( NetworkProviderData data)?  providersSuccess,TResult? Function( String error)?  providersError,TResult? Function()?  providersEmpty,TResult? Function( NetworkProviderData data)?  providersLoadingMore,TResult? Function()?  governmentsLoading,TResult? Function( List<Government> governments)?  governmentsSuccess,TResult? Function( String error)?  governmentsError,TResult? Function()?  citiesLoading,TResult? Function( List<City> cities)?  citiesSuccess,TResult? Function( String error)?  citiesError,TResult? Function()?  locationLoading,TResult? Function( double latitude,  double longitude)?  locationSuccess,TResult? Function( String error)?  locationError,TResult? Function()?  locationPermissionDenied,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case CategoriesLoading() when categoriesLoading != null:
@@ -255,7 +260,8 @@ return categoriesError(_that.error);case ProvidersLoading() when providersLoadin
 return providersLoading();case ProvidersSuccess() when providersSuccess != null:
 return providersSuccess(_that.data);case ProvidersError() when providersError != null:
 return providersError(_that.error);case ProvidersEmpty() when providersEmpty != null:
-return providersEmpty();case GovernmentsLoading() when governmentsLoading != null:
+return providersEmpty();case ProvidersLoadingMore() when providersLoadingMore != null:
+return providersLoadingMore(_that.data);case GovernmentsLoading() when governmentsLoading != null:
 return governmentsLoading();case GovernmentsSuccess() when governmentsSuccess != null:
 return governmentsSuccess(_that.governments);case GovernmentsError() when governmentsError != null:
 return governmentsError(_that.error);case CitiesLoading() when citiesLoading != null:
@@ -670,6 +676,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class ProvidersLoadingMore implements NetworkState {
+  const ProvidersLoadingMore(this.data);
+  
+
+ final  NetworkProviderData data;
+
+/// Create a copy of NetworkState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProvidersLoadingMoreCopyWith<ProvidersLoadingMore> get copyWith => _$ProvidersLoadingMoreCopyWithImpl<ProvidersLoadingMore>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProvidersLoadingMore&&(identical(other.data, data) || other.data == data));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,data);
+
+@override
+String toString() {
+  return 'NetworkState.providersLoadingMore(data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProvidersLoadingMoreCopyWith<$Res> implements $NetworkStateCopyWith<$Res> {
+  factory $ProvidersLoadingMoreCopyWith(ProvidersLoadingMore value, $Res Function(ProvidersLoadingMore) _then) = _$ProvidersLoadingMoreCopyWithImpl;
+@useResult
+$Res call({
+ NetworkProviderData data
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProvidersLoadingMoreCopyWithImpl<$Res>
+    implements $ProvidersLoadingMoreCopyWith<$Res> {
+  _$ProvidersLoadingMoreCopyWithImpl(this._self, this._then);
+
+  final ProvidersLoadingMore _self;
+  final $Res Function(ProvidersLoadingMore) _then;
+
+/// Create a copy of NetworkState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? data = null,}) {
+  return _then(ProvidersLoadingMore(
+null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as NetworkProviderData,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

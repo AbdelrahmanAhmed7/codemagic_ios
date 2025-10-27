@@ -21,6 +21,7 @@ class NetworkScreen extends StatefulWidget {
 class _NetworkScreenState extends State<NetworkScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
 
   @override
   void initState() {
@@ -56,9 +57,14 @@ class _NetworkScreenState extends State<NetworkScreen> {
   }
 
   void _onScroll() {
+    if (_isLoadingMore) return;
+    
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent * 0.9) {
-      context.read<NetworkCubit>().loadMoreProviders();
+      _isLoadingMore = true;
+      context.read<NetworkCubit>().loadMoreProviders().then((_) {
+        _isLoadingMore = false;
+      });
     }
   }
 
@@ -89,8 +95,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const PageHeader(title: 'Providers Network'),
-
+            const PageHeader(title: 'Providers Network', backPath: '/home'),
             SizedBox(height: 16.h),
 
             Expanded(
@@ -261,11 +266,14 @@ class _NetworkScreenState extends State<NetworkScreen> {
           current is ProvidersLoading ||
           current is ProvidersSuccess ||
           current is ProvidersError ||
-          current is ProvidersEmpty,
+          current is ProvidersEmpty ||
+          current is ProvidersLoadingMore,
       builder: (context, state) {
-        final providers = context.read<NetworkCubit>().currentProviders;
+        final cubit = context.read<NetworkCubit>();
+        final providers = cubit.currentProviders;
+        final hasNextPage = cubit.currentProviderData?.pagination.hasNextPage ?? false;
 
-        // Show loading only when actively searching
+        // Show loading only when actively searching (first load)
         if (state is ProvidersLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -275,13 +283,24 @@ class _NetworkScreenState extends State<NetworkScreen> {
           return const EmptyProvidersState();
         }
 
-        // Show list of providers
+        // Show list of providers with pagination indicator
         return ListView.builder(
           controller: _scrollController,
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          itemCount: providers.length,
+          itemCount: providers.length + (hasNextPage ? 1 : 0),
           itemBuilder: (context, index) {
-            return ProviderCard(provider: providers[index]);
+            // Show provider card
+            if (index < providers.length) {
+              return ProviderCard(provider: providers[index]);
+            }
+            
+            // Show loading indicator at the end
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           },
         );
       },

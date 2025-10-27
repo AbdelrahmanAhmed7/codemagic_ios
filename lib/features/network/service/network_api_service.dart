@@ -22,7 +22,7 @@ abstract class NetworkApiService {
   @GET('/{lang}/Network/GetNetwork')
   Future<NetworkProviderResponse> searchProviders(
     @Path('lang') String lang, {
-    @Query("key") String? searchKey,
+    @Query("search") String? searchKey,
     @Query("categoryId") int? categoryId,
     @Query("governmentId") int? governmentId,
     @Query("cityId") int? cityId,
