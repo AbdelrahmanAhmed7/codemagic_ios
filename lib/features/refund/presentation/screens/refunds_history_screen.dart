@@ -48,7 +48,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const PageHeader(title: 'Approval History', backPath: '/home'),
+            const PageHeader(title: 'Refunds History', backPath: '/home'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -71,60 +71,66 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                       children: [
                         SizedBox(height: 16.h),
                         _buildTabs(),
-                        SizedBox(height: 12.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.filter_list,
-                                  color: AppColors.greyClr,
-                                  size: 22.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: 24.h),
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             child: BlocBuilder<RefundsCubit, RefundsState>(
                               builder: (context, state) {
                                 return state.when(
-                                  initial: () => const Center(child: CircularProgressIndicator()),
-                                  loading: () => const Center(child: CircularProgressIndicator()),
-                                  failed: (message) => Center(
-                                    child: Text(message, style: AppTextStyles.font14GreyRegular),
+                                  initial: () => const Center(
+                                    child: CircularProgressIndicator(),
                                   ),
-                                  loaded: (refunds, pagination, status, loadingMore) {
-                                    if (refunds.isEmpty) {
-                                      return _buildEmptyState();
-                                    }
-                                    return ListView.separated(
-                                      controller: _controller,
-                                      physics: const BouncingScrollPhysics(),
-                                      cacheExtent: 500,
-                                      addAutomaticKeepAlives: true,
-                                      addRepaintBoundaries: true,
-                                      itemCount: refunds.length + (pagination.hasNextPage ? 1 : 0),
-                                      separatorBuilder: (_, __) => SizedBox(height: 12.h),
-                                      itemBuilder: (context, index) {
-                                        if (index >= refunds.length) {
-                                          return const Center(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(12),
-                                              child: CircularProgressIndicator(strokeWidth: 2),
-                                            ),
-                                          );
+                                  loading: () => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  failed: (message) => Center(
+                                    child: Text(
+                                      message,
+                                      style: AppTextStyles.font14GreyRegular,
+                                    ),
+                                  ),
+                                  loaded:
+                                      (
+                                        refunds,
+                                        pagination,
+                                        status,
+                                        loadingMore,
+                                      ) {
+                                        if (refunds.isEmpty) {
+                                          return _buildEmptyState();
                                         }
-                                        return _RefundCard(key: ValueKey(refunds[index].id), item: refunds[index]);
+                                        return ListView.separated(
+                                          controller: _controller,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          cacheExtent: 500,
+                                          addAutomaticKeepAlives: true,
+                                          addRepaintBoundaries: true,
+                                          itemCount:
+                                              refunds.length +
+                                              (pagination.hasNextPage ? 1 : 0),
+                                          separatorBuilder: (_, __) =>
+                                              SizedBox(height: 12.h),
+                                          itemBuilder: (context, index) {
+                                            if (index >= refunds.length) {
+                                              return const Center(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(12),
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                ),
+                                              );
+                                            }
+                                            return _RefundCard(
+                                              key: ValueKey(refunds[index].id),
+                                              item: refunds[index],
+                                            );
+                                          },
+                                        );
                                       },
-                                    );
-                                  },
                                 );
                               },
                             ),
@@ -202,31 +208,46 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: 50.h),
-          Image.asset(AppAssets.emptyState, width: 250.w, height: 200.h),
+          Image.asset(AppAssets.refundEmpty, width: 250.w, height: 200.h),
           SizedBox(height: 16.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: AppTextStyles.font14BlackMedium,
-                children: [
-                  const TextSpan(text: "You don't have any requests click\nbutton "),
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Container(
-                      width: 24.w,
-                      height: 24.w,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFF2563EB),
+            child: Column(
+              children: [
+                Text(
+                  "No Refund Requests Yet",
+                  style: AppTextStyles.font20BlackSemiBold,
+                ),
+                SizedBox(height: 8.h),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: AppTextStyles.font14BlackMedium,
+                    children: [
+                      const TextSpan(
+                        text: "You don't have any requests click\nbutton ",
                       ),
-                      child: const Icon(Icons.add, color: Colors.white, size: 16),
-                    ),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          width: 24.w,
+                          height: 24.w,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFF2563EB),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                      const TextSpan(text: " to request refund"),
+                    ],
                   ),
-                  const TextSpan(text: " to request refund"),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 12.h),
@@ -283,14 +304,21 @@ class _RefundCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 3.h,
+                      ),
                       decoration: BoxDecoration(
                         color: statusColor,
                         borderRadius: BorderRadius.circular(24.r),
                       ),
                       child: Text(
                         statusLabel,
-                        style: TextStyle(color: Colors.white, fontSize: 8.sp, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
@@ -298,17 +326,31 @@ class _RefundCard extends StatelessWidget {
                 SizedBox(height: 6.h),
                 Row(
                   children: [
-                    Icon(Icons.calendar_today, size: 14.sp, color: AppColors.blueClr),
+                    Icon(
+                      Icons.calendar_today,
+                      size: 14.sp,
+                      color: AppColors.blueClr,
+                    ),
                     SizedBox(width: 5.w),
-                    Text("Date: ${item.date}", style: AppTextStyles.font10GreyRegular),
+                    Text(
+                      "Date: ${item.date}",
+                      style: AppTextStyles.font10GreyRegular,
+                    ),
                   ],
                 ),
                 SizedBox(height: 4.h),
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 14.sp, color: AppColors.blueClr),
+                    Icon(
+                      Icons.access_time,
+                      size: 14.sp,
+                      color: AppColors.blueClr,
+                    ),
                     SizedBox(width: 5.w),
-                    Text("Time: ${item.time}", style: AppTextStyles.font10GreyRegular),
+                    Text(
+                      "Time: ${item.time}",
+                      style: AppTextStyles.font10GreyRegular,
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.h),
@@ -321,7 +363,10 @@ class _RefundCard extends StatelessWidget {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: Text("View Details", style: AppTextStyles.font12BlueMedium),
+                    child: Text(
+                      "View Details",
+                      style: AppTextStyles.font12BlueMedium,
+                    ),
                   ),
                 ),
               ],

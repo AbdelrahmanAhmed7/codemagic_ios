@@ -21,8 +21,7 @@ class ApprovalHistoryScreen extends StatefulWidget {
 
 class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
   final ScrollController _controller = ScrollController();
-  int _currentTab = 0; // 0 All, 1 Pending, 2 Approved, 3 Rejected
-
+  int _currentTab = 0;
   @override
   void initState() {
     super.initState();
@@ -74,26 +73,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                       children: [
                         SizedBox(height: 16.h),
                         _buildTabs(),
-                        SizedBox(height: 12.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  // TODO: filter logic
-                                },
-                                icon: Icon(
-                                  Icons.filter_list,
-                                  color: AppColors.greyClr,
-                                  size: 22.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: 24.h),
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.w),

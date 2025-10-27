@@ -57,7 +57,7 @@ class QuickAccessWidget extends StatelessWidget {
                 color: AppColors.refundColor,
                 textColor: AppColors.refundTextColor,
                 onTap: () {
-                  context.go('/refund-request');
+                  context.go('/refund-history');
                 },
               ),
               _buildQuickAccessButton(

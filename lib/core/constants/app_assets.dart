@@ -83,6 +83,7 @@ class AppAssets {
   static const String physiotherapy = 'assets/refund/physiotherapy.png';
   static const String examinations = 'assets/refund/examinations.png';
   static const String uploadIcon = 'assets/refund/upload.png';
+  static const String refundEmpty = 'assets/refund/refund.png';
 
   // chronic medicines assets
   static const String mdeiSelector = 'assets/chronic/mediscelector.png';

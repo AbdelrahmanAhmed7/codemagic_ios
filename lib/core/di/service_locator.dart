@@ -33,6 +33,7 @@ import 'package:mediconsult/features/notifications/presentation/cubit/notificati
 import 'package:mediconsult/features/network/service/network_api_service.dart';
 import 'package:mediconsult/features/network/repository/network_repository.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refunds_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -74,4 +75,5 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<ApprovalsCubit>(() => ApprovalsCubit(sl()));
   sl.registerFactory<NotificationsCubit>(() => NotificationsCubit(sl()));
   sl.registerFactory<NetworkCubit>(() => NetworkCubit(sl()));
+  sl.registerFactory<RefundsCubit>(() => RefundsCubit());
 }
