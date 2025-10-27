@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -7,9 +8,8 @@ import 'package:mediconsult/features/home/data/home_response_model.dart';
 
 class OngoingRequestWidget extends StatelessWidget {
   final HomeData data;
-  final VoidCallback? onSeeAll;
 
-  const OngoingRequestWidget({super.key, required this.data, this.onSeeAll});
+  const OngoingRequestWidget({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,9 @@ class OngoingRequestWidget extends StatelessWidget {
           children: [
             Text('Ongoing Requests', style: AppTextStyles.font14BlackMedium),
             GestureDetector(
-              onTap: onSeeAll,
+              onTap: (){
+                context.go('/approval-history');
+              },
               child: Text(
                 'See All',
                 style: AppTextStyles.font14PrimaryMedium.copyWith(
@@ -93,7 +95,7 @@ class OngoingRequestWidget extends StatelessWidget {
           // Left color indicator
           Container(
             width: 6.w,
-            height: 120.h,
+            height: 140.h,
             decoration: BoxDecoration(
               color: _getStatusColor(approval.status),
               borderRadius: BorderRadius.only(

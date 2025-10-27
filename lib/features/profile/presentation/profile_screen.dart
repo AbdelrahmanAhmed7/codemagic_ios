@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
@@ -22,8 +23,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    // Load home data if not already loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeCubit>().getHomeInfo('en');
+      final cubit = context.read<HomeCubit>();
+      if (cubit.state is! Loaded) {
+        cubit.getHomeInfo('en');
+      }
     });
   }
 
@@ -62,18 +67,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           BlocBuilder<HomeCubit, HomeCubitState>(
                             builder: (context, state) {
                               return state.when(
-                                initial: () {
-                                  return const ProfileHeaderShimmer();
-                                },
-                                loading: () {
-                                  return const ProfileHeaderShimmer();
-                                },
+                                initial: () => const ProfileHeaderShimmer(),
+                                loading: () => const ProfileHeaderShimmer(),
                                 loaded: (homeResponse) {
                                   final data = homeResponse.data;
                                   if (data == null) {
                                     return const ProfileHeaderShimmer();
                                   }
-                                
                                   return Row(
                                     children: [
                                       Container(
@@ -81,7 +81,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 90.w,
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(8.r),
-                                          child: data.memberPhoto != null ? CachedNetworkImage(
+                                          child: data.memberPhoto != null && data.memberPhoto!.isNotEmpty
+                                              ? CachedNetworkImage(
                                                   imageUrl: data.memberPhoto!,
                                                   placeholder: (context, url) => Image.asset(
                                                     AppAssets.profile,

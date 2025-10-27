@@ -41,6 +41,8 @@ import 'package:mediconsult/features/notifications/presentation/notifications_sc
 import 'package:mediconsult/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:mediconsult/features/network/presentation/network_screen.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
+import 'package:mediconsult/features/policy/presentation/policy_screen.dart';
+import 'package:mediconsult/features/policy/presentation/policy_details_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -260,6 +262,60 @@ class AppRouter {
             create: (context) => sl<NetworkCubit>(),
             child: const NetworkScreen(),
           );
+        },
+      ),
+      GoRoute(
+        path: '/policy',
+        builder: (context, state) {
+          return const PolicyScreen();
+        },
+      ),
+      GoRoute(
+        path: '/pharmacy-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Pharmacy');
+        },
+      ),
+      GoRoute(
+        path: '/lab-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Lab');
+        },
+      ),
+      GoRoute(
+        path: '/hospital-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Hospital');
+        },
+      ),
+      GoRoute(
+        path: '/doctor-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Doctor');
+        },
+      ),
+      GoRoute(
+        path: '/scan-lab-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Scan Lab');
+        },
+      ),
+      GoRoute(
+        path: '/specialized-center-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Specialized Center');
+        },
+      ),
+      GoRoute(
+        path: '/physiotherapy-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Physiotherapy');
+        },
+      ),
+      GoRoute(
+        path: '/optical-center-policy',
+        builder: (context, state) {
+          return const PolicyDetailsScreen(serviceName: 'Optical Center');
         },
       ),
     ],

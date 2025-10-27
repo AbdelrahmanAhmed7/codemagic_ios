@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/core/error/app_error_handler.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
 import 'package:mediconsult/features/home/presentation/widgets/home_header_widget.dart';
@@ -116,10 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: AppTextStyles.font16BlackMedium,
                     ),
                     SizedBox(height: 8.h),
-                    Text(
-                      message,
-                      style: AppTextStyles.font14GreyRegular,
-                      textAlign: TextAlign.center,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 32.w),
+                      child: Text(
+                        AppErrorHandler.getUserFriendlyMessage(message),
+                        style: AppTextStyles.font14GreyRegular,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     SizedBox(height: 24.h),
                     ElevatedButton.icon(
