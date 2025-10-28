@@ -35,12 +35,12 @@ class AccountVerifiedScreen extends StatelessWidget {
                     SizedBox(height: 38.h),
                     Text(
                       'Account Verified',
-                      style: AppTextStyles.font16BlackMedium,
+                      style: AppTextStyles.font16BlackMedium(context),
                     ),
                     SizedBox(height: 8.h),
                     Text(
                       'Congratulations, your account has been\n verified. You can start using the app',
-                      style: AppTextStyles.font14GreyRegular,
+                      style: AppTextStyles.font14GreyRegular(context),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 57.h,),

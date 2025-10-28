@@ -52,12 +52,12 @@ class PharmacyCard extends StatelessWidget {
               children: [
                 Text(
                   provider.name,
-                  style: AppTextStyles.font14BlackMedium,
+                  style: AppTextStyles.font14BlackMedium(context),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   provider.copaymentType,
-                  style: AppTextStyles.font12GreyRegular,
+                  style: AppTextStyles.font12GreyRegular(context),
                 ),
               ],
             ),
@@ -84,7 +84,7 @@ class PharmacyCard extends StatelessWidget {
                 ),
                 child: Text(
                   'View Details',
-                  style: AppTextStyles.font12BlueRegular,
+                  style: AppTextStyles.font12BlueRegular(context),
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -60,7 +61,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
 
     // Submit approval request
     context.read<ApprovalRequestCubit>().createApprovalRequest(
-      lang: 'en',
+      lang: context.locale.languageCode,
       memberId: _selectedFamilyMember!.memberId,
       providerId: _selectedProvider!.id,
       notes: _noteController.text.isNotEmpty ? _noteController.text : null,
@@ -116,7 +117,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                 children: [
                                   Text(
                                     'Family Members',
-                                    style: AppTextStyles.font14BlackMedium,
+                                    style: AppTextStyles.font14BlackMedium(context),
                                   ),
                                   SizedBox(height: 12.h),
                                   FamilyMembersSelector(
@@ -130,7 +131,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 24.h),
                                   Text(
                                     'Provider',
-                                    style: AppTextStyles.font14BlackMedium,
+                                    style: AppTextStyles.font14BlackMedium(context),
                                   ),
                                   SizedBox(height: 8.h),
                                   ProviderSelector(
@@ -144,7 +145,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 16.h),
                                   Text(
                                     'Note',
-                                    style: AppTextStyles.font14BlackMedium,
+                                    style: AppTextStyles.font14BlackMedium(context),
                                   ),
                                   SizedBox(height: 8.h),
                                   NoteTextField(

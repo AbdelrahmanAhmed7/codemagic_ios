@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,13 +25,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     super.initState();
     _controller.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NotificationsCubit>().load(lang: 'en');
+      context.read<NotificationsCubit>().load(lang: context.locale.languageCode);
     });
   }
 
   void _onScroll() {
     if (_controller.position.pixels >= _controller.position.maxScrollExtent * 0.9) {
-      context.read<NotificationsCubit>().loadMore(lang: 'en');
+      context.read<NotificationsCubit>().loadMore(lang: context.locale.languageCode);
     }
   }
 
@@ -135,7 +136,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             final dates = groupedNotifications.keys.toList();
 
                             return RefreshIndicator(
-                              onRefresh: () => context.read<NotificationsCubit>().refresh(lang: 'en'),
+                              onRefresh: () => context.read<NotificationsCubit>().refresh(lang: context.locale.languageCode),
                               child: ListView.builder(
                                 controller: _controller,
                                 physics: const BouncingScrollPhysics(),
@@ -165,7 +166,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         padding: EdgeInsets.only(bottom: 12.h, top: index == 0 ? 0 : 16.h),
                                         child: Text(
                                           _formatDateHeader(date),
-                                          style: AppTextStyles.font14BlackMedium,
+                                          style: AppTextStyles.font14BlackMedium(context),
                                         ),
                                       ),
                                       // Notifications for this date
@@ -294,21 +295,21 @@ class _NotificationCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         item.title,
-                        style: AppTextStyles.font14BlackMedium,
+                        style: AppTextStyles.font14BlackMedium(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Text(
                       item.time,
-                      style: AppTextStyles.font10GreyRegular,
+                      style: AppTextStyles.font10GreyRegular(context),
                     ),
                   ],
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   item.body,
-                  style: AppTextStyles.font12GreyRegular,
+                  style: AppTextStyles.font12GreyRegular(context),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

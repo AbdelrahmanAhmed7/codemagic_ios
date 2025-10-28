@@ -8,6 +8,7 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RefundHistoryScreen extends StatefulWidget {
   const RefundHistoryScreen({super.key});
@@ -48,7 +49,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const PageHeader(title: 'Refunds History', backPath: '/home'),
+            PageHeader(title: 'refund_history.title'.tr(), backPath: '/home'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -215,7 +216,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
             child: Column(
               children: [
                 Text(
-                  "No Refund Requests Yet",
+                  'refund_history.empty_state_title'.tr(),
                   style: AppTextStyles.font20BlackSemiBold,
                 ),
                 SizedBox(height: 8.h),
@@ -224,8 +225,8 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                   text: TextSpan(
                     style: AppTextStyles.font14BlackMedium,
                     children: [
-                      const TextSpan(
-                        text: "You don't have any requests click\nbutton ",
+                      TextSpan(
+                        text: 'refund_history.empty_state'.tr(),
                       ),
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
@@ -243,7 +244,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                           ),
                         ),
                       ),
-                      const TextSpan(text: " to request refund"),
+                      TextSpan(text: 'refund_history.to_request_refund'.tr()),
                     ],
                   ),
                 ),
@@ -299,7 +300,7 @@ class _RefundCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "Request Number: ${item.requestNumber}",
+                        '${'refund_history.request_number'.tr()}${item.requestNumber}',
                         style: AppTextStyles.font10GreyRegular,
                       ),
                     ),
@@ -333,7 +334,7 @@ class _RefundCard extends StatelessWidget {
                     ),
                     SizedBox(width: 5.w),
                     Text(
-                      "Date: ${item.date}",
+                      '${'refund_history.date'.tr()}${item.date}',
                       style: AppTextStyles.font10GreyRegular,
                     ),
                   ],
@@ -348,7 +349,7 @@ class _RefundCard extends StatelessWidget {
                     ),
                     SizedBox(width: 5.w),
                     Text(
-                      "Time: ${item.time}",
+                      '${'refund_history.time'.tr()}${item.time}',
                       style: AppTextStyles.font10GreyRegular,
                     ),
                   ],
@@ -366,7 +367,7 @@ class _RefundCard extends StatelessWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      "View Details",
+                      'refund_history.view_details'.tr(),
                       style: AppTextStyles.font12BlueMedium,
                     ),
                   ),
@@ -406,12 +407,12 @@ class _RefundCard extends StatelessWidget {
   String _statusLabel(String status) {
     switch (status.toUpperCase()) {
       case 'A':
-        return "Approved";
+        return 'refund_history.status.approved'.tr();
       case 'R':
-        return "Rejected";
+        return 'refund_history.status.rejected'.tr();
       case 'P':
       default:
-        return "Pending";
+        return 'refund_history.status.pending'.tr();
     }
   }
 }

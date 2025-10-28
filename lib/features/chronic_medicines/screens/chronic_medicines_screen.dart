@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -12,6 +10,8 @@ import 'package:mediconsult/features/chronic_medicines/widgets/action_required_d
 import 'package:mediconsult/features/chronic_medicines/widgets/month_header.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/monthly_medicines_selector.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/upcoming_lab_card.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class ChronicMedicinesScreen extends StatefulWidget {
   const ChronicMedicinesScreen({super.key});
@@ -35,9 +35,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
     }
     // UI only for now
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Saved')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('chronic_medicines.saved'.tr())));
     }
   }
 
@@ -50,63 +50,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                height: 136.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryClr,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(24.r),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 16.h),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 36.w,
-                        height: 36.w,
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteClr,
-                          borderRadius: BorderRadius.circular(10.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.greyClr.withValues(alpha: 0.08),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                          onPressed: () => context.go('/home'),
-                        ),
-                      ),
-                      SizedBox(width: 28.w),
-                      Expanded(
-                        child: Text(
-                          'Chronic Medicines',
-                          style: AppTextStyles.font18BlackSemiBold.copyWith(
-                            color: AppColors.whiteClr,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 28.w,
-                        height: 28.w,
-                        decoration: const BoxDecoration(
-                          color: AppColors.whiteClr,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          CupertinoIcons.question,
-                          color: AppColors.blackClr,
-                          size: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              PageHeader(
+                title: 'chronic_medicines.title'.tr(),
+                backPath: '/home',
               ),
               Transform.translate(
                 offset: Offset(0, -20.h),
@@ -134,9 +80,16 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                           SizedBox(height: 12.h),
                           Row(
                             children: [
-                              Image.asset(AppAssets.familySelect,width: 16.w,height: 16.h,),
+                              Image.asset(
+                                AppAssets.familySelect,
+                                width: 16.w,
+                                height: 16.h,
+                              ),
                               SizedBox(width: 4.w),
-                              Text('Select Member', style: AppTextStyles.font14BlackMedium),
+                              Text(
+                                'chronic_medicines.select_member'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
                             ],
                           ),
                           SizedBox(height: 12.h),
@@ -144,9 +97,16 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                           SizedBox(height: 24.h),
                           Row(
                             children: [
-                              Image.asset(AppAssets.mdeiSelector,width: 16.w,height: 16.h,),
+                              Image.asset(
+                                AppAssets.mdeiSelector,
+                                width: 16.w,
+                                height: 16.h,
+                              ),
                               SizedBox(width: 4.w),
-                              Text('Select Your Monthly Medicines', style: AppTextStyles.font14BlackMedium),
+                              Text(
+                                'chronic_medicines.select_medicines'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
                             ],
                           ),
                           SizedBox(height: 8.h),
@@ -154,7 +114,10 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                           SizedBox(height: 36.h),
                           const UpcomingLabCard(),
                           SizedBox(height: 16.h),
-                          Text('Upload Quarterly Lab Results', style: AppTextStyles.font14BlackMedium),
+                          Text(
+                            'chronic_medicines.upload_lab_results'.tr(),
+                            style: AppTextStyles.font14BlackMedium(context),
+                          ),
                           SizedBox(height: 8.h),
                           Container(
                             width: double.infinity,
@@ -166,20 +129,38 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Required Tests:', style: AppTextStyles.font16BlueMedium),
+                                Text(
+                                  'chronic_medicines.required_tests'.tr(),
+                                  style: AppTextStyles.font16BlueMedium(context),
+                                ),
                                 SizedBox(height: 6.h),
                                 Row(
                                   children: [
-                                    Image.asset(AppAssets.tests,width: 16.w,height: 16.h,),
+                                    Image.asset(
+                                      AppAssets.tests,
+                                      width: 16.w,
+                                      height: 16.h,
+                                    ),
                                     SizedBox(width: 4.w),
-                                    Text('Blood Sugar Test', style: AppTextStyles.font12GreyRegular),
+                                    Text(
+                                      'chronic_medicines.blood_sugar_test'.tr(),
+                                      style: AppTextStyles.font12GreyRegular(context),
+                                    ),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    Image.asset(AppAssets.tests,width: 16.w,height: 16.h,),
+                                    Image.asset(
+                                      AppAssets.tests,
+                                      width: 16.w,
+                                      height: 16.h,
+                                    ),
                                     SizedBox(width: 4.w),
-                                    Text('Kidney Function Test', style: AppTextStyles.font12GreyRegular),
+                                    Text(
+                                      'chronic_medicines.kidney_function_test'
+                                          .tr(),
+                                      style: AppTextStyles.font12GreyRegular(context),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(height: 24.h),
@@ -192,7 +173,7 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                             width: double.infinity,
                             height: 48.h,
                             child: AppButton(
-                              text: 'Save',
+                              text: 'common.save'.tr(),
                               onPressed: _onSave,
                             ),
                           ),
@@ -210,5 +191,3 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
     );
   }
 }
-
-

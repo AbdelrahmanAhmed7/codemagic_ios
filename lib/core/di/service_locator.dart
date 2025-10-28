@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:mediconsult/core/network/dio_factory.dart';
+import 'package:mediconsult/core/services/language_service.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/resend_otp_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/reset_password_cubit.dart';
@@ -19,6 +20,7 @@ import 'package:mediconsult/features/family_members/service/family_member_api_se
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/home/repository/home_repository.dart';
 import 'package:mediconsult/features/home/service/home_api_service.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/language_cubit.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_cubit.dart';
 import 'package:mediconsult/features/providers/service/providers_api_service.dart';
 import 'package:mediconsult/features/providers/repository/providers_repository.dart';
@@ -49,6 +51,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ApprovalRequestApiService>(() => ApprovalRequestApiService(dio));
   sl.registerLazySingleton<NotificationService>(() => NotificationService(dio));
   sl.registerLazySingleton<NetworkApiService>(() => NetworkApiService(dio));
+  sl.registerLazySingleton<LanguageService>(() => LanguageService());
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -76,4 +79,5 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<NotificationsCubit>(() => NotificationsCubit(sl()));
   sl.registerFactory<NetworkCubit>(() => NetworkCubit(sl()));
   sl.registerFactory<RefundsCubit>(() => RefundsCubit());
+  sl.registerFactory<LanguageCubit>(() => LanguageCubit(sl()));
 }

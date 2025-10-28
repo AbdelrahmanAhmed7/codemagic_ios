@@ -39,7 +39,7 @@ class SuccessDialog extends StatelessWidget {
             Text(
               'Approval Request Submitted Successfully',
               textAlign: TextAlign.center,
-              style: AppTextStyles.font18BlackSemiBold,
+              style: AppTextStyles.font18BlackSemiBold(context),
             ),
             SizedBox(height: 12.h),
             

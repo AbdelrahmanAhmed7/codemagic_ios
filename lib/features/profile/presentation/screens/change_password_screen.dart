@@ -4,6 +4,7 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -73,7 +74,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             Expanded(
               child: Text(
                 'The new password must be different from the old password',
-                style: AppTextStyles.font12GreyRegular,
+                style: AppTextStyles.font12GreyRegular(context),
               ),
             ),
           ],
@@ -140,9 +141,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 
                 // Success message
                 Text(
-                  'Congratulations your password has been changed.',
+                  'profile.change_password.success_message'.tr(),
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.font14BlackMedium,
+                  style: AppTextStyles.font14BlackMedium(context),
                 ),
                 
                 SizedBox(height: 24.h),
@@ -163,8 +164,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                     ),
                     child: Text(
-                      'OK',
-                      style: AppTextStyles.font14WhiteMedium,
+                      'common.ok'.tr(),
+                      style: AppTextStyles.font14WhiteMedium(context),
                     ),
                   ),
                 ),
@@ -184,7 +185,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const PageHeader(title: 'Change Password', backPath: '/profile'),
+              PageHeader(title: 'profile.change_password.title'.tr(), backPath: '/profile'),
               Transform.translate(
                 offset: Offset(0, -20.h),
                 child: Padding(
@@ -221,8 +222,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   border: Border.all(color: Colors.yellow.withValues(alpha: 0.3)),
                                 ),
                                 child: Text(
-                                  'The new password must be different from the old password',
-                                  style: AppTextStyles.font12BlackRegular.copyWith(
+                                  'profile.change_password.hint'.tr(),
+                                  style: AppTextStyles.font12BlackRegular(context).copyWith(
                                     color: Colors.orange.shade800,
                                   ),
                                 ),
@@ -232,17 +233,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             
                             // Old Password
                             Text(
-                              'Old Password',
-                              style: AppTextStyles.font14BlackMedium,
+                              'profile.change_password.old_password'.tr(),
+                              style: AppTextStyles.font14BlackMedium(context),
                             ),
                             SizedBox(height: 8.h),
                             AppTextField(
-                              hintText: 'Enter old password',
+                              hintText: 'profile.change_password.old_password_placeholder'.tr(),
                               controller: _oldPasswordController,
                               isPassword: true,
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Old password is required';
+                                  return 'profile.change_password.validation.old_password_required'.tr();
                                 }
                                 return null;
                               },
@@ -252,23 +253,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             
                             // New Password
                             Text(
-                              'New Password',
-                              style: AppTextStyles.font14BlackMedium,
+                              'profile.change_password.new_password'.tr(),
+                              style: AppTextStyles.font14BlackMedium(context),
                             ),
                             SizedBox(height: 8.h),
                             AppTextField(
-                              hintText: 'Enter new password',
+                              hintText: 'profile.change_password.new_password_placeholder'.tr(),
                               controller: _newPasswordController,
                               isPassword: true,
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'New password is required';
+                                  return 'profile.change_password.validation.new_password_required'.tr();
                                 }
                                 if (value.length < 8) {
-                                  return 'Password must be at least 8 characters';
+                                  return 'profile.change_password.validation.password_length'.tr();
                                 }
                                 if (!value.contains(RegExp(r'[A-Z]'))) {
-                                  return 'Password must include 1 uppercase letter';
+                                  return 'profile.change_password.validation.password_uppercase'.tr();
                                 }
                                 return null;
                               },
@@ -287,8 +288,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 SizedBox(width: 8.w),
                                 Expanded(
                                   child: Text(
-                                    'Password must be at least 8 characters included 1 upper case',
-                                    style: AppTextStyles.font12GreyRegular,
+                                    'profile.change_password.password_requirements'.tr(),
+                                    style: AppTextStyles.font12GreyRegular(context),
                                   ),
                                 ),
                               ],
@@ -298,20 +299,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             
                             // Confirm Password
                             Text(
-                              'Confirm Password',
-                              style: AppTextStyles.font14BlackMedium,
+                              'profile.change_password.confirm_password'.tr(),
+                              style: AppTextStyles.font14BlackMedium(context),
                             ),
                             SizedBox(height: 8.h),
                             AppTextField(
-                              hintText: 'Confirm new password',
+                              hintText: 'profile.change_password.confirm_password_placeholder'.tr(),
                               controller: _confirmPasswordController,
                               isPassword: true,
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Please confirm your password';
+                                  return 'profile.change_password.validation.confirm_password_required'.tr();
                                 }
                                 if (value != _newPasswordController.text) {
-                                  return 'Passwords do not match';
+                                  return 'profile.change_password.validation.passwords_not_match'.tr();
                                 }
                                 return null;
                               },
@@ -332,8 +333,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   padding: EdgeInsets.symmetric(vertical: 16.h),
                                 ),
                                 child: Text(
-                                  'Save',
-                                  style: AppTextStyles.font16WhiteMedium,
+                                  'common.save'.tr(),
+                                  style: AppTextStyles.font16WhiteMedium(context),
                                 ),
                               ),
                             ),

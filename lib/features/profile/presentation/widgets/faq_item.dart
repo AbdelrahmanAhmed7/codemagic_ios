@@ -25,11 +25,11 @@ class FaqItem extends StatelessWidget {
         ],
       ),
       child: ExpansionTile(
-        title: Text(question, style: AppTextStyles.font14BlackMedium),
+        title: Text(question, style: AppTextStyles.font14BlackMedium(context)),
         children: [
           Padding(
             padding: EdgeInsets.all(16.w),
-            child: Text(answer, style: AppTextStyles.font12BlackRegular),
+            child: Text(answer, style: AppTextStyles.font12BlackRegular(context)),
           ),
         ],
       ),

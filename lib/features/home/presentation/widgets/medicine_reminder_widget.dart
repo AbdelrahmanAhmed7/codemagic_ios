@@ -15,12 +15,12 @@ class MedicineReminderWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Medicine Reminder', style: AppTextStyles.font14BlackMedium),
+            Text('Medicine Reminder', style: AppTextStyles.font14BlackMedium(context)),
             GestureDetector(
               onTap: () {},
               child: Text(
                 'See All',
-                style: AppTextStyles.font14PrimaryMedium.copyWith(
+                style: AppTextStyles.font14PrimaryMedium(context).copyWith(
                   fontSize: 12.sp,
                 ),
               ),
@@ -99,7 +99,7 @@ class MedicineReminderWidget extends StatelessWidget {
               children: [
                 Text(
                   medicineName,
-                  style: AppTextStyles.font14PrimaryMedium.copyWith(
+                  style: AppTextStyles.font14PrimaryMedium(context).copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -113,7 +113,7 @@ class MedicineReminderWidget extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                     SizedBox(width: 4.w),
-                    Text(dosage, style: AppTextStyles.font12GreyRegular),
+                    Text(dosage, style: AppTextStyles.font12GreyRegular(context)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 6.w),
                       child: Text(
@@ -121,7 +121,7 @@ class MedicineReminderWidget extends StatelessWidget {
                         style: TextStyle(color: AppColors.greyClr),
                       ),
                     ),
-                    Text(note, style: AppTextStyles.font12GreyRegular),
+                    Text(note, style: AppTextStyles.font12GreyRegular(context)),
                   ],
                 ),
                 SizedBox(height: 6.h),
@@ -133,7 +133,7 @@ class MedicineReminderWidget extends StatelessWidget {
                       color: AppColors.greyClr,
                     ),
                     SizedBox(width: 4.w),
-                    Text(time, style: AppTextStyles.font12GreyRegular),
+                    Text(time, style: AppTextStyles.font12GreyRegular(context)),
                   ],
                 ),
               ],

@@ -130,7 +130,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             ),
           ),
           SizedBox(height: 8.h),
-          Text('Profile Photo', style: AppTextStyles.font14BlackMedium),
+          Text('Profile Photo', style: AppTextStyles.font14BlackMedium(context)),
         ],
       ),
     );

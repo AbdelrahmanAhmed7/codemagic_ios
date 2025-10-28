@@ -31,7 +31,7 @@ class OnboardingPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Text(
                 model.title,
-                style: AppTextStyles.font20BlackSemiBold.copyWith(
+                style: AppTextStyles.font20BlackSemiBold(context).copyWith(
                   fontSize: 22.sp,
                   height: 1.4,
                 ),
@@ -43,7 +43,7 @@ class OnboardingPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Text(
                 model.description,
-                style: AppTextStyles.font16GreyRegular.copyWith(
+                style: AppTextStyles.font16GreyRegular(context).copyWith(
                   fontSize: 14.sp,
                   height: 1.5,
                 ),

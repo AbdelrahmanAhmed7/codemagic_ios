@@ -9,6 +9,7 @@ import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_cubit.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_state.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProviderSelector extends StatefulWidget {
   final Function(ProviderItem?)? onProviderSelected;
@@ -79,8 +80,8 @@ class _ProviderSelectorState extends State<ProviderSelector> {
                   child: Text(
                     _selectedProvider?.name ?? 'Select provider',
                     style: _selectedProvider == null
-                        ? AppTextStyles.font14GreyRegular
-                        : AppTextStyles.font14BlackMedium,
+                        ? AppTextStyles.font14GreyRegular(context)
+                        : AppTextStyles.font14BlackMedium(context),
                   ),
                 ),
                 const Icon(Icons.keyboard_arrow_down, color: AppColors.greyClr),
@@ -101,7 +102,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
                 ),
               ),
               // SizedBox(width: 8.w),
-              Text('Chronic Treatment', style: AppTextStyles.font14BlackMedium),
+              Text('Chronic Treatment', style: AppTextStyles.font14BlackMedium(context)),
             ],
           ),
         ],
@@ -117,7 +118,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
       builder: (context) {
         // Use app-wide DI to ensure authorized Dio
         return BlocProvider(
-          create: (_) => sl<ProvidersCubit>()..loadProviders(lang: 'en', page: 1, pageSize: 10),
+          create: (_) => sl<ProvidersCubit>()..loadProviders(lang: context.locale.languageCode, page: 1, pageSize: 10),
           child: _ProvidersBottomSheet(),
         );
       },
@@ -193,7 +194,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
         _page = state.pagination.currentPage + 1;
         if (!_isDisposed) {
           context.read<ProvidersCubit>().loadProviders(
-                lang: 'en',
+                lang: context.locale.languageCode,
                 page: _page,
                 pageSize: _pageSize,
                 search: _search,
@@ -211,7 +212,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
       _search = null;
       _page = 1;
       context.read<ProvidersCubit>().loadProviders(
-            lang: 'en',
+            lang: context.locale.languageCode,
             page: _page,
             pageSize: _pageSize,
             search: _search,
@@ -225,7 +226,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
         _search = value.trim();
         _page = 1;
         context.read<ProvidersCubit>().loadProviders(
-              lang: 'en',
+              lang: context.locale.languageCode,
               page: _page,
               pageSize: _pageSize,
               search: _search,
@@ -264,7 +265,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
-              Text('Select provider', style: AppTextStyles.font16BlackMedium),
+              Text('Select provider', style: AppTextStyles.font16BlackMedium(context)),
               SizedBox(height: 12.h),
               TextField(
                 controller: _searchController,
@@ -298,7 +299,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
                     }
                     if (state is Failed) {
                       return Center(
-                        child: Text(state.message, style: AppTextStyles.font14GreyRegular),
+                        child: Text(state.message, style: AppTextStyles.font14GreyRegular(context)),
                       );
                     }
                     final loaded = state as Loaded;
@@ -383,13 +384,13 @@ class _ProviderListItemState extends State<_ProviderListItem>
         ),
         title: Text(
           widget.item.name,
-          style: AppTextStyles.font14BlackMedium,
+          style: AppTextStyles.font14BlackMedium(context),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
           widget.item.categoryName ?? '',
-          style: AppTextStyles.font12GreyRegular,
+          style: AppTextStyles.font12GreyRegular(context),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

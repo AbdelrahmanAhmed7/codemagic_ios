@@ -1,0 +1,396 @@
+{
+  "common": {
+    "save": "Save",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "ok": "OK",
+    "retry": "Retry",
+    "send": "Send",
+    "next": "Next",
+    "skip": "Skip",
+    "get_started": "Get Started",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "no_data": "No data available",
+    "back": "Back"
+  },
+  "onboarding": {
+    "welcome_to": "Welcome to ",
+    "medi": "Medi",
+    "consult": "Consult",
+    "welcome_description": "Get access to a wide network of\n hospitals, clinic, pharmacies and labs",
+    "insurance_in_pocket": "Your Insurance, In Your Pocket",
+    "insurance_description": "Search for providers in your network",
+    "find_hospitals": "Find Hospitals & Pharmacies",
+    "find_hospitals_description": "View list of your network providers\n near your location",
+    "pre_approvals": "Pre-approvals",
+    "pre_approvals_description": "View status of requests pending\n approval"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back! Glad to see you,\n Again!",
+      "subtitle": "Please enter your Credentials to login",
+      "card_id": "Card ID",
+      "card_id_placeholder": "Enter card number",
+      "password": "Password",
+      "password_placeholder": "Enter Password",
+      "forgot_password": "Forgot Password?",
+      "login_button": "Login",
+      "logging_in": "Logging in...",
+      "dont_have_account": "Don't have an account? ",
+      "register": "Register",
+      "login_successful": "Login Successful",
+      "validation": {
+        "card_id_required": "Please enter your Card ID",
+        "card_id_start": "Card ID must start with 20",
+        "card_id_length": "Card ID must be exactly 7 digits",
+        "card_id_numbers": "Card ID must contain only numbers",
+        "password_required": "Please enter your password",
+        "password_length": "Password must be at least 6 characters"
+      }
+    },
+    "signup": {
+      "title": "Hello! Register to get started",
+      "subtitle": "Please enter your Credentials",
+      "card_id": "Card ID ",
+      "card_id_placeholder": "Enter card number",
+      "national_id": "National ID ",
+      "national_id_placeholder": "Enter National ID",
+      "phone_number": "Phone Number ",
+      "phone_number_placeholder": "Enter Phone Number",
+      "password": "Password ",
+      "password_placeholder": "Enter Password",
+      "confirm_password": "Confirm Password ",
+      "confirm_password_placeholder": "Enter Confirm Password",
+      "register_button": "Register",
+      "registering": "Registering...",
+      "already_have_account": "Already have an account? ",
+      "login": "Login",
+      "registration_successful": "Registration Successful",
+      "validation": {
+        "card_id_required": "Card ID is required",
+        "national_id_required": "National ID is required",
+        "national_id_invalid": "Enter a valid 14-digit National ID",
+        "phone_required": "Phone number is required",
+        "phone_invalid": "Enter a valid Egyptian phone number",
+        "password_required": "Password is required",
+        "password_length": "Password must be at least 6 characters",
+        "confirm_password_required": "Confirm password is required",
+        "passwords_not_match": "Passwords do not match"
+      }
+    },
+    "forgot_password": {
+      "title": "Forgot Password",
+      "description": "Don't worry ! It happens. Please enter your phone number and we will send the OTP to this phone number.",
+      "phone_number": "Phone Number",
+      "phone_placeholder": "Enter your phone number",
+      "send_button": "Send",
+      "sending": "Sending...",
+      "change_phone": "Do you want to change phone number ?",
+      "contact_us": "Contact Us",
+      "validation": {
+        "phone_required": "Please enter your phone number"
+      }
+    },
+    "reset_password": {
+      "title": "Reset Password",
+      "description": "Create a new password. Ensure it differs from the previous one for security.",
+      "new_password": "New Password",
+      "new_password_placeholder": "Create Password",
+      "confirm_password": "Confirm Password",
+      "confirm_password_placeholder": "Confirm Password",
+      "confirm_button": "Confirm",
+      "congratulations": "Congratulations!",
+      "success_message": "Password changed successfully\nYou'll be redirected to the login screen now",
+      "validation": {
+        "new_password_required": "Please enter a new password",
+        "password_length": "Password must be at least 8 characters",
+        "confirm_password_required": "Please confirm your password",
+        "passwords_not_match": "Passwords do not match"
+      }
+    }
+  },
+  "home": {
+    "title": "Home",
+    "error_loading": "An error occurred while loading the data",
+    "quick_access": "Quick Access",
+    "approval": "Approval",
+    "refund": "Refund",
+    "chronic_medicine": "Chronic\nMedicine",
+    "hello": "Hello, ",
+    "health_question": "How is your health now?",
+    "member_id": "Member ID",
+    "expire_date": "Expire Date",
+    "ongoing_requests": "Ongoing Requests",
+    "see_all": "See All",
+    "no_ongoing_requests": "No ongoing requests",
+    "service_type": "Service Type",
+    "no_notes": "No notes provided",
+    "date": "Date"
+  },
+  "profile": {
+    "title": "Profile",
+    "member_id": "Member ID: ",
+    "error_loading_profile": "Error loading profile",
+    "account": "Account",
+    "personal_information": "Personal Information",
+    "family_members": "Family Members",
+    "insurance_plan": "Insurance Plan",
+    "settings": "Settings",
+    "change_password": "Change Password",
+    "language": "Language",
+    "help_support": "Help & Support",
+    "faq": "FAQ",
+    "contact_us": "Contact us",
+    "terms_privacy": "Terms & Privacy Policy",
+    "log_out": "Log Out"
+  },
+  "personal_info": {
+    "title": "Personal Information",
+    "profile_photo": "Profile Photo",
+    "full_name": "Full Name",
+    "insurance_card_id": "Insurance Card ID",
+    "phone_number": "Phone Number",
+    "date_of_birth": "Date of Birth",
+    "gender": "Gender",
+    "email_address": "Email Address",
+    "address": "Address",
+    "validation": {
+      "full_name_required": "Full name is required",
+      "insurance_id_required": "Insurance Card ID is required",
+      "phone_required": "Phone number is required",
+      "phone_length": "Phone number must be at least 11 digits",
+      "dob_required": "Date of birth is required",
+      "gender_required": "Gender is required",
+      "email_invalid": "Please enter a valid email address"
+    }
+  },
+  "change_password": {
+    "title": "Change Password",
+    "hint": "The new password must be different from the old password",
+    "old_password": "Old Password",
+    "old_password_placeholder": "Enter old password",
+    "new_password": "New Password",
+    "new_password_placeholder": "Enter new password",
+    "confirm_password": "Confirm Password",
+    "confirm_password_placeholder": "Confirm new password",
+    "password_requirements": "Password must be at least 8 characters included 1 upper case",
+    "success_message": "Congratulations your password has been changed.",
+    "validation": {
+      "old_password_required": "Old password is required",
+      "new_password_required": "New password is required",
+      "password_length": "Password must be at least 8 characters",
+      "password_uppercase": "Password must include 1 uppercase letter",
+      "confirm_password_required": "Please confirm your password",
+      "passwords_not_match": "Passwords do not match"
+    }
+  },
+  "language": {
+    "title": "Language",
+    "change_language": "Change Language",
+    "english": "English",
+    "arabic": "العربية",
+    "language_changed": "Language changed to "
+  },
+  "faq": {
+    "title": "FQA",
+    "search_placeholder": "Search",
+    "categories": {
+      "general": "General",
+      "approval": "Approval",
+      "refund": "Refund",
+      "medications": "Medications & Pharmacies"
+    }
+  },
+  "contact_us": {
+    "title": "Contact Us",
+    "chat": "Chat",
+    "chat_subtitle": "Chat with our team",
+    "phone": "Phone Number",
+    "email": "Email",
+    "other_contacts": "Other Contacts",
+    "whatsapp": "WhatsApp",
+    "website": "Website",
+    "linkedin": "LinkedIn",
+    "instagram": "Instagram"
+  },
+  "network": {
+    "title": "Providers Network",
+    "search_placeholder": "Search providers...",
+    "no_providers": "No providers found",
+    "loading_providers": "Loading providers..."
+  },
+  "notifications": {
+    "title": "Notification",
+    "no_notifications": "No notifications",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
+    }
+  },
+  "approval_request": {
+    "title": "Approval Request",
+    "family_members": "Family Members",
+    "provider": "Provider",
+    "note": "Note",
+    "attachments": "Attachments",
+    "select_family_member": "Please select a family member",
+    "select_provider": "Please select a provider",
+    "attachment_required": "At least 1 attachment is required"
+  },
+  "approval_history": {
+    "title": "Approval History",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "request_number": "Request Number: ",
+    "date": "Date: ",
+    "time": "Time: ",
+    "view_details": "View Details",
+    "empty_state": "You don't have any requests click\nbutton ",
+    "to_request_approval": " to request approval",
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pending": "Pending"
+    }
+  },
+  "refund": {
+    "title": "Refund Request",
+    "family_members": "Family Members",
+    "refund_type": "Refund Type",
+    "provider": "Provider",
+    "reason": "Reason",
+    "amount": "Amount",
+    "amount_placeholder": "Enter amount",
+    "service_date": "Service Date",
+    "select_date": "Select date",
+    "note": "Note"
+  },
+  "refund_history": {
+    "title": "Refunds History",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "request_number": "Request Number: ",
+    "date": "Date: ",
+    "time": "Time: ",
+    "view_details": "View Details",
+    "empty_state_title": "No Refund Requests Yet",
+    "empty_state": "You don't have any requests click\nbutton ",
+    "to_request_refund": " to request refund",
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pending": "Pending"
+    }
+  },
+  "family_members": {
+    "title": "Family Member",
+    "members": "Members",
+    "no_members": "No family members found",
+    "activated_member": "Activated Member",
+    "gold_plan": "Gold Plan"
+  },
+  "chronic_medicines": {
+    "title": "Chronic Medicines",
+    "select_member": "Select Member",
+    "select_medicines": "Select Your Monthly Medicines",
+    "upcoming_lab": "Upcoming Lab",
+    "upload_lab_results": "Upload Quarterly Lab Results",
+    "required_tests": "Required Tests:",
+    "blood_sugar_test": "Blood Sugar Test",
+    "kidney_function_test": "Kidney Function Test",
+    "saved": "Saved"
+  },
+  "policy": {
+    "title": "Policy",
+    "services": "Services"
+  },
+  "insurance_plan": {
+    "title": "Insurance Plan",
+    "gold_health_plan": "Gold Health Plan",
+    "policy_number": "Policy #MED-2025-0123",
+    "valid_until": "Valid until",
+    "valid_date": "Dec 31, 2025",
+    "status": "Status",
+    "active": "Active",
+    "coverage_details": "Coverage Details",
+    "coverage_type": "Coverage Type",
+    "family_plan": "Family Plan",
+    "annual_limit": "Annual Limit",
+    "annual_limit_value": "EGP 300,000",
+    "deductible": "Deductible",
+    "deductible_value": "EGP 1,000",
+    "copayment": "Copayment",
+    "copayment_value": "20%",
+    "coverage_member": "Coverage Member",
+    "main_member": "Main Member",
+    "spouse": "Spouse",
+    "son": "Son"
+  },
+  "terms_policy": {
+    "title": "Terms & Privacy Policy",
+    "terms": "Terms",
+    "privacy_policy": "Privacy Policy",
+    "last_updated": "Last updated: January 15, 2025",
+    "medical_insurance_app": "Medical Insurance App",
+    "sections": {
+      "introduction": "1. Introduction",
+      "eligibility": "2. Eligibility & Account Registration",
+      "services": "3. Services",
+      "contact_us": "Contact Us",
+      "info_collect": "2. Information We Collect",
+      "how_we_use": "3. How We Use Your Information",
+      "data_protection": "4. How We Protect Your Data",
+      "questions": "Do you have any questions?"
+    }
+  },
+  "bottom_nav": {
+    "home": "Home",
+    "provider": "Provider",
+    "request": "Request",
+    "profile": "Profile"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalid_email": "Invalid email address",
+    "invalid_phone": "Invalid phone number"
+  },
+  "messages": {
+    "success": "Operation completed successfully",
+    "error": "An error occurred",
+    "no_internet": "No internet connection",
+    "server_error": "Server error, please try again later"
+  }
+}

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class QuickAccessWidget extends StatelessWidget {
   const QuickAccessWidget({super.key});
@@ -16,8 +17,8 @@ class QuickAccessWidget extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 4.w, bottom: 10.h),
           child: Text(
-            'Quick Access',
-            style: AppTextStyles.font14BlackMedium.copyWith(
+            'home.quick_access'.tr(),
+            style: AppTextStyles.font14BlackMedium(context).copyWith(
               fontSize: 16.sp,
               fontWeight: FontWeight.w700,
             ),
@@ -44,7 +45,7 @@ class QuickAccessWidget extends StatelessWidget {
             children: [
               _buildQuickAccessButton(
                 image: AppAssets.approval,
-                label: 'Approval',
+                label: 'home.approval'.tr(),
                 color: AppColors.approvalColor,
                 textColor: AppColors.approvalTextColor,
                 onTap: () {
@@ -53,7 +54,7 @@ class QuickAccessWidget extends StatelessWidget {
               ),
               _buildQuickAccessButton(
                 image: AppAssets.refund,
-                label: 'Refund',
+                label: 'home.refund'.tr(),
                 color: AppColors.refundColor,
                 textColor: AppColors.refundTextColor,
                 onTap: () {
@@ -62,7 +63,7 @@ class QuickAccessWidget extends StatelessWidget {
               ),
               _buildQuickAccessButton(
                 image: AppAssets.medicine,
-                label: 'Chronic\nMedicine',
+                label: 'home.chronic_medicine'.tr(),
                 color: AppColors.chronicMedicineColor,
                 textColor: AppColors.chronicMedicineTextColor,
                 onTap: () {
@@ -117,7 +118,7 @@ class QuickAccessWidget extends StatelessWidget {
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: AppTextStyles.font12GreyRegular.copyWith(
+              style: AppTextStyles.font12GreyRegular(context).copyWith(
                 color: textColor,
                 fontWeight: FontWeight.w700,
                 fontSize: 13.sp,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -14,8 +15,8 @@ class ExploreWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Explore',
-          style: AppTextStyles.font14BlackMedium,
+          'home.explore'.tr(),
+          style: AppTextStyles.font14BlackMedium(context),
         ),
         SizedBox(height: 16.h),
 
@@ -102,12 +103,12 @@ class ExploreWidget extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.font14BlackMedium,
+                    style: AppTextStyles.font14BlackMedium(context),
                   ),
                   SizedBox(height: 4.h),
                   Text(
                     description,
-                    style: AppTextStyles.font12GreyRegular,
+                    style: AppTextStyles.font12GreyRegular(context),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

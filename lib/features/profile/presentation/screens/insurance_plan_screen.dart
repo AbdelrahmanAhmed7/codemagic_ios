@@ -91,12 +91,12 @@ class InsurancePlanScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Gold Health Plan',
-                        style: AppTextStyles.font20WhiteSemiBold,
+                        style: AppTextStyles.font20WhiteSemiBold(context),
                       ),
                       SizedBox(height: 4.h),
                       Text(
                         'Policy #MED-2025-0123',
-                        style: AppTextStyles.font14WhiteRegular,
+                        style: AppTextStyles.font14WhiteRegular(context),
                       ),
                     ],
                   ),
@@ -113,12 +113,12 @@ class InsurancePlanScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Valid until',
-                      style: AppTextStyles.font14WhiteRegular,
+                      style: AppTextStyles.font14WhiteRegular(context),
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       'Dec 31, 2025',
-                      style: AppTextStyles.font16WhiteRegular.copyWith(
+                      style: AppTextStyles.font16WhiteRegular(context).copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -127,9 +127,9 @@ class InsurancePlanScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('Status', style: AppTextStyles.font14GreenRegular),
+                    Text('Status', style: AppTextStyles.font14GreenRegular(context)),
                     SizedBox(height: 4.h),
-                    Text('Active', style: AppTextStyles.font16GreenMedium),
+                    Text('Active', style: AppTextStyles.font16GreenMedium(context)),
                   ],
                 ),
               ],
@@ -159,7 +159,7 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Coverage Details', style: AppTextStyles.font14BlackMedium),
+            Text('Coverage Details', style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
             _buildCoverageItem('Coverage Type', 'Family Plan'),
             _buildCoverageItem('Annual Limit', 'EGP 300,000'),
@@ -177,10 +177,10 @@ class InsurancePlanScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: AppTextStyles.font12GreyRegular),
+          Text(title, style: AppTextStyles.font12GreyRegular(context)),
           Text(
             value,
-            style: AppTextStyles.font12BlueMedium.copyWith(
+            style: AppTextStyles.font12BlueMedium(context).copyWith(
               color: AppColors.blueClrW,
             ),
           ),
@@ -208,7 +208,7 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Coverage Member', style: AppTextStyles.font14BlackMedium),
+            Text('Coverage Member', style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
             _buildMemberItem(
               'Ahmed Mohamed Adel Amin',
@@ -244,8 +244,8 @@ class InsurancePlanScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: AppTextStyles.font12BlackMedium),
-                Text(role, style: AppTextStyles.font10GreyRegular.copyWith(
+                Text(name, style: AppTextStyles.font12BlackMedium(context)),
+                Text(role, style: AppTextStyles.font10GreyRegular(context).copyWith(
                   color: Color(0xff484848),
                 )),
               ],

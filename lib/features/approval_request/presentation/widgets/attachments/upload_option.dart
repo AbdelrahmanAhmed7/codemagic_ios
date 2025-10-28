@@ -53,7 +53,7 @@ class UploadOption extends StatelessWidget {
               else if (icon != null)
                 Icon(icon, color: AppColors.primaryClr),
               SizedBox(height: 8.h),
-              Text(label, style: AppTextStyles.font14BlackMedium),
+              Text(label, style: AppTextStyles.font14BlackMedium(context)),
             ],
           ),
         ),

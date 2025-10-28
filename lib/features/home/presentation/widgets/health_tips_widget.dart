@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -13,8 +14,8 @@ class HealthTipsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Health Tips',
-          style: AppTextStyles.font14BlackMedium,
+          'home.health_tips'.tr(),
+          style: AppTextStyles.font14BlackMedium(context),
         ),
         SizedBox(height: 16.h),
 
@@ -39,14 +40,14 @@ class HealthTipsWidget extends StatelessWidget {
                     children: [
                       Text(
                         'Get Regular Check-Ups',
-                        style: AppTextStyles.font14BlackMedium.copyWith(
+                        style: AppTextStyles.font14BlackMedium(context).copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 8.h),
                       Text(
                         'Annual health check-ups can help detect diseases early and keep you healthier for longer!',
-                        style: AppTextStyles.font14GreyRegular.copyWith(
+                        style: AppTextStyles.font14GreyRegular(context).copyWith(
                           height: 1.4,
                           fontSize: 11.sp,
                         ),

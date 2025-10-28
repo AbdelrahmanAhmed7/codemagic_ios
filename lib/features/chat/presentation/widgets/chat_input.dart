@@ -66,7 +66,7 @@ class _ChatInputState extends State<ChatInput> {
                 textInputAction: TextInputAction.send,
                 decoration: InputDecoration(
                   hintText: 'Message...',
-                  hintStyle: AppTextStyles.font12GreyRegular,
+                  hintStyle: AppTextStyles.font12GreyRegular(context),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 16.w,

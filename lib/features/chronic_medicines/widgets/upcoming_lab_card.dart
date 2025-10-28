@@ -34,12 +34,12 @@ class UpcomingLabCard extends StatelessWidget {
                   children: [
                     Text(
                       'Upcoming Lab Tests',
-                      style: AppTextStyles.font14BlueRegular,
+                      style: AppTextStyles.font14BlueRegular(context),
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       'Next tests due in 2 months',
-                      style: AppTextStyles.font12BlueRegular
+                      style: AppTextStyles.font12BlueRegular(context)
                           .copyWith(color: const Color(0xff4285F4)),
                     ),
                   ],

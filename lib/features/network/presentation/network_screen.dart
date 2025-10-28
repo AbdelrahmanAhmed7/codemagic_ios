@@ -197,7 +197,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                     decoration: InputDecoration(
                                       hintText: 'Search providers...',
                                       hintStyle:
-                                          AppTextStyles.font14GreyRegular,
+                                          AppTextStyles.font14GreyRegular(context),
                                       prefixIcon: Icon(
                                         Icons.search,
                                         color: AppColors.greyClr,

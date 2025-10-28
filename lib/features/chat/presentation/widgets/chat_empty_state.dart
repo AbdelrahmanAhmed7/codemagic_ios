@@ -26,7 +26,7 @@ class ChatEmptyState extends StatelessWidget {
             // Welcome text
             Text(
               'How can we help you?',
-              style: AppTextStyles.font16BlackMedium,
+              style: AppTextStyles.font16BlackMedium(context),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 12.h),
@@ -34,7 +34,7 @@ class ChatEmptyState extends StatelessWidget {
             // Subtitle with icon
             Text(
               'Start by typing your question below! ⬇️',
-              style: AppTextStyles.font12GreyRegular,
+              style: AppTextStyles.font12GreyRegular(context),
             ),
             SizedBox(height: 32.h),
             

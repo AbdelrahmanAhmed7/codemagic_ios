@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FAQScreen extends StatefulWidget {
   const FAQScreen({super.key});
@@ -49,7 +50,7 @@ class _FAQScreenState extends State<FAQScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageHeader(title: 'FQA', backPath: '/profile'),
+            PageHeader(title: 'profile.faq.title'.tr(), backPath: '/profile'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -89,9 +90,9 @@ class _FAQScreenState extends State<FAQScreen> {
                             child: TextField(
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.search,size: 24,),
-                                hintText: 'Search',
+                                hintText: 'profile.faq.search_placeholder'.tr(),
                                 hintStyle:
-                                    AppTextStyles.font12BlackRegular.copyWith(
+                                    AppTextStyles.font12BlackRegular(context).copyWith(
                                   color: AppColors.greyClr,
                                 ),
                                 border: InputBorder.none,
@@ -130,7 +131,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                     child: Center(
                                       child: Text(
                                         categories[index],
-                                        style: AppTextStyles.font12GreyRegular,
+                                        style: AppTextStyles.font12GreyRegular(context),
                                       ),
                                     ),
                                   ),
@@ -159,7 +160,7 @@ class _FAQScreenState extends State<FAQScreen> {
                               child: ExpansionTile(
                                 title: Text(
                                   faq["question"],
-                                  style: AppTextStyles.font14BlackMedium,
+                                  style: AppTextStyles.font14BlackMedium(context),
                                 ),
                                 childrenPadding: EdgeInsets.all(12.w),
                                 children: [
@@ -182,7 +183,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                               child: Text(
                                                 '${i + 1}',
                                                 style: AppTextStyles
-                                                    .font10GreyRegular
+                                                    .font10GreyRegular(context)
                                                     .copyWith(
                                                   color: Colors.white,
                                                 ),
@@ -193,7 +194,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                               child: Text(
                                                 faq["answer"][i],
                                                 style: AppTextStyles
-                                                    .font12BlackRegular
+                                                    .font12BlackRegular(context)
                                                     .copyWith(
                                                   color: AppColors.greyClr,
                                                   height: 1.4,

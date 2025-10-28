@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -22,14 +23,14 @@ class OngoingRequestWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Ongoing Requests', style: AppTextStyles.font14BlackMedium),
+            Text('home.ongoing_requests'.tr(), style: AppTextStyles.font14BlackMedium(context)),
             GestureDetector(
               onTap: (){
                 context.go('/approval-history');
               },
               child: Text(
-                'See All',
-                style: AppTextStyles.font14PrimaryMedium.copyWith(
+                'home.see_all'.tr(),
+                style: AppTextStyles.font14PrimaryMedium(context).copyWith(
                   fontSize: 12.sp,
                 ),
               ),
@@ -45,7 +46,7 @@ class OngoingRequestWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 40.h),
               child: Text(
                 'No ongoing requests',
-                style: AppTextStyles.font12GreyRegular,
+                style: AppTextStyles.font12GreyRegular(context),
               ),
             ),
           )
@@ -144,7 +145,7 @@ class OngoingRequestWidget extends StatelessWidget {
                           children: [
                             Text(
                               approval.providerName.trim(),
-                              style: AppTextStyles.font14BlackMedium.copyWith(
+                              style: AppTextStyles.font14BlackMedium(context).copyWith(
                                 color: const Color(0xff062860),
                               ),
                               maxLines: 1,
@@ -155,14 +156,14 @@ class OngoingRequestWidget extends StatelessWidget {
                               " Service Type : ${approval.notes.isNotEmpty
                                   ? approval.notes
                                   : "No notes provided"}",
-                              style: AppTextStyles.font12GreyRegular,
+                              style: AppTextStyles.font12GreyRegular(context),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 6.h),
                             Text(
                               "Date: ${approval.createdDate.split('T').first}",
-                              style: AppTextStyles.font10GreyRegular,
+                              style: AppTextStyles.font10GreyRegular(context),
                             ),
                           ],
                         ),
@@ -198,7 +199,7 @@ class OngoingRequestWidget extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         approval.status,
-                        style: AppTextStyles.font10GreyRegular.copyWith(
+                        style: AppTextStyles.font10GreyRegular(context).copyWith(
                           fontWeight: FontWeight.w600,
                           color: _getStatusColor(approval.status),
                           fontSize: 9.sp,

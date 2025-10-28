@@ -124,7 +124,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
             ),
           ),
           SizedBox(height: 8.h),
-          Text('Add Member photo', style: AppTextStyles.font14BlackMedium),
+          Text('Add Member photo', style: AppTextStyles.font14BlackMedium(context)),
         ],
       ),
     );
@@ -236,7 +236,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
                   side: BorderSide(color: AppColors.greyClr),
                 ),
               ),
-              child: Text('Cancel', style: AppTextStyles.font14BlackMedium),
+              child: Text('Cancel', style: AppTextStyles.font14BlackMedium(context)),
             ),
           ),
         ],

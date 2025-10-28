@@ -29,7 +29,7 @@ class ProviderCard extends StatelessWidget {
       final Uri googleMapsAppUri = Uri.parse(
         'google.navigation:q=${provider.latitude},${provider.longitude}',
       );
-      
+
       if (await canLaunchUrl(googleMapsAppUri)) {
         await launchUrl(googleMapsAppUri);
         return;
@@ -38,7 +38,7 @@ class ProviderCard extends StatelessWidget {
       final Uri mapsUri = Uri.parse(
         'https://www.google.com/maps/search/?api=1&query=${provider.latitude},${provider.longitude}',
       );
-      
+
       if (await canLaunchUrl(mapsUri)) {
         await launchUrl(mapsUri, mode: LaunchMode.externalApplication);
       } else {
@@ -124,7 +124,7 @@ class ProviderCard extends StatelessWidget {
                       // Provider Name
                       Text(
                         provider.providerName,
-                        style: AppTextStyles.font12BlackMedium,
+                        style: AppTextStyles.font12BlackMedium(context),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -134,9 +134,9 @@ class ProviderCard extends StatelessWidget {
                       // City with blue color
                       Text(
                         provider.city,
-                        style: AppTextStyles.font14BlueMedium.copyWith(
-                          fontSize: 10.sp,
-                        ),
+                        style: AppTextStyles.font14BlueMedium(
+                          context,
+                        ).copyWith(fontSize: 10.sp),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -157,7 +157,7 @@ class ProviderCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     provider.fullAddress,
-                    style: AppTextStyles.font12GreyRegular,
+                    style: AppTextStyles.font12GreyRegular(context),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -178,7 +178,10 @@ class ProviderCard extends StatelessWidget {
                     height: 16.h,
                   ),
                   SizedBox(width: 8.w),
-                  Text(provider.mobile, style: AppTextStyles.font12GreyRegular),
+                  Text(
+                    provider.mobile,
+                    style: AppTextStyles.font12GreyRegular(context),
+                  ),
                   Spacer(),
                   // Details Button
                   ElevatedButton(
@@ -205,9 +208,9 @@ class ProviderCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Navigate',
-                      style: AppTextStyles.font14WhiteMedium.copyWith(
-                        fontSize: 10.sp,
-                      ),
+                      style: AppTextStyles.font14WhiteMedium(
+                        context,
+                      ).copyWith(fontSize: 10.sp),
                     ),
                   ),
                 ],

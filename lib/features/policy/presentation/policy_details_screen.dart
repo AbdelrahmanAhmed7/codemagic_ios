@@ -65,7 +65,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                 borderRadius: BorderRadius.circular(12.r),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
+                                    color: Colors.black.withValues(alpha: 0.08),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                     spreadRadius: 0,
@@ -76,7 +76,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                 controller: _searchController,
                                 decoration: InputDecoration(
                                   hintText: 'Search',
-                                  hintStyle: AppTextStyles.font14GreyRegular,
+                                  hintStyle: AppTextStyles.font14GreyRegular(context),
                                   prefixIcon: Icon(
                                     Icons.search,
                                     color: AppColors.greyClr,
@@ -100,7 +100,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                             // Policy Details Section
                             Text(
                               'Policy Details',
-                              style: AppTextStyles.font16BlueMedium,
+                              style: AppTextStyles.font16BlueMedium(context),
                             ),
                             SizedBox(height: 16.h),
 
@@ -119,7 +119,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                       children: [
                                         Text(
                                           'Coverage',
-                                          style: AppTextStyles.font14BlackMedium,
+                                          style: AppTextStyles.font14BlackMedium(context),
                                         ),
                                         SizedBox(height: 8.h),
                                         Row(
@@ -132,7 +132,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                             SizedBox(width: 4.w),
                                             Text(
                                               policyDetails.serviceName,
-                                              style: AppTextStyles.font10GreyRegular,
+                                              style: AppTextStyles.font10GreyRegular(context),
                                             ),
                                           ],
                                         ),
@@ -152,7 +152,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                       ),
                                       Text(
                                         policyDetails.coverageType,
-                                        style: AppTextStyles.font10GreyRegular,
+                                        style: AppTextStyles.font10GreyRegular(context),
                                       ),
                                     ],
                                   ),
@@ -167,7 +167,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                               children: [
                                 Text(
                                   'Providers',
-                                  style: AppTextStyles.font16BlueMedium,
+                                  style: AppTextStyles.font16BlueMedium(context),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -180,7 +180,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                   ),
                                   child: Text(
                                     'See all',
-                                    style: AppTextStyles.font12BlueRegular,
+                                    style: AppTextStyles.font12BlueRegular(context),
                                   ),
                                 ),
                               ],

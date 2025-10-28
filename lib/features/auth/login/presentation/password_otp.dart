@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,20 +84,20 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
                   SizedBox(width: 30.w),
                   Text(
                     'Forgot Password',
-                    style: AppTextStyles.font20BlackSemiBold,
+                    style: AppTextStyles.font20BlackSemiBold(context),
                   ),
                 ],
               ),
               SizedBox(height: 44.h),
               Text(
                 'OTP Verification',
-                style: AppTextStyles.font20BlackSemiBold,
+                style: AppTextStyles.font20BlackSemiBold(context),
               ),
               SizedBox(height: 12.h),
               Text.rich(
                 TextSpan(
                   text: 'Please enter the OTP we just sent to ',
-                  style: AppTextStyles.font14GreyRegular,
+                  style: AppTextStyles.font14GreyRegular(context),
                   children: [
                     TextSpan(
                       text: widget.phoneNumber,
@@ -171,7 +172,7 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
               Center(
                 child: Text(
                   'The verify code will expire in $_formattedTime',
-                  style: AppTextStyles.font14GreyRegular,
+                  style: AppTextStyles.font14GreyRegular(context),
                 ),
               ),
               SizedBox(height: 16.h),
@@ -207,7 +208,7 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
                               _startTimer();
                               context
                                   .read<ResendOtpCubit>()
-                                  .resendOtp(widget.phoneNumber, 'en');
+                                  .resendOtp(widget.phoneNumber, context.locale.languageCode);
                             }
                           : null,
                       child: Text(
@@ -253,7 +254,7 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
                                 context.read<VerifyOtpCubit>().verifyOtp(
                                   widget.phoneNumber,
                                   otp,
-                                  'en',
+                                  context.locale.languageCode,
                                 );
                               }
                             },

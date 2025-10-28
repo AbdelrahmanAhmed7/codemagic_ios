@@ -66,7 +66,7 @@ class _NoteTextFieldState extends State<NoteTextField> {
             decoration: InputDecoration(
               counterText: '',
               hintText: 'Enter Note',
-              hintStyle: AppTextStyles.font14GreyRegular,
+              hintStyle: AppTextStyles.font14GreyRegular(context),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(12.r),

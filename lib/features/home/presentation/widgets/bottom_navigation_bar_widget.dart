@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
   final int currentIndex;
@@ -38,16 +39,23 @@ class BottomNavigationBarWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(4, (index) {
-                  return _buildNavItem(index);
+                  return _buildNavItem(index, context);
                 }),
               ),
             ),
 
             Positioned(
               top: -25.h,
-              left: (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
-                  ((MediaQuery.of(context).size.width - 32.w) / 8) -
-                  25.w,
+              left: context.locale.languageCode == 'ar' 
+                  ? null
+                  : (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
+                    ((MediaQuery.of(context).size.width - 32.w) / 8) -
+                    25.w,
+              right: context.locale.languageCode == 'ar'
+                  ? (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
+                    ((MediaQuery.of(context).size.width - 32.w) / 8) -
+                    25.w
+                  : null,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOut,
@@ -65,9 +73,12 @@ class BottomNavigationBarWidget extends StatelessWidget {
                   ],
                 ),
                 padding: EdgeInsets.all(10.w),
-                child: Image.asset(
-                  _getIconPath(currentIndex, true),
-                  fit: BoxFit.contain,
+                child: Transform.flip(
+                  flipX: context.locale.languageCode == 'ar',
+                  child: Image.asset(
+                    _getIconPath(currentIndex, true),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
@@ -77,7 +88,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(int index) {
+  Widget _buildNavItem(int index, BuildContext context) {
     final bool isSelected = currentIndex == index;
 
     return GestureDetector(
@@ -87,11 +98,14 @@ class BottomNavigationBarWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 10.h),
-          Image.asset(
-            _getIconPath(index, false),
-            width: 22.w,
-            height: 22.h,
-            color: isSelected ? Colors.transparent : AppColors.greyClr,
+          Transform.flip(
+            flipX: context.locale.languageCode == 'ar',
+            child: Image.asset(
+              _getIconPath(index, false),
+              width: 22.w,
+              height: 22.h,
+              color: isSelected ? Colors.transparent : AppColors.greyClr,
+            ),
           ),
           SizedBox(height: 4.h),
           Text(
@@ -110,13 +124,13 @@ class BottomNavigationBarWidget extends StatelessWidget {
   String _getLabel(int index) {
     switch (index) {
       case 0:
-        return 'Home';
+        return 'bottom_nav.home'.tr();
       case 1:
-        return 'Provider';
+        return 'bottom_nav.provider'.tr();
       case 2:
-        return 'Request';
+        return 'bottom_nav.request'.tr();
       case 3:
-        return 'Profile';
+        return 'bottom_nav.profile'.tr();
       default:
         return '';
     }

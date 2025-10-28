@@ -164,7 +164,7 @@ class LabResultsUploadState extends State<LabResultsUpload> {
                 Text(
                   'Tap to upload your lab\n test results',
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.font10GreyRegular,
+                  style: AppTextStyles.font10GreyRegular(context),
                 ),
               ],
             ),

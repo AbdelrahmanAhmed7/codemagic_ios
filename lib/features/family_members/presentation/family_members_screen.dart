@@ -7,6 +7,8 @@ import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/features/family_members/presentation/cubit/family_members_cubit.dart';
 import 'package:mediconsult/features/family_members/presentation/cubit/family_members_state.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/core/utils/language_helper.dart';
 
 class FamilyMembersScreen extends StatefulWidget {
   const FamilyMembersScreen({super.key});
@@ -20,7 +22,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<FamilyMembersCubit>(context).getFamilyMembers('en');
+      context.read<FamilyMembersCubit>().getFamilyMembers(LanguageHelper.getLanguageCode(context));
     });
   }
 
@@ -31,7 +33,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const PageHeader(title: 'Family Member', backPath: '/home'),
+            PageHeader(title: 'family_members.title'.tr(), backPath: '/home'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -56,7 +58,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                         Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            'Members',
+                            'family_members.members'.tr(),
                             style: AppTextStyles.font14BlackMedium,
                           ),
                         ),
@@ -70,10 +72,10 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                                 loaded: (model) {
                                   final members = model.data.familyMembers;
                                   if (members.isEmpty) {
-                                    return const Center(child: Text('No family members found'));
+                                    return Center(child: Text('family_members.no_members'.tr()));
                                   }
                                   return RefreshIndicator(
-                                    onRefresh: () => context.read<FamilyMembersCubit>().refreshFamilyMembers('en'),
+                                    onRefresh: () => context.read<FamilyMembersCubit>().refreshFamilyMembers(LanguageHelper.getLanguageCode(context)),
                                     child: ListView.separated(
                                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                                       itemCount: members.length,
@@ -113,7 +115,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
     // Default to 'Gold Plan' if memberStatus is empty or null
     final String displayStatus = (member.memberStatus != null && member.memberStatus.isNotEmpty)
         ? member.memberStatus
-        : 'Activated Member';
+        : 'family_members.activated_member'.tr();
     
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +133,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
             children: [
               Text(
                 member.memberName,
-                style: AppTextStyles.font12BlackMedium,
+                style: AppTextStyles.font12BlackMedium(context),
               ),
               SizedBox(height: 4.h),
               Row(
@@ -144,7 +146,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                   SizedBox(width: 4.w),
                   Text(
                     member.level,
-                    style: AppTextStyles.font12GreyRegular,
+                    style: AppTextStyles.font12GreyRegular(member),
                   ),
                 ],
               ),
@@ -159,7 +161,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                   SizedBox(width: 4.w),
                   Text(
                     displayStatus,
-                    style: AppTextStyles.font12GreyRegular.copyWith(
+                    style: AppTextStyles.font12GreyRegular(context).copyWith(
                       color: member.isActive ? Colors.green : Colors.red,
                     ),
                   ),
@@ -185,8 +187,8 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                     ),
                     SizedBox(width: 4.w),
                     Text(
-                      'Gold Plan',
-                      style: AppTextStyles.font12BlackMedium.copyWith(
+                      'family_members.gold_plan'.tr(),
+                      style: AppTextStyles.font12BlackMedium(context).copyWith(
                         fontSize: 10.sp,
                       ),
                     ),

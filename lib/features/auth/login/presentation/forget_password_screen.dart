@@ -11,6 +11,7 @@ import 'package:mediconsult/features/auth/login/presentation/logic/reset_passwor
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/send_otp_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -50,8 +51,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ),
                   SizedBox(width: 30.w),
                   Text(
-                    'Forgot Password',
-                    style: AppTextStyles.font20BlackSemiBold,
+                    'auth.forgot_password.title'.tr(),
+                    style: AppTextStyles.font20BlackSemiBold(context),
                   ),
                 ],
               ),
@@ -66,15 +67,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                     SizedBox(height: 38.h),
                     Text(
-                      'Don’t worry ! It happens. Please enter your phone number and we will send the OTP to this phone number.',
-                      style: AppTextStyles.font14GreyRegular,
+                      'auth.forgot_password.description'.tr(),
+                      style: AppTextStyles.font14GreyRegular(context),
                     ),
                     SizedBox(height: 24.h),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Phone Number',
-                        style: AppTextStyles.font16BlackMedium,
+                        'auth.forgot_password.phone_number'.tr(),
+                        style: AppTextStyles.font16BlackMedium(context),
                       ),
                     ),
                     SizedBox(height: 8.h),
@@ -82,11 +83,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       key: _formKey,
                       child: AppTextField(
                         controller: phoneNumberController,
-                        hintText: 'Enter your phone number',
+                        hintText: 'auth.forgot_password.phone_placeholder'.tr(),
                         keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your phone number';
+                            return 'auth.forgot_password.validation.phone_required'.tr();
                           }
                           return null;
                         },
@@ -95,11 +96,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     SizedBox(height: 29.h),
                     RichText(
                       text: TextSpan(
-                        text: 'Do you want to change phone number ?',
-                        style: AppTextStyles.font14GreyRegular,
+                        text: 'auth.forgot_password.change_phone'.tr(),
+                        style: AppTextStyles.font14GreyRegular(context),
                         children: [
                           TextSpan(
-                            text: 'Contact Us',
+                            text: 'auth.forgot_password.contact_us'.tr(),
                             style: const TextStyle(
                               color: AppColors.primaryClr,
                               fontWeight: FontWeight.w400,
@@ -118,7 +119,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         final isLoading = state is Loading;
                         
                         return AppButton(
-                          text: isLoading ? 'Sending...' : 'Send',
+                          text: isLoading ? 'auth.forgot_password.sending'.tr() : 'auth.forgot_password.send_button'.tr(),
                           isLoading: isLoading,
                           onPressed: isLoading
                               ? null
@@ -126,7 +127,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                   if (_formKey.currentState!.validate()) {
                                     context.read<SendOtpCubit>().sendOtp(
                                           phoneNumberController.text,
-                                          'en',
+                                          context.locale.languageCode,
                                         );
                                   }
                                 },

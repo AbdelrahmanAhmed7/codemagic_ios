@@ -32,7 +32,7 @@ class EmptyProvidersState extends StatelessWidget {
           // Title
           Text(
             'Search for Providers',
-            style: AppTextStyles.font16BlackMedium,
+            style: AppTextStyles.font16BlackMedium(context),
           ),
 
           SizedBox(height: 8.h),
@@ -42,7 +42,7 @@ class EmptyProvidersState extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Text(
               'Use the search bar or filters to find nearby healthcare providers',
-              style: AppTextStyles.font14GreyRegular,
+              style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),
           ),

@@ -170,7 +170,7 @@ class ApprovalDetailsBottomSheet extends StatelessWidget {
                   // Approval/Rejected/Pending Details
                   Text(
                     '${_getStatusText()} Details',
-                    style: AppTextStyles.font14BlackMedium,
+                    style: AppTextStyles.font14BlackMedium(context),
                   ),
                   SizedBox(height: 12.h),
 
@@ -341,12 +341,12 @@ class _DetailRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: AppTextStyles.font12GreyRegular,
+                style: AppTextStyles.font12GreyRegular(context),
               ),
               SizedBox(height: 2.h),
               Text(
                 value,
-                style: AppTextStyles.font14BlackMedium,
+                style: AppTextStyles.font14BlackMedium(context),
               ),
             ],
           ),

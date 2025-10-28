@@ -48,7 +48,7 @@ class KhusmPromotionWidget extends StatelessWidget {
 
                 Text(
                   'Save up to 30% on Medications & Lab Tests...etc!',
-                  style: AppTextStyles.font14BlackMedium.copyWith(
+                  style: AppTextStyles.font14BlackMedium(context).copyWith(
                     fontSize: 12.sp,
                     color: const Color(0xff484848),
                     fontWeight: FontWeight.w400,
@@ -70,7 +70,7 @@ class KhusmPromotionWidget extends StatelessWidget {
                   ),
                   child: Text(
                     'Download app',
-                    style: AppTextStyles.font12GreyRegular.copyWith(
+                    style: AppTextStyles.font12GreyRegular(context).copyWith(
                       color: AppColors.whiteClr,
                       fontWeight: FontWeight.w400,
                       fontSize: 10.sp,

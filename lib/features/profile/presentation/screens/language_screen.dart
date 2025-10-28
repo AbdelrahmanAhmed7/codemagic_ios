@@ -4,6 +4,12 @@ import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/language_cubit.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:go_router/go_router.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -13,7 +19,7 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  String _selectedLanguage = 'English'; 
+  String _selectedLanguage = 'en'; 
 
   final List<Map<String, String>> _languages = [
     {
@@ -36,7 +42,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const PageHeader(title: 'Language', backPath: '/profile'),
+              PageHeader(title: 'profile.language.title'.tr(), backPath: '/profile'),
               Transform.translate(
                 offset: Offset(0, -20.h),
                 child: Padding(
@@ -64,6 +70,26 @@ class _LanguageScreenState extends State<LanguageScreen> {
                           
                           // Language selection card
                           _buildLanguageCard(),
+                          
+                          SizedBox(height: 32.h),
+                          
+                          // Save button
+                          AppButton(
+                            text: 'common.save'.tr(),
+                            onPressed: () async {
+                              final languageCubit = context.read<LanguageCubit>();
+                              await languageCubit.changeLanguage(_selectedLanguage);
+                              
+                              if (mounted) {
+                                await context.setLocale(Locale(_selectedLanguage));
+                                showAppSnackBar(
+                                  context,
+                                  'profile.language.language_changed'.tr(),
+                                );
+                                context.go('/profile');
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -95,8 +121,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
         children: [
           // Title
           Text(
-            'Change Language',
-            style: AppTextStyles.font16BlackMedium.copyWith(
+            'profile.language.change_language'.tr(),
+            style: AppTextStyles.font16BlackMedium(context).copyWith(
               color: Color(0xff083D91),
             ),
           ),
@@ -111,33 +137,22 @@ class _LanguageScreenState extends State<LanguageScreen> {
   }
 
   Widget _buildLanguageOption(Map<String, String> language) {
-    final bool isSelected = _selectedLanguage == language['name'];
+    final bool isSelected = _selectedLanguage == language['code'];
     
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: InkWell(
         onTap: () {
           setState(() {
-            _selectedLanguage = language['name']!;
+            _selectedLanguage = language['code']!;
           });
-          
-          // TODO: Implement language change functionality
-          print('Selected language: ${language['name']}');
-          
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Language changed to ${language['nativeName']}'),
-              backgroundColor: AppColors.primaryClr,
-            ),
-          );
         },
         child: Row(
           children: [
             Expanded(
               child: Text(
                 language['nativeName']!,
-                style: AppTextStyles.font14BlackRegular,
+                style: AppTextStyles.font14BlackRegular(context),
               ),
             ),
             Container(

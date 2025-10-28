@@ -74,7 +74,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
               children: [
                 Text(
                   'Filter',
-                  style: AppTextStyles.font18BlackSemiBold,
+                  style: AppTextStyles.font18BlackSemiBold(context),
                 ),
                 TextButton(
                   onPressed: () {
@@ -86,7 +86,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                   },
                   child: Text(
                     'Clear',
-                    style: AppTextStyles.font14PrimaryMedium,
+                    style: AppTextStyles.font14PrimaryMedium(context),
                   ),
                 ),
               ],
@@ -105,7 +105,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                   // Category Dropdown
                   Text(
                     'Choose category',
-                    style: AppTextStyles.font14BlackMedium,
+                    style: AppTextStyles.font14BlackMedium(context),
                   ),
                   SizedBox(height: 12.h),
                   BlocBuilder<NetworkCubit, NetworkState>(
@@ -119,7 +119,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                       if (categories.isEmpty) {
                         return Text(
                           'No categories available',
-                          style: AppTextStyles.font12GreyRegular,
+                          style: AppTextStyles.font12GreyRegular(context),
                         );
                       }
 
@@ -139,14 +139,14 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                         ),
                         hint: Text(
                           'Select category',
-                          style: AppTextStyles.font14GreyRegular,
+                          style: AppTextStyles.font14GreyRegular(context),
                         ),
                         items: categories.map((category) {
                           return DropdownMenuItem<int>(
                             value: category.id,
                             child: Text(
                               category.name,
-                              style: AppTextStyles.font14BlackRegular,
+                              style: AppTextStyles.font14BlackRegular(context),
                             ),
                           );
                         }).toList(),
@@ -164,7 +164,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                   // Government Dropdown
                   Text(
                     'Choose government',
-                    style: AppTextStyles.font14BlackMedium,
+                    style: AppTextStyles.font14BlackMedium(context),
                   ),
                   SizedBox(height: 12.h),
                   BlocBuilder<NetworkCubit, NetworkState>(
@@ -178,7 +178,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                       if (governments.isEmpty) {
                         return Text(
                           'No governments available',
-                          style: AppTextStyles.font12GreyRegular,
+                          style: AppTextStyles.font12GreyRegular(context),
                         );
                       }
 
@@ -198,14 +198,14 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                         ),
                         hint: Text(
                           'Select government',
-                          style: AppTextStyles.font14GreyRegular,
+                          style: AppTextStyles.font14GreyRegular(context),
                         ),
                         items: governments.map((government) {
                           return DropdownMenuItem<int>(
                             value: government.id,
                             child: Text(
                               government.name,
-                              style: AppTextStyles.font14BlackRegular,
+                              style: AppTextStyles.font14BlackRegular(context),
                             ),
                           );
                         }).toList(),
@@ -227,7 +227,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                     SizedBox(height: 20.h),
                     Text(
                       'Choose city',
-                      style: AppTextStyles.font14BlackMedium,
+                      style: AppTextStyles.font14BlackMedium(context),
                     ),
                     SizedBox(height: 12.h),
                     BlocBuilder<NetworkCubit, NetworkState>(
@@ -247,7 +247,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                         if (cities.isEmpty) {
                           return Text(
                             'No cities available',
-                            style: AppTextStyles.font12GreyRegular,
+                            style: AppTextStyles.font12GreyRegular(context),
                           );
                         }
 
@@ -267,14 +267,14 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                           ),
                           hint: Text(
                             'Select city',
-                            style: AppTextStyles.font14GreyRegular,
+                            style: AppTextStyles.font14GreyRegular(context),
                           ),
                           items: cities.map((city) {
                             return DropdownMenuItem<int>(
                               value: city.cityId,
                               child: Text(
                                 city.cityName,
-                                style: AppTextStyles.font14BlackRegular,
+                                style: AppTextStyles.font14BlackRegular(context),
                               ),
                             );
                           }).toList(),
@@ -318,7 +318,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                 ),
                 child: Text(
                   'Choose',
-                  style: AppTextStyles.font16WhiteMedium,
+                  style: AppTextStyles.font16WhiteMedium(context),
                 ),
               ),
             ),
