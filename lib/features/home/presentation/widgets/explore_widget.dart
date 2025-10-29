@@ -22,8 +22,8 @@ class ExploreWidget extends StatelessWidget {
 
         // Explore Items
         _buildExploreItem(
-          title: 'Providers',
-          description: 'Find healthcare networks, hospitals and Pharmacies',
+          title: 'explore.providers'.tr(),
+          description: 'explore.providers_description'.tr(),
           iconPath: AppAssets.providers,
           arrowPath: 'assets/icons/arrow.png',
           onTap: () {
@@ -33,8 +33,8 @@ class ExploreWidget extends StatelessWidget {
         ),
         SizedBox(height: 12.h),
         _buildExploreItem(
-          title: 'Policy',
-          description: 'View & manage insurance policies',
+          title: 'explore.policy'.tr(),
+          description: 'explore.policy_description'.tr(),
           iconPath: AppAssets.policy,
           arrowPath: 'assets/icons/arrow.png',
           onTap: () {
@@ -44,8 +44,8 @@ class ExploreWidget extends StatelessWidget {
         ),
         SizedBox(height: 12.h),
         _buildExploreItem(
-          title: 'Family',
-          description: 'Add & manage family members',
+          title: 'explore.family'.tr(),
+          description: 'explore.family_description'.tr(),
           iconPath: AppAssets.family,
           arrowPath: 'assets/icons/arrow.png',
           onTap: () {
@@ -65,6 +65,7 @@ class ExploreWidget extends StatelessWidget {
     required VoidCallback onTap,
     required BuildContext context,
   }) {
+    final isArabic = context.locale.languageCode == 'ar';
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12.r),
@@ -105,10 +106,7 @@ class ExploreWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.font14BlackMedium(context),
-                  ),
+                  Text(title, style: AppTextStyles.font14BlackMedium(context)),
                   SizedBox(height: 4.h),
                   Text(
                     description,
@@ -121,11 +119,14 @@ class ExploreWidget extends StatelessWidget {
             ),
 
             // Arrow Image (15×16)
-            Image.asset(
-              AppAssets.arrowRight,
-              width: 25.w,
-              height: 20.h,
-              fit: BoxFit.contain,
+            Transform.rotate(
+              angle: isArabic ? 3.1416 : 0,
+              child: Image.asset(
+                AppAssets.arrowRight,
+                width: 25.w,
+                height: 20.h,
+                fit: BoxFit.contain,
+              ),
             ),
           ],
         ),

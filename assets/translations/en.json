@@ -131,6 +131,8 @@
     "no_notes": "No notes provided",
     "date": "Date",
     "health_tips": "Health Tips",
+    "health_tips_title": "Get Regular Check-Ups",
+    "health_tips_description": "Annual health check-ups can help detect diseases early and keep you healthier for longer!",
     "explore": "Explore"
   },
   "profile": {
@@ -394,5 +396,13 @@
     "error": "An error occurred",
     "no_internet": "No internet connection",
     "server_error": "Server error, please try again later"
+  },
+  "explore": {
+    "providers": "Providers",
+    "providers_description": "Find healthcare networks, hospitals and pharmacies",
+    "policy": "Policy",
+    "policy_description": "View & manage insurance policies",
+    "family": "Family",
+    "family_description": "Add & manage family members"
   }
 }

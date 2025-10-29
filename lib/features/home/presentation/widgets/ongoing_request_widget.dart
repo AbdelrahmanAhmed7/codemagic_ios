@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,16 +25,19 @@ class OngoingRequestWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('home.ongoing_requests'.tr(), style: AppTextStyles.font14BlackMedium(context)),
+            Text(
+              'home.ongoing_requests'.tr(),
+              style: AppTextStyles.font14BlackMedium(context),
+            ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 context.go('/approval-history');
               },
               child: Text(
                 'home.see_all'.tr(),
-                style: AppTextStyles.font14PrimaryMedium(context).copyWith(
-                  fontSize: 12.sp,
-                ),
+                style: AppTextStyles.font14PrimaryMedium(
+                  context,
+                ).copyWith(fontSize: 12.sp),
               ),
             ),
           ],
@@ -45,7 +50,7 @@ class OngoingRequestWidget extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 40.h),
               child: Text(
-                'No ongoing requests',
+                'home',
                 style: AppTextStyles.font12GreyRegular(context),
               ),
             ),
@@ -72,41 +77,31 @@ class OngoingRequestWidget extends StatelessWidget {
   }
 
   Widget _buildApprovalCard(BuildContext context, Approval approval) {
-    return Container(
-      width: double.infinity,
-      height: 120.h,
-      decoration: BoxDecoration(
-        color: AppColors.whiteClr,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.15),
-            blurRadius: 15,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.05),
-            blurRadius: 30,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
+    final isArabic = context.locale.languageCode == 'ar';
+
+    return Directionality(
+      textDirection: isArabic ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+      child: Stack(
         children: [
-          // Left color indicator
           Container(
-            width: 6.w,
+            width: double.infinity,
             height: 140.h,
             decoration: BoxDecoration(
-              color: _getStatusColor(approval.status),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.r),
-                bottomLeft: Radius.circular(12.r),
-              ),
+              color: AppColors.whiteClr,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.greyClr.withValues(alpha: 0.15),
+                  blurRadius: 15,
+                  offset: const Offset(0, 4),
+                ),
+                BoxShadow(
+                  color: AppColors.greyClr.withValues(alpha: 0.05),
+                  blurRadius: 30,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-          ),
-
-          Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
               child: Stack(
@@ -145,24 +140,22 @@ class OngoingRequestWidget extends StatelessWidget {
                           children: [
                             Text(
                               approval.providerName.trim(),
-                              style: AppTextStyles.font14BlackMedium(context).copyWith(
-                                color: const Color(0xff062860),
-                              ),
+                              style: AppTextStyles.font14BlackMedium(
+                                context,
+                              ).copyWith(color: const Color(0xff062860)),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 6.h),
                             Text(
-                              " Service Type : ${approval.notes.isNotEmpty
-                                  ? approval.notes
-                                  : "No notes provided"}",
+                              "${'home.service_type'.tr()}: ${approval.notes.isNotEmpty ? approval.notes : 'home.no_notes'.tr()}",
                               style: AppTextStyles.font12GreyRegular(context),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 6.h),
                             Text(
-                              "Date: ${approval.createdDate.split('T').first}",
+                              "${'home.date'.tr()}: ${approval.createdDate.split('T').first}",
                               style: AppTextStyles.font10GreyRegular(context),
                             ),
                           ],
@@ -172,10 +165,14 @@ class OngoingRequestWidget extends StatelessWidget {
                       // Arrow
                       Padding(
                         padding: EdgeInsets.only(right: 8.w),
-                        child: Image.asset(
-                          AppAssets.arrowRight,
-                          width: 20.w,
-                          height: 18.h,
+                        child: Transform.rotate(
+                          angle: isArabic ? 3.1416 : 0,
+                          child: Image.asset(
+                            AppAssets.arrowRight,
+                            width: 25.w,
+                            height: 20.h,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ],
@@ -199,15 +196,32 @@ class OngoingRequestWidget extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         approval.status,
-                        style: AppTextStyles.font10GreyRegular(context).copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: _getStatusColor(approval.status),
-                          fontSize: 9.sp,
-                        ),
+                        style: AppTextStyles.font10GreyRegular(context)
+                            .copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: _getStatusColor(approval.status),
+                              fontSize: 9.sp,
+                            ),
                       ),
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: Container(
+              width: 6.w,
+              decoration: BoxDecoration(
+                color: _getStatusColor(approval.status),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.r),
+                  bottomLeft: Radius.circular(12.r),
+                ),
               ),
             ),
           ),
