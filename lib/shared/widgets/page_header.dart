@@ -50,10 +50,7 @@ class PageHeader extends StatelessWidget {
                   ],
                 ),
                 child: IconButton(
-                  icon: Transform.rotate(
-                    angle: isRtl ? 3.14 : 0,
-                    child: const Icon(Icons.arrow_back_ios_new, size: 18),
-                  ),
+                  icon: Icon(Icons.arrow_back_ios_new, size: 18),
                   onPressed:
                       onBack ??
                       () => backPath != null

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -65,7 +66,7 @@ class _NoteTextFieldState extends State<NoteTextField> {
             maxLength: widget.maxLength,
             decoration: InputDecoration(
               counterText: '',
-              hintText: 'Enter Note',
+              hintText: 'approval_request.enter_note'.tr(),
               hintStyle: AppTextStyles.font14GreyRegular(context),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
@@ -77,12 +78,10 @@ class _NoteTextFieldState extends State<NoteTextField> {
         ),
         SizedBox(height: 6.h),
         Text(
-          'Maximum ${widget.maxLength} characters',
+          'approval_request.max_characters'.tr(args: ['${widget.maxLength}']),
           style: AppTextStyles.font10GreyRegular(context).copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
   }
 }
-
-

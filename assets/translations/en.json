@@ -261,10 +261,13 @@
     "family_members": "Family Members",
     "provider": "Provider",
     "note": "Note",
-    "attachments": "Attachments",
+    "add_attachments": "Add Attachments",
     "select_family_member": "Please select a family member",
     "select_provider": "Please select a provider",
-    "attachment_required": "At least 1 attachment is required"
+    "attachment_required": "At least 1 attachment is required",
+    "max_size": "Maximum size 5MB",
+    "max_characters": "Maximum 300 characters",
+    "enter_note": "Enter Note"
   },
   "approval_history": {
     "title": "Approval History",

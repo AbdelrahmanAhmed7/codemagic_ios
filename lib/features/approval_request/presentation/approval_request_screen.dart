@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -60,7 +61,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
 
     // Submit approval request
     context.read<ApprovalRequestCubit>().createApprovalRequest(
-      lang: 'en',
+      lang: context.locale.languageCode,
       memberId: _selectedFamilyMember!.memberId,
       providerId: _selectedProvider!.id,
       notes: _noteController.text.isNotEmpty ? _noteController.text : null,
@@ -85,7 +86,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
       body: SafeArea(
         child: Column(
             children: [
-              const PageHeader(title: 'Approval Request', backPath: '/approval-history'),
+              PageHeader(title: 'approval_request.title'.tr(), backPath: '/approval-history'),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -115,7 +116,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Family Members',
+                                    'approval_request.family_members'.tr(),
                                     style: AppTextStyles.font14BlackMedium(context),
                                   ),
                                   SizedBox(height: 12.h),
@@ -129,7 +130,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   ),
                                   SizedBox(height: 24.h),
                                   Text(
-                                    'Provider',
+                                    'approval_request.provider'.tr(),
                                     style: AppTextStyles.font14BlackMedium(context),
                                   ),
                                   SizedBox(height: 8.h),
@@ -143,7 +144,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
-                                    'Note',
+                                    'approval_request.note'.tr(),
                                     style: AppTextStyles.font14BlackMedium(context),
                                   ),
                                   SizedBox(height: 8.h),
@@ -183,7 +184,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                     builder: (context, state) {
                                       final isLoading = state is Loading;
                                       return AppButton(
-                                        text: 'Save',
+                                        text: 'common.save'.tr(),
                                         onPressed: _submitApprovalRequest,
                                         isLoading: isLoading,
                                         width: double.infinity,

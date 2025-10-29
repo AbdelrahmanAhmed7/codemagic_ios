@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -56,11 +57,11 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Add Attachment ',
+                        text: 'approval_request.add_attachments'.tr(),
                         style: AppTextStyles.font14BlackMedium(context),
                       ),
                       TextSpan(
-                        text: '(maximum size 5MB)',
+                        text: ' (${'approval_request.max_size'.tr()})',
                         style: AppTextStyles.font10GreyRegular(context),
                       ),
                     ],

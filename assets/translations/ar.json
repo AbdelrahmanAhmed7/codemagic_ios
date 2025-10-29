@@ -261,10 +261,13 @@
     "family_members": "أفراد العائلة",
     "provider": "مقدم الخدمة",
     "note": "ملاحظة",
-    "attachments": "المرفقات",
+    "add_attachments": "إضافة مرفقات",
     "select_family_member": "يرجى اختيار فرد من العائلة",
     "select_provider": "يرجى اختيار مقدم خدمة",
-    "attachment_required": "مرفق واحد على الأقل مطلوب"
+    "attachment_required": "مرفق واحد على الأقل مطلوب",
+    "max_size": "الحد الأقصى للحجم 5 ميجابايت",
+    "max_characters": "الحد الأقصى 300 حرف",
+    "enter_note": "أدخل ملاحظة"
   },
   "approval_history": {
     "title": "تاريخ الموافقات",
@@ -397,13 +400,12 @@
     "no_internet": "لا يوجد اتصال بالإنترنت",
     "server_error": "خطأ في السيرفر يرجى المحاولة لاحقاً"
   },
- "explore": {
-  "providers": "مزودي الخدمة",
-  "providers_description": "ابحث عن شبكات الرعاية الصحية والمستشفيات والصيدليات",
-  "policy": "السياسات",
-  "policy_description": "عرض وإدارة وثائق التأمين",
-  "family": "أفراد العائلة",
-  "family_description": "أضف وأدِر أفراد العائلة"
-}
-
+  "explore": {
+    "providers": "مزودي الخدمة",
+    "providers_description": "ابحث عن شبكات الرعاية الصحية والمستشفيات والصيدليات",
+    "policy": "السياسات",
+    "policy_description": "عرض وإدارة وثائق التأمين",
+    "family": "أفراد العائلة",
+    "family_description": "أضف وأدِر أفراد العائلة"
+  }
 }

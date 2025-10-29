@@ -78,6 +78,7 @@ class OngoingRequestWidget extends StatelessWidget {
 
   Widget _buildApprovalCard(BuildContext context, Approval approval) {
     final isArabic = context.locale.languageCode == 'ar';
+    final statusLabel = _statusLabel(approval.status);
 
     return Directionality(
       textDirection: isArabic ? ui.TextDirection.rtl : ui.TextDirection.ltr,
@@ -195,7 +196,7 @@ class OngoingRequestWidget extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        approval.status,
+                        statusLabel,
                         style: AppTextStyles.font10GreyRegular(context)
                             .copyWith(
                               fontWeight: FontWeight.w600,
@@ -240,6 +241,17 @@ class OngoingRequestWidget extends StatelessWidget {
         return Colors.redAccent;
       default:
         return Colors.grey;
+    }
+  }
+  String _statusLabel(String status) {
+    switch (status.toUpperCase()) {
+      case 'A':
+        return 'approval_history.status.approved'.tr();
+      case 'R':
+        return 'approval_history.status.rejected'.tr();
+      case 'P':
+      default:
+        return 'approval_history.status.pending'.tr();
     }
   }
 }
