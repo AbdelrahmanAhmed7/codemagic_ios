@@ -263,7 +263,7 @@
     "note": "ملاحظة",
     "add_attachments": "إضافة مرفقات",
     "select_family_member": "يرجى اختيار فرد من العائلة",
-    "select_provider": "يرجى اختيار مقدم خدمة",
+    "select_provider": "اختر مقدم الخدمة",
     "attachment_required": "مرفق واحد على الأقل مطلوب",
     "max_size": "الحد الأقصى للحجم 5 ميجابايت",
     "max_characters": "الحد الأقصى 300 حرف",
@@ -289,7 +289,7 @@
       "pending": "معلق"
     }
   },
-  "refund": {
+  "refund_request": {
     "title": "طلب الاسترداد",
     "family_members": "أفراد العائلة",
     "refund_type": "نوع الاسترداد",
@@ -338,7 +338,9 @@
     "required_tests": "التحاليل المطلوبة:",
     "blood_sugar_test": "تحليل السكر",
     "kidney_function_test": "تحليل وظائف الكلى",
-    "saved": "تم الحفظ"
+    "saved": "تم الحفظ",
+    "upcoming_lab_title": "الفحوصات القادمة",
+    "upcoming_lab_subtitle": "الفحوصات التالية بعد شهرين"
   },
   "policy": {
     "title": "السياسة",

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -117,7 +118,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
       builder: (context) {
         // Use app-wide DI to ensure authorized Dio
         return BlocProvider(
-          create: (_) => sl<ProvidersCubit>()..loadProviders(lang: 'en', page: 1, pageSize: 10),
+          create: (_) => sl<ProvidersCubit>()..loadProviders(lang: context.locale.languageCode, page: 1, pageSize: 10),
           child: _ProvidersBottomSheet(),
         );
       },
@@ -193,7 +194,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
         _page = state.pagination.currentPage + 1;
         if (!_isDisposed) {
           context.read<ProvidersCubit>().loadProviders(
-                lang: 'en',
+                lang: context.locale.languageCode,
                 page: _page,
                 pageSize: _pageSize,
                 search: _search,
@@ -211,7 +212,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
       _search = null;
       _page = 1;
       context.read<ProvidersCubit>().loadProviders(
-            lang: 'en',
+            lang: context.locale.languageCode,
             page: _page,
             pageSize: _pageSize,
             search: _search,
@@ -225,7 +226,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
         _search = value.trim();
         _page = 1;
         context.read<ProvidersCubit>().loadProviders(
-              lang: 'en',
+              lang: context.locale.languageCode,
               page: _page,
               pageSize: _pageSize,
               search: _search,
@@ -264,7 +265,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
-              Text('Select provider', style: AppTextStyles.font16BlackMedium(context)),
+              Text('approval_request.select_provider'.tr(), style: AppTextStyles.font16BlackMedium(context)),
               SizedBox(height: 12.h),
               TextField(
                 controller: _searchController,

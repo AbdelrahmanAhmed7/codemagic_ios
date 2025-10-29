@@ -263,7 +263,7 @@
     "note": "Note",
     "add_attachments": "Add Attachments",
     "select_family_member": "Please select a family member",
-    "select_provider": "Please select a provider",
+    "select_provider": "Select Provider",
     "attachment_required": "At least 1 attachment is required",
     "max_size": "Maximum size 5MB",
     "max_characters": "Maximum 300 characters",
@@ -289,7 +289,7 @@
       "pending": "Pending"
     }
   },
-  "refund": {
+  "refund_request": {
     "title": "Refund Request",
     "family_members": "Family Members",
     "refund_type": "Refund Type",
@@ -338,7 +338,9 @@
     "required_tests": "Required Tests:",
     "blood_sugar_test": "Blood Sugar Test",
     "kidney_function_test": "Kidney Function Test",
-    "saved": "Saved"
+    "saved": "Saved",
+    "upcoming_lab_title": "Upcoming Lab Tests",
+    "upcoming_lab_subtitle": "Next tests due in 2 months"
   },
   "policy": {
     "title": "Policy",

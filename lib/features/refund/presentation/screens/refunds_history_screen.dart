@@ -157,7 +157,13 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   }
 
   Widget _buildTabs() {
-    final tabs = ['All', 'Pending', 'Approved', 'Rejected'];
+    final tabs = [
+      'approval_history.tabs.all'.tr(),
+      'approval_history.tabs.pending'.tr(),
+      'approval_history.tabs.approved'.tr(),
+      'approval_history.tabs.rejected'.tr(),
+    ];
+
     final apiStatus = ['All', 'Pending', 'Approved', 'Rejected'];
 
     return Padding(
