@@ -78,7 +78,7 @@ class _NoteTextFieldState extends State<NoteTextField> {
         SizedBox(height: 6.h),
         Text(
           'Maximum ${widget.maxLength} characters',
-          style: AppTextStyles.font10GreyRegular.copyWith(fontWeight: FontWeight.w600),
+          style: AppTextStyles.font10GreyRegular(context).copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );

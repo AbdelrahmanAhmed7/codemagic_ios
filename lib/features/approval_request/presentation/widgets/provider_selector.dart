@@ -9,7 +9,6 @@ import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_cubit.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_state.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ProviderSelector extends StatefulWidget {
   final Function(ProviderItem?)? onProviderSelected;
@@ -118,7 +117,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
       builder: (context) {
         // Use app-wide DI to ensure authorized Dio
         return BlocProvider(
-          create: (_) => sl<ProvidersCubit>()..loadProviders(lang: context.locale.languageCode, page: 1, pageSize: 10),
+          create: (_) => sl<ProvidersCubit>()..loadProviders(lang: 'en', page: 1, pageSize: 10),
           child: _ProvidersBottomSheet(),
         );
       },
@@ -194,7 +193,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
         _page = state.pagination.currentPage + 1;
         if (!_isDisposed) {
           context.read<ProvidersCubit>().loadProviders(
-                lang: context.locale.languageCode,
+                lang: 'en',
                 page: _page,
                 pageSize: _pageSize,
                 search: _search,
@@ -212,7 +211,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
       _search = null;
       _page = 1;
       context.read<ProvidersCubit>().loadProviders(
-            lang: context.locale.languageCode,
+            lang: 'en',
             page: _page,
             pageSize: _pageSize,
             search: _search,
@@ -226,7 +225,7 @@ class _ProvidersBottomSheetState extends State<_ProvidersBottomSheet> {
         _search = value.trim();
         _page = 1;
         context.read<ProvidersCubit>().loadProviders(
-              lang: context.locale.languageCode,
+              lang: 'en',
               page: _page,
               pageSize: _pageSize,
               search: _search,

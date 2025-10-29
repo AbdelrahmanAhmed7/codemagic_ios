@@ -40,7 +40,7 @@ class PolicySection extends StatelessWidget {
           // Title
           Text(
             title,
-            style: AppTextStyles.font14BlueMedium.copyWith(
+            style: AppTextStyles.font14BlueMedium(context).copyWith(
               color: AppColors.blueClrW,
             ),
           ),
@@ -50,7 +50,7 @@ class PolicySection extends StatelessWidget {
           if (content != null) ...[
             Text(
               content!,
-              style: AppTextStyles.font12BlackRegular,
+              style: AppTextStyles.font12BlackRegular(context),
             ),
             SizedBox(height: 8.h),
           ],
@@ -106,7 +106,7 @@ class PolicySection extends StatelessWidget {
                   Expanded(
                     child: Text(
                       item,
-                      style: AppTextStyles.font12BlackRegular,
+                      style: AppTextStyles.font12BlackRegular(context),
                     ),
                   ),
                 ],
@@ -127,7 +127,7 @@ class PolicySection extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Text(
                   email!,
-                  style: AppTextStyles.font12BlackRegular.copyWith(
+                  style: AppTextStyles.font12BlackRegular(context).copyWith(
                     color: AppColors.primaryClr,
                   ),
                 ),

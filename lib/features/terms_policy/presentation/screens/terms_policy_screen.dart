@@ -141,17 +141,17 @@ class PrivacyPolicyContent extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 'Privacy Policy',
-                style: AppTextStyles.font18BlackSemiBold,
+                style: AppTextStyles.font18BlackSemiBold(context),
               ),
               SizedBox(height: 4.h),
               Text(
                 'Medical Insurance App',
-                style: AppTextStyles.font12GreyRegular,
+                style: AppTextStyles.font12GreyRegular(context),
               ),
               SizedBox(height: 8.h),
               Text(
                 'Last updated: January 15, 2025',
-                style: AppTextStyles.font10GreyRegular,
+                style: AppTextStyles.font10GreyRegular(context),
               ),
             ],
           ),

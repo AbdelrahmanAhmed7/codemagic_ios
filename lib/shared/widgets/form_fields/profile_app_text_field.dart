@@ -75,12 +75,12 @@ class _ProfileAppTextFieldState extends State<ProfileAppTextField> {
               RichText(
                 text: TextSpan(
                   text: widget.label!,
-                  style: AppTextStyles.font12BlackRegular,
+                  style: AppTextStyles.font12BlackRegular(context),
                   children: widget.isRequired
                       ? [
                           TextSpan(
                             text: ' *',
-                            style: AppTextStyles.font12BlackRegular.copyWith(
+                            style: AppTextStyles.font12BlackRegular(context).copyWith(
                               color: Colors.red,
                             ),
                           ),
@@ -106,16 +106,16 @@ class _ProfileAppTextFieldState extends State<ProfileAppTextField> {
                   fieldState.didChange(value);
                   fieldState.validate();
                 },
-                style: widget.readOnly 
-                    ? AppTextStyles.font12GreyRegular.copyWith(color: AppColors.greyClr)
-                    : AppTextStyles.font12GreyRegular,
+                style: widget.readOnly
+                    ? AppTextStyles.font12GreyRegular(context).copyWith(color: AppColors.greyClr)
+                    : AppTextStyles.font12GreyRegular(context),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12.w,
                     vertical: 12.h,
                   ),
                   hintText: widget.hintText,
-                  hintStyle: AppTextStyles.font12GreyRegular,
+                  hintStyle: AppTextStyles.font12GreyRegular(context),
                   filled: true,
                   fillColor: widget.readOnly ? AppColors.lightGreyClr : AppColors.whiteClr,
                   isDense: true,

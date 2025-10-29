@@ -51,6 +51,7 @@ class QuickAccessWidget extends StatelessWidget {
                 onTap: () {
                   context.go('/approval-history');
                 },
+                context: context,
               ),
               _buildQuickAccessButton(
                 image: AppAssets.refund,
@@ -60,6 +61,7 @@ class QuickAccessWidget extends StatelessWidget {
                 onTap: () {
                   context.go('/refund-history');
                 },
+                context: context,
               ),
               _buildQuickAccessButton(
                 image: AppAssets.medicine,
@@ -69,6 +71,7 @@ class QuickAccessWidget extends StatelessWidget {
                 onTap: () {
                   context.go('/chronic-medicines');
                 },
+                context: context,
               ),
             ],
           ),
@@ -83,6 +86,7 @@ class QuickAccessWidget extends StatelessWidget {
     required Color color,
     required Color textColor,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
     return GestureDetector(
       onTap: onTap,

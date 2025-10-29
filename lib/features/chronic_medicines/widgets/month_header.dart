@@ -19,7 +19,7 @@ class MonthHeader extends StatelessWidget {
           color: const Color(0xFFF4E7C7),
           borderRadius: BorderRadius.circular(8.r),
         ),
-        child: Text(label, style: AppTextStyles.font12BlueRegular.copyWith(color: AppColors.blackClr)),
+        child: Text(label, style: AppTextStyles.font12BlueRegular(context).copyWith(color: AppColors.blackClr)),
       ),
     );
   }

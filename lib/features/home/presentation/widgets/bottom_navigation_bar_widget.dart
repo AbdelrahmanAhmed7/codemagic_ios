@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'dart:ui' as ui;
 
 class BottomNavigationBarWidget extends StatelessWidget {
   final int currentIndex;
@@ -16,10 +17,12 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width - 32.w;
+    final isRtl = Directionality.of(context) == ui.TextDirection.rtl;
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
       child: SizedBox(
-        height: 80.h, 
+        height: 80.h,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -36,25 +39,30 @@ class BottomNavigationBarWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(4, (index) {
-                  return _buildNavItem(index, context);
-                }),
+              child: Directionality(
+                textDirection: isRtl
+                    ? ui.TextDirection.rtl
+                    : ui.TextDirection.ltr,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(4, (index) {
+                    return _buildNavItem(index);
+                  }),
+                ),
               ),
             ),
 
             Positioned(
               top: -25.h,
-              left: context.locale.languageCode == 'ar' 
+              left: isRtl
                   ? null
-                  : (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
-                    ((MediaQuery.of(context).size.width - 32.w) / 8) -
-                    25.w,
-              right: context.locale.languageCode == 'ar'
-                  ? (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
-                    ((MediaQuery.of(context).size.width - 32.w) / 8) -
-                    25.w
+                  : (currentIndex * (screenWidth / 4)) +
+                        (screenWidth / 8) -
+                        25.w,
+              right: isRtl
+                  ? (currentIndex * (screenWidth / 4)) +
+                        (screenWidth / 8) -
+                        25.w
                   : null,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
@@ -73,12 +81,9 @@ class BottomNavigationBarWidget extends StatelessWidget {
                   ],
                 ),
                 padding: EdgeInsets.all(10.w),
-                child: Transform.flip(
-                  flipX: context.locale.languageCode == 'ar',
-                  child: Image.asset(
-                    _getIconPath(currentIndex, true),
-                    fit: BoxFit.contain,
-                  ),
+                child: Image.asset(
+                  _getIconPath(currentIndex, true),
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -88,7 +93,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(int index, BuildContext context) {
+  Widget _buildNavItem(int index) {
     final bool isSelected = currentIndex == index;
 
     return GestureDetector(
@@ -98,14 +103,11 @@ class BottomNavigationBarWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 10.h),
-          Transform.flip(
-            flipX: context.locale.languageCode == 'ar',
-            child: Image.asset(
-              _getIconPath(index, false),
-              width: 22.w,
-              height: 22.h,
-              color: isSelected ? Colors.transparent : AppColors.greyClr,
-            ),
+          Image.asset(
+            _getIconPath(index, false),
+            width: 22.w,
+            height: 22.h,
+            color: isSelected ? Colors.transparent : AppColors.greyClr,
           ),
           SizedBox(height: 4.h),
           Text(

@@ -47,7 +47,7 @@ class SuccessDialog extends StatelessWidget {
             Text(
               'We\'ll notify you once your request is approved',
               textAlign: TextAlign.center,
-              style: AppTextStyles.font14BlackMedium.copyWith(
+              style: AppTextStyles.font14BlackMedium(context).copyWith(
                 color: AppColors.greyClr,
               ),
             ),

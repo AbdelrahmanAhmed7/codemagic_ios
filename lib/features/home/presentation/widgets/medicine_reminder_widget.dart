@@ -58,6 +58,7 @@ class MedicineReminderWidget extends StatelessWidget {
     required String dosage,
     required String note,
     required String time,
+    context
   }) {
     return Container(
       width: 280.w,

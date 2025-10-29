@@ -73,13 +73,13 @@ class LabResultsUploadState extends State<LabResultsUpload> {
                     SizedBox(height: 12.h),
                     Text(
                       "Lab Test Due",
-                      style: AppTextStyles.font14BlueMedium.copyWith(decoration: TextDecoration.none),
+                      style: AppTextStyles.font14BlueMedium(context).copyWith(decoration: TextDecoration.none),
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       "It’s time for your quarterly lab tests",
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.font12GreyRegular.copyWith(decoration: TextDecoration.none),
+                      style: AppTextStyles.font12GreyRegular(context).copyWith(decoration: TextDecoration.none),
                     ),
                     SizedBox(height: 20.h),
 
@@ -264,9 +264,9 @@ class _RowUploadTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTextStyles.font12BlueRegular.copyWith(decoration: TextDecoration.none)),
+                  Text(title, style: AppTextStyles.font12BlueRegular(context).copyWith(decoration: TextDecoration.none)),
                   SizedBox(height: 4.h),
-                  Text(description, style: AppTextStyles.font8GreyRegular.copyWith(decoration: TextDecoration.none)),
+                  Text(description, style: AppTextStyles.font8GreyRegular(context).copyWith(decoration: TextDecoration.none)),
                 ],
               ),
             ),

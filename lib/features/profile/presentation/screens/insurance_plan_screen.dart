@@ -39,11 +39,11 @@ class InsurancePlanScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildInsuranceCard(),
+                          _buildInsuranceCard(context),
                           SizedBox(height: 32.h),
-                          _buildCoverageDetails(),
+                          _buildCoverageDetails(context),
                           SizedBox(height: 24.h),
-                          _buildCoverageMembers(),
+                          _buildCoverageMembers(context),
                           SizedBox(height: 8.h),
                         ],
                       ),
@@ -58,7 +58,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInsuranceCard() {
+  Widget _buildInsuranceCard(context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -140,7 +140,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCoverageDetails() {
+  Widget _buildCoverageDetails(context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -161,17 +161,17 @@ class InsurancePlanScreen extends StatelessWidget {
           children: [
             Text('Coverage Details', style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
-            _buildCoverageItem('Coverage Type', 'Family Plan'),
-            _buildCoverageItem('Annual Limit', 'EGP 300,000'),
-            _buildCoverageItem('Deductible', 'EGP 1,000'),
-            _buildCoverageItem('Copayment', '20%'),
+            _buildCoverageItem('Coverage Type', 'Family Plan',context),
+            _buildCoverageItem('Annual Limit', 'EGP 300,000',context),
+            _buildCoverageItem('Deductible', 'EGP 1,000',context),
+            _buildCoverageItem('Copayment', '20%',context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCoverageItem(String title, String value) {
+  Widget _buildCoverageItem(String title, String value,context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
@@ -189,7 +189,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCoverageMembers() {
+  Widget _buildCoverageMembers(context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -214,18 +214,21 @@ class InsurancePlanScreen extends StatelessWidget {
               'Ahmed Mohamed Adel Amin',
               'Main Member',
               'assets/approval/ahmed.png',
+              context
             ),
             Divider(color: AppColors.lightGreyClr),
             _buildMemberItem(
               'Noha Khaled Ali Mohamed',
               'Spouse',
               'assets/approval/noha.png',
+              context
             ),
             Divider(color: AppColors.lightGreyClr),
             _buildMemberItem(
               'Youssef Ahmed Mohamed',
               'Son',
               'assets/approval/ali.png',
+              context
             ),
           ],
         ),
@@ -233,7 +236,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMemberItem(String name, String role, String imagePath) {
+  Widget _buildMemberItem(String name, String role, String imagePath,context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(

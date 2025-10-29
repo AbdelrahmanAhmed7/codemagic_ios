@@ -29,6 +29,7 @@ class ExploreWidget extends StatelessWidget {
           onTap: () {
             context.go('/network');
           },
+          context: context,
         ),
         SizedBox(height: 12.h),
         _buildExploreItem(
@@ -39,6 +40,7 @@ class ExploreWidget extends StatelessWidget {
           onTap: () {
             context.go('/policy');
           },
+          context: context,
         ),
         SizedBox(height: 12.h),
         _buildExploreItem(
@@ -49,6 +51,7 @@ class ExploreWidget extends StatelessWidget {
           onTap: () {
             context.go('/family-members');
           },
+          context: context,
         ),
       ],
     );
@@ -60,6 +63,7 @@ class ExploreWidget extends StatelessWidget {
     required String iconPath,
     required String arrowPath,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
     return InkWell(
       onTap: onTap,

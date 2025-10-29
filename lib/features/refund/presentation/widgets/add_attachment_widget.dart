@@ -105,7 +105,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         previewCameraName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium,
+                                        style: AppTextStyles.font14BlackMedium(context),
                                       ),
                                     ],
                                   ),
@@ -149,7 +149,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         previewGalleryName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium,
+                                        style: AppTextStyles.font14BlackMedium(context),
                                       ),
                                     ],
                                   ),
@@ -233,7 +233,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
               fit: BoxFit.contain,
             ),
             SizedBox(height: 8.h),
-            Text(label, style: AppTextStyles.font14BlackMedium),
+            Text(label, style: AppTextStyles.font14BlackMedium(context)),
           ],
         ),
       ),
@@ -285,11 +285,11 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       children: [
                         TextSpan(
                           text: 'Add Attachment ',
-                          style: AppTextStyles.font14BlackMedium,
+                          style: AppTextStyles.font14BlackMedium(context),
                         ),
                         TextSpan(
                           text: '(maximum size 5MB)',
-                          style: AppTextStyles.font10GreyRegular,
+                          style: AppTextStyles.font10GreyRegular(context),
                         ),
                       ],
                     ),
@@ -304,7 +304,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
             Center(
               child: Text(
                 '${widget.refundTypeName ?? 'Glasses'} Attachment',
-                style: AppTextStyles.font14BlackMedium,
+                style: AppTextStyles.font14BlackMedium(context),
               ),
             ),
             SizedBox(height: 12.h),
@@ -332,12 +332,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       children: [
                         Text(
                           'Upload E-Invoice',
-                          style: AppTextStyles.font12BlueRegular,
+                          style: AppTextStyles.font12BlueRegular(context),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           'Should be included name , national ID and Tax activity code',
-                          style: AppTextStyles.font8GreyRegular,
+                          style: AppTextStyles.font8GreyRegular(context),
                         ),
                       ],
                     ),
@@ -379,12 +379,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       children: [
                         Text(
                           'Upload ${widget.refundTypeName ?? 'Glasses'} Prescription',
-                          style: AppTextStyles.font12BlueRegular,
+                          style: AppTextStyles.font12BlueRegular(context),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           'Should be included name and date',
-                          style: AppTextStyles.font8GreyRegular,
+                          style: AppTextStyles.font8GreyRegular(context),
                         ),
                       ],
                     ),

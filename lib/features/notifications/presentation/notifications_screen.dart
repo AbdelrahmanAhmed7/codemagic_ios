@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,13 +24,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     super.initState();
     _controller.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NotificationsCubit>().load(lang: context.locale.languageCode);
+      context.read<NotificationsCubit>().load(lang: 'en');
     });
   }
 
   void _onScroll() {
     if (_controller.position.pixels >= _controller.position.maxScrollExtent * 0.9) {
-      context.read<NotificationsCubit>().loadMore(lang: context.locale.languageCode);
+      context.read<NotificationsCubit>().loadMore(lang: 'en');
     }
   }
 
@@ -119,14 +118,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           initial: () => const Center(child: CircularProgressIndicator()),
                           loading: () => const Center(child: CircularProgressIndicator()),
                           failed: (msg) => Center(
-                            child: Text(msg, style: AppTextStyles.font14GreyRegular),
+                            child: Text(msg, style: AppTextStyles.font14GreyRegular(context)),
                           ),
                           loaded: (notifications, totalCount, currentPage, totalPages, hasNextPage, loadingMore) {
                             if (notifications.isEmpty) {
                               return Center(
                                 child: Text(
                                   'No notifications',
-                                  style: AppTextStyles.font14GreyRegular,
+                                  style: AppTextStyles.font14GreyRegular(context),
                                 ),
                               );
                             }
@@ -136,7 +135,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             final dates = groupedNotifications.keys.toList();
 
                             return RefreshIndicator(
-                              onRefresh: () => context.read<NotificationsCubit>().refresh(lang: context.locale.languageCode),
+                              onRefresh: () => context.read<NotificationsCubit>().refresh(lang: 'en'),
                               child: ListView.builder(
                                 controller: _controller,
                                 physics: const BouncingScrollPhysics(),

@@ -46,8 +46,8 @@ class _ReasonSelectorState extends State<ReasonSelector> {
                   child: Text(
                     _selectedReason ?? 'Select reason',
                     style: _selectedReason != null
-                        ? AppTextStyles.font14BlackMedium
-                        : AppTextStyles.font14GreyRegular,
+                        ? AppTextStyles.font14BlackMedium(context)
+                        : AppTextStyles.font14GreyRegular(context),
                   ),
                 ),
                 Icon(
@@ -106,7 +106,7 @@ class _ReasonSelectorState extends State<ReasonSelector> {
                 : BorderSide.none,
           ),
         ),
-        child: Text(reason, style: AppTextStyles.font14BlackMedium),
+        child: Text(reason, style: AppTextStyles.font14BlackMedium(context)),
       ),
     );
   }

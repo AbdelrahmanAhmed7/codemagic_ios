@@ -88,7 +88,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                                   failed: (message) => Center(
                                     child: Text(
                                       message,
-                                      style: AppTextStyles.font14GreyRegular,
+                                      style: AppTextStyles.font14GreyRegular(context),
                                     ),
                                   ),
                                   loaded:
@@ -180,8 +180,8 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                     Text(
                       tabs[i],
                       style: selected
-                          ? AppTextStyles.font14BlueMedium
-                          : AppTextStyles.font14GreyRegular,
+                          ? AppTextStyles.font14BlueMedium(context)
+                          : AppTextStyles.font14GreyRegular(context),
                     ),
                     if (selected)
                       Container(
@@ -217,13 +217,13 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
               children: [
                 Text(
                   'refund_history.empty_state_title'.tr(),
-                  style: AppTextStyles.font20BlackSemiBold,
+                  style: AppTextStyles.font20BlackSemiBold(context),
                 ),
                 SizedBox(height: 8.h),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: AppTextStyles.font14BlackMedium,
+                    style: AppTextStyles.font14BlackMedium(context),
                     children: [
                       TextSpan(
                         text: 'refund_history.empty_state'.tr(),
@@ -301,7 +301,7 @@ class _RefundCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${'refund_history.request_number'.tr()}${item.requestNumber}',
-                        style: AppTextStyles.font10GreyRegular,
+                        style: AppTextStyles.font10GreyRegular(context),
                       ),
                     ),
                     Container(
@@ -335,7 +335,7 @@ class _RefundCard extends StatelessWidget {
                     SizedBox(width: 5.w),
                     Text(
                       '${'refund_history.date'.tr()}${item.date}',
-                      style: AppTextStyles.font10GreyRegular,
+                      style: AppTextStyles.font10GreyRegular(context),
                     ),
                   ],
                 ),
@@ -350,7 +350,7 @@ class _RefundCard extends StatelessWidget {
                     SizedBox(width: 5.w),
                     Text(
                       '${'refund_history.time'.tr()}${item.time}',
-                      style: AppTextStyles.font10GreyRegular,
+                      style: AppTextStyles.font10GreyRegular(context),
                     ),
                   ],
                 ),
@@ -368,7 +368,7 @@ class _RefundCard extends StatelessWidget {
                     ),
                     child: Text(
                       'refund_history.view_details'.tr(),
-                      style: AppTextStyles.font12BlueMedium,
+                      style: AppTextStyles.font12BlueMedium(context),
                     ),
                   ),
                 ),

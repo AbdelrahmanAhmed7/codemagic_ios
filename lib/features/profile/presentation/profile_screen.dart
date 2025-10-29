@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<HomeCubit>();
       if (cubit.state is! Loaded) {
-        cubit.getHomeInfo(context.locale.languageCode);
+        cubit.getHomeInfo('en');
       }
     });
   }
@@ -183,14 +183,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _Tile(
                                 title: 'profile.personal_information'.tr(),
                                 image: AppAssets.personal,
+                                route: '/personal-information',
                               ),
                               _Tile(
                                 title: 'profile.family_members'.tr(),
                                 image: AppAssets.familyMembers,
+                                route: '/family-members',
                               ),
                               _Tile(
                                 title: 'profile.insurance_plan'.tr(),
                                 image: AppAssets.insurance,
+                                route: '/insurance-plan',
                               ),
                             ],
                           ),
@@ -200,10 +203,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _Tile(
                                 title: 'profile.change_password'.tr(),
                                 image: AppAssets.change_password,
+                                route: '/change-password',
                               ),
                               _Tile(
                                 title: 'profile.language'.tr(),
                                 image: AppAssets.language,
+                                route: '/language',
                               ),
                             ],
                           ),
@@ -213,14 +218,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _Tile(
                                 title: 'profile.faq'.tr(),
                                 image: AppAssets.faq,
+                                route: '/faq',
                               ),
                               _Tile(
                                 title: 'profile.contact_us'.tr(),
                                 image: AppAssets.contactUs,
+                                route: '/contact-us',
                               ),
                               _Tile(
                                 title: 'profile.terms_privacy'.tr(),
                                 image: AppAssets.terms,
+                                route: '/terms-privacy',
                               ),
                             ],
                           ),
@@ -230,6 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _Tile(
                                 title: 'profile.log_out'.tr(),
                                 image: AppAssets.logout,
+                                route: '/logout',
                               ),
                             ],
                           ),
@@ -279,45 +288,19 @@ class _Section extends StatelessWidget {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({required this.title, required this.image});
+  const _Tile({required this.title, required this.image, this.route});
   final String title;
   final String image;
+  final String? route; 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Image.asset(image, width: 24.h, height: 24.h),
       title: Text(title, style: AppTextStyles.font12BlackRegular(context)),
-      trailing: context.locale.languageCode == 'ar'
-          ? Transform.rotate(
-              angle: 3.14159, // 180 degrees in radians
-              child: Image.asset(
-                AppAssets.chevronRight,
-                width: 24.w,
-                height: 29.h,
-              ),
-            )
-          : Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
-      onTap: () {
-        if (title == 'profile.personal_information'.tr()) {
-          context.go('/personal-information');
-        } else if (title == 'profile.family_members'.tr()) {
-          context.go('/family-members');
-        } else if (title == 'profile.insurance_plan'.tr()) {
-          context.go('/insurance-plan');
-        } else if (title == 'profile.faq'.tr()) {
-          context.go('/faq');
-        } else if (title == 'profile.contact_us'.tr()) {
-          context.go('/contact-us');
-        } else if (title == 'profile.terms_privacy'.tr()) {
-          context.go('/terms-policy');
-        } else if (title == 'profile.change_password'.tr()) {
-          context.go('/change-password');
-        } else if (title == 'profile.language'.tr()) {
-          context.go('/language');
-        } else if (title == 'profile.log_out'.tr()) {
-          // يمكن إضافة منطق تسجيل الخروج هنا
-        }
-      },
+      trailing: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
+      onTap: route != null 
+        ? () => context.go(route!) 
+        : null,
     );
   }
 }

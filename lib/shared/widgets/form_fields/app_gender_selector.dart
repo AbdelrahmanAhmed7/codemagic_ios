@@ -30,30 +30,34 @@ class AppGenderSelector extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Gender',
-                style: AppTextStyles.font12BlackRegular,
+                style: AppTextStyles.font12BlackRegular(context),
                 children: isRequired
                     ? [
                         TextSpan(
                           text: ' *',
-                          style: AppTextStyles.font12BlackRegular.copyWith(
-                            color: Colors.red,
-                          ),
+                          style: AppTextStyles.font12BlackRegular(
+                            context,
+                          ).copyWith(color: Colors.red),
                         ),
                       ]
                     : [],
               ),
             ),
             SizedBox(height: 8.h),
-            
+
             // Gender Options
             Row(
               children: [
-                Expanded(child: _buildGenderOption('Male', fieldState)),
+                Expanded(
+                  child: _buildGenderOption('Male', fieldState, context),
+                ),
                 SizedBox(width: 16.w),
-                Expanded(child: _buildGenderOption('Female', fieldState)),
+                Expanded(
+                  child: _buildGenderOption('Female', fieldState, context),
+                ),
               ],
             ),
-            
+
             // Error message
             if (fieldState.errorText != null)
               Padding(
@@ -73,7 +77,11 @@ class AppGenderSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildGenderOption(String gender, FormFieldState<String> fieldState) {
+  Widget _buildGenderOption(
+    String gender,
+    FormFieldState<String> fieldState,
+    context,
+  ) {
     return GestureDetector(
       onTap: () {
         onGenderChanged(gender);
@@ -95,7 +103,7 @@ class AppGenderSelector extends StatelessWidget {
               }
             },
           ),
-          Text(gender, style: AppTextStyles.font12BlackRegular),
+          Text(gender, style: AppTextStyles.font12BlackRegular(context)),
         ],
       ),
     );

@@ -37,8 +37,8 @@ class TabNavigation extends StatelessWidget {
                   'Terms',
                   textAlign: TextAlign.center,
                   style: isTermsSelected 
-                      ? AppTextStyles.font16BlackMedium
-                      : AppTextStyles.font16BlackMedium,
+                      ? AppTextStyles.font16BlackMedium(context)
+                      : AppTextStyles.font16BlackMedium(context),
                 ),
               ),
             ),
@@ -56,8 +56,8 @@ class TabNavigation extends StatelessWidget {
                   'Privacy Policy',
                   textAlign: TextAlign.center,
                   style: !isTermsSelected 
-                      ? AppTextStyles.font16BlackMedium
-                      : AppTextStyles.font16BlackMedium,
+                      ? AppTextStyles.font16BlackMedium(context)
+                      : AppTextStyles.font16BlackMedium(context),
                 ),
               ),
             ),

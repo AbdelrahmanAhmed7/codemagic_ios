@@ -26,13 +26,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ApprovalsCubit>().load(
-        lang: context.locale.languageCode,
-        status: 'All',
-        reset: true,
-      );
-    });
+    context.read<ApprovalsCubit>().load(lang: 'en', status: 'All', reset: true);
     _controller.addListener(_onScroll);
   }
 
@@ -40,9 +34,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
     if (!_controller.hasClients) return;
     final position = _controller.position;
     if (position.pixels >= position.maxScrollExtent * 0.9) {
-      context.read<ApprovalsCubit>().loadMore(
-        lang: context.locale.languageCode,
-      );
+      context.read<ApprovalsCubit>().loadMore(lang: 'en');
     }
   }
 
@@ -87,69 +79,47 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             child: BlocBuilder<ApprovalsCubit, ApprovalsState>(
-                              builder: (context, state) {
-                                return state.when(
-                                  initial: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  failed: (message) => Center(
-                                    child: Text(
-                                      message,
-                                      style: AppTextStyles.font14GreyRegular(context),
-                                    ),
-                                  ),
-                                  loaded:
-                                      (
-                                        approvals,
-                                        pagination,
-                                        status,
-                                        loadingMore,
-                                      ) {
-                                        if (approvals.isEmpty) {
-                                          return _buildEmptyState();
-                                        }
-                                        return ListView.separated(
-                                          controller: _controller,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          cacheExtent: 500,
-                                          addAutomaticKeepAlives: true,
-                                          addRepaintBoundaries: true,
-                                          itemCount:
-                                              approvals.length +
-                                              (pagination.hasNextPage ? 1 : 0),
-                                          separatorBuilder: (_, __) =>
-                                              SizedBox(height: 12.h),
-                                          itemBuilder: (context, index) {
-                                            if (index >= approvals.length) {
-                                              return const Center(
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(12),
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                      ),
-                                                ),
-                                              );
-                                            }
-                                            return RepaintBoundary(
-                                              child: _ApprovalCard(
-                                                key: ValueKey(
-                                                  approvals[index].id,
-                                                ),
-                                                item: approvals[index],
-                                              ),
-                                            );
-                                          },
+                            builder: (context, state) {
+                              return state.when(
+                                initial: () => const Center(child: CircularProgressIndicator()),
+                                loading: () => const Center(child: CircularProgressIndicator()),
+                                failed: (message) => Center(
+                                  child: Text(message, style: AppTextStyles.font14GreyRegular(context)),
+                                ),
+                                loaded: (approvals, pagination, status, loadingMore) {
+                                  if (approvals.isEmpty) {
+                                    return _buildEmptyState();
+                                  }
+                                  return ListView.separated(
+                                    controller: _controller,
+                                    physics: const BouncingScrollPhysics(),
+                                    cacheExtent: 500,
+                                    addAutomaticKeepAlives: true,
+                                    addRepaintBoundaries: true,
+                                    itemCount: approvals.length + (pagination.hasNextPage ? 1 : 0),
+                                    separatorBuilder: (_, __) => SizedBox(height: 12.h),
+                                    itemBuilder: (context, index) {
+                                      if (index >= approvals.length) {
+                                        return const Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(12),
+                                            child: CircularProgressIndicator(strokeWidth: 2),
+                                          ),
                                         );
-                                      },
-                                );
-                              },
-                            ),
+                                      }
+                                      return RepaintBoundary(
+                                        child: _ApprovalCard(
+                                          key: ValueKey(approvals[index].id),
+                                          item: approvals[index],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
                           ),
+                        ),
                         ),
                       ],
                     ),
@@ -186,7 +156,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                 setState(() => _currentTab = i);
                 context.read<ApprovalsCubit>().changeStatus(
                   apiStatus[i],
-                  lang: context.locale.languageCode,
+                  lang: 'en',
                 );
               },
               child: Padding(
@@ -226,7 +196,11 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: 50.h),
-          Image.asset(AppAssets.emptyState, width: 250.w, height: 200.h),
+          Image.asset(
+            AppAssets.emptyState,
+            width: 250.w,
+            height: 200.h,
+          ),
           SizedBox(height: 16.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -235,7 +209,8 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
               text: TextSpan(
                 style: AppTextStyles.font14BlackMedium(context),
                 children: [
-                  TextSpan(text: 'approval_history.empty_state'.tr()),
+                  TextSpan(
+                      text: 'approval_history.empty_state'.tr()),
                   WidgetSpan(
                     alignment: PlaceholderAlignment.middle,
                     child: Container(
@@ -245,11 +220,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                         shape: BoxShape.circle,
                         color: Color(0xFF2563EB),
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 16,
-                      ),
+                      child: const Icon(Icons.add, color: Colors.white, size: 16),
                     ),
                   ),
                   TextSpan(text: 'approval_history.to_request_approval'.tr()),
@@ -258,7 +229,11 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
             ),
           ),
           SizedBox(height: 12.h),
-          Image.asset(AppAssets.arrow, width: 130.w, height: 130.h),
+          Image.asset(
+            AppAssets.arrow,
+            width: 130.w,
+            height: 130.h,
+          ),
           SizedBox(height: 20.h),
         ],
       ),
@@ -283,148 +258,141 @@ class _ApprovalCard extends StatelessWidget {
       ),
       padding: EdgeInsets.all(12.w),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // logo
-          Container(
-            width: 69.w,
-            height: 69.w,
-            decoration: BoxDecoration(
-              color: AppColors.primaryClr,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child:
-                (item.providerLogo != null &&
-                    item.providerLogo!.isNotEmpty &&
-                    item.providerLogo!.startsWith('http'))
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: CachedNetworkImage(
-                      imageUrl: item.providerLogo!,
-                      fit: BoxFit.cover,
-                      memCacheWidth: 138,
-                      memCacheHeight: 138,
-                      maxWidthDiskCache: 138,
-                      maxHeightDiskCache: 138,
-                      placeholder: (context, url) => Center(
-                        child: SizedBox(
-                          width: 20.w,
-                          height: 20.w,
-                          child: const CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Padding(
-                        padding: EdgeInsets.all(8.w),
-                        child: Image.asset(AppAssets.logo, fit: BoxFit.contain),
-                      ),
-                    ),
-                  )
-                : Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: Image.asset(AppAssets.logo, fit: BoxFit.contain),
-                  ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // logo
+        Container(
+          width: 69.w,
+          height: 69.w,
+          decoration: BoxDecoration(
+            color: AppColors.primaryClr,
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // رقم الطلب + الحالة
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        '${'approval_history.request_number'.tr()}${item.approvalNumber}',
-                        style: AppTextStyles.font10GreyRegular(context),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 3.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusColor,
-                        borderRadius: BorderRadius.circular(24.r),
-                      ),
-                      child: Text(
-                        statusLabel,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
+          child: (item.providerLogo != null && item.providerLogo!.isNotEmpty && item.providerLogo!.startsWith('http'))
+              ? ClipRRect(
+            borderRadius: BorderRadius.circular(12.r),
+            child: CachedNetworkImage(
+              imageUrl: item.providerLogo!,
+              fit: BoxFit.cover,
+              memCacheWidth: 138,
+              memCacheHeight: 138,
+              maxWidthDiskCache: 138,
+              maxHeightDiskCache: 138,
+              placeholder: (context, url) => Center(
+                child: SizedBox(
+                  width: 20.w,
+                  height: 20.w,
+                  child: const CircularProgressIndicator(strokeWidth: 2),
                 ),
-                SizedBox(height: 6.h),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      size: 14.sp,
-                      color: AppColors.blueClr,
-                    ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      '${'approval_history.date'.tr()}${item.date}',
+              ),
+              errorWidget: (context, url, error) => Padding(
+                padding: EdgeInsets.all(8.w),
+                child: Image.asset(
+                  AppAssets.logo,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          )
+              : Padding(
+            padding: EdgeInsets.all(8.w),
+            child: Image.asset(
+              AppAssets.logo,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // رقم الطلب + الحالة
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${'approval_history.request_number'.tr()}${item.approvalNumber}',
                       style: AppTextStyles.font10GreyRegular(context),
                     ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.access_time,
-                      size: 14.sp,
-                      color: AppColors.blueClr,
-                    ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      '${'approval_history.time'.tr()}${item.time}',
-                      style: AppTextStyles.font10GreyRegular(context),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      ApprovalDetailsBottomSheet.show(context, item);
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  Container(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      borderRadius: BorderRadius.circular(24.r),
                     ),
                     child: Text(
-                      'approval_history.view_details'.tr(),
-                      style: AppTextStyles.font12BlueMedium(context),
+                      statusLabel,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 6.h),
+              Row(
+                children: [
+                  Icon(Icons.calendar_today,
+                      size: 14.sp, color: AppColors.blueClr),
+                  SizedBox(width: 5.w),
+                  Text(
+                    '${'approval_history.date'.tr()}${item.date}',
+                    style: AppTextStyles.font10GreyRegular(context),
+                  ),
+                ],
+              ),
+              SizedBox(height: 4.h),
+              Row(
+                children: [
+                  Icon(Icons.access_time,
+                      size: 14.sp, color: AppColors.blueClr),
+                  SizedBox(width: 5.w),
+                  Text(
+                    '${'approval_history.time'.tr()}${item.time}',
+                    style: AppTextStyles.font10GreyRegular(context),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    ApprovalDetailsBottomSheet.show(context, item);
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'approval_history.view_details'.tr(),
+                    style: AppTextStyles.font12BlueMedium(context),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+        );
   }
 
   Color _statusColor(String status) {
     switch (status.toUpperCase()) {
       case 'A':
-        return const Color(0xFF349859);
+        return const Color(0xFF349859); 
       case 'R':
-        return const Color(0xFFB92828);
+        return const Color(0xFFB92828); 
       case 'P':
       default:
-        return const Color(0xFF999999);
+        return const Color(0xFF999999); 
     }
   }
 

@@ -67,7 +67,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SizedBox(height: 43.h),
                 Text(
                   'auth.reset_password.congratulations'.tr(),
-                  style: AppTextStyles.font20BlackSemiBold.copyWith(
+                  style: AppTextStyles.font20BlackSemiBold(context).copyWith(
                     fontSize: 24.sp,
                     decoration: TextDecoration.none,
                   ),
@@ -75,7 +75,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SizedBox(height: 16.h),
                 Text(
                   'auth.reset_password.success_message'.tr(),
-                  style: AppTextStyles.font14GreyRegular.copyWith(
+                  style: AppTextStyles.font14GreyRegular(context).copyWith(
                     decoration: TextDecoration.none,
                   ),
                   textAlign: TextAlign.center,

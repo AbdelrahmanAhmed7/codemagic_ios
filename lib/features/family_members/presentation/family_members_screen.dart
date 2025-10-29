@@ -59,7 +59,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                           padding: EdgeInsets.all(16.w),
                           child: Text(
                             'family_members.members'.tr(),
-                            style: AppTextStyles.font14BlackMedium,
+                            style: (AppTextStyles.font14BlackMedium(context)),
                           ),
                         ),
                         Expanded(
