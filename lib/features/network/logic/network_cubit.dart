@@ -57,25 +57,25 @@ class NetworkCubit extends Cubit<NetworkState> {
       (_searchKey != null && _searchKey!.isNotEmpty);
 
   /// Get all categories
- Future<void> getCategories({BuildContext? context, String? lang}) async {
-  emit(const NetworkState.categoriesLoading());
+  Future<void> getCategories({BuildContext? context, String? lang}) async {
+    emit(const NetworkState.categoriesLoading());
 
-  final String language = context != null 
-      ? context.locale.languageCode 
-      : (lang ?? 'en');
+    final String language = context != null
+        ? context.locale.languageCode
+        : (lang ?? 'en');
 
-  final result = await _repository.getCategories(language);
+    final result = await _repository.getCategories(language);
 
-  result.when(
-    success: (response) {
-      _categories = response.data.categories;
-      emit(NetworkState.categoriesSuccess(_categories));
-    },
-    failure: (message) {
-      emit(NetworkState.categoriesError(message));
-    },
-  );
-}
+    result.when(
+      success: (response) {
+        _categories = response.data.categories;
+        emit(NetworkState.categoriesSuccess(_categories));
+      },
+      failure: (message) {
+        emit(NetworkState.categoriesError(message));
+      },
+    );
+  }
 
   /// Get user's current location
   Future<void> getUserLocation() async {
@@ -134,6 +134,7 @@ class NetworkCubit extends Cubit<NetworkState> {
     bool resetPage = true,
     String? lang,
     BuildContext? context,
+    bool ensureEmptyResults = false,
   }) async {
     if (resetPage) {
       _currentPage = 1;
@@ -146,10 +147,10 @@ class NetworkCubit extends Cubit<NetworkState> {
     _selectedCityId = cityId;
 
     emit(const NetworkState.providersLoading());
-    
+
     // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
-    final String language = context != null 
-        ? context.locale.languageCode 
+    final String language = context != null
+        ? context.locale.languageCode
         : (lang ?? 'en');
 
     final result = await _repository.searchProviders(
@@ -167,8 +168,24 @@ class NetworkCubit extends Cubit<NetworkState> {
     result.when(
       success: (response) {
         if (response.data == null || response.data!.providers.isEmpty) {
+          // إذا كانت البيانات فارغة من API
+          // حفظ البيانات الفارغة مع معلومات الفلترة
+          if (response.data != null) {
+            _currentProviderData = provider_model.NetworkProviderData(
+              categories: response.data!.categories,
+              providers: [], // قائمة فارغة
+              pagination: response.data!.pagination,
+              userLocation: response.data!.userLocation,
+              searchTerm: response.data!.searchTerm,
+              categoryId: categoryId,
+              governmentId: governmentId,
+              cityId: cityId,
+            );
+          }
+          // إظهار حالة "لا توجد نتائج"
           emit(const NetworkState.providersEmpty());
         } else {
+          // إذا كانت هناك نتائج
           _currentProviderData = response.data;
           emit(NetworkState.providersSuccess(response.data!));
         }
@@ -190,8 +207,8 @@ class NetworkCubit extends Cubit<NetworkState> {
     _currentPage++;
 
     // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
-    final String language = context != null 
-        ? context.locale.languageCode 
+    final String language = context != null
+        ? context.locale.languageCode
         : (lang ?? 'en');
 
     final result = await _repository.searchProviders(
@@ -241,8 +258,8 @@ class NetworkCubit extends Cubit<NetworkState> {
     emit(const NetworkState.governmentsLoading());
 
     // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
-    final String language = context != null 
-        ? context.locale.languageCode 
+    final String language = context != null
+        ? context.locale.languageCode
         : (lang ?? 'en');
 
     final result = await _repository.getGovernments(
@@ -263,12 +280,14 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   /// Get cities by government
-  Future<void> getCitiesByGovernment(int governmentId, {BuildContext? context, String? lang}) async {
+  Future<void> getCitiesByGovernment(
+    int governmentId, {
+    BuildContext? context,
+    String? lang,
+  }) async {
     emit(const NetworkState.citiesLoading());
-
-    // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
-    final String language = context != null 
-        ? context.locale.languageCode 
+    final String language = context != null
+        ? context.locale.languageCode
         : (lang ?? 'en');
 
     final result = await _repository.getCitiesByGovernment(

@@ -325,7 +325,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
         // Show list of providers with pagination indicator
         return ListView.builder(
           controller: _scrollController,
-          padding: EdgeInsets.symmetric(vertical: 16.h),
+          shrinkWrap: true,
+          padding: EdgeInsets.only(top: 16.h,bottom: 24.h),
           itemCount: providers.length + (hasNextPage ? 1 : 0),
           itemBuilder: (context, index) {
             // Show provider card

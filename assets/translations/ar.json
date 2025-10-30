@@ -15,7 +15,8 @@
     "error": "خطأ",
     "success": "نجح",
     "no_data": "لا توجد بيانات متاحة",
-    "back": "رجوع"
+    "back": "رجوع",
+    "choose": "اختر"
   },
   "onboarding": {
     "welcome_to": "مرحباً بك في ",
@@ -227,7 +228,9 @@
     "no_providers": "لم يتم العثور على مقدمي خدمات",
     "loading_providers": "جاري تحميل مقدمي الخدمات...",
     "search_description": "استخدم شريط البحث أو الفلاتر للعثور على مقدمي الرعاية الصحية القريبين",
-    "navigate" : "انتقال"
+    "navigate": "انتقال",
+    "filter_no_results": "لا توجد نتائج للفلترة المحددة",
+    "filter_no_results_description": "حاول تغيير معايير الفلترة للحصول على نتائج"
   },
   "notifications": {
     "title": "الإشعارات",
@@ -411,5 +414,14 @@
     "policy_description": "عرض وإدارة وثائق التأمين",
     "family": "أفراد العائلة",
     "family_description": "أضف وأدِر أفراد العائلة"
+  },
+  "bottom_sheet": {
+    "filter": "تصفية",
+    "clear": "مسح",
+    "choose_category": "اختر الفئة",
+    "choose_government": "اختر المحافظة",
+    "choose_city": "اختر المدينة",
+    "no_categories": "لا توجد فئات متاحة",
+    "no_governments": "لا توجد محافظات متاحة"
   }
 }

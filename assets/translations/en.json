@@ -15,7 +15,8 @@
     "error": "Error",
     "success": "Success",
     "no_data": "No data available",
-    "back": "Back"
+    "back": "Back",
+    "choose": "Choose"
   },
   "onboarding": {
     "welcome_to": "Welcome to ",
@@ -227,7 +228,9 @@
     "no_providers": "No providers found",
     "loading_providers": "Loading providers...",
     "search_description": "Use the search bar or filters to find nearby healthcare providers",
-    "navigate" : "Navigate"
+    "navigate" : "Navigate",
+    "filter_no_results": "No results for selected filters",
+    "filter_no_results_description": "Try changing filter criteria to get results"
   },
   "notifications": {
     "title": "Notification",
@@ -414,7 +417,12 @@
   },
   "bottom_sheet": {
     "filter": "Filter",
-    "select_refund_type": "Select Refund Type",
-    "select_family_member": "Select Family Member"
+    "clear": "Clear",
+    "choose_category": "Choose Category",
+    "choose_government": "Choose Government",
+    "choose_city": "Choose City",
+    "no_categories": "No categories available",
+    "no_governments": "No governments available",
+    "no_cities": "No cities available"
   }
 }
