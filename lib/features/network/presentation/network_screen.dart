@@ -326,7 +326,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
         return ListView.builder(
           controller: _scrollController,
           shrinkWrap: true,
-          padding: EdgeInsets.only(top: 16.h,bottom: 24.h),
+          padding: EdgeInsets.only(top: 16.h, bottom: 24.h),
           itemCount: providers.length + (hasNextPage ? 1 : 0),
           itemBuilder: (context, index) {
             // Show provider card

@@ -146,7 +146,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                   SizedBox(width: 4.w),
                   Text(
                     member.level,
-                    style: AppTextStyles.font12GreyRegular(member),
+                    style: AppTextStyles.font12GreyRegular(context),
                   ),
                 ],
               ),

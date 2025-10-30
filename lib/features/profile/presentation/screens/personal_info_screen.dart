@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -65,10 +66,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageHeader(
-              title: 'Personal Information',
-              backPath: '/profile',
-            ),
+            PageHeader(title: 'personal_info.title'.tr(), backPath: '/profile'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -88,15 +86,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     ),
                     child: Form(
                       key: _formKey,
-                    child: ListView(
-                      padding: EdgeInsets.all(16.w),
-                      children: [
-                        SizedBox(height: 24.h),
-                        _buildProfilePhotoSection(),
-                        SizedBox(height: 32.h),
-                        _buildFormFields(),
-                        SizedBox(height: 24.h),
-                      ],
+                      child: ListView(
+                        padding: EdgeInsets.all(16.w),
+                        children: [
+                          SizedBox(height: 24.h),
+                          _buildProfilePhotoSection(),
+                          SizedBox(height: 32.h),
+                          _buildFormFields(),
+                          SizedBox(height: 24.h),
+                        ],
                       ),
                     ),
                   ),
@@ -130,7 +128,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             ),
           ),
           SizedBox(height: 8.h),
-          Text('Profile Photo', style: AppTextStyles.font14BlackMedium(context)),
+          Text(
+            'personal_info.profile_photo'.tr(),
+            style: AppTextStyles.font14BlackMedium(context),
+          ),
         ],
       ),
     );
@@ -141,7 +142,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ProfileAppTextField(
-          label: 'Full Name',
+          label: 'personal_info.full_name'.tr(),
           readOnly: true,
           controller: _nameController,
           isRequired: true,
@@ -154,7 +155,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
         SizedBox(height: 16.h),
         ProfileAppTextField(
-          label: 'Insurance Card ID',
+          label: 'personal_info.insurance_card_id'.tr(),
           controller: _insuranceIdController,
           isRequired: true,
           readOnly: true,
@@ -167,7 +168,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
         SizedBox(height: 16.h),
         ProfileAppTextField(
-          label: 'Phone Number',
+          label: 'personal_info.phone_number'.tr(),
           controller: _phoneController,
           isRequired: true,
           keyboardType: TextInputType.phone,
@@ -184,7 +185,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
         SizedBox(height: 16.h),
         AppDateField(
-          label: 'Date of Birth',
+          label: 'personal_info.date_of_birth'.tr(),
           controller: _dobController,
           isRequired: true,
           validator: (value) {
@@ -214,13 +215,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
         SizedBox(height: 16.h),
         ProfileAppTextField(
-          label: 'Email Address',
+          label: 'personal_info.email_address'.tr(),
           readOnly: true,
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value != null && value.isNotEmpty) {
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(value)) {
                 return 'Please enter a valid email address';
               }
             }
@@ -229,7 +232,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
         SizedBox(height: 16.h),
         ProfileAppTextField(
-          label: 'Address',
+          label: 'personal_info.address'.tr(),
           readOnly: true,
           controller: _addressController,
           maxLines: 3,
@@ -251,10 +254,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   //       'email': _emailController.text.trim(),
   //       'address': _addressController.text.trim(),
   //     };
-      
+
   //     print('Saving personal info: $personalInfo');
   //     print('Note: Insurance Card ID, Phone Number, Date of Birth, and Gender are read-only fields');
-      
+
   //     // Show success message
   //     ScaffoldMessenger.of(context).showSnackBar(
   //       const SnackBar(

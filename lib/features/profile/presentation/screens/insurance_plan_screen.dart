@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -16,7 +17,7 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageHeader(title: 'Insurance Plan', backPath: '/profile'),
+            PageHeader(title: 'insurance_plan.title'.tr(), backPath: '/profile'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -90,12 +91,12 @@ class InsurancePlanScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Gold Health Plan',
+                        'insurance_plan.gold_health_plan'.tr(),
                         style: AppTextStyles.font20WhiteSemiBold(context),
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        'Policy #MED-2025-0123',
+                        'insurance_plan.policy_number'.tr(),
                         style: AppTextStyles.font14WhiteRegular(context),
                       ),
                     ],
@@ -112,7 +113,7 @@ class InsurancePlanScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Valid until',
+                      'insurance_plan.valid_until'.tr(),
                       style: AppTextStyles.font14WhiteRegular(context),
                     ),
                     SizedBox(height: 4.h),
