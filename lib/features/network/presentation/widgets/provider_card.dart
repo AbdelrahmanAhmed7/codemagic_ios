@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -207,7 +208,7 @@ class ProviderCard extends StatelessWidget {
                       elevation: 0,
                     ),
                     child: Text(
-                      'Navigate',
+                      'network.navigate'.tr(),
                       style: AppTextStyles.font14WhiteMedium(
                         context,
                       ).copyWith(fontSize: 10.sp),

@@ -29,12 +29,12 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
 
     // Load governments if not loaded
     if (cubit.governments.isEmpty) {
-      cubit.getGovernments();
+      cubit.getGovernments(context: context);
     }
 
     // Load cities if government is selected
     if (_selectedGovernmentId != null) {
-      cubit.getCitiesByGovernment(_selectedGovernmentId!);
+      cubit.getCitiesByGovernment(_selectedGovernmentId!, context: context);
     }
   }
 

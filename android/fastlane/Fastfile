@@ -14,7 +14,7 @@ platform :android do
       firebase_cli_token: ENV['FIREBASE_TOKEN'],
       android_artifact_type: "APK",
       android_artifact_path: "../build/app/outputs/flutter-apk/app-release.apk",
-      testers: "omaralsalhani7@gmail.com", 
+      testers: "omaralsalhani7@gmail.com,safyibrahim289@gmail.com",
       release_notes: "Automated build from Fastlane"
     )
   end

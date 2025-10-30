@@ -34,11 +34,8 @@ class LabResultsUploadState extends State<LabResultsUpload> {
         _kidneyImage = result.image;
       }
     });
-    // Trigger rebuild for the open dialog without closing it
     _rebuildDialog?.call();
   }
-
-  // old picker kept earlier is no longer used
 
   void _showUploadDialog() {
     showGeneralDialog(

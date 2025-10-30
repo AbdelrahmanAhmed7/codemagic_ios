@@ -10,22 +10,21 @@ import 'package:easy_localization/easy_localization.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize EasyLocalization
+
   await EasyLocalization.ensureInitialized();
-  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await setupServiceLocator();
   await checkIfLoggedInUser();
-  
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: const Locale('en'),
+      useOnlyLangCode: true,
+      saveLocale: true,
       child: const MediConsultApp(),
     ),
   );

@@ -169,7 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'auth.signup.validation.password_required'.tr();
-                    } else if (value.length < 6) {
+                    } else if (value.length < 8) {
                       return 'auth.signup.validation.password_length'.tr();
                     }
 

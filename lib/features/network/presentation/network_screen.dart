@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,23 +24,30 @@ class _NetworkScreenState extends State<NetworkScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
+  bool _hasLoadedInitialData = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Load initial data
-    final cubit = context.read<NetworkCubit>();
-    cubit.getCategories();
-    cubit.getGovernments();
-
-    // Setup pagination
     _scrollController.addListener(_onScroll);
 
     // Request location and load providers after frame is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeLocation();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_hasLoadedInitialData) {
+      final cubit = context.read<NetworkCubit>();
+      cubit.getCategories(context: context);
+      cubit.getGovernments(context: context);
+      _hasLoadedInitialData = true;
+    }
   }
 
   Future<void> _initializeLocation() async {
@@ -50,22 +58,24 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
     // If location retrieved successfully, load providers
     if (cubit.userLatitude != null && cubit.userLongitude != null) {
-      await cubit.searchProviders(resetPage: true);
+      await cubit.searchProviders(resetPage: true, context: context);
     } else {
       // fallback: load random providers or show message
-      await cubit.searchProviders(resetPage: true);
+      await cubit.searchProviders(resetPage: true, context: context);
     }
   }
 
-  void _onScroll() {
+  void _onScroll() async {
     if (_isLoadingMore) return;
-    
+
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent * 0.9) {
       _isLoadingMore = true;
-      context.read<NetworkCubit>().loadMoreProviders().then((_) {
+      try {
+        await context.read<NetworkCubit>().loadMoreProviders(context: context);
+      } finally {
         _isLoadingMore = false;
-      });
+      }
     }
   }
 
@@ -116,168 +126,173 @@ class _NetworkScreenState extends State<NetworkScreen> {
         },
         child: SafeArea(
           child: Column(
-          children: [
-            const PageHeader(title: 'Providers Network', backPath: '/home'),
-            SizedBox(height: 16.h),
+            children: [
+              PageHeader(title: 'network.title'.tr(), backPath: '/home'),
+              SizedBox(height: 16.h),
 
-            Expanded(
-              child: Transform.translate(
-                offset: Offset(0, -28.h),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteClr,
-                        borderRadius: BorderRadius.circular(16.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.greyClr.withValues(alpha: 0.08),
-                            blurRadius: 24,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(16.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Categories Section
-                            BlocBuilder<NetworkCubit, NetworkState>(
-                              buildWhen: (previous, current) =>
-                                  current is CategoriesLoading ||
-                                  current is CategoriesSuccess ||
-                                  current is CategoriesError,
-                              builder: (context, state) {
-                                if (state is CategoriesLoading) {
-                                  return SizedBox(
-                                    height: 100.h,
-                                    child: const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
+              Expanded(
+                child: Transform.translate(
+                  offset: Offset(0, -28.h),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteClr,
+                          borderRadius: BorderRadius.circular(16.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.greyClr.withValues(alpha: 0.08),
+                              blurRadius: 24,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Categories Section
+                              BlocBuilder<NetworkCubit, NetworkState>(
+                                buildWhen: (previous, current) =>
+                                    current is CategoriesLoading ||
+                                    current is CategoriesSuccess ||
+                                    current is CategoriesError,
+                                builder: (context, state) {
+                                  if (state is CategoriesLoading) {
+                                    return SizedBox(
+                                      height: 100.h,
+                                      child: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
 
-                                final categories = context
-                                    .read<NetworkCubit>()
-                                    .categories;
-
-                                if (categories.isEmpty) {
-                                  return const SizedBox.shrink();
-                                }
-
-                                return NetworkCategoriesList(
-                                  categories: categories,
-                                  selectedCategoryId: context
+                                  final categories = context
                                       .read<NetworkCubit>()
-                                      .selectedCategoryId,
-                                  onCategorySelected: (categoryId) {
-                                    context
+                                      .categories;
+
+                                  if (categories.isEmpty) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return NetworkCategoriesList(
+                                    categories: categories,
+                                    selectedCategoryId: context
                                         .read<NetworkCubit>()
-                                        .searchProviders(
-                                          categoryId: categoryId,
+                                        .selectedCategoryId,
+                                    onCategorySelected: (categoryId) {
+                                      context
+                                          .read<NetworkCubit>()
+                                          .searchProviders(
+                                            categoryId: categoryId,
+                                            resetPage: true,
+                                          );
+                                    },
+                                  );
+                                },
+                              ),
+
+                              SizedBox(height: 16.h),
+
+                              // Search and Filter Bar
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _searchController,
+                                      decoration: InputDecoration(
+                                        hintText: 'network.search_placeholder'
+                                            .tr(),
+                                        hintStyle:
+                                            AppTextStyles.font14GreyRegular(
+                                              context,
+                                            ),
+                                        prefixIcon: Icon(
+                                          Icons.search,
+                                          color: AppColors.greyClr,
+                                          size: 20.sp,
+                                        ),
+                                        filled: true,
+                                        fillColor: AppColors.lightGreyClr,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12.r,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 16.w,
+                                          vertical: 12.h,
+                                        ),
+                                      ),
+                                      onSubmitted: (value) async {
+                                        final cubit = context
+                                            .read<NetworkCubit>();
+
+                                        // Ensure we have user location before searching
+                                        if (cubit.userLatitude == null ||
+                                            cubit.userLongitude == null) {
+                                          await cubit.getUserLocation();
+                                        }
+
+                                        cubit.searchProviders(
+                                          searchKey: value.isNotEmpty
+                                              ? value
+                                              : null,
                                           resetPage: true,
                                         );
-                                  },
-                                );
-                              },
-                            ),
-
-                            SizedBox(height: 16.h),
-
-                            // Search and Filter Bar
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: _searchController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Search providers...',
-                                      hintStyle:
-                                          AppTextStyles.font14GreyRegular(context),
-                                      prefixIcon: Icon(
-                                        Icons.search,
-                                        color: AppColors.greyClr,
-                                        size: 20.sp,
-                                      ),
-                                      filled: true,
-                                      fillColor: AppColors.lightGreyClr,
-                                      border: OutlineInputBorder(
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  GestureDetector(
+                                    onTap: _showFilterBottomSheet,
+                                    child: Container(
+                                      padding: EdgeInsets.all(12.w),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            context
+                                                .watch<NetworkCubit>()
+                                                .hasActiveFilters
+                                            ? AppColors.primaryClr
+                                            : AppColors.lightGreyClr,
                                         borderRadius: BorderRadius.circular(
                                           12.r,
                                         ),
-                                        borderSide: BorderSide.none,
                                       ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
-                                        vertical: 12.h,
+                                      child: Icon(
+                                        Icons.tune,
+                                        color:
+                                            context
+                                                .watch<NetworkCubit>()
+                                                .hasActiveFilters
+                                            ? AppColors.whiteClr
+                                            : AppColors.greyClr,
+                                        size: 20.sp,
                                       ),
-                                    ),
-                                    onSubmitted: (value) async {
-                                      final cubit = context
-                                          .read<NetworkCubit>();
-
-                                      // Ensure we have user location before searching
-                                      if (cubit.userLatitude == null ||
-                                          cubit.userLongitude == null) {
-                                        await cubit.getUserLocation();
-                                      }
-
-                                      cubit.searchProviders(
-                                        searchKey: value.isNotEmpty
-                                            ? value
-                                            : null,
-                                        resetPage: true,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                SizedBox(width: 12.w),
-                                GestureDetector(
-                                  onTap: _showFilterBottomSheet,
-                                  child: Container(
-                                    padding: EdgeInsets.all(12.w),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          context
-                                              .watch<NetworkCubit>()
-                                              .hasActiveFilters
-                                          ? AppColors.primaryClr
-                                          : AppColors.lightGreyClr,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                    ),
-                                    child: Icon(
-                                      Icons.tune,
-                                      color:
-                                          context
-                                              .watch<NetworkCubit>()
-                                              .hasActiveFilters
-                                          ? AppColors.whiteClr
-                                          : AppColors.greyClr,
-                                      size: 20.sp,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
 
-                            SizedBox(height: 16.h),
+                              SizedBox(height: 16.h),
 
-                            // Providers List
-                            SizedBox(height: 500.h, child: _buildListView()),
-                          ],
+                              // Providers List
+                              SizedBox(height: 500.h, child: _buildListView()),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
@@ -294,7 +309,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
       builder: (context, state) {
         final cubit = context.read<NetworkCubit>();
         final providers = cubit.currentProviders;
-        final hasNextPage = cubit.currentProviderData?.pagination.hasNextPage ?? false;
+        final hasNextPage =
+            cubit.currentProviderData?.pagination.hasNextPage ?? false;
 
         // Show loading only when actively searching (first load)
         if (state is ProvidersLoading) {
@@ -316,13 +332,11 @@ class _NetworkScreenState extends State<NetworkScreen> {
             if (index < providers.length) {
               return ProviderCard(provider: providers[index]);
             }
-            
+
             // Show loading indicator at the end
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             );
           },
         );

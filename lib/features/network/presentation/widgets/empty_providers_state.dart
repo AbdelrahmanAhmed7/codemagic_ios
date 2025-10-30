@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -31,7 +32,7 @@ class EmptyProvidersState extends StatelessWidget {
 
           // Title
           Text(
-            'Search for Providers',
+            'network.search_placeholder'.tr(),
             style: AppTextStyles.font16BlackMedium(context),
           ),
 
@@ -41,7 +42,7 @@ class EmptyProvidersState extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Text(
-              'Use the search bar or filters to find nearby healthcare providers',
+              'network.search_description'.tr(),
               style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),

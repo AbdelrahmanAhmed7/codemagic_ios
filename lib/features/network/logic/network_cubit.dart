@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/network/data/city_response_model.dart';
 import 'package:mediconsult/features/network/data/government_response_model.dart';
@@ -55,21 +57,25 @@ class NetworkCubit extends Cubit<NetworkState> {
       (_searchKey != null && _searchKey!.isNotEmpty);
 
   /// Get all categories
-  Future<void> getCategories() async {
-    emit(const NetworkState.categoriesLoading());
+ Future<void> getCategories({BuildContext? context, String? lang}) async {
+  emit(const NetworkState.categoriesLoading());
 
-    final result = await _repository.getCategories('en');
+  final String language = context != null 
+      ? context.locale.languageCode 
+      : (lang ?? 'en');
 
-    result.when(
-      success: (response) {
-        _categories = response.data.categories;
-        emit(NetworkState.categoriesSuccess(_categories));
-      },
-      failure: (message) {
-        emit(NetworkState.categoriesError(message));
-      },
-    );
-  }
+  final result = await _repository.getCategories(language);
+
+  result.when(
+    success: (response) {
+      _categories = response.data.categories;
+      emit(NetworkState.categoriesSuccess(_categories));
+    },
+    failure: (message) {
+      emit(NetworkState.categoriesError(message));
+    },
+  );
+}
 
   /// Get user's current location
   Future<void> getUserLocation() async {
@@ -126,6 +132,8 @@ class NetworkCubit extends Cubit<NetworkState> {
     int? governmentId,
     int? cityId,
     bool resetPage = true,
+    String? lang,
+    BuildContext? context,
   }) async {
     if (resetPage) {
       _currentPage = 1;
@@ -138,9 +146,14 @@ class NetworkCubit extends Cubit<NetworkState> {
     _selectedCityId = cityId;
 
     emit(const NetworkState.providersLoading());
+    
+    // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
+    final String language = context != null 
+        ? context.locale.languageCode 
+        : (lang ?? 'en');
 
     final result = await _repository.searchProviders(
-      'en',
+      language,
       searchKey: _searchKey,
       categoryId: _selectedCategoryId,
       governmentId: _selectedGovernmentId,
@@ -166,7 +179,7 @@ class NetworkCubit extends Cubit<NetworkState> {
     );
   }
 
-  Future<void> loadMoreProviders() async {
+  Future<void> loadMoreProviders({BuildContext? context, String? lang}) async {
     if (_currentProviderData == null ||
         !_currentProviderData!.pagination.hasNextPage) {
       return;
@@ -176,8 +189,13 @@ class NetworkCubit extends Cubit<NetworkState> {
 
     _currentPage++;
 
+    // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
+    final String language = context != null 
+        ? context.locale.languageCode 
+        : (lang ?? 'en');
+
     final result = await _repository.searchProviders(
-      'en',
+      language,
       searchKey: _searchKey,
       categoryId: _selectedCategoryId,
       governmentId: _selectedGovernmentId,
@@ -219,11 +237,16 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   /// Get all governments
-  Future<void> getGovernments() async {
+  Future<void> getGovernments({BuildContext? context, String? lang}) async {
     emit(const NetworkState.governmentsLoading());
 
+    // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
+    final String language = context != null 
+        ? context.locale.languageCode 
+        : (lang ?? 'en');
+
     final result = await _repository.getGovernments(
-      'en',
+      language,
       page: 1,
       pageSize: 100,
     );
@@ -240,11 +263,16 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   /// Get cities by government
-  Future<void> getCitiesByGovernment(int governmentId) async {
+  Future<void> getCitiesByGovernment(int governmentId, {BuildContext? context, String? lang}) async {
     emit(const NetworkState.citiesLoading());
 
+    // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
+    final String language = context != null 
+        ? context.locale.languageCode 
+        : (lang ?? 'en');
+
     final result = await _repository.getCitiesByGovernment(
-      'en',
+      language,
       governmentId: governmentId,
       page: 1,
       pageSize: 100,

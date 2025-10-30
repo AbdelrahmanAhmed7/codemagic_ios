@@ -56,7 +56,7 @@ class HomeHeaderWidget extends StatelessWidget {
                       ),
                       Text(
                         'home.health_question'.tr(),
-                        style: AppTextStyles.font8WhiteRegular(context),
+                        style: AppTextStyles.font10WhiteRegular(context),
                       ),
                     ],
                   ),

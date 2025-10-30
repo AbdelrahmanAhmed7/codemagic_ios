@@ -34,8 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // call home info when the screen is opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeCubit>().getHomeInfo(LanguageHelper.getLanguageCode(context));
+      _checkPermissionsAndLoadData();
     });
+  }
+  
+  Future<void> _checkPermissionsAndLoadData() async {
+    try {
+      // Load home data regardless of permissions
+      context.read<HomeCubit>().getHomeInfo(LanguageHelper.getLanguageCode(context));
+    } catch (e) {
+      // If there's an error, still try to load home data
+      context.read<HomeCubit>().getHomeInfo(LanguageHelper.getLanguageCode(context));
+    }
   }
 
   @override
