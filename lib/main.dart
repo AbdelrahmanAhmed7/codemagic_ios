@@ -8,22 +8,23 @@ import 'package:mediconsult/firebase_options.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/mediconsult_app.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/core/network/connectivity_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   EasyLocalization.logger.enableBuildModes = [];
   
-  // Run critical initializations in parallel (except Firebase-dependent services)
   await Future.wait<void>([
     EasyLocalization.ensureInitialized(),
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]);
   
-  // Initialize Firebase-dependent services AFTER Firebase is initialized
+  // Initialize connectivity service before other services
+  await ConnectivityService.instance.initialize();
+  
   await PushNotificationService.instance.initialize();
   
-  // Setup service locator and check login status in parallel
   await Future.wait<void>([
     setupServiceLocator(),
     checkIfLoggedInUser(),

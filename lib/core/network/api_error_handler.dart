@@ -38,8 +38,13 @@ class ErrorHandler {
 
       if (error.type == DioExceptionType.unknown) {
         if (error.error is SocketException) {
-          return "No internet connection.";
+          return "No internet connection. Please check your network.";
         }
+      }
+      
+      // Connection error (network unreachable)
+      if (error.type == DioExceptionType.connectionError) {
+        return "Connection error. Please check your internet connection.";
       }
 
       return "Something went wrong. Please try again.";

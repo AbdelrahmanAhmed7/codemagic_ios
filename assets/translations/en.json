@@ -16,7 +16,8 @@
     "success": "Success",
     "no_data": "No data available",
     "back": "Back",
-    "choose": "Choose"
+    "choose": "Choose",
+    "no_internet": "No internet connection"
   },
   "policy_screen": {
     "title": "Policy",

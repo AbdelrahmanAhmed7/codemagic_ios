@@ -68,6 +68,8 @@ dependencies:
   easy_localization: ^3.0.8
   firebase_messaging: ^16.0.3
   flutter_local_notifications: ^19.5.0
+  # Offline support
+  connectivity_plus: ^6.1.0
 
 dev_dependencies:
   flutter_test:

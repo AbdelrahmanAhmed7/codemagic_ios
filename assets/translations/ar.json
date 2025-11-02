@@ -16,7 +16,8 @@
     "success": "نجح",
     "no_data": "لا توجد بيانات متاحة",
     "back": "رجوع",
-    "choose": "اختر"
+    "choose": "اختر",
+    "no_internet": "لا يوجد اتصال بالإنترنت"
   },
   "policy_screen": {
     "title": "البوليسي",
