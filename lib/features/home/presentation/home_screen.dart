@@ -70,22 +70,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
                       children: [
-                        HomeHeaderWidget(data: data!),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 130.h,
-                              color: AppColors.primaryClr,
-                            ),
-                            Positioned(
-                              bottom: -70.h,
-                              left: 16.w,
-                              right: 16.w,
-                              child: UserPlanCardWidget(data: data),
-                            ),
-                          ],
+                        // Wrap header in RepaintBoundary for better performance
+                        RepaintBoundary(
+                          child: HomeHeaderWidget(data: data!),
+                        ),
+                        RepaintBoundary(
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 130.h,
+                                color: AppColors.primaryClr,
+                              ),
+                              Positioned(
+                                bottom: -70.h,
+                                left: 16.w,
+                                right: 16.w,
+                                child: UserPlanCardWidget(data: data),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 80.h),
                         Container(
@@ -94,17 +99,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const QuickAccessWidget(),
+                              RepaintBoundary(
+                                child: const QuickAccessWidget(),
+                              ),
                               SizedBox(height: 24.h),
-                              const KhusmPromotionWidget(),
+                              RepaintBoundary(
+                                child: const KhusmPromotionWidget(),
+                              ),
                               SizedBox(height: 24.h),
                               if (data.approvals.isNotEmpty) ...[
-                                OngoingRequestWidget(data: data),
+                                RepaintBoundary(
+                                  child: OngoingRequestWidget(data: data),
+                                ),
                                 SizedBox(height: 24.h),
                               ],
-                              const HealthTipsWidget(),
+                              RepaintBoundary(
+                                child: const HealthTipsWidget(),
+                              ),
                               SizedBox(height: 24.h),
-                              const ExploreWidget(),
+                              RepaintBoundary(
+                                child: const ExploreWidget(),
+                              ),
                               SizedBox(height: 40.h),
                             ],
                           ),
