@@ -18,6 +18,16 @@
     "back": "رجوع",
     "choose": "اختر"
   },
+  "policy_screen": {
+    "title": "البوليسي",
+    "services": "الخدمات",
+    "search": "بحث",
+    "details": "تفاصيل البوليسي",
+    "service_name": "اسم الخدمة",
+    "coverage": "نسبة التغطية",
+    "coverage_type": "نوع التغطية",
+    "providers": "مقدمي الخدمة"
+  },
   "onboarding": {
     "welcome_to": "مرحباً بك في ",
     "medi": "ميدي",

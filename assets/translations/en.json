@@ -18,6 +18,16 @@
     "back": "Back",
     "choose": "Choose"
   },
+  "policy_screen": {
+    "title": "Policy",
+    "services": "Services",
+    "search": "Search",
+    "details": "Policy Details",
+    "service_name": "Service Name",
+    "coverage": "Coverage",
+    "coverage_type": "Coverage Type",
+    "providers": "Providers"
+  },
   "onboarding": {
     "welcome_to": "Welcome to ",
     "medi": "Medi",

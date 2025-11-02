@@ -8,21 +8,18 @@ class MediConsultApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
-      title: 'MediConsult',
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      builder: (context, child) {
-        return ScreenUtilInit(
-          designSize: const Size(375, 812),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (_, __) => child!,
-        );
-      },
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+        title: 'MediConsult',
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+      ),
     );
   }
 }

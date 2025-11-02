@@ -1,3 +1,50 @@
+enum PolicyItemType { service, provider }
+
+class PolicyItem {
+  final String id;
+  final String name;
+  final PolicyItemType type;
+  final String? icon;
+  final String? color;
+  final String? route;
+  final String? description;
+  final String? additionalInfo;
+
+  PolicyItem({
+    required this.id,
+    required this.name,
+    required this.type,
+    this.icon,
+    this.color,
+    this.route,
+    this.description,
+    this.additionalInfo,
+  });
+
+  factory PolicyItem.fromService(PolicyService service) {
+    return PolicyItem(
+      id: service.id,
+      name: service.name,
+      type: PolicyItemType.service,
+      icon: service.icon,
+      color: service.color,
+      route: service.route,
+    );
+  }
+
+  factory PolicyItem.fromProvider(PolicyProvider provider) {
+    return PolicyItem(
+      id: provider.id,
+      name: provider.name,
+      type: PolicyItemType.provider,
+      icon: provider.logo,
+      description: provider.copaymentType,
+      additionalInfo: provider.copaymentPercentage,
+    );
+  }
+}
+
+// Legacy models kept for backward compatibility
 class PolicyService {
   final String id;
   final String name;

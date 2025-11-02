@@ -35,7 +35,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         _items.clear();
         _items.addAll(data.notifications);
         emit(NotificationsState.loaded(
-          notifications: List.of(_items),
+          notifications: _items,
           totalCount: data.totalCount,
           currentPage: data.page,
           totalPages: data.totalPages,
@@ -80,7 +80,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         _items.addAll(data.notifications);
         _loadingMore = false;
         emit(NotificationsState.loaded(
-          notifications: List.of(_items),
+          notifications: _items,
           totalCount: data.totalCount,
           currentPage: data.page,
           totalPages: data.totalPages,

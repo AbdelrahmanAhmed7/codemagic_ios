@@ -16,10 +16,10 @@ class _FAQScreenState extends State<FAQScreen> {
   int selectedCategory = 0;
 
   final List<String> categories = [
-    'General',
-    'Approval',
-    'Refund',
-    'Medications & Pharmacies',
+    'faq.categories.general'.tr(),
+    'faq.categories.approval'.tr(),
+    'faq.categories.refund'.tr(),
+    'faq.categories.medications'.tr(),
   ];
 
   final List<Map<String, dynamic>> faqData = [

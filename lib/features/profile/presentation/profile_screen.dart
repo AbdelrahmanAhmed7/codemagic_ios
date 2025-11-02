@@ -228,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _Tile(
                                 title: 'profile.terms_privacy'.tr(),
                                 image: AppAssets.terms,
-                                route: '/terms-privacy',
+                                route: '/terms-policy',
                               ),
                             ],
                           ),

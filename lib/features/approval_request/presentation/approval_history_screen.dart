@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,6 +24,9 @@ class ApprovalHistoryScreen extends StatefulWidget {
 class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
   final ScrollController _controller = ScrollController();
   int _currentTab = 0;
+  Timer? _scrollTimer;
+  bool _isLoadingMore = false;
+
   @override
   void initState() {
     super.initState();
@@ -40,17 +44,28 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
   }
 
   void _onScroll() {
-    if (!_controller.hasClients) return;
+    if (!_controller.hasClients || _isLoadingMore) return;
     final position = _controller.position;
-    if (position.pixels >= position.maxScrollExtent * 0.9) {
-      context.read<ApprovalsCubit>().loadMore(
-        lang: context.locale.languageCode,
-      );
+    // Load more when 85% scrolled (instead of 90% for better UX)
+    if (position.pixels >= position.maxScrollExtent * 0.85) {
+      // Debounce scroll events
+      _scrollTimer?.cancel();
+      _scrollTimer = Timer(const Duration(milliseconds: 300), () {
+        if (mounted && !_isLoadingMore) {
+          _isLoadingMore = true;
+          context.read<ApprovalsCubit>().loadMore(
+            lang: context.locale.languageCode,
+          ).then((_) {
+            _isLoadingMore = false;
+          });
+        }
+      });
     }
   }
 
   @override
   void dispose() {
+    _scrollTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -140,13 +155,11 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                                                 ),
                                               );
                                             }
-                                            return RepaintBoundary(
-                                              child: _ApprovalCard(
-                                                key: ValueKey(
-                                                  approvals[index].id,
-                                                ),
-                                                item: approvals[index],
+                                            return _ApprovalCard(
+                                              key: ValueKey(
+                                                approvals[index].id,
                                               ),
+                                              item: approvals[index],
                                             );
                                           },
                                         );
@@ -283,9 +296,9 @@ class _ApprovalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color statusColor = _statusColor(item.statusChar);
-    final Color backgroundColor = _backgroundColorForStatus(item.statusChar);
-    final String statusLabel = _statusLabel(item.statusChar);
+    final Color statusColor = _getStatusColor(item.statusChar);
+    final Color backgroundColor = _getBackgroundColorForStatus(item.statusChar);
+    final String statusLabel = _getStatusLabel(item.statusChar);
 
     return Container(
       decoration: BoxDecoration(
@@ -427,7 +440,7 @@ class _ApprovalCard extends StatelessWidget {
     );
   }
 
-  Color _statusColor(String status) {
+  static Color _getStatusColor(String status) {
     switch (status.toUpperCase()) {
       case 'A':
         return const Color(0xFF349859);
@@ -439,7 +452,7 @@ class _ApprovalCard extends StatelessWidget {
     }
   }
 
-  Color _backgroundColorForStatus(String status) {
+  static Color _getBackgroundColorForStatus(String status) {
     switch (status.toUpperCase()) {
       case 'A':
         return const Color(0xFFD9F2E2);
@@ -451,7 +464,7 @@ class _ApprovalCard extends StatelessWidget {
     }
   }
 
-  String _statusLabel(String status) {
+  static String _getStatusLabel(String status) {
     switch (status.toUpperCase()) {
       case 'A':
         return 'approval_history.status.approved'.tr();

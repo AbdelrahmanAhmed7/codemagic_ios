@@ -40,7 +40,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
         _items.clear();
         _items.addAll(data.approvals);
         emit(ApprovalsState.loaded(
-          approvals: List.of(_items),
+          approvals: _items,
           pagination: data.pagination,
           status: data.filter.status,
           loadingMore: false,
@@ -57,7 +57,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
     } else {
       _loadingMore = true;
       emit(ApprovalsState.loaded(
-        approvals: List.of(_items),
+        approvals: _items,
         pagination: Pagination(
           currentPage: _page-1,
           pageSize: _pageSize,
@@ -96,7 +96,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
         _items.addAll(data.approvals);
         _loadingMore = false;
         emit(ApprovalsState.loaded(
-          approvals: List.of(_items),
+          approvals: _items,
           pagination: data.pagination,
           status: data.filter.status,
           loadingMore: false,
@@ -111,7 +111,9 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
 
   Future<void> loadMore({required String lang}) async {
     final current = state;
-    if (current is Loaded && current.pagination.hasNextPage && !_loadingMore) {
+    if (current is Loaded && 
+        current.pagination.hasNextPage && 
+        !_loadingMore) {
       _page = current.pagination.currentPage + 1;
       await load(lang: lang);
     }

@@ -118,7 +118,7 @@ class InsurancePlanScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      'Dec 31, 2025',
+                      'insurance_plan.valid_date'.tr(),
                       style: AppTextStyles.font16WhiteRegular(context).copyWith(
                         fontWeight: FontWeight.w500,
                       ),
@@ -128,9 +128,9 @@ class InsurancePlanScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('Status', style: AppTextStyles.font14GreenRegular(context)),
+                    Text('insurance_plan.status'.tr(), style: AppTextStyles.font14GreenRegular(context)),
                     SizedBox(height: 4.h),
-                    Text('Active', style: AppTextStyles.font16GreenMedium(context)),
+                    Text('insurance_plan.active'.tr(), style: AppTextStyles.font16GreenMedium(context)),
                   ],
                 ),
               ],
@@ -160,12 +160,12 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Coverage Details', style: AppTextStyles.font14BlackMedium(context)),
+            Text('insurance_plan.coverage_details'.tr(), style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
-            _buildCoverageItem('Coverage Type', 'Family Plan',context),
-            _buildCoverageItem('Annual Limit', 'EGP 300,000',context),
-            _buildCoverageItem('Deductible', 'EGP 1,000',context),
-            _buildCoverageItem('Copayment', '20%',context),
+            _buildCoverageItem('insurance_plan.coverage_type'.tr(), 'insurance_plan.family_plan'.tr(),context),
+            _buildCoverageItem('insurance_plan.annual_limit'.tr(), 'EGP 300,000',context),
+            _buildCoverageItem('insurance_plan.deductible'.tr(), 'EGP 1,000',context),
+            _buildCoverageItem('insurance_plan.copayment'.tr(), '20%',context),
           ],
         ),
       ),
@@ -209,25 +209,25 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Coverage Member', style: AppTextStyles.font14BlackMedium(context)),
+            Text('insurance_plan.coverage_member'.tr(), style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
             _buildMemberItem(
               'Ahmed Mohamed Adel Amin',
-              'Main Member',
+              'insurance_plan.main_member'.tr(),
               'assets/approval/ahmed.png',
               context
             ),
             Divider(color: AppColors.lightGreyClr),
             _buildMemberItem(
               'Noha Khaled Ali Mohamed',
-              'Spouse',
+              'insurance_plan.spouse'.tr(),
               'assets/approval/noha.png',
               context
             ),
             Divider(color: AppColors.lightGreyClr),
             _buildMemberItem(
               'Youssef Ahmed Mohamed',
-              'Son',
+              'insurance_plan.son'.tr(),
               'assets/approval/ali.png',
               context
             ),

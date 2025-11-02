@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/policy/data/policy_mock_data.dart';
-import 'package:mediconsult/features/policy/presentation/widgets/pharmacy_card.dart';
+import 'package:mediconsult/features/policy/data/policy_models.dart';
+import 'package:mediconsult/features/policy/presentation/widgets/policy_item_card.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class PolicyDetailsScreen extends StatefulWidget {
@@ -33,7 +35,10 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            PageHeader(title: '${widget.serviceName} Policy', backPath: '/policy'),
+            PageHeader(
+              title: 'policy_screen.details'.tr(),
+              onBack: () => Navigator.pop(context),
+            ),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -28.h),
@@ -75,7 +80,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                               child: TextField(
                                 controller: _searchController,
                                 decoration: InputDecoration(
-                                  hintText: 'Search',
+                                  hintText: 'policy_screen.search'.tr(),
                                   hintStyle: AppTextStyles.font14GreyRegular(context),
                                   prefixIcon: Icon(
                                     Icons.search,
@@ -99,7 +104,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
 
                             // Policy Details Section
                             Text(
-                              'Policy Details',
+                              'policy_screen.details'.tr(),
                               style: AppTextStyles.font16BlueMedium(context),
                             ),
                             SizedBox(height: 16.h),
@@ -118,7 +123,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Coverage',
+                                          'policy_screen.coverage'.tr(),
                                           style: AppTextStyles.font14BlackMedium(context),
                                         ),
                                         SizedBox(height: 8.h),
@@ -166,7 +171,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Providers',
+                                  'policy_screen.providers'.tr(),
                                   style: AppTextStyles.font16BlueMedium(context),
                                 ),
                                 TextButton(
@@ -179,7 +184,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: Text(
-                                    'See all',
+                                    'home.see_all'.tr(),
                                     style: AppTextStyles.font12BlueRegular(context),
                                   ),
                                 ),
@@ -193,8 +198,9 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: policyDetails.providers.length,
                               itemBuilder: (context, index) {
-                                return PharmacyCard(
-                                  provider: policyDetails.providers[index],
+                                return PolicyItemCard(
+                                  item: PolicyItem.fromProvider(policyDetails.providers[index]),
+                                  onTap: () {},
                                 );
                               },
                             ),

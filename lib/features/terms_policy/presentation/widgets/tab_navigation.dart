@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -34,7 +35,7 @@ class TabNavigation extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
-                  'Terms',
+                  'terms_policy.terms'.tr(),
                   textAlign: TextAlign.center,
                   style: isTermsSelected 
                       ? AppTextStyles.font16BlackMedium(context)
@@ -53,7 +54,7 @@ class TabNavigation extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
-                  'Privacy Policy',
+                  'terms_policy.privacy_policy'.tr(),
                   textAlign: TextAlign.center,
                   style: !isTermsSelected 
                       ? AppTextStyles.font16BlackMedium(context)
