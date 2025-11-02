@@ -63,13 +63,8 @@ class ProfileTileWidget extends StatelessWidget {
     return ListTile(
       leading: Image.asset(image, width: 24.h, height: 24.h),
       title: Text(title, style: AppTextStyles.font12BlackRegular(context)),
-      trailing: Image.asset(
-        AppAssets.chevronRight,
-        width: 24.w,
-        height: 29.h,
-      ),
+      trailing: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
       onTap: route != null ? () => context.go(route!) : null,
     );
   }
 }
-
