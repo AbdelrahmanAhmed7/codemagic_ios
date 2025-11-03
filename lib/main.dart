@@ -20,7 +20,6 @@ Future<void> main() async {
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]);
   
-  // Initialize connectivity service before other services
   await ConnectivityService.instance.initialize();
   
   await PushNotificationService.instance.initialize();

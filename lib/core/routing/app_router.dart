@@ -47,7 +47,7 @@ import 'package:mediconsult/features/policy/presentation/policy_details_screen.d
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: isLoggedInUser ? '/home' : '/login',
+    initialLocation: '/login',
     routes: [
       GoRoute(
         path: '/',

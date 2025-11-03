@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'core/routing/app_router.dart';
@@ -21,17 +22,31 @@ class MediConsultApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         builder: (context, child) {
-          return Stack(
-            children: [
-              child ?? const SizedBox.shrink(),
-              // Offline banner at the top
-              const Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: OfflineBanner(),
-              ),
-            ],
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) {
+              if (didPop) {
+                return;
+              }
+              if (context.canPop()) {
+                context.pop();
+                return;
+              }
+              // At root: consume back press and do nothing (prevents app exit)
+              return;
+            },
+            child: Stack(
+              children: [
+                child ?? const SizedBox.shrink(),
+                // Offline banner at the top
+                Positioned(
+                  top: MediaQuery.of(context).padding.top,
+                  left: 0,
+                  right: 0,
+                  child: const OfflineBanner(),
+                ),
+              ],
+            ),
           );
         },
       ),

@@ -27,7 +27,7 @@ class ExploreWidget extends StatelessWidget {
           iconPath: AppAssets.providers,
           arrowPath: 'assets/icons/arrow.png',
           onTap: () {
-            context.go('/network');
+            context.push('/network');
           },
           context: context,
         ),
@@ -38,7 +38,7 @@ class ExploreWidget extends StatelessWidget {
           iconPath: AppAssets.policy,
           arrowPath: 'assets/icons/arrow.png',
           onTap: () {
-            context.go('/policy');
+            context.push('/policy');
           },
           context: context,
         ),
@@ -49,7 +49,7 @@ class ExploreWidget extends StatelessWidget {
           iconPath: AppAssets.family,
           arrowPath: 'assets/icons/arrow.png',
           onTap: () {
-            context.go('/family-members');
+            context.push('/family-members');
           },
           context: context,
         ),

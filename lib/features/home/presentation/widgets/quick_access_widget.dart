@@ -49,7 +49,7 @@ class QuickAccessWidget extends StatelessWidget {
                 color: AppColors.approvalColor,
                 textColor: AppColors.approvalTextColor,
                 onTap: () {
-                  context.go('/approval-history');
+                  context.push('/approval-history');
                 },
                 context: context,
               ),
@@ -59,7 +59,7 @@ class QuickAccessWidget extends StatelessWidget {
                 color: AppColors.refundColor,
                 textColor: AppColors.refundTextColor,
                 onTap: () {
-                  context.go('/refund-history');
+                  context.push('/refund-history');
                 },
                 context: context,
               ),
@@ -69,7 +69,7 @@ class QuickAccessWidget extends StatelessWidget {
                 color: AppColors.chronicMedicineColor,
                 textColor: AppColors.chronicMedicineTextColor,
                 onTap: () {
-                  context.go('/chronic-medicines');
+                  context.push('/chronic-medicines');
                 },
                 context: context,
               ),

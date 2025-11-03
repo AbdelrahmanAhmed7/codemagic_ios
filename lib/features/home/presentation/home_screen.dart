@@ -181,14 +181,14 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index;
+            _currentIndex = 0;
           });
           if (index == 1) {
-            context.go('/network');
+            context.push('/network');
           } else if (index == 2) {
-            context.go('/approval-request');
+            context.push('/approval-request');
           } else if (index == 3) {
-            context.go('/profile');
+            context.push('/profile');
           }
         },
       ),

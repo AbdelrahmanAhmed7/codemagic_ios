@@ -95,6 +95,7 @@
       }
     },
     "forgot_password": {
+      "otp_title": "Verify OTP",
       "title": "Forgot Password",
       "description": "Don't worry ! It happens. Please enter your phone number and we will send the OTP to this phone number.",
       "phone_number": "Phone Number",
@@ -103,6 +104,15 @@
       "sending": "Sending...",
       "change_phone": "Do you want to change phone number ?",
       "contact_us": "Contact Us",
+      "otp_message": "OTP: {otp}",
+      "otp_sent_success": "OTP sent successfully",
+      "otp_instruction": "Please enter the OTP we sent to {phone}",
+      "otp_expire_in": "The verify code will expire in {time}",
+      "resend_code": "Resend Code",
+      "otp_resend_success": "OTP resent successfully",
+      "otp_verified": "OTP verified successfully",
+      "verifying": "Verifying...",
+      "verify": "Verify",
       "validation": {
         "phone_required": "Please enter your phone number"
       }

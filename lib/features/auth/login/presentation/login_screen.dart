@@ -44,23 +44,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => context.go('/signup'),
-                    ),
-                    SizedBox(width: 50.w),
-                    Image.asset(
-                      AppAssets.logo,
-                      width: 172.w,
-                      height: 38.h,
-                      fit: BoxFit.contain,
-                    ),
-                  ],
+                Center(
+                  child: Image.asset(
+                    AppAssets.logo,
+                    width: 172.w,
+                    height: 38.h,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 SizedBox(height: 43.h),
 
@@ -122,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      context.go('/forget-password');
+                      context.push('/forget-password');
                     },
                     child: Text(
                       'auth.login.forgot_password'.tr(),
@@ -141,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (state is Success) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         showAppSnackBar(context, 'auth.login.login_successful'.tr());
-                        context.go('/home');
+                        context.push('/home');
                       });
                     } else if (state is Failed) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -188,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              context.go('/signup');
+                              context.push('/signup');
                             },
                         ),
                       ],
