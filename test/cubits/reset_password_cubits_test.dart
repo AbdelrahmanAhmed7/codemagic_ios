@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/send_otp_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/send_otp_state.dart';
@@ -15,7 +14,6 @@ import 'package:mediconsult/features/auth/login/data/forget_password_models/otp_
 import 'package:mediconsult/features/auth/login/data/forget_password_models/verify_otp_request_model.dart';
 import 'package:mediconsult/features/auth/login/data/forget_password_models/reset_password_request_model.dart';
 import 'package:mediconsult/features/auth/login/data/forget_password_models/otp_response_model.dart';
-import 'package:mediconsult/features/auth/login/data/forget_password_models/verify_otp_response.dart';
 import 'package:mediconsult/features/auth/login/data/forget_password_models/reset_password_response_model.dart';
 
 class MockResetPasswordRepository extends Mock implements ResetPasswordRepository {}
