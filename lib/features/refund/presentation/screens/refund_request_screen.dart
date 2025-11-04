@@ -11,6 +11,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_
 import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class RefundRequestScreen extends StatefulWidget {
   const RefundRequestScreen({super.key});
@@ -24,6 +25,13 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   final TextEditingController _amountController = TextEditingController();
   DateTime? _selectedDate;
   String? _selectedRefundType;
+
+  // Showcase keys
+  final GlobalKey _familyKey = GlobalKey();
+  final GlobalKey _submitKey = GlobalKey();
+  final GlobalKey _providerKey = GlobalKey();
+  final GlobalKey _noteKey = GlobalKey();
+  final GlobalKey _attachKey = GlobalKey();
 
   // TODO: API Integration
   // Method to handle refund request submission
@@ -81,209 +89,248 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightGreyClr,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const PageHeader(title: 'Refund Request', backPath: '/home'),
-              Transform.translate(
-                offset: Offset(0, -20.h),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteClr,
-                      borderRadius: BorderRadius.circular(16.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.greyClr.withValues(alpha: 0.08),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(16.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Family Members',
-                            style: AppTextStyles.font14BlackMedium(context),
-                          ),
-                          SizedBox(height: 12.h),
-                          const FamilyMembersSelector(),
-                          SizedBox(height: 24.h),
-                          Text(
-                            'Refund Type',
-                            style: AppTextStyles.font14BlackMedium(context),
-                          ),
-                          SizedBox(height: 8.h),
-                          RefundTypeSelector(
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedRefundType = value;
-                              });
-                            },
-                          ),
-                          SizedBox(height: 16.h),
-                          Text(
-                            'Provider',
-                            style: AppTextStyles.font14BlackMedium(context),
-                          ),
-                          SizedBox(height: 8.h),
-                          const ProviderSelector(),
-                          SizedBox(height: 16.h),
-                          Text(
-                            'Reason',
-                            style: AppTextStyles.font14BlackMedium(context),
-                          ),
-                          SizedBox(height: 8.h),
-                          const ReasonSelector(),
-                          SizedBox(height: 16.h),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Amount',
-                                      style: AppTextStyles.font14BlackMedium(
-                                        context,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    TextField(
-                                      controller: _amountController,
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                        hintText: 'Enter amount',
-                                        hintStyle:
-                                            AppTextStyles.font14GreyRegular(
-                                              context,
-                                            ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 12.w,
-                                          vertical: 8.h,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8.r,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: AppColors.greyClr.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8.r,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: AppColors.greyClr.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 16.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Service Date',
-                                      style: AppTextStyles.font14BlackMedium(
-                                        context,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    GestureDetector(
-                                      onTap: () => _selectDate(context),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 12.w,
-                                          vertical: 12.h,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColors.greyClr.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            8.r,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              _selectedDate == null
-                                                  ? 'Select date'
-                                                  : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                                              style: _selectedDate == null
-                                                  ? AppTextStyles.font14GreyRegular(
-                                                      context,
-                                                    )
-                                                  : AppTextStyles.font14BlackMedium(
-                                                      context,
-                                                    ),
-                                            ),
-                                            Icon(
-                                              Icons.calendar_today_outlined,
-                                              size: 20.w,
-                                              color: AppColors.greyClr,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16.h),
-                          Text('Note', style: AppTextStyles.font14BlackMedium(context)),
-                          SizedBox(height: 8.h),
-                          const NoteTextField(maxLength: 300),
-                          SizedBox(height: 16.h),
-                          AddAttachmentWidget(
-                            refundTypeName: _selectedRefundType,
-                          ),
-                          SizedBox(height: 20.h),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 48.h,
-                            child: _isLoading
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : AppButton(
-                                    text: 'Submit',
-                                    onPressed: _submitRefundRequest,
-                                  ),
+    return ShowCaseWidget(
+      builder: (context) => Scaffold(
+        backgroundColor: AppColors.lightGreyClr,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PageHeader(
+                  title: 'Refund Request',
+                  backPath: '/home',
+                  onHelp: () {
+                    ShowCaseWidget.of(
+                      context,
+                  ).startShowCase([
+                    _familyKey,
+                    _providerKey,
+                    _noteKey,
+                    _attachKey,
+                    _submitKey,
+                  ]);
+                  },
+                ),
+                Transform.translate(
+                  offset: Offset(0, -20.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteClr,
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.greyClr.withValues(alpha: 0.08),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
                           ),
                         ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(16.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Family Members',
+                              style: AppTextStyles.font14BlackMedium(context),
+                            ),
+                            SizedBox(height: 12.h),
+                            Showcase(
+                              key: _familyKey,
+                              description:
+                                  'Select a family member before submitting',
+                              child: const FamilyMembersSelector(),
+                            ),
+                            SizedBox(height: 24.h),
+                            Text(
+                              'Refund Type',
+                              style: AppTextStyles.font14BlackMedium(context),
+                            ),
+                            SizedBox(height: 8.h),
+                            RefundTypeSelector(
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedRefundType = value;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              'Provider',
+                              style: AppTextStyles.font14BlackMedium(context),
+                            ),
+                            SizedBox(height: 8.h),
+                            Showcase(
+                              key: _providerKey,
+                              description: 'Choose a provider from the network',
+                              child: const ProviderSelector(),
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              'Reason',
+                              style: AppTextStyles.font14BlackMedium(context),
+                            ),
+                            SizedBox(height: 8.h),
+                            const ReasonSelector(),
+                            SizedBox(height: 16.h),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Amount',
+                                        style: AppTextStyles.font14BlackMedium(
+                                          context,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      TextField(
+                                        controller: _amountController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: 'Enter amount',
+                                          hintStyle:
+                                              AppTextStyles.font14GreyRegular(
+                                                context,
+                                              ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 12.w,
+                                            vertical: 8.h,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                            borderSide: BorderSide(
+                                              color: AppColors.greyClr
+                                                  .withValues(alpha: 0.2),
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                            borderSide: BorderSide(
+                                              color: AppColors.greyClr
+                                                  .withValues(alpha: 0.2),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 16.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Service Date',
+                                        style: AppTextStyles.font14BlackMedium(
+                                          context,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      GestureDetector(
+                                        onTap: () => _selectDate(context),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w,
+                                            vertical: 12.h,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: AppColors.greyClr
+                                                  .withValues(alpha: 0.2),
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                _selectedDate == null
+                                                    ? 'Select date'
+                                                    : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                                                style: _selectedDate == null
+                                                    ? AppTextStyles.font14GreyRegular(
+                                                        context,
+                                                      )
+                                                    : AppTextStyles.font14BlackMedium(
+                                                        context,
+                                                      ),
+                                              ),
+                                              Icon(
+                                                Icons.calendar_today_outlined,
+                                                size: 20.w,
+                                                color: AppColors.greyClr,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              'Note',
+                              style: AppTextStyles.font14BlackMedium(context),
+                            ),
+                            SizedBox(height: 8.h),
+                            Showcase(
+                              key: _noteKey,
+                              description: 'Add an optional note for the request',
+                              child: const NoteTextField(maxLength: 300),
+                            ),
+                            SizedBox(height: 16.h),
+                            Showcase(
+                              key: _attachKey,
+                              description: 'Attach required documents or images',
+                              child: AddAttachmentWidget(
+                                refundTypeName: _selectedRefundType,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Showcase(
+                              key: _submitKey,
+                              description: 'Tap to submit your refund request',
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 48.h,
+                                child: _isLoading
+                                    ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : AppButton(
+                                        text: 'Submit',
+                                        onPressed: _submitRefundRequest,
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 8.h),
-            ],
+                SizedBox(height: 8.h),
+              ],
+            ),
           ),
         ),
       ),

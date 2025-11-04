@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,11 +12,13 @@ class PageHeader extends StatelessWidget {
     required this.title,
     this.onBack,
     this.backPath,
+    this.onHelp,
   });
 
   final String title;
   final VoidCallback? onBack;
   final String? backPath;
+  final VoidCallback? onHelp; 
 
   @override
   Widget build(BuildContext context) {
@@ -52,25 +53,23 @@ class PageHeader extends StatelessWidget {
                   ],
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios_new, size: 18),
-                  onPressed:
-                      onBack ??
+                  icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                  onPressed: onBack ??
                       () => backPath != null
                           ? context.go(backPath!)
                           : context.pop(),
                 ),
               ),
             ),
+
             Center(
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: AppTextStyles.font18BlackSemiBold(
-                  context,
-                ).copyWith(color: AppColors.whiteClr),
+                style: AppTextStyles.font18BlackSemiBold(context)
+                    .copyWith(color: AppColors.whiteClr),
               ),
             ),
-
             Align(
               alignment: isRtl ? Alignment.centerLeft : Alignment.centerRight,
               child: Container(
@@ -81,12 +80,10 @@ class PageHeader extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: InkWell(
-                  onTap: () {
-                    context.push('/faq');
-                  },
+                  onTap: onHelp,
                   child: Transform(
                     alignment: Alignment.center,
-                    transform: Matrix4.rotationY(isRtl ? math.pi : 0), // 🔄 Mirror horizontally
+                    transform: Matrix4.rotationY(isRtl ? math.pi : 0),
                     child: const Icon(
                       CupertinoIcons.question,
                       color: AppColors.blackClr,

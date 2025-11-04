@@ -15,6 +15,7 @@ import 'package:mediconsult/features/family_members/data/family_response_model.d
 import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class ApprovalRequestScreen extends StatefulWidget {
   const ApprovalRequestScreen({super.key});
@@ -28,6 +29,13 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
   ProviderItem? _selectedProvider;
   final TextEditingController _noteController = TextEditingController();
   final List<String> _attachments = [];
+
+  // Showcase keys
+  final GlobalKey _familyKey = GlobalKey();
+  final GlobalKey _submitKey = GlobalKey();
+  final GlobalKey _providerKey = GlobalKey();
+  final GlobalKey _noteKey = GlobalKey();
+  final GlobalKey _attachKey = GlobalKey();
 
   @override
   void dispose() {
@@ -46,9 +54,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
     }
 
     if (_selectedProvider == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a provider')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a provider')));
       return;
     }
 
@@ -81,12 +89,27 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightGreyClr,
-      body: SafeArea(
-        child: Column(
+    return ShowCaseWidget(
+      builder: (context) => Scaffold(
+        backgroundColor: AppColors.lightGreyClr,
+        body: SafeArea(
+          child: Column(
             children: [
-              PageHeader(title: 'approval_request.title'.tr(), backPath: '/approval-history'),
+              PageHeader(
+                title: 'approval_request.title'.tr(),
+                backPath: '/approval-history',
+                onHelp: () {
+                  ShowCaseWidget.of(
+                    context,
+                  ).startShowCase([
+                    _familyKey,
+                    _providerKey,
+                    _noteKey,
+                    _attachKey,
+                    _submitKey,
+                  ]);
+                },
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -104,7 +127,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.greyClr.withValues(alpha: 0.08),
+                                  color: AppColors.greyClr.withValues(
+                                    alpha: 0.08,
+                                  ),
                                   blurRadius: 24,
                                   offset: const Offset(0, 8),
                                 ),
@@ -117,79 +142,113 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                 children: [
                                   Text(
                                     'approval_request.family_members'.tr(),
-                                    style: AppTextStyles.font14BlackMedium(context),
+                                    style: AppTextStyles.font14BlackMedium(
+                                      context,
+                                    ),
                                   ),
                                   SizedBox(height: 12.h),
-                                  FamilyMembersSelector(
-                                    onMemberSelected: (member) {
-                                      setState(() {
-                                        _selectedFamilyMember = member;
-                                      });
-                                    },
-                                    selectedMember: _selectedFamilyMember,
+                                  Showcase(
+                                    key: _familyKey,
+                                    description:
+                                        'Select a family member before submitting',
+                                    child: FamilyMembersSelector(
+                                      onMemberSelected: (member) {
+                                        setState(() {
+                                          _selectedFamilyMember = member;
+                                        });
+                                      },
+                                      selectedMember: _selectedFamilyMember,
+                                    ),
                                   ),
                                   SizedBox(height: 24.h),
                                   Text(
                                     'approval_request.provider'.tr(),
-                                    style: AppTextStyles.font14BlackMedium(context),
+                                    style: AppTextStyles.font14BlackMedium(
+                                      context,
+                                    ),
                                   ),
                                   SizedBox(height: 8.h),
-                                  ProviderSelector(
+                                  Showcase(
+                                    key: _providerKey,
+                                    description: 'Choose a provider from the network',
+                                    child: ProviderSelector(
                                     onProviderSelected: (provider) {
                                       setState(() {
                                         _selectedProvider = provider;
                                       });
                                     },
                                     selectedProvider: _selectedProvider,
+                                    ),
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
                                     'approval_request.note'.tr(),
-                                    style: AppTextStyles.font14BlackMedium(context),
+                                    style: AppTextStyles.font14BlackMedium(
+                                      context,
+                                    ),
                                   ),
                                   SizedBox(height: 8.h),
-                                  NoteTextField(
+                                  Showcase(
+                                    key: _noteKey,
+                                    description: 'Add an optional note for the request',
+                                    child: NoteTextField(
                                     maxLength: 300,
                                     controller: _noteController,
+                                    ),
                                   ),
                                   SizedBox(height: 21.h),
-                                  AttachmentsSection(
+                                  Showcase(
+                                    key: _attachKey,
+                                    description: 'Attach required documents or images',
+                                    child: AttachmentsSection(
                                     onAttachmentsChanged: (attachments) {
                                       setState(() {
                                         _attachments.clear();
                                         _attachments.addAll(attachments);
                                       });
                                     },
+                                    ),
                                   ),
                                   SizedBox(height: 20.h),
-                                  BlocConsumer<ApprovalRequestCubit, ApprovalRequestState>(
-                                    listener: (context, state) {
-                                      state.when(
-                                        initial: () {},
-                                        loading: () {},
-                                        success: (data) {
-                                          SuccessDialog.show(context);
-                                          _resetForm();
-                                        },
-                                        failed: (message) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(message),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    builder: (context, state) {
-                                      final isLoading = state is Loading;
-                                      return AppButton(
-                                        text: 'common.save'.tr(),
-                                        onPressed: _submitApprovalRequest,
-                                        isLoading: isLoading,
-                                        width: double.infinity,
-                                      );
-                                    },
+                                  Showcase(
+                                    key: _submitKey,
+                                    description:
+                                        'Tap to submit your approval request',
+                                    child:
+                                        BlocConsumer<
+                                          ApprovalRequestCubit,
+                                          ApprovalRequestState
+                                        >(
+                                          listener: (context, state) {
+                                            state.when(
+                                              initial: () {},
+                                              loading: () {},
+                                              success: (data) {
+                                                SuccessDialog.show(context);
+                                                _resetForm();
+                                              },
+                                              failed: (message) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(message),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          builder: (context, state) {
+                                            final isLoading = state is Loading;
+                                            return AppButton(
+                                              text: 'common.save'.tr(),
+                                              onPressed: _submitApprovalRequest,
+                                              isLoading: isLoading,
+                                              width: double.infinity,
+                                            );
+                                          },
+                                        ),
                                   ),
                                   SizedBox(height: 20.h),
                                 ],
@@ -205,6 +264,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
             ],
           ),
         ),
+      ),
     );
   }
 }

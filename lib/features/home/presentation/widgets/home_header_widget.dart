@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -82,11 +83,10 @@ class HomeHeaderWidget extends StatelessWidget {
                     color: AppColors.whiteClr,
                     shape: BoxShape.circle,
                   ),
-                  child: Image.asset(
-                    AppAssets.notification,
-                    width: 15.w,
-                    height: 15.h,
-                    fit: BoxFit.scaleDown,
+                  child: Icon(
+                    CupertinoIcons.bell,
+                    size: 22.w,
+                    color: AppColors.blackClr,
                   ),
                 ),
                 if (data.notificationsCount > 0)

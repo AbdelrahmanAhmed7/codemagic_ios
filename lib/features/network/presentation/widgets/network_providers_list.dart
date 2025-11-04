@@ -10,11 +10,15 @@ import 'package:mediconsult/features/network/presentation/widgets/provider_card.
 class NetworkProvidersList extends StatelessWidget {
   final ScrollController scrollController;
   final bool isLoadingMore;
+  final GlobalKey? firstNavigateKey;
+  final GlobalKey? firstPhoneKey;
 
   const NetworkProvidersList({
     super.key,
     required this.scrollController,
     required this.isLoadingMore,
+    this.firstNavigateKey,
+    this.firstPhoneKey,
   });
 
   @override
@@ -51,7 +55,11 @@ class NetworkProvidersList extends StatelessWidget {
           itemBuilder: (context, index) {
             // Show provider card
             if (index < providers.length) {
-              return ProviderCard(provider: providers[index]);
+              return ProviderCard(
+                provider: providers[index],
+                navigateKey: index == 0 ? firstNavigateKey : null,
+                phoneKey: index == 0 ? firstPhoneKey : null,
+              );
             }
 
             // Show loading indicator at the end

@@ -23,7 +23,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _obscureNewPassword = true;
 
   @override
   void dispose() {
@@ -36,7 +35,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, anim1, anim2) {
         return Center(
@@ -67,17 +66,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SizedBox(height: 43.h),
                 Text(
                   'auth.reset_password.congratulations'.tr(),
-                  style: AppTextStyles.font20BlackSemiBold(context).copyWith(
-                    fontSize: 24.sp,
-                    decoration: TextDecoration.none,
-                  ),
+                  style: AppTextStyles.font20BlackSemiBold(
+                    context,
+                  ).copyWith(fontSize: 24.sp, decoration: TextDecoration.none),
                 ),
                 SizedBox(height: 16.h),
                 Text(
                   'auth.reset_password.success_message'.tr(),
-                  style: AppTextStyles.font14GreyRegular(context).copyWith(
-                    decoration: TextDecoration.none,
-                  ),
+                  style: AppTextStyles.font14GreyRegular(
+                    context,
+                  ).copyWith(decoration: TextDecoration.none),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -143,7 +141,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               prefixImagePath: AppAssets.passwordIcon,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'auth.reset_password.validation.new_password_required'.tr();
+                  return 'auth.reset_password.validation.new_password_required'
+                      .tr();
                 }
                 return null;
               },
@@ -164,10 +163,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               prefixImagePath: AppAssets.passwordIcon,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'auth.reset_password.validation.confirm_password_required'.tr();
+                  return 'auth.reset_password.validation.confirm_password_required'
+                      .tr();
                 }
                 if (value != _newPasswordController.text) {
-                  return 'auth.reset_password.validation.passwords_not_match'.tr();
+                  return 'auth.reset_password.validation.passwords_not_match'
+                      .tr();
                 }
                 return null;
               },
@@ -197,11 +198,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       : () {
                           if (_formKey.currentState!.validate()) {
                             context.read<ResetPasswordCubit>().resetPassword(
-                                  widget.phoneNumber,
-                                  _newPasswordController.text,
-                                  _confirmPasswordController.text,
-                                  context.locale.languageCode,
-                                );
+                              widget.phoneNumber,
+                              _newPasswordController.text,
+                              _confirmPasswordController.text,
+                              context.locale.languageCode,
+                            );
                             _showSuccessDialog();
                           }
                         },
@@ -248,6 +249,4 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ),
     );
   }
-
-  
 }

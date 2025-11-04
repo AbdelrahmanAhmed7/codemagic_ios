@@ -12,6 +12,7 @@ import 'package:mediconsult/features/chronic_medicines/widgets/monthly_medicines
 import 'package:mediconsult/features/chronic_medicines/widgets/upcoming_lab_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class ChronicMedicinesScreen extends StatefulWidget {
   const ChronicMedicinesScreen({super.key});
@@ -22,6 +23,8 @@ class ChronicMedicinesScreen extends StatefulWidget {
 
 class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
   final GlobalKey<LabResultsUploadState> _labKey = GlobalKey();
+  final GlobalKey _familyKey = GlobalKey();
+  final GlobalKey _saveKey = GlobalKey();
 
   Future<void> _onSave() async {
     final isComplete = _labKey.currentState?.isComplete ?? false;
@@ -43,148 +46,176 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightGreyClr,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PageHeader(
-                title: 'chronic_medicines.title'.tr(),
-                backPath: '/home',
-              ),
-              Transform.translate(
-                offset: Offset(0, -20.h),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteClr,
-                      borderRadius: BorderRadius.circular(16.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.greyClr.withValues(alpha: 0.08),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(16.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          MonthHeader(date: DateTime.now()),
-                          SizedBox(height: 12.h),
-                          Row(
-                            children: [
-                              Image.asset(
-                                AppAssets.familySelect,
-                                width: 16.w,
-                                height: 16.h,
-                              ),
-                              SizedBox(width: 4.w),
-                              Text(
-                                'chronic_medicines.select_member'.tr(),
-                                style: AppTextStyles.font14BlackMedium(context),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 12.h),
-                          const FamilyMembersSelector(),
-                          SizedBox(height: 24.h),
-                          Row(
-                            children: [
-                              Image.asset(
-                                AppAssets.mdeiSelector,
-                                width: 16.w,
-                                height: 16.h,
-                              ),
-                              SizedBox(width: 4.w),
-                              Text(
-                                'chronic_medicines.select_medicines'.tr(),
-                                style: AppTextStyles.font14BlackMedium(context),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8.h),
-                          const MonthlyMedicinesSelector(),
-                          SizedBox(height: 36.h),
-                          const UpcomingLabCard(),
-                          SizedBox(height: 16.h),
-                          Text(
-                            'chronic_medicines.upload_lab_results'.tr(),
-                            style: AppTextStyles.font14BlackMedium(context),
-                          ),
-                          SizedBox(height: 8.h),
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(12.w),
-                            decoration: BoxDecoration(
-                              color: AppColors.whiteClr,
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'chronic_medicines.required_tests'.tr(),
-                                  style: AppTextStyles.font16BlueMedium(context),
-                                ),
-                                SizedBox(height: 6.h),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      AppAssets.tests,
-                                      width: 16.w,
-                                      height: 16.h,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Text(
-                                      'chronic_medicines.blood_sugar_test'.tr(),
-                                      style: AppTextStyles.font12GreyRegular(context),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      AppAssets.tests,
-                                      width: 16.w,
-                                      height: 16.h,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Text(
-                                      'chronic_medicines.kidney_function_test'
-                                          .tr(),
-                                      style: AppTextStyles.font12GreyRegular(context),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 24.h),
-                                LabResultsUpload(key: _labKey),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20.h),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 48.h,
-                            child: AppButton(
-                              text: 'common.save'.tr(),
-                              onPressed: _onSave,
-                            ),
+    return ShowCaseWidget(
+      builder: (context) => Scaffold(
+        backgroundColor: AppColors.lightGreyClr,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PageHeader(
+                  title: 'chronic_medicines.title'.tr(),
+                  backPath: '/home',
+                  onHelp: () {
+                    ShowCaseWidget.of(
+                      context,
+                    ).startShowCase([_familyKey, _saveKey]);
+                  },
+                ),
+                Transform.translate(
+                  offset: Offset(0, -20.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteClr,
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.greyClr.withValues(alpha: 0.08),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
                           ),
                         ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(16.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            MonthHeader(date: DateTime.now()),
+                            SizedBox(height: 12.h),
+                            Row(
+                              children: [
+                                Image.asset(
+                                  AppAssets.familySelect,
+                                  width: 16.w,
+                                  height: 16.h,
+                                ),
+                                SizedBox(width: 4.w),
+                                Text(
+                                  'chronic_medicines.select_member'.tr(),
+                                  style: AppTextStyles.font14BlackMedium(
+                                    context,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 12.h),
+                            Showcase(
+                              key: _familyKey,
+                              description:
+                                  'Select a family member to manage medicines',
+                              child: const FamilyMembersSelector(),
+                            ),
+                            SizedBox(height: 24.h),
+                            Row(
+                              children: [
+                                Image.asset(
+                                  AppAssets.mdeiSelector,
+                                  width: 16.w,
+                                  height: 16.h,
+                                ),
+                                SizedBox(width: 4.w),
+                                Text(
+                                  'chronic_medicines.select_medicines'.tr(),
+                                  style: AppTextStyles.font14BlackMedium(
+                                    context,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8.h),
+                            const MonthlyMedicinesSelector(),
+                            SizedBox(height: 36.h),
+                            const UpcomingLabCard(),
+                            SizedBox(height: 16.h),
+                            Text(
+                              'chronic_medicines.upload_lab_results'.tr(),
+                              style: AppTextStyles.font14BlackMedium(context),
+                            ),
+                            SizedBox(height: 8.h),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(12.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.whiteClr,
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'chronic_medicines.required_tests'.tr(),
+                                    style: AppTextStyles.font16BlueMedium(
+                                      context,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        AppAssets.tests,
+                                        width: 16.w,
+                                        height: 16.h,
+                                      ),
+                                      SizedBox(width: 4.w),
+                                      Text(
+                                        'chronic_medicines.blood_sugar_test'
+                                            .tr(),
+                                        style: AppTextStyles.font12GreyRegular(
+                                          context,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        AppAssets.tests,
+                                        width: 16.w,
+                                        height: 16.h,
+                                      ),
+                                      SizedBox(width: 4.w),
+                                      Text(
+                                        'chronic_medicines.kidney_function_test'
+                                            .tr(),
+                                        style: AppTextStyles.font12GreyRegular(
+                                          context,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 24.h),
+                                  LabResultsUpload(key: _labKey),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Showcase(
+                              key: _saveKey,
+                              description:
+                                  'Tap to save your chronic medicines updates',
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 48.h,
+                                child: AppButton(
+                                  text: 'common.save'.tr(),
+                                  onPressed: _onSave,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 8.h),
-            ],
+                SizedBox(height: 8.h),
+              ],
+            ),
           ),
         ),
       ),

@@ -9,7 +9,7 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 /// Profile section widget (e.g., Account, Settings, Help & Support)
 class ProfileSectionWidget extends StatelessWidget {
   final String title;
-  final List<ProfileTileWidget> tiles;
+  final List<Widget> tiles;
 
   const ProfileSectionWidget({
     super.key,
