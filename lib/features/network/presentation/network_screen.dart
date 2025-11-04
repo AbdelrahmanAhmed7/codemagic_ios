@@ -199,7 +199,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
                               return Showcase(
                                 key: _categoriesKey,
-                                description: 'Browse categories to filter providers',
+                                description: 'tutorial.network.categories'.tr(),
                                 child: NetworkCategoriesList(
                                   categories: categories,
                                   selectedCategoryId: context
@@ -223,7 +223,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                               // Search and Filter Bar
                               Showcase(
                                 key: _searchKey,
-                                description: 'Search or use filters to narrow results',
+                                description: 'tutorial.network.search'.tr(),
                                 child: NetworkSearchBar(
                                   searchController: _searchController,
                                   onFilterTap: _showFilterBottomSheet,

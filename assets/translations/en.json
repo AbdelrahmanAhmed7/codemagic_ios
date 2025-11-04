@@ -445,5 +445,39 @@
     "no_categories": "No categories available",
     "no_governments": "No governments available",
     "no_cities": "No cities available"
+  },
+  "tutorial": {
+    "family_members": {
+      "select": "Select a family member before submitting"
+    },
+    "provider": {
+      "select": "Choose a provider from the network"
+    },
+    "note": {
+      "hint": "Add an optional note for the request"
+    },
+    "attachments": {
+      "hint": "Attach required documents or images"
+    },
+    "submit": {
+      "tap": "Tap to submit your request"
+    },
+    "save": {
+      "tap": "Tap to save your changes"
+    },
+    "network": {
+      "categories": "Browse categories to filter providers",
+      "search": "Search or use filters to narrow results",
+      "navigate": "Open maps to navigate to provider",
+      "call": "Tap the phone number to call the provider"
+    },
+    "profile": {
+      "personal_info": "View and edit your personal information",
+      "change_password": "Change your account password"
+    },
+    "approval_history" :{
+      "swipe":"Swipe or tap to filter approvals",
+      "fab": "Tap to create a new approval request"
+    }
   }
 }

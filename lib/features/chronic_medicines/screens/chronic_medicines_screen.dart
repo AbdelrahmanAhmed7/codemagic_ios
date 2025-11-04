@@ -104,10 +104,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                               ],
                             ),
                             SizedBox(height: 12.h),
-                            Showcase(
+                             Showcase(
                               key: _familyKey,
-                              description:
-                                  'Select a family member to manage medicines',
+                               description: 'tutorial.family_members.select'.tr(),
                               child: const FamilyMembersSelector(),
                             ),
                             SizedBox(height: 24.h),
@@ -194,10 +193,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                               ),
                             ),
                             SizedBox(height: 20.h),
-                            Showcase(
+                             Showcase(
                               key: _saveKey,
-                              description:
-                                  'Tap to save your chronic medicines updates',
+                               description: 'tutorial.save.tap'.tr(),
                               child: SizedBox(
                                 width: double.infinity,
                                 height: 48.h,

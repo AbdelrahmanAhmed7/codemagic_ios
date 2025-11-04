@@ -18,8 +18,7 @@ class PageHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onBack;
   final String? backPath;
-  final VoidCallback? onHelp; 
-
+  final VoidCallback? onHelp;
   @override
   Widget build(BuildContext context) {
     final isRtl = Directionality.of(context) == TextDirection.rtl;
@@ -70,29 +69,30 @@ class PageHeader extends StatelessWidget {
                     .copyWith(color: AppColors.whiteClr),
               ),
             ),
-            Align(
-              alignment: isRtl ? Alignment.centerLeft : Alignment.centerRight,
-              child: Container(
-                width: 28.w,
-                height: 28.w,
-                decoration: const BoxDecoration(
-                  color: AppColors.whiteClr,
-                  shape: BoxShape.circle,
-                ),
-                child: InkWell(
-                  onTap: onHelp,
-                  child: Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(isRtl ? math.pi : 0),
-                    child: const Icon(
-                      CupertinoIcons.question,
-                      color: AppColors.blackClr,
-                      size: 18,
+            if (onHelp != null)
+              Align(
+                alignment: isRtl ? Alignment.centerLeft : Alignment.centerRight,
+                child: Container(
+                  width: 28.w,
+                  height: 28.w,
+                  decoration: const BoxDecoration(
+                    color: AppColors.whiteClr,
+                    shape: BoxShape.circle,
+                  ),
+                  child: InkWell(
+                    onTap: onHelp, 
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(isRtl ? math.pi : 0),
+                      child: const Icon(
+                        CupertinoIcons.question,
+                        color: AppColors.blackClr,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

@@ -195,7 +195,7 @@ class ProviderCard extends StatelessWidget {
                         )
                       : Showcase(
                           key: phoneKey!,
-                          description: 'Tap the phone number to call the provider',
+                          description: 'tutorial.network.call'.tr(),
                           child: Text(
                             provider.mobile,
                             style: AppTextStyles.font12GreyRegular(context),
@@ -207,7 +207,7 @@ class ProviderCard extends StatelessWidget {
                       ? _NavigateButton(onOpen: _openMaps)
                       : Showcase(
                           key: navigateKey!,
-                          description: 'Open maps to navigate to provider',
+                          description: 'tutorial.network.navigate'.tr(),
                           child: _NavigateButton(onOpen: _openMaps),
                         ),
                 ],

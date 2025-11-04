@@ -149,8 +149,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 12.h),
                                   Showcase(
                                     key: _familyKey,
-                                    description:
-                                        'Select a family member before submitting',
+                                    description: 'tutorial.family_members.select'.tr(),
                                     child: FamilyMembersSelector(
                                       onMemberSelected: (member) {
                                         setState(() {
@@ -170,7 +169,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 8.h),
                                   Showcase(
                                     key: _providerKey,
-                                    description: 'Choose a provider from the network',
+                                    description: 'tutorial.provider.select'.tr(),
                                     child: ProviderSelector(
                                     onProviderSelected: (provider) {
                                       setState(() {
@@ -190,7 +189,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 8.h),
                                   Showcase(
                                     key: _noteKey,
-                                    description: 'Add an optional note for the request',
+                                    description: 'tutorial.note.hint'.tr(),
                                     child: NoteTextField(
                                     maxLength: 300,
                                     controller: _noteController,
@@ -199,7 +198,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 21.h),
                                   Showcase(
                                     key: _attachKey,
-                                    description: 'Attach required documents or images',
+                                    description: 'tutorial.attachments.hint'.tr(),
                                     child: AttachmentsSection(
                                     onAttachmentsChanged: (attachments) {
                                       setState(() {
@@ -212,8 +211,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                   SizedBox(height: 20.h),
                                   Showcase(
                                     key: _submitKey,
-                                    description:
-                                        'Tap to submit your approval request',
+                                    description: 'tutorial.submit.tap'.tr(),
                                     child:
                                         BlocConsumer<
                                           ApprovalRequestCubit,

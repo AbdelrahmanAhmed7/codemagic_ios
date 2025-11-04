@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -141,8 +142,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             SizedBox(height: 12.h),
                             Showcase(
                               key: _familyKey,
-                              description:
-                                  'Select a family member before submitting',
+                              description: 'tutorial.family_members.select'.tr(),
                               child: const FamilyMembersSelector(),
                             ),
                             SizedBox(height: 24.h),
@@ -166,7 +166,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             SizedBox(height: 8.h),
                             Showcase(
                               key: _providerKey,
-                              description: 'Choose a provider from the network',
+                              description: 'tutorial.provider.select'.tr(),
                               child: const ProviderSelector(),
                             ),
                             SizedBox(height: 16.h),
@@ -294,13 +294,13 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             SizedBox(height: 8.h),
                             Showcase(
                               key: _noteKey,
-                              description: 'Add an optional note for the request',
+                              description: 'tutorial.note.hint'.tr(),
                               child: const NoteTextField(maxLength: 300),
                             ),
                             SizedBox(height: 16.h),
                             Showcase(
                               key: _attachKey,
-                              description: 'Attach required documents or images',
+                              description: 'tutorial.attachments.hint'.tr(),
                               child: AddAttachmentWidget(
                                 refundTypeName: _selectedRefundType,
                               ),
@@ -308,7 +308,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             SizedBox(height: 20.h),
                             Showcase(
                               key: _submitKey,
-                              description: 'Tap to submit your refund request',
+                              description: 'tutorial.submit.tap'.tr(),
                               child: SizedBox(
                                 width: double.infinity,
                                 height: 48.h,
