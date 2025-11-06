@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/features/onboarding/onboarding_buttons.dart';
 import 'package:mediconsult/features/onboarding/onboarding_model';
 import 'onboarding_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -20,31 +21,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingModel> _pages = [
     OnboardingModel(
       image: 'assets/onboarding/2.png',
-      title: 'Your Insurance, In Your Pocket',
-      description: 'Search for providers in your network',
+      title: 'onboarding.insurance_in_pocket',
+      description: 'onboarding.insurance_description',
     ),
     OnboardingModel(
       image: 'assets/onboarding/3.png',
-      title: 'Find Hospitals & Pharmacies',
-      description: 'View list of your network providers\n near your location',
+      title: 'onboarding.find_hospitals',
+      description: 'onboarding.find_hospitals_description',
     ),
     OnboardingModel(
       image: 'assets/onboarding/4.png',
-      title: 'Pre-approvals',
-      description: 'View status of requests pending\n approval',
+      title: 'onboarding.pre_approvals',
+      description: 'onboarding.pre_approvals_description',
     ),
   ];
-
-  void _nextPage() {
-    if (_currentPage < _pages.length) {
-      _controller.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _finish();
-    }
-  }
 
   void _finish() {
     context.go('/signup');
@@ -52,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLast = _currentPage == _pages.length;
+    final isRtl = context.locale.languageCode == 'ar';
 
     return Scaffold(
       body: SafeArea(
@@ -60,14 +50,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(height: 20.h,),
+              SizedBox(height: 20.h),
               Align(
-                alignment: Alignment.topLeft,
-                child: TextButton(onPressed: _finish, child: Text("Skip",style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Color(0xff090F47),
-                  fontFamily: 'Roboto'
-                ),)),
+                alignment: isRtl ? Alignment.topRight : Alignment.topLeft,
+                child: TextButton(
+                  onPressed: _finish,
+                  child: Text(
+                    tr('common.skip'),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: const Color(0xff090F47),
+                      fontFamily: 'Roboto',
+                    ),
+                  ),
+                ),
               ),
               Expanded(
                 child: PageView.builder(
@@ -107,7 +103,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 children: [
-                                  TextSpan(text: 'Welcome to ',style: AppTextStyles.font20BlackSemiBold(context)),
+                                  TextSpan(
+                                    text: tr('onboarding.welcome_to'),
+                                    style: AppTextStyles.font20BlackSemiBold(
+                                      context,
+                                    ),
+                                  ),
                                   const TextSpan(
                                     text: 'Medi',
                                     style: TextStyle(color: Colors.blue),
@@ -119,11 +120,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 ],
                               ),
                             ),
-
                             SizedBox(height: 16.h),
-
                             Text(
-                              'Get access to a wide network of\n hospitals, clinic, pharmacies and labs',
+                              tr('onboarding.welcome_description'),
                               style: AppTextStyles.font16GreyRegular(context),
                               textAlign: TextAlign.center,
                             ),
@@ -156,48 +155,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
               SizedBox(height: 48.h),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    if (_currentPage != 0)
-                      GestureDetector(
-                        onTap: (){
-                            _controller.previousPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                        },
-                          child: Image.asset(AppAssets.backward,width: 20.w,height: 20.h,))
-                    else
-                      const SizedBox(width: 48),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: _nextPage,
-                      child: Container(
-                        width: 245.w,
-                        height: 56.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF4285F4), Color(0xFF0139FE)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          isLast ? "Get Started" : "Next",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: OnboardingButtons(
+                  pageController: _controller,
+                  currentPage: _currentPage,
+                  isLastPage: _currentPage == _pages.length,
                 ),
               ),
               SizedBox(height: 53.h),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/onboarding/onboarding_model';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingPage extends StatelessWidget {
   final OnboardingModel model;
@@ -30,7 +31,7 @@ class OnboardingPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Text(
-                model.title,
+                tr(model.title),
                 style: AppTextStyles.font20BlackSemiBold(context).copyWith(
                   fontSize: 22.sp,
                   height: 1.4,
@@ -42,7 +43,7 @@ class OnboardingPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Text(
-                model.description,
+                tr(model.description),
                 style: AppTextStyles.font16GreyRegular(context).copyWith(
                   fontSize: 14.sp,
                   height: 1.5,

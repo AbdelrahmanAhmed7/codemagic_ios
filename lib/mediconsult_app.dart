@@ -24,7 +24,7 @@ class MediConsultApp extends StatelessWidget {
         builder: (context, child) {
           return PopScope(
             canPop: false,
-            onPopInvoked: (didPop) {
+            onPopInvokedWithResult: (didPop, _) {
               if (didPop) {
                 return;
               }
@@ -34,7 +34,9 @@ class MediConsultApp extends StatelessWidget {
               }
               String? loc;
               try {
-                loc = GoRouter.of(context).routeInformationProvider.value.location;
+                loc = GoRouter.of(
+                  context,
+                ).routeInformationProvider.value.uri.toString();
               } catch (_) {}
               if (loc != null) {
                 if (loc.startsWith('/profile')) {

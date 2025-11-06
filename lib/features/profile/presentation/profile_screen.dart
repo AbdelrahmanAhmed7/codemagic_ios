@@ -10,6 +10,7 @@ import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.da
 import 'package:mediconsult/features/profile/presentation/widgets/profile_header_widget.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/profile_section_widget.dart';
 import 'package:showcaseview/showcaseview.dart';
+// ignore_for_file: deprecated_member_use
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

@@ -12,6 +12,7 @@ import 'package:mediconsult/features/network/presentation/widgets/network_search
 import 'package:mediconsult/features/network/presentation/widgets/network_providers_list.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
+// ignore_for_file: deprecated_member_use
 
 class NetworkScreen extends StatefulWidget {
   const NetworkScreen({super.key});

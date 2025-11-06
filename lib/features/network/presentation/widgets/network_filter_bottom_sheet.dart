@@ -131,7 +131,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                       }
 
                       return DropdownButtonFormField<int>(
-                        value: _selectedCategoryId,
+                        initialValue: _selectedCategoryId,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColors.lightGreyClr,
@@ -192,7 +192,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                       }
 
                       return DropdownButtonFormField<int>(
-                        value: _selectedGovernmentId,
+                        initialValue: _selectedGovernmentId,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColors.lightGreyClr,
@@ -266,7 +266,7 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                         }
 
                         return DropdownButtonFormField<int>(
-                          value: _selectedCityId,
+                          initialValue: _selectedCityId,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.lightGreyClr,

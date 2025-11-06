@@ -13,6 +13,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/reason_selector
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
+// ignore_for_file: deprecated_member_use
 
 class RefundRequestScreen extends StatefulWidget {
   const RefundRequestScreen({super.key});
@@ -102,15 +103,13 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                   title: 'Refund Request',
                   backPath: '/home',
                   onHelp: () {
-                    ShowCaseWidget.of(
-                      context,
-                  ).startShowCase([
-                    _familyKey,
-                    _providerKey,
-                    _noteKey,
-                    _attachKey,
-                    _submitKey,
-                  ]);
+                    ShowCaseWidget.of(context).startShowCase([
+                      _familyKey,
+                      _providerKey,
+                      _noteKey,
+                      _attachKey,
+                      _submitKey,
+                    ]);
                   },
                 ),
                 Transform.translate(
@@ -142,7 +141,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             SizedBox(height: 12.h),
                             Showcase(
                               key: _familyKey,
-                              description: 'tutorial.family_members.select'.tr(),
+                              description: 'tutorial.family_members.select'
+                                  .tr(),
                               child: const FamilyMembersSelector(),
                             ),
                             SizedBox(height: 24.h),

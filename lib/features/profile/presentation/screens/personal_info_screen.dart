@@ -5,6 +5,9 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/shared/widgets/form_fields/form_fields.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/personal_info_cubit.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/personal_info_state.dart';
 
 class PersonalInformationScreen extends StatefulWidget {
   const PersonalInformationScreen({super.key});
@@ -38,13 +41,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = userData['fullName'] ?? '';
-    _insuranceIdController.text = userData['insuranceCardId'] ?? '';
-    _phoneController.text = userData['phoneNumber'] ?? '';
-    _dobController.text = userData['dateOfBirth'] ?? '';
-    _emailController.text = userData['email'] ?? '';
-    _addressController.text = userData['address'] ?? '';
-    _selectedGender = userData['gender'] ?? 'Male';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PersonalInfoCubit>().load(lang: context.locale.languageCode);
+    });
   }
 
   @override
@@ -86,15 +85,32 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     ),
                     child: Form(
                       key: _formKey,
-                      child: ListView(
+                      child: BlocConsumer<PersonalInfoCubit, PersonalInfoState>(
+                        listener: (context, state) {
+                          if (state is Loaded) {
+                            final d = state.data.data;
+                            _nameController.text = d.memberName;
+                            _insuranceIdController.text = d.memberId.toString();
+                            _phoneController.text = d.mobile;
+                            _dobController.text = d.birthdate;
+                            _emailController.text = d.email;
+                            _addressController.text = d.address;
+                            _selectedGender = d.isMale ? 'Male' : 'Female';
+                            setState(() {});
+                          }
+                        },
+                        builder: (context, state) {
+                          return ListView(
                         padding: EdgeInsets.all(16.w),
                         children: [
                           SizedBox(height: 24.h),
-                          _buildProfilePhotoSection(),
+                          _buildProfilePhotoSection(state),
                           SizedBox(height: 32.h),
                           _buildFormFields(),
                           SizedBox(height: 24.h),
                         ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -107,7 +123,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
     );
   }
 
-  Widget _buildProfilePhotoSection() {
+  Widget _buildProfilePhotoSection(PersonalInfoState state) {
     return Center(
       child: Column(
         children: [
@@ -118,12 +134,16 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                CircleAvatar(
-                  radius: 45.r,
-                  backgroundImage: const AssetImage(
-                    'assets/approval/ahmed.png',
+                if (state is Loaded && state.data.data.image.isNotEmpty)
+                  CircleAvatar(
+                    radius: 45.r,
+                    backgroundImage: NetworkImage(state.data.data.image),
+                  )
+                else
+                  CircleAvatar(
+                    radius: 45.r,
+                    backgroundImage: const AssetImage('assets/approval/ahmed.png'),
                   ),
-                ),
               ],
             ),
           ),
