@@ -75,7 +75,7 @@ class _ProfileAppTextFieldState extends State<ProfileAppTextField> {
               RichText(
                 text: TextSpan(
                   text: widget.label!,
-                  style: AppTextStyles.font12BlackRegular(context),
+                  style: AppTextStyles.font14BlackMedium(context),
                   children: widget.isRequired
                       ? [
                           TextSpan(

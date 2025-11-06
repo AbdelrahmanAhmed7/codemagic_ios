@@ -31,7 +31,7 @@ class AppGenderSelector extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'personal_info.gender'.tr(),
-                style: AppTextStyles.font12BlackRegular(context),
+                style: AppTextStyles.font14BlackMedium(context),
                 children: isRequired
                     ? [
                         TextSpan(
