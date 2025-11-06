@@ -140,10 +140,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     backgroundImage: NetworkImage(state.data.data.image),
                   )
                 else
-                  CircleAvatar(
-                    radius: 45.r,
+                CircleAvatar(
+                  radius: 45.r,
                     backgroundImage: const AssetImage('assets/approval/ahmed.png'),
-                  ),
+                ),
               ],
             ),
           ),

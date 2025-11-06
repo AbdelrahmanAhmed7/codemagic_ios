@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/core/network/save_user_token.dart';
+import 'package:mediconsult/core/services/firebase_token_service.dart';
 import 'package:mediconsult/features/auth/login/data/login_request_model.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/login_state.dart';
 import 'package:mediconsult/features/auth/login/repository/login_repository.dart';
@@ -17,6 +18,9 @@ class LoginCubit extends Cubit<LoginState> {
       success: (response) async {
         await saveUserToken(response.data!.token);
         emit(LoginState.success(response));
+        
+        // Send Firebase token to backend (non-blocking)
+        FirebaseTokenService.instance.sendTokenToBackend(lang);
       },
       failure: (message) {
         emit(LoginState.failed(error: message));

@@ -13,6 +13,10 @@ abstract class ProfileApiService {
   Future<PersonalInfoResponse> getPersonalInfo(
     @Path('lang') String lang,
   );
+
+  @POST('/{lang}/Profile/UpdateFirebaseToken')
+  Future<HttpResponse<dynamic>> updateFirebaseToken(
+    @Path('lang') String lang,
+    @Body() Map<String, dynamic> body,
+  );
 }
-
-

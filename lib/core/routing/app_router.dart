@@ -38,6 +38,7 @@ import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart'
 import 'package:mediconsult/features/refund/presentation/screens/refunds_history_screen.dart';
 import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
 import 'package:mediconsult/features/support/presentation/cubit/faq_cubit.dart';
+import 'package:mediconsult/features/terms_policy/presentation/cubit/terms_cubit.dart';
 import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/language_screen.dart';
@@ -243,7 +244,10 @@ class AppRouter {
       GoRoute(
         path: '/terms-policy',
         builder: (context, state) {
-          return const TermsPolicyScreen();
+          return BlocProvider(
+            create: (context) => sl<TermsCubit>(),
+            child: const TermsPolicyScreen(),
+          );
         },
       ),
       GoRoute(

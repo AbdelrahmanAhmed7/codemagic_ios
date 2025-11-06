@@ -32,148 +32,151 @@ class UserPlanCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
+    final formattedDate =
+        (data.policyExpireDate.isNotEmpty &&
+            data.policyExpireDate.contains('T'))
+        ? data.policyExpireDate.split('T').first
+        : data.policyExpireDate;
     // Wrap in RepaintBoundary for better scroll performance
     return RepaintBoundary(
       child: Container(
-      width: double.infinity,
-      height: 200.h,
-      padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),
-      decoration: BoxDecoration(
-        color: AppColors.whiteClr,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.greyClr.withValues(alpha: 0.10),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // Plan type label
-          Positioned(
-            top: -16.h,
-            left: isArabic ? null : -16.w,
-            right: isArabic ? -16.w : null,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 7.h),
-              decoration: BoxDecoration(
-                color: planColor,
-                borderRadius: isArabic
-                    ? BorderRadius.only(
-                        topRight: Radius.circular(12.r),
-                        bottomLeft: Radius.circular(16.r),
-                      )
-                    : BorderRadius.only(
-                        topLeft: Radius.circular(16.r),
-                        bottomRight: Radius.circular(12.r),
-                      ),
-              ),
-              child: Text(
-                planName,
-                style: AppTextStyles.font12GreyRegular(context).copyWith(
-                  color: AppColors.blackClr,
-                  fontWeight: FontWeight.w600,
+        width: double.infinity,
+        height: 200.h,
+        padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),
+        decoration: BoxDecoration(
+          color: AppColors.whiteClr,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.greyClr.withValues(alpha: 0.10),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Plan type label
+            Positioned(
+              top: -16.h,
+              left: isArabic ? null : -16.w,
+              right: isArabic ? -16.w : null,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 7.h),
+                decoration: BoxDecoration(
+                  color: planColor,
+                  borderRadius: isArabic
+                      ? BorderRadius.only(
+                          topRight: Radius.circular(12.r),
+                          bottomLeft: Radius.circular(16.r),
+                        )
+                      : BorderRadius.only(
+                          topLeft: Radius.circular(16.r),
+                          bottomRight: Radius.circular(12.r),
+                        ),
+                ),
+                child: Text(
+                  planName,
+                  style: AppTextStyles.font12GreyRegular(context).copyWith(
+                    color: AppColors.blackClr,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // User Info
-          Padding(
-            padding: EdgeInsets.only(top: 4.h),
-            child: Row(
-              children: [
-                Container(
-                  width: 86.w,
-                  height: 104.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.lightGreyClr,
-                    image: DecorationImage(
-                      image:
-                          (data.memberPhoto != null &&
-                              data.memberPhoto!.isNotEmpty)
-                          ? NetworkImage(data.memberPhoto!)
-                          : const AssetImage(AppAssets.logo) as ImageProvider,
+            // User Info
+            Padding(
+              padding: EdgeInsets.only(top: 4.h),
+              child: Row(
+                children: [
+                  Container(
+                    width: 86.w,
+                    height: 104.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.lightGreyClr,
+                      image: DecorationImage(
+                        image:
+                            (data.memberPhoto != null &&
+                                data.memberPhoto!.isNotEmpty)
+                            ? NetworkImage(data.memberPhoto!)
+                            : const AssetImage(AppAssets.logo) as ImageProvider,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 18.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 18.h),
-                      Text(
-                        data.memberName,
-                        style: AppTextStyles.font14BlackMedium(context),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 4.h),
-                      Row(
-                        children: [
-                          Text(
-                            'home.member_id'.tr(),
-                            style: AppTextStyles.font14GreyRegular(
-                              context,
-                            ).copyWith(color: const Color(0xff484848)),
-                          ),
-                          SizedBox(width: 20.w),
-                          Text(
-                            data.memberId.toString(),
-                            style: AppTextStyles.font14GreyRegular(
-                              context,
-                            ).copyWith(color: const Color(0xff484848)),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.h),
-                      Row(
-                        children: [
-                          Text(
-                            'home.expire_date'.tr(),
-                            style: AppTextStyles.font10GreyRegular(
-                              context,
-                            ).copyWith(color: const Color(0xff484848)),
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            data.policyExpireDate,
-                            style: AppTextStyles.font8GreyRegular(context)
-                                .copyWith(
-                                  color: const Color(0xff484848),
-                                  fontSize: context.locale.languageCode == 'ar'
-                                      ? 10.sp
-                                      : 12.sp,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ],
+                  SizedBox(width: 18.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 18.h),
+                        Text(
+                          data.memberName,
+                          style: AppTextStyles.font14BlackMedium(context),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4.h),
+                        Row(
+                          children: [
+                            Text(
+                              'home.member_id'.tr(),
+                              style: AppTextStyles.font14GreyRegular(
+                                context,
+                              ).copyWith(color: const Color(0xff484848)),
+                            ),
+                            SizedBox(width: 20.w),
+                            Text(
+                              data.memberId.toString(),
+                              style: AppTextStyles.font14GreyRegular(
+                                context,
+                              ).copyWith(color: const Color(0xff484848)),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Row(
+                          children: [
+                            Text(
+                              'home.expire_date'.tr(),
+                              style: AppTextStyles.font14GreyRegular(
+                                context,
+                              ).copyWith(color: const Color(0xff484848)),
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              formattedDate,
+                              style: AppTextStyles.font8GreyRegular(context)
+                                  .copyWith(
+                                    color: const Color(0xff484848),
+                                    fontSize: 12.sp,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          // QR Code at bottom right
-          Positioned(
-            bottom: 8.h,
-            right: isArabic ? null : 8.w,
-            left: isArabic ? 8.w : null,
-            child: Image.asset(
-              AppAssets.qrCode,
-              width: 42.w,
-              height: 52.h,
-              fit: BoxFit.contain,
+            // QR Code at bottom right
+            Positioned(
+              bottom: 8.h,
+              right: isArabic ? null : 8.w,
+              left: isArabic ? 8.w : null,
+              child: Image.asset(
+                AppAssets.qrCode,
+                width: 42.w,
+                height: 52.h,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

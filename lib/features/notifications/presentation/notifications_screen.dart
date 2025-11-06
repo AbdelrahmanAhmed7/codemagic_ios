@@ -49,6 +49,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     super.dispose();
   }
 
+  String _tr(BuildContext context, String key, String fallback) {
+    final translated = key.tr();
+    return translated == key ? fallback : translated;
+  }
+
   // Group notifications by date
   Map<String, List<NotificationItem>> _groupByDate(List<NotificationItem> notifications) {
     final Map<String, List<NotificationItem>> grouped = {};
@@ -64,12 +69,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   // Format date to show day name and date
   String _formatDateHeader(String dateStr) {
     try {
-      // Parse date from format "30-07-2024"
+      // Parse date supporting both "DD-MM-YYYY" and "YYYY-MM-DD"
       final parts = dateStr.split('-');
       if (parts.length == 3) {
-        final day = int.parse(parts[0]);
-        final month = int.parse(parts[1]);
-        final year = int.parse(parts[2]);
+        int day;
+        int month;
+        int year;
+        if (parts[0].length == 4) {
+          // YYYY-MM-DD
+          year = int.parse(parts[0]);
+          month = int.parse(parts[1]);
+          day = int.parse(parts[2]);
+        } else {
+          // DD-MM-YYYY
+          day = int.parse(parts[0]);
+          month = int.parse(parts[1]);
+          year = int.parse(parts[2]);
+        }
         final date = DateTime(year, month, day);
         
         final now = DateTime.now();
@@ -77,13 +93,34 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         final yesterday = today.subtract(const Duration(days: 1));
         
         if (date == today) {
-          return 'notifications.today'.tr();
+          return _tr(context, 'notifications.today', 'Today');
         } else if (date == yesterday) {
-          return 'notifications.yesterday'.tr();
+          return _tr(context, 'notifications.yesterday', 'Yesterday');
         } else {
           // Format: "Thursday, 23 Oct 2024"
-          final weekdays = ['notifications.days.monday'.tr(), 'notifications.days.tuesday'.tr(), 'notifications.days.wednesday'.tr(), 'notifications.days.thursday'.tr(), 'notifications.days.friday'.tr(), 'notifications.days.saturday'.tr(), 'notifications.days.sunday'.tr()];
-          final months = ['notifications.months.jan'.tr(), 'notifications.months.feb'.tr(), 'notifications.months.mar'.tr(), 'notifications.months.apr'.tr(), 'notifications.months.may'.tr(), 'notifications.months.jun'.tr(), 'notifications.months.jul'.tr(), 'notifications.months.aug'.tr(), 'notifications.months.sep'.tr(), 'notifications.months.oct'.tr(), 'notifications.months.nov'.tr(), 'notifications.months.dec'.tr()];
+          final weekdays = [
+            _tr(context, 'notifications.days.monday', 'Monday'),
+            _tr(context, 'notifications.days.tuesday', 'Tuesday'),
+            _tr(context, 'notifications.days.wednesday', 'Wednesday'),
+            _tr(context, 'notifications.days.thursday', 'Thursday'),
+            _tr(context, 'notifications.days.friday', 'Friday'),
+            _tr(context, 'notifications.days.saturday', 'Saturday'),
+            _tr(context, 'notifications.days.sunday', 'Sunday'),
+          ];
+          final months = [
+            _tr(context, 'notifications.months.jan', 'Jan'),
+            _tr(context, 'notifications.months.feb', 'Feb'),
+            _tr(context, 'notifications.months.mar', 'Mar'),
+            _tr(context, 'notifications.months.apr', 'Apr'),
+            _tr(context, 'notifications.months.may', 'May'),
+            _tr(context, 'notifications.months.jun', 'Jun'),
+            _tr(context, 'notifications.months.jul', 'Jul'),
+            _tr(context, 'notifications.months.aug', 'Aug'),
+            _tr(context, 'notifications.months.sep', 'Sep'),
+            _tr(context, 'notifications.months.oct', 'Oct'),
+            _tr(context, 'notifications.months.nov', 'Nov'),
+            _tr(context, 'notifications.months.dec', 'Dec'),
+          ];
           final weekday = weekdays[date.weekday - 1];
           final monthName = months[date.month - 1];
           return '$weekday, ${date.day} $monthName ${date.year}';
@@ -121,7 +158,33 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         ),
                       ],
                     ),
-                    child: BlocBuilder<NotificationsCubit, NotificationsState>(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton.icon(
+                              onPressed: () async {
+                                await context.read<NotificationsCubit>().markAllAsRead(lang: context.locale.languageCode);
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('notifications.marked_all_read'.tr()),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              icon: Icon(Icons.done_all, size: 18.sp),
+                              label: Text('notifications.mark_all_read'.tr()),
+                              style: TextButton.styleFrom(
+                                foregroundColor: AppColors.primaryClr,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: BlocBuilder<NotificationsCubit, NotificationsState>(
                       builder: (context, state) {
                         return state.when(
                           initial: () => const Center(child: CircularProgressIndicator()),
@@ -144,13 +207,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             final dates = groupedNotifications.keys.toList();
 
                             return RefreshIndicator(
-                              onRefresh: () => context.read<NotificationsCubit>().refresh(lang: 'en'),
+                              onRefresh: () => context.read<NotificationsCubit>().refresh(lang: context.locale.languageCode),
                               child: ListView.builder(
                                 controller: _controller,
-                                physics: const BouncingScrollPhysics(),
-                                cacheExtent: 500,
-                                addAutomaticKeepAlives: true,
-                                addRepaintBoundaries: true,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                cacheExtent: 1000,
+                                addAutomaticKeepAlives: false,
+                                addRepaintBoundaries: false,
                                 padding: EdgeInsets.all(16.w),
                                 itemCount: dates.length + (hasNextPage ? 1 : 0),
                                 itemBuilder: (context, index) {
@@ -185,6 +248,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                             child: _NotificationCard(
                                               key: ValueKey(notification.id),
                                               item: notification,
+                                              onMarkRead: notification.isRead
+                                                  ? null
+                                                  : () => context.read<NotificationsCubit>().markAsRead(
+                                                        lang: context.locale.languageCode,
+                                                        notificationId: notification.id,
+                                                      ),
                                             ),
                                           ),
                                         );
@@ -197,6 +266,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           },
                         );
                       },
+                    ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -211,7 +283,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
 class _NotificationCard extends StatelessWidget {
   final NotificationItem item;
-  const _NotificationCard({super.key, required this.item});
+  final VoidCallback? onMarkRead;
+  const _NotificationCard({super.key, required this.item, this.onMarkRead});
 
   IconData _getIcon() {
     final body = item.body.toLowerCase();
@@ -245,16 +318,25 @@ class _NotificationCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: item.isRead ? AppColors.whiteClr : AppColors.primaryClr.withValues(alpha: 0.05),
+        color: item.isRead ? AppColors.whiteClr : const Color(0xFFFFF3E0),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppColors.greyClr.withValues(alpha: 0.1),
-          width: 1,
+          color: item.isRead ? AppColors.greyClr.withValues(alpha: 0.1) : AppColors.primaryClr.withValues(alpha: 0.2),
+          width: item.isRead ? 1 : 1.5,
         ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Unread indicator dot
+          if (!item.isRead) ...[
+            Container(
+              width: 6.w,
+              height: 6.w,
+              margin: EdgeInsets.only(top: 6.h, right: 6.w),
+              decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+            ),
+          ],
           // Icon or Image
           Container(
             width: 48.w,
@@ -317,10 +399,51 @@ class _NotificationCard extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   item.body,
-                  style: AppTextStyles.font12GreyRegular(context),
+                  style: AppTextStyles.font12GreyRegular(context).copyWith(
+                    color: item.isRead ? AppColors.greyClr : AppColors.blackClr.withValues(alpha: 0.8),
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+                if (!item.isRead && onMarkRead != null) ...[
+                  SizedBox(height: 8.h),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: onMarkRead,
+                      borderRadius: BorderRadius.circular(8.r),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryClr.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(
+                            color: AppColors.primaryClr.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              size: 16.sp,
+                              color: AppColors.primaryClr,
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              'notifications.mark_read'.tr(),
+                              style: AppTextStyles.font12GreyRegular(context).copyWith(
+                                color: AppColors.primaryClr,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

@@ -272,6 +272,10 @@
   "notifications": {
     "title": "الإشعارات",
     "no_notifications": "لا توجد إشعارات",
+    "mark_all_read": "تحديد الكل كمقروء",
+    "marked_all_read": "تم تحديد جميع الإشعارات كمقروءة",
+    "mark_read": "تحديد كمقروء",
+    "action_failed": "فشلت العملية",
     "today": "اليوم",
     "yesterday": "أمس",
     "days": {

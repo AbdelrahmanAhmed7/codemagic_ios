@@ -5,6 +5,7 @@ import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/notifications/data/notification_models.dart';
 import 'package:mediconsult/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:mediconsult/features/notifications/repository/notification_repository.dart';
+import 'package:mediconsult/core/services/notification_badge_service.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {
   final NotificationRepository _repository;
@@ -34,12 +35,13 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         final data = cachedData.data!;
         _items.clear();
         _items.addAll(data.notifications);
+        NotificationBadgeService.instance.setCount(_items.where((e) => !e.isRead).length);
         emit(NotificationsState.loaded(
           notifications: _items,
-          totalCount: data.totalCount,
-          currentPage: data.page,
-          totalPages: data.totalPages,
-          hasNextPage: data.page < data.totalPages,
+          totalCount: data.pagination.totalCount,
+          currentPage: data.pagination.currentPage,
+          totalPages: data.pagination.totalPages,
+          hasNextPage: data.pagination.hasNextPage,
           loadingMore: false,
         ));
 
@@ -79,12 +81,13 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         }
         _items.addAll(data.notifications);
         _loadingMore = false;
+        NotificationBadgeService.instance.setCount(_items.where((e) => !e.isRead).length);
         emit(NotificationsState.loaded(
           notifications: _items,
-          totalCount: data.totalCount,
-          currentPage: data.page,
-          totalPages: data.totalPages,
-          hasNextPage: data.page < data.totalPages,
+          totalCount: data.pagination.totalCount,
+          currentPage: data.pagination.currentPage,
+          totalPages: data.pagination.totalPages,
+          hasNextPage: data.pagination.hasNextPage,
           loadingMore: false,
         ));
       },
@@ -109,5 +112,64 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   Future<void> clearCache() async {
     await CacheService.clearNotificationsCache();
+  }
+
+  Future<bool> markAsRead({required String lang, required int notificationId}) async {
+    final res = await _repository.markAsRead(lang: lang, notificationId: notificationId);
+    bool ok = false;
+    res.when(
+      success: (_) {
+        final index = _items.indexWhere((n) => n.id == notificationId);
+        if (index != -1) {
+          final item = _items[index];
+          _items[index] = NotificationItem(
+            id: item.id,
+            title: item.title,
+            body: item.body,
+            imageUrl: item.imageUrl,
+            isSeen: 1,
+            date: item.date,
+            time: item.time,
+          );
+          final current = state;
+          if (current is Loaded) {
+            emit(current.copyWith(notifications: List.of(_items)));
+          }
+        }
+        NotificationBadgeService.instance.setCount(_items.where((e) => !e.isRead).length);
+        ok = true;
+      },
+      failure: (_) { ok = false; },
+    );
+    return ok;
+  }
+
+  Future<bool> markAllAsRead({required String lang}) async {
+    final res = await _repository.markAllAsRead(lang: lang);
+    bool ok = false;
+    res.when(
+      success: (_) {
+        for (int i = 0; i < _items.length; i++) {
+          final item = _items[i];
+          _items[i] = NotificationItem(
+            id: item.id,
+            title: item.title,
+            body: item.body,
+            imageUrl: item.imageUrl,
+            isSeen: 1,
+            date: item.date,
+            time: item.time,
+          );
+        }
+        final current = state;
+        if (current is Loaded) {
+          emit(current.copyWith(notifications: List.of(_items)));
+        }
+        NotificationBadgeService.instance.setCount(0);
+        ok = true;
+      },
+      failure: (_) { ok = false; },
+    );
+    return ok;
   }
 }

@@ -12,14 +12,8 @@ abstract class SupportApiService {
 
   /// Contacts endpoint: /{lang}/ContactUs/Get
   @GET('/{lang}/ContactUs/Get')
-  Future<ContactsResponse> getContacts(
-    @Path('lang') String lang,
-  );
+  Future<ContactsResponse> getContacts(@Path('lang') String lang);
 
   @GET('/{lang}/FAQ/GetFAQs')
-  Future<FAQResponse> getFaqs(
-    @Path('lang') String lang,
-  );
+  Future<FAQResponse> getFaqs(@Path('lang') String lang);
 }
-
-

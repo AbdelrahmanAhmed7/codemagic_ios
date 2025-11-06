@@ -14,6 +14,7 @@ import 'notifications_cache_service.dart';
 import 'network_cache_service.dart';
 import 'support_cache_service.dart';
 import 'profile_cache_service.dart';
+import 'terms_cache_service.dart';
 
 /// Unified cache service facade
 /// Delegates to specific cache services for better code organization and performance
@@ -172,5 +173,22 @@ class CacheService {
 
   static Future<dynamic> getCachedPersonalInfo() async {
     return ProfileCacheService.getCachedPersonalInfo();
+  }
+
+  // ==================== Terms & Privacy Cache ====================
+  static Future<void> cacheTerms(dynamic data) async {
+    return TermsCacheService.cacheTerms(data);
+  }
+
+  static Future<dynamic> getCachedTerms() async {
+    return TermsCacheService.getCachedTerms();
+  }
+
+  static Future<void> cachePrivacy(dynamic data) async {
+    return TermsCacheService.cachePrivacy(data);
+  }
+
+  static Future<dynamic> getCachedPrivacy() async {
+    return TermsCacheService.getCachedPrivacy();
   }
 }
