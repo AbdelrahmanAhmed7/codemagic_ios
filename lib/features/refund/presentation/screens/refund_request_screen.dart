@@ -11,6 +11,7 @@ import 'package:mediconsult/features/approval_request/presentation/widgets/note_
 import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_widget.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fields.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
 // ignore_for_file: deprecated_member_use
@@ -180,108 +181,15 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Amount',
-                                        style: AppTextStyles.font14BlackMedium(
-                                          context,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      TextField(
-                                        controller: _amountController,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                          hintText: 'Enter amount',
-                                          hintStyle:
-                                              AppTextStyles.font14GreyRegular(
-                                                context,
-                                              ),
-                                          contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 12.w,
-                                            vertical: 8.h,
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8.r,
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: AppColors.greyClr
-                                                  .withValues(alpha: 0.2),
-                                            ),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8.r,
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: AppColors.greyClr
-                                                  .withValues(alpha: 0.2),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  child: RefundAmountField(
+                                    controller: _amountController,
                                   ),
                                 ),
                                 SizedBox(width: 16.w),
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Service Date',
-                                        style: AppTextStyles.font14BlackMedium(
-                                          context,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      GestureDetector(
-                                        onTap: () => _selectDate(context),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 12.w,
-                                            vertical: 12.h,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: AppColors.greyClr
-                                                  .withValues(alpha: 0.2),
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              8.r,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                _selectedDate == null
-                                                    ? 'Select date'
-                                                    : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                                                style: _selectedDate == null
-                                                    ? AppTextStyles.font14GreyRegular(
-                                                        context,
-                                                      )
-                                                    : AppTextStyles.font14BlackMedium(
-                                                        context,
-                                                      ),
-                                              ),
-                                              Icon(
-                                                Icons.calendar_today_outlined,
-                                                size: 20.w,
-                                                color: AppColors.greyClr,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  child: RefundDatePicker(
+                                    selectedDate: _selectedDate,
+                                    onTap: _selectDate,
                                   ),
                                 ),
                               ],

@@ -51,12 +51,14 @@ class ProfileTileWidget extends StatelessWidget {
   final String title;
   final String image;
   final String? route;
+  final VoidCallback? onTap;
 
   const ProfileTileWidget({
     super.key,
     required this.title,
     required this.image,
     this.route,
+    this.onTap,
   });
 
   @override
@@ -69,7 +71,7 @@ class ProfileTileWidget extends StatelessWidget {
         angle: isArabic ? 3.14 : 0,
         child: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
       ),
-      onTap: route != null ? () => context.push(route!) : null,
+      onTap: onTap ?? (route != null ? () => context.push(route!) : null),
     );
   }
 }
