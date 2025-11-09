@@ -85,12 +85,12 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
         body: SafeArea(
           child: Column(
             children: [
-            PageHeader(
+              PageHeader(
                 title: 'approval_history.title'.tr(),
                 backPath: '/home',
-              onHelp: () {
-                ShowCaseWidget.of(context).startShowCase([_tabsKey, _fabKey]);
-              },
+                onHelp: () {
+                  ShowCaseWidget.of(context).startShowCase([_tabsKey, _fabKey]);
+                },
               ),
               Expanded(
                 child: Transform.translate(
@@ -161,7 +161,12 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
                                       ),
                                     ),
                                     loaded:
-                                        (approvals, pagination, status, loadingMore) {
+                                        (
+                                          approvals,
+                                          pagination,
+                                          status,
+                                          loadingMore,
+                                        ) {
                                           if (approvals.isEmpty) {
                                             return const ApprovalEmptyState();
                                           }
@@ -185,7 +190,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
             ],
           ),
         ),
-      floatingActionButton: Showcase(
+        floatingActionButton: Showcase(
           key: _fabKey,
           description: 'Tap to create a new approval request',
           child: FloatingActionButton(
