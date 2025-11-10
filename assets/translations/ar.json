@@ -345,7 +345,19 @@
     "amount_placeholder": "أدخل المبلغ",
     "service_date": "تاريخ الخدمة",
     "select_date": "اختر التاريخ",
-    "note": "ملاحظة"
+    "note": "ملاحظة",
+    "submit": "إرسال",
+    "provider_hint": "أدخل اسم مقدم الخدمة",
+    "note_hint": "أضف أي ملاحظات إضافية هنا",
+    "validation": {
+      "select_member": "الرجاء اختيار فرد من العائلة",
+      "select_type": "الرجاء اختيار نوع الاسترداد",
+      "enter_provider": "الرجاء إدخال اسم مقدم الخدمة",
+      "select_reason": "الرجاء اختيار السبب",
+      "enter_amount": "الرجاء إدخال المبلغ",
+      "select_date": "الرجاء اختيار تاريخ الخدمة",
+      "add_attachment": "الرجاء إضافة مرفق واحد على الأقل"
+    }
   },
   "refund_history": {
     "title": "تاريخ الاستردادات",

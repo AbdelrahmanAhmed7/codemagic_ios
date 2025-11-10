@@ -37,11 +37,11 @@ class HomeHeaderWidget extends StatelessWidget {
                   height: 48.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.whiteClr,
                     image: DecorationImage(
                       image: (data.memberPhoto != null && data.memberPhoto!.isNotEmpty)
-                          ? AssetImage(data.memberPhoto!)
-                          : const AssetImage(AppAssets.logo) as ImageProvider,
+                          ? NetworkImage(data.memberPhoto!) as ImageProvider
+                          : const AssetImage(AppAssets.logo),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -99,20 +99,11 @@ class HomeHeaderWidget extends StatelessWidget {
                       final badge = count > 0 ? count : data.notificationsCount;
                       if (badge <= 0) return const SizedBox.shrink();
                       return Container(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 10.w,
+                        height: 10.w,
                         decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          badge.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       );
                     },

@@ -20,6 +20,7 @@ class RefundAmountField extends StatelessWidget {
         SizedBox(height: 8.h),
         TextField(
           controller: controller,
+          autofocus: false,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: 'Enter amount',

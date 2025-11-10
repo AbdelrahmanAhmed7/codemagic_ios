@@ -29,19 +29,21 @@ class ProfileHeaderWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 74.w,
-                  height: 90.w,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r),
-                    child: data.memberPhoto != null && data.memberPhoto!.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: data.memberPhoto!,
-                            placeholder: (context, url) =>
-                                Image.asset(AppAssets.profile),
-                            errorWidget: (context, url, error) =>
-                                Image.asset(AppAssets.profile),
-                          )
-                        : Image.asset(AppAssets.profile),
+                  height: 74.w,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
+                  clipBehavior: Clip.antiAlias,
+                  child: data.memberPhoto != null && data.memberPhoto!.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: data.memberPhoto!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              Image.asset(AppAssets.profile, fit: BoxFit.cover),
+                          errorWidget: (context, url, error) =>
+                              Image.asset(AppAssets.profile, fit: BoxFit.cover),
+                        )
+                      : Image.asset(AppAssets.profile, fit: BoxFit.cover),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
@@ -80,8 +82,12 @@ class ProfileHeaderWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 74.w,
-                  height: 90.w,
-                  child: Image.asset(AppAssets.profile),
+                  height: 74.w,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Image.asset(AppAssets.profile, fit: BoxFit.cover),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(

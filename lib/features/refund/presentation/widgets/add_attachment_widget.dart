@@ -14,13 +14,21 @@ class _UploadSelection {
   final ImageProvider imageProvider;
   final String name;
 
-  _UploadSelection({required this.imageProvider, required this.name});
+  _UploadSelection({
+    required this.imageProvider,
+    required this.name,
+  });
 }
 
 class AddAttachmentWidget extends StatefulWidget {
-  const AddAttachmentWidget({super.key, this.refundTypeName});
+  const AddAttachmentWidget({
+    super.key,
+    this.refundTypeName,
+    this.onAttachmentsChanged,
+  });
 
   final String? refundTypeName;
+  final Function(List<String>)? onAttachmentsChanged;
 
   @override
   State<AddAttachmentWidget> createState() => _AddAttachmentWidgetState();
@@ -31,6 +39,16 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
   bool _showAttachmentOptions = false;
   AttachmentItem? _eInvoice;
   AttachmentItem? _prescription;
+  String? _eInvoicePath;
+  String? _prescriptionPath;
+
+  void _notifyPathsChanged() {
+    final paths = <String>[
+      if (_eInvoicePath != null) _eInvoicePath!,
+      if (_prescriptionPath != null) _prescriptionPath!,
+    ];
+    widget.onAttachmentsChanged?.call(paths);
+  }
 
   void _openUploadSheet(_AttachmentSlot slot) async {
     ImageProvider? previewCameraImage;
@@ -82,6 +100,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                           );
                                           previewCameraName = picked.name;
                                         });
+                                        // Store path for later use
+                                        if (slot == _AttachmentSlot.eInvoice) {
+                                          _eInvoicePath = picked.path;
+                                        } else {
+                                          _prescriptionPath = picked.path;
+                                        }
                                       }
                                     },
                                   )
@@ -126,6 +150,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                           );
                                           previewGalleryName = picked.name;
                                         });
+                                        // Store path for later use
+                                        if (slot == _AttachmentSlot.eInvoice) {
+                                          _eInvoicePath = picked.path;
+                                        } else {
+                                          _prescriptionPath = picked.path;
+                                        }
                                       }
                                     },
                                   )
@@ -192,9 +222,11 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
 
     if (selection == null) return;
     setState(() {
+      final path = slot == _AttachmentSlot.eInvoice ? _eInvoicePath : _prescriptionPath;
       final item = AttachmentItem(
         image: selection.imageProvider,
-        name: selection.name, path: '',
+        name: selection.name,
+        path: path ?? '',
       );
       if (slot == _AttachmentSlot.eInvoice) {
         _eInvoice = item;
@@ -207,6 +239,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
           if (_eInvoice != null) _eInvoice!,
           if (_prescription != null) _prescription!,
         ]);
+      _notifyPathsChanged();
     });
   }
 

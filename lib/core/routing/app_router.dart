@@ -31,6 +31,9 @@ import 'package:mediconsult/features/profile/presentation/screens/contact_us_scr
 import 'package:mediconsult/features/profile/presentation/screens/faq_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/insurance_plan_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/personal_info_screen.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_reasons_cubit.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_request_cubit.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_types_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/screens/refund_request_screen.dart';
 import 'package:mediconsult/features/profile/presentation/profile_screen.dart';
@@ -154,8 +157,13 @@ class AppRouter {
       GoRoute(
         path: '/refund-request',
         builder: (context, state) {
-          return BlocProvider(
-            create: (context) => sl<FamilyMembersCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RefundRequestCubit>()),
+              BlocProvider(create: (context) => sl<RefundTypesCubit>()),
+              BlocProvider(create: (context) => sl<RefundReasonsCubit>()), 
+              BlocProvider(create: (context) => sl<FamilyMembersCubit>()),
+            ],
             child: const RefundRequestScreen(),
           );
         },

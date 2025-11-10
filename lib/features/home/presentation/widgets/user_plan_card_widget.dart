@@ -164,17 +164,17 @@ class UserPlanCardWidget extends StatelessWidget {
             ),
 
             // QR Code at bottom right
-            Positioned(
-              bottom: 8.h,
-              right: isArabic ? null : 8.w,
-              left: isArabic ? 8.w : null,
-              child: Image.asset(
-                AppAssets.qrCode,
-                width: 42.w,
-                height: 52.h,
-                fit: BoxFit.contain,
-              ),
-            ),
+            // Positioned(
+            //   bottom: 8.h,
+            //   right: isArabic ? null : 8.w,
+            //   left: isArabic ? 8.w : null,
+            //   child: Image.asset(
+            //     AppAssets.qrCode,
+            //     width: 42.w,
+            //     height: 52.h,
+            //     fit: BoxFit.contain,
+            //   ),
+            // ),
           ],
         ),
       ),

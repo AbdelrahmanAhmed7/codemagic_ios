@@ -25,7 +25,7 @@ class HealthTipsWidget extends StatelessWidget {
         SizedBox(height: 16.h),
         Container(
           width: double.infinity,
-          height: 165.h,
+          constraints: BoxConstraints(minHeight: 165.h),
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             color: const Color(0xffCBDCF9),
@@ -44,20 +44,25 @@ class HealthTipsWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'home.health_tips_title'.tr(),
                         style: AppTextStyles.font14BlackMedium(context).copyWith(
                           fontWeight: FontWeight.w600,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8.h),
+                      SizedBox(height: 6.h),
                       Text(
                         'home.health_tips_description'.tr(),
                         style: AppTextStyles.font14GreyRegular(context).copyWith(
-                          height: 1.4,
-                          fontSize: 13.sp,
+                          height: 1.3,
+                          fontSize: 12.sp,
                         ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -67,8 +72,8 @@ class HealthTipsWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12.r),
                 child: Image.asset(
                   AppAssets.checkUp,
-                  width: 120.w,
-                  height: 120.h,
+                  width: 110.w,
+                  height: 110.h,
                   fit: BoxFit.contain,
                 ),
               ),

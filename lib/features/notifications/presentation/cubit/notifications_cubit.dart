@@ -115,60 +115,96 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   Future<bool> markAsRead({required String lang, required int notificationId}) async {
+    // Optimistic update - update UI immediately
+    final index = _items.indexWhere((n) => n.id == notificationId);
+    if (index == -1) return false;
+    
+    final oldItem = _items[index];
+    _items[index] = NotificationItem(
+      id: oldItem.id,
+      title: oldItem.title,
+      body: oldItem.body,
+      imageUrl: oldItem.imageUrl,
+      isSeen: 1,
+      date: oldItem.date,
+      time: oldItem.time,
+    );
+    
+    // Force new list instance and emit
+    final newList = List<NotificationItem>.from(_items);
+    final current = state;
+    if (current is Loaded) {
+      emit(current.copyWith(notifications: newList));
+    }
+    
+    // Update badge count
+    final unreadCount = newList.where((e) => !e.isRead).length;
+    NotificationBadgeService.instance.setCount(unreadCount);
+
+    // Then send API request in background
     final res = await _repository.markAsRead(lang: lang, notificationId: notificationId);
     bool ok = false;
     res.when(
       success: (_) {
-        final index = _items.indexWhere((n) => n.id == notificationId);
-        if (index != -1) {
-          final item = _items[index];
-          _items[index] = NotificationItem(
-            id: item.id,
-            title: item.title,
-            body: item.body,
-            imageUrl: item.imageUrl,
-            isSeen: 1,
-            date: item.date,
-            time: item.time,
-          );
-          final current = state;
-          if (current is Loaded) {
-            emit(current.copyWith(notifications: List.of(_items)));
-          }
-        }
-        NotificationBadgeService.instance.setCount(_items.where((e) => !e.isRead).length);
         ok = true;
       },
-      failure: (_) { ok = false; },
+      failure: (_) { 
+        // Revert on failure
+        _items[index] = oldItem;
+        final revertedList = List<NotificationItem>.from(_items);
+        final current = state;
+        if (current is Loaded) {
+          emit(current.copyWith(notifications: revertedList));
+        }
+        final unreadCount = revertedList.where((e) => !e.isRead).length;
+        NotificationBadgeService.instance.setCount(unreadCount);
+        ok = false; 
+      },
     );
     return ok;
   }
 
   Future<bool> markAllAsRead({required String lang}) async {
+    // Store old items for potential revert
+    final oldItems = List<NotificationItem>.from(_items);
+    
+    // Optimistic update - update UI immediately
+    for (int i = 0; i < _items.length; i++) {
+      final item = _items[i];
+      _items[i] = NotificationItem(
+        id: item.id,
+        title: item.title,
+        body: item.body,
+        imageUrl: item.imageUrl,
+        isSeen: 1,
+        date: item.date,
+        time: item.time,
+      );
+    }
+    final current = state;
+    if (current is Loaded) {
+      emit(current.copyWith(notifications: List.of(_items)));
+    }
+    NotificationBadgeService.instance.setCount(0);
+
+    // Then send API request in background
     final res = await _repository.markAllAsRead(lang: lang);
     bool ok = false;
     res.when(
       success: (_) {
-        for (int i = 0; i < _items.length; i++) {
-          final item = _items[i];
-          _items[i] = NotificationItem(
-            id: item.id,
-            title: item.title,
-            body: item.body,
-            imageUrl: item.imageUrl,
-            isSeen: 1,
-            date: item.date,
-            time: item.time,
-          );
-        }
+        ok = true;
+      },
+      failure: (_) { 
+        // Revert on failure
+        _items.clear();
+        _items.addAll(oldItems);
         final current = state;
         if (current is Loaded) {
           emit(current.copyWith(notifications: List.of(_items)));
         }
-        NotificationBadgeService.instance.setCount(0);
-        ok = true;
+        NotificationBadgeService.instance.setCount(_items.where((e) => !e.isRead).length);
+        ok = false; 
       },
-      failure: (_) { ok = false; },
     );
     return ok;
   }

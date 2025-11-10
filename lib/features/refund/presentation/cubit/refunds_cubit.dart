@@ -1,91 +1,123 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
+import 'package:mediconsult/core/constants/api_result.dart';
+import 'package:mediconsult/features/refund/data/refund_list_models.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_state.dart';
+import 'package:mediconsult/features/refund/repository/refund_repository.dart';
 
 class RefundsCubit extends Cubit<RefundsState> {
-  RefundsCubit() : super(const RefundsState.initial());
+  final RefundRepository _repository;
+  
+  RefundsCubit(this._repository) : super(const RefundsState.initial());
 
-  final List<RefundItem> _all = [
-    RefundItem(
-      id: 1,
-      providerLogo: null,
-      providerName: 'مستشفيات ميديكال',
-      requestNumber: '27749',
-      date: '22 Nov 2025',
-      time: '09:44 AM',
-      status: 'Approved',
-      statusChar: 'A',
-    ),
-    RefundItem(
-      id: 2,
-      providerLogo: null,
-      providerName: 'مستشفيات ميديكال',
-      requestNumber: '27750',
-      date: '22 Nov 2025',
-      time: '09:44 AM',
-      status: 'Rejected',
-      statusChar: 'R',
-    ),
-    RefundItem(
-      id: 3,
-      providerLogo: null,
-      providerName: 'مستشفيات ميديكال',
-      requestNumber: '27751',
-      date: '22 Nov 2025',
-      time: '09:44 AM',
-      status: 'Pending',
-      statusChar: 'P',
-    ),
-  ];
+  // Cache for refunds by status
+  final Map<String, List<RefundItem>> _cache = {};
+  final Map<String, PaginationInfo> _paginationCache = {};
 
   String _status = 'All';
   int _page = 1;
   final int _pageSize = 10;
 
-  Future<void> load({String? status, bool reset = false}) async {
-    emit(const RefundsState.loading());
-
+  Future<void> load({
+    required String lang,
+    String? status,
+    bool reset = false,
+    bool forceRefresh = false,
+    bool isLoadingMore = false,
+  }) async {
     if (status != null) _status = status;
     if (reset) _page = 1;
 
-    await Future.delayed(const Duration(milliseconds: 300));
+    // Check cache first
+    if (!forceRefresh && _cache.containsKey(_status) && _page == 1) {
+      emit(
+        RefundsState.loaded(
+          refunds: _cache[_status]!,
+          pagination: _paginationCache[_status]!,
+          status: _status,
+        ),
+      );
+      return;
+    }
 
-    final filtered = _status == 'All'
-        ? _all
-        : _all.where((e) => e.status == _status).toList();
+    // Don't emit loading if we're loading more
+    if (!isLoadingMore) {
+      emit(const RefundsState.loading());
+    }
 
-    final pagination = Pagination(
-      currentPage: _page,
+    final result = await _repository.getRefunds(
+      lang: lang,
+      page: _page,
       pageSize: _pageSize,
-      totalCount: filtered.length,
-      totalPages: 1,
-      hasNextPage: false,
-      hasPreviousPage: false,
+      status: _status,
     );
 
-    emit(
-      RefundsState.loaded(
-        refunds: filtered,
-        pagination: pagination,
-        status: _status,
-      ),
+    result.when(
+      success: (response) {
+        if (response.data != null) {
+          final refunds = response.data!.refunds;
+          final pagination = response.data!.pagination;
+
+          // Update cache
+          if (_page == 1) {
+            _cache[_status] = refunds;
+            _paginationCache[_status] = pagination;
+          } else {
+            _cache[_status] = [...(_cache[_status] ?? []), ...refunds];
+          }
+
+          emit(
+            RefundsState.loaded(
+              refunds: _cache[_status]!,
+              pagination: pagination,
+              status: _status,
+              loadingMore: false,
+            ),
+          );
+        } else {
+          emit(const RefundsState.failed('No data available'));
+        }
+      },
+      failure: (message) {
+        // If we were loading more, keep the current items and just show error
+        final current = state;
+        if (isLoadingMore && current is Loaded) {
+          emit(current.copyWith(loadingMore: false));
+          // Optionally show a snackbar or toast here
+        } else {
+          emit(RefundsState.failed(message));
+        }
+      },
     );
   }
 
-  Future<void> loadMore() async {
+  Future<void> loadMore(String lang) async {
     final current = state;
     if (current is Loaded && current.pagination.hasNextPage) {
+      final previousPage = _page;
       emit(current.copyWith(loadingMore: true));
-      await Future.delayed(const Duration(milliseconds: 250));
-      emit(current.copyWith(loadingMore: false));
+      _page++;
+      
+      await load(lang: lang, isLoadingMore: true);
+      
+      // If load failed and we're still in loaded state with loadingMore false,
+      // it means the error was handled and we should revert the page
+      final newState = state;
+      if (newState is Loaded && !newState.loadingMore && newState.refunds.length == current.refunds.length) {
+        _page = previousPage;
+      }
     }
   }
 
-  void changeStatus(String status) {
-    load(status: status, reset: true);
+  void changeStatus(String lang, String status) {
+    load(lang: lang, status: status, reset: true);
   }
 
-  Future<void> refreshRefunds() async {
-    await load(reset: true);
+  Future<void> refreshRefunds(String lang) async {
+    await load(lang: lang, reset: true, forceRefresh: true);
+  }
+
+  void clearCache() {
+    _cache.clear();
+    _paginationCache.clear();
   }
 }

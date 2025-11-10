@@ -345,7 +345,19 @@
     "amount_placeholder": "Enter amount",
     "service_date": "Service Date",
     "select_date": "Select date",
-    "note": "Note"
+    "note": "Note",
+    "submit": "Submit",
+    "provider_hint": "Enter provider name",
+    "note_hint": "Add any additional notes here",
+    "validation": {
+      "select_member": "Please select a family member",
+      "select_type": "Please select refund type",
+      "enter_provider": "Please enter provider name",
+      "select_reason": "Please select reason",
+      "enter_amount": "Please enter amount",
+      "select_date": "Please select service date",
+      "add_attachment": "Please add at least one attachment"
+    }
   },
   "refund_history": {
     "title": "Refunds History",

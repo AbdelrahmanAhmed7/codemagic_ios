@@ -16,56 +16,58 @@ class SuccessDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.r),
       ),
       backgroundColor: AppColors.whiteClr,
-      child: Padding(
-        padding: EdgeInsets.all(32.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Success Illustration Container
-            Container(
-              width: 200.w,
-              height: 200.h,
-              decoration: BoxDecoration(
-                color: AppColors.primaryClr.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(32.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Success Illustration Container
+              Container(
+                width: 180.w,
+                height: 180.h,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryClr.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Image.asset(AppAssets.success)
+                ),
               ),
-              child: Center(
-                child: Image.asset(AppAssets.success)
+              SizedBox(height: 24.h),
+              
+              // Title
+              Text(
+                'Approval Request Submitted Successfully',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.font18BlackSemiBold(context),
               ),
-            ),
-            SizedBox(height: 24.h),
-            
-            // Title
-            Text(
-              'Approval Request Submitted Successfully',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.font18BlackSemiBold(context),
-            ),
-            SizedBox(height: 12.h),
-            
-            // Subtitle
-            Text(
-              'We\'ll notify you once your request is approved',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.font14BlackMedium(context).copyWith(
-                color: AppColors.greyClr,
+              SizedBox(height: 12.h),
+              
+              // Subtitle
+              Text(
+                'We\'ll notify you once your request is approved',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.font14BlackMedium(context).copyWith(
+                  color: AppColors.greyClr,
+                ),
               ),
-            ),
-            SizedBox(height: 32.h),
-            
-            // Back Home Button
-            SizedBox(
-              width: double.infinity,
-              height: 48.h,
-              child: AppButton(
-                text: 'Back Home',
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  context.go('/home'); 
-                },
+              SizedBox(height: 32.h),
+              
+              // Back Home Button
+              SizedBox(
+                width: double.infinity,
+                height: 48.h,
+                child: AppButton(
+                  text: 'Back Home',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    context.go('/home'); 
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

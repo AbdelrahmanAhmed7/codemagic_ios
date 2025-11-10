@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
-import 'package:mediconsult/features/refund/presentation/cubit/refunds_state.dart';
+import 'package:mediconsult/features/refund/data/refund_list_models.dart';
 
 class RefundCard extends StatelessWidget {
   final RefundItem item;
@@ -67,7 +67,7 @@ class RefundCard extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '${'refund_history.request_number'.tr()}${item.requestNumber}',
+            '${'refund_history.request_number'.tr()}${item.approvalNumber}',
             style: AppTextStyles.font10GreyRegular(context),
           ),
         ),

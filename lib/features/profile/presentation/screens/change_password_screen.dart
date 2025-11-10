@@ -53,25 +53,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.info_outline,
-            color: Colors.orange.shade800,
-            size: 16.sp,
-          ),
+          Icon(Icons.info_outline, color: Colors.orange.shade800, size: 16.sp),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               'The new password must be different from the old password',
-              style: AppTextStyles.font12GreyRegular(context).copyWith(
-                color: Colors.orange.shade800,
-              ),
+              style: AppTextStyles.font12GreyRegular(
+                context,
+              ).copyWith(color: Colors.orange.shade800),
             ),
           ),
         ],
       ),
     );
   }
-
 
   void _showSuccessDialog() {
     showDialog(
@@ -110,9 +105,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 16.h),
-                
+
                 // Success illustration
                 Container(
                   width: 120.w,
@@ -127,18 +122,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     size: 60.sp,
                   ),
                 ),
-                
+
                 SizedBox(height: 24.h),
-                
+
                 // Success message
                 Text(
                   'Congratulations your password has been changed.',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.font14BlackMedium(context),
                 ),
-                
+
                 SizedBox(height: 24.h),
-                
+
                 // OK button
                 SizedBox(
                   width: double.infinity,
@@ -216,7 +211,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             borderRadius: BorderRadius.circular(16.r),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.greyClr.withValues(alpha: 0.08),
+                                color: AppColors.greyClr.withValues(
+                                  alpha: 0.08,
+                                ),
                                 blurRadius: 24,
                                 offset: const Offset(0, 8),
                               ),
@@ -231,11 +228,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 children: [
                                   _buildHintBanner(),
                                   SizedBox(height: 24.h),
-                                  
+
                                   // Old Password
                                   Text(
                                     'profile.change_password.old_password'.tr(),
-                                    style: AppTextStyles.font14BlackMedium(context),
+                                    style: AppTextStyles.font14BlackMedium(
+                                      context,
+                                    ),
                                   ),
                                   SizedBox(height: 8.h),
                                   AppTextField(
@@ -243,19 +242,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     controller: _oldPasswordController,
                                     isPassword: true,
                                     validator: (value) {
-                                      if (value == null || value.trim().isEmpty) {
-                                        return 'profile.change_password.validation.old_password_required'.tr();
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
+                                        return 'profile.change_password.validation.old_password_required'
+                                            .tr();
                                       }
                                       return null;
                                     },
                                   ),
-                                  
+
                                   SizedBox(height: 16.h),
-                                  
+
                                   // New Password
                                   Text(
                                     'profile.change_password.new_password'.tr(),
-                                    style: AppTextStyles.font14BlackMedium(context),
+                                    style: AppTextStyles.font14BlackMedium(
+                                      context,
+                                    ),
                                   ),
                                   SizedBox(height: 8.h),
                                   AppTextField(
@@ -263,18 +266,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     controller: _newPasswordController,
                                     isPassword: true,
                                     validator: (value) {
-                                      if (value == null || value.trim().isEmpty) {
-                                        return 'profile.change_password.validation.new_password_required'.tr();
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
+                                        return 'profile.change_password.validation.new_password_required'
+                                            .tr();
                                       }
                                       if (value.length < 8) {
-                                        return 'profile.change_password.validation.password_length'.tr();
+                                        return 'profile.change_password.validation.password_length'
+                                            .tr();
                                       }
                                       return null;
                                     },
                                   ),
-                                  
+
                                   SizedBox(height: 8.h),
-                                  
+
                                   // Password requirements
                                   SizedBox(height: 4.h),
                                   Row(
@@ -288,18 +294,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                       Expanded(
                                         child: Text(
                                           'Password must be at least 8 characters',
-                                          style: AppTextStyles.font12GreyRegular(context),
+                                          style:
+                                              AppTextStyles.font12GreyRegular(
+                                                context,
+                                              ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  
+
                                   SizedBox(height: 16.h),
-                                  
+
                                   // Confirm Password
                                   Text(
-                                    'profile.change_password.confirm_password'.tr(),
-                                    style: AppTextStyles.font14BlackMedium(context),
+                                    'profile.change_password.confirm_password'
+                                        .tr(),
+                                    style: AppTextStyles.font14BlackMedium(
+                                      context,
+                                    ),
                                   ),
                                   SizedBox(height: 8.h),
                                   AppTextField(
@@ -307,30 +319,42 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     controller: _confirmPasswordController,
                                     isPassword: true,
                                     validator: (value) {
-                                      if (value == null || value.trim().isEmpty) {
-                                        return 'profile.change_password.validation.confirm_password_required'.tr();
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
+                                        return 'profile.change_password.validation.confirm_password_required'
+                                            .tr();
                                       }
-                                      if (value != _newPasswordController.text) {
-                                        return 'profile.change_password.validation.passwords_not_match'.tr();
+                                      if (value !=
+                                          _newPasswordController.text) {
+                                        return 'profile.change_password.validation.passwords_not_match'
+                                            .tr();
                                       }
                                       return null;
                                     },
                                   ),
-                                  
+
                                   SizedBox(height: 32.h),
-                                  
+
                                   // Save button
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
-                                      onPressed: isLoading ? null : () => _changePassword(context),
+                                      onPressed: isLoading
+                                          ? null
+                                          : () => _changePassword(context),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: AppColors.primaryClr,
-                                        disabledBackgroundColor: AppColors.primaryClr.withOpacity(0.6),
+                                        disabledBackgroundColor: AppColors
+                                            .primaryClr
+                                            .withOpacity(0.6),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8.r),
+                                          borderRadius: BorderRadius.circular(
+                                            8.r,
+                                          ),
                                         ),
-                                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 16.h,
+                                        ),
                                       ),
                                       child: isLoading
                                           ? SizedBox(
@@ -338,12 +362,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                               width: 20.w,
                                               child: CircularProgressIndicator(
                                                 strokeWidth: 2,
-                                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.whiteClr),
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(AppColors.whiteClr),
                                               ),
                                             )
                                           : Text(
                                               'Save',
-                                              style: AppTextStyles.font16WhiteMedium(context),
+                                              style:
+                                                  AppTextStyles.font16WhiteMedium(
+                                                    context,
+                                                  ),
                                             ),
                                     ),
                                   ),
