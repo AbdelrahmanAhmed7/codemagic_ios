@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -14,10 +15,7 @@ class _UploadSelection {
   final ImageProvider imageProvider;
   final String name;
 
-  _UploadSelection({
-    required this.imageProvider,
-    required this.name,
-  });
+  _UploadSelection({required this.imageProvider, required this.name});
 }
 
 class AddAttachmentWidget extends StatefulWidget {
@@ -89,7 +87,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                             child: (previewCameraImage == null)
                                 ? _buildUploadOption(
                                     AppAssets.camera,
-                                    'Take Photo',
+                                    'add_attachment.take_photo'.tr(),
                                     () async {
                                       final picked =
                                           await ImagePickerService.pickFromCameraWithPermission();
@@ -129,7 +127,9 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         previewCameraName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium(context),
+                                        style: AppTextStyles.font14BlackMedium(
+                                          context,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -139,7 +139,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                             child: (previewGalleryImage == null)
                                 ? _buildUploadOption(
                                     AppAssets.upload,
-                                    'Upload File',
+                                    'add_attachment.upload_file'.tr(),
                                     () async {
                                       final picked =
                                           await ImagePickerService.pickFromGallery();
@@ -179,7 +179,9 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         previewGalleryName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium(context),
+                                        style: AppTextStyles.font14BlackMedium(
+                                          context,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -222,7 +224,9 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
 
     if (selection == null) return;
     setState(() {
-      final path = slot == _AttachmentSlot.eInvoice ? _eInvoicePath : _prescriptionPath;
+      final path = slot == _AttachmentSlot.eInvoice
+          ? _eInvoicePath
+          : _prescriptionPath;
       final item = AttachmentItem(
         image: selection.imageProvider,
         name: selection.name,
@@ -317,11 +321,11 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Add Attachment ',
+                          text: 'placeholders.add_attachment'.tr(),
                           style: AppTextStyles.font14BlackMedium(context),
                         ),
                         TextSpan(
-                          text: '(maximum size 5MB)',
+                          text: ' (${'approval_request.max_size'.tr()})',
                           style: AppTextStyles.font10GreyRegular(context),
                         ),
                       ],
@@ -336,7 +340,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
             SizedBox(height: 16.h),
             Center(
               child: Text(
-                '${widget.refundTypeName ?? 'Glasses'} Attachment',
+                '${widget.refundTypeName ?? ' '} ${'add_attachment.attachment'.tr()}',
                 style: AppTextStyles.font14BlackMedium(context),
               ),
             ),
@@ -364,12 +368,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Upload E-Invoice',
+                          'add_attachment.upload_e_invoice'.tr(),
                           style: AppTextStyles.font12BlueRegular(context),
                         ),
                         SizedBox(height: 4.h),
                         Text(
-                          'Should be included name , national ID and Tax activity code',
+                          'add_attachment.e_invoice_instructions'.tr(),
                           style: AppTextStyles.font8GreyRegular(context),
                         ),
                       ],
@@ -411,12 +415,14 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Upload ${widget.refundTypeName ?? 'Glasses'} Prescription',
+                          'add_attachment.upload_refund_prescription'.tr(
+                            namedArgs: {'type': widget.refundTypeName ?? ''},
+                          ),
                           style: AppTextStyles.font12BlueRegular(context),
                         ),
                         SizedBox(height: 4.h),
                         Text(
-                          'Should be included name and date',
+                          'add_attachment.prescription_instructions'.tr(),
                           style: AppTextStyles.font8GreyRegular(context),
                         ),
                       ],

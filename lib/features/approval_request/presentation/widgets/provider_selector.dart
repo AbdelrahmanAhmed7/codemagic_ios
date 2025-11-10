@@ -77,7 +77,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
                   ),
                 Expanded(
                   child: Text(
-                    _selectedProvider?.name ?? 'Select provider',
+                    _selectedProvider?.name ?? 'approval_request.select_provider'.tr(),
                     style: _selectedProvider == null
                         ? AppTextStyles.font14GreyRegular(context)
                         : AppTextStyles.font14BlackMedium(context),

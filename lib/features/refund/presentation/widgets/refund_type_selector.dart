@@ -119,7 +119,7 @@ class _RefundTypeSelectorState extends State<RefundTypeSelector> {
                     ],
                     Expanded(
                       child: Text(
-                        _selectedTypeName ?? 'Select refund type',
+                        _selectedTypeName ?? 'placeholders.select_refund_type'.tr(),
                         style: _selectedTypeName != null
                             ? AppTextStyles.font14BlackMedium(context)
                             : AppTextStyles.font14GreyRegular(context),

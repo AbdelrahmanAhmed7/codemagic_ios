@@ -164,7 +164,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
                             child: (previewCameraImage == null)
                                 ? UploadOption(
                                     assetIcon: AppAssets.camera,
-                                    label: 'Take Photo',
+                                    label: 'add_attachment.take_photo'.tr(),
                                     onTap: () async {
                                       final ok =
                                           await AttachmentsPermissions.ensureCamera();
@@ -216,7 +216,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
                             child: (previewGalleryImage == null)
                                 ? UploadOption(
                                     assetIcon: AppAssets.upload,
-                                    label: 'Upload File',
+                                    label: 'add_attachment.upload_file'.tr(),
                                     onTap: () async {
                                       final picker = ImagePicker();
                                       final picked = await picker.pickImage(

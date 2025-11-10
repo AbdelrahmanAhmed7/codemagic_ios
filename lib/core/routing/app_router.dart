@@ -24,6 +24,7 @@ import 'package:mediconsult/features/approval_request/presentation/cubit/approva
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/change_password_cubit.dart';
 import 'package:mediconsult/features/profile/presentation/cubit/language_cubit.dart';
 import 'package:mediconsult/features/profile/presentation/cubit/personal_info_cubit.dart';
 import 'package:mediconsult/features/profile/presentation/screens/add_family_member_screen.dart';
@@ -161,7 +162,7 @@ class AppRouter {
             providers: [
               BlocProvider(create: (context) => sl<RefundRequestCubit>()),
               BlocProvider(create: (context) => sl<RefundTypesCubit>()),
-              BlocProvider(create: (context) => sl<RefundReasonsCubit>()), 
+              BlocProvider(create: (context) => sl<RefundReasonsCubit>()),
               BlocProvider(create: (context) => sl<FamilyMembersCubit>()),
             ],
             child: const RefundRequestScreen(),
@@ -261,7 +262,10 @@ class AppRouter {
       GoRoute(
         path: '/change-password',
         builder: (context, state) {
-          return const ChangePasswordScreen();
+          return BlocProvider(
+            create: (context) => sl<ChangePasswordCubit>(),
+            child: const ChangePasswordScreen(),
+          );
         },
       ),
       GoRoute(

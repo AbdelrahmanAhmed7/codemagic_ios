@@ -265,7 +265,7 @@
     "no_providers": "No providers found",
     "loading_providers": "Loading providers...",
     "search_description": "Use the search bar or filters to find nearby healthcare providers",
-    "navigate" : "Navigate",
+    "navigate": "Navigate",
     "filter_no_results": "No results for selected filters",
     "filter_no_results_description": "Try changing filter criteria to get results"
   },
@@ -507,9 +507,31 @@
       "personal_info": "View and edit your personal information",
       "change_password": "Change your account password"
     },
-    "approval_history" :{
-      "swipe":"Swipe or tap to filter approvals",
+    "approval_history": {
+      "swipe": "Swipe or tap to filter approvals",
       "fab": "Tap to create a new approval request"
     }
+  },
+  "placeholders": {
+    "select_refund_type": "Select Refund Type",
+    "select_refund_reason": "Select Refund Reason",
+    "select_service_date": "Select Date",
+    "enter_amount": "Enter Amount",
+    "add_attachment": "Add Attachment"
+  },
+  "add_attachment": {
+    "attachment": "Attachment",
+    "take_photo": "Take Photo",
+    "upload_file": "Upload File",
+    "upload_e_invoice": "Upload E-Invoice",
+    "upload_prescription": "Upload Prescription",
+    "upload_refund_prescription": "Upload {type} Prescription",
+    "e_invoice_instructions": "Should be included name , national ID and Tax activity code",
+    "prescription_instructions": "Should be included name and date"
+  },
+  "dialog": {
+    "coming_soon_title": "Coming Soon",
+    "coming_soon_message": "This feature is under development.\nStay tuned for updates!",
+    "got_it": "Got it!"
   }
 }

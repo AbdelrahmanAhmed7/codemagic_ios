@@ -87,7 +87,7 @@ class _ReasonSelectorState extends State<ReasonSelector> {
                   children: [
                     Expanded(
                       child: Text(
-                        _selectedReasonName ?? 'Select reason',
+                        _selectedReasonName ?? 'placeholders.select_refund_reason'.tr(),
                         style: _selectedReasonName != null
                             ? AppTextStyles.font14BlackMedium(context)
                             : AppTextStyles.font14GreyRegular(context),

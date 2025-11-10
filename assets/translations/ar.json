@@ -395,10 +395,20 @@
     "upload_lab_results": "رفع نتائج التحاليل الربعية",
     "required_tests": "التحاليل المطلوبة:",
     "blood_sugar_test": "تحليل السكر",
+    "blood_sugar_test_short": "تحليل السكر",
     "kidney_function_test": "تحليل وظائف الكلى",
+    "kidney_test": "تقرير تحليل وظائف الكلى",
+    "kidney_test_short": "تحليل وظائف الكلى",
+    "test_description": "يجب أن يتضمن الاسم والتاريخ",
     "saved": "تم الحفظ",
     "upcoming_lab_title": "الفحوصات القادمة",
-    "upcoming_lab_subtitle": "الفحوصات التالية بعد شهرين"
+    "upcoming_lab_subtitle": "الفحوصات التالية بعد شهرين",
+    "lab_test_due": "موعد التحليل",
+    "lab_test_message": "حان وقت التحاليل الربعية",
+    "tap_to_upload": "اضغط لرفع نتائج\n التحاليل",
+    "upload_button": "رفع نتائج التحاليل",
+    "action_required_title": "إجراء مطلوب: رفع نتائج التحاليل",
+    "action_required_message": "لمواصلة استلام أدويتك المزمنة، يرجى رفع جميع نتائج التحاليل المطلوبة."
   },
   "policy": {
     "title": "السياسة",
@@ -506,5 +516,27 @@
       "personal_info": "اعرض وعدّل معلوماتك الشخصية",
       "change_password": "قم بتغيير كلمة مرور حسابك"
     }
+  },
+  "placeholders": {
+    "select_refund_type": "اختر نوع الاسترداد",
+    "select_refund_reason": "اختر السبب",
+    "select_service_date": "اختر التاريخ",
+    "enter_amount": "أدخل المبلغ",
+    "add_attachment": "أضف مرفق"
+  },
+  "add_attachment": {
+    "attachment": "مرفق",
+    "take_photo": "التقط صورة",
+    "upload_file": "رفع ملف",
+    "upload_e_invoice": "رفع الفاتورة الإلكترونية",
+    "upload_prescription": "رفع الوصفة الطبية",
+    "upload_refund_prescription": "رفع روشتة {type}",
+    "e_invoice_instructions": "يجب أن تتضمن الاسم، الرقم القومي، ورمز النشاط الضريبي",
+    "prescription_instructions": "يجب أن تتضمن الاسم والتاريخ"
+  },
+  "dialog": {
+    "coming_soon_title": "قريباً",
+    "coming_soon_message": "نعمل على تطوير هذه الميزة\nترقب التحديثات قريباً!",
+    "got_it": "فهمت"
   }
 }
