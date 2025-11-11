@@ -17,7 +17,12 @@
     "no_data": "لا توجد بيانات متاحة",
     "back": "رجوع",
     "choose": "اختر",
-    "no_internet": "لا يوجد اتصال بالإنترنت"
+    "no_internet": "لا يوجد اتصال بالإنترنت",
+    "dismiss": "إغلاق",
+    "cannot_open_pdf": "تعذر فتح ملف PDF",
+    "pdf_not_available": "ملف PDF غير متاح",
+    "error_loading_pdf": "حدث خطأ أثناء تحميل ملف PDF",
+    "request_timeout": "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى"
   },
   "policy_screen": {
     "title": "البوليسي",
@@ -28,8 +33,14 @@
     "coverage": "نسبة التغطية",
     "coverage_type": "نوع التغطية",
     "providers": "مقدمي الخدمة",
+    "medication_coverage": "نسبة التغطية",
     "policy": "بوليسي",
     "pharmacy": "صيدلية",
+    "standart_copayment": "التحمل",
+    "standard_copayment": "تحمل قياسي",
+    "higher_copayment": "تحمل أعلى",
+    "highest_copayment": "أعلى تحمل",
+    "view_details": "عرض التفاصيل",
     "lab": "معمل",
     "hospital": "مستشفى",
     "doctor": "طبيب",
@@ -329,6 +340,8 @@
     "view_details": "عرض التفاصيل",
     "empty_state": "ليس لديك أي طلبات اضغط على\nالزر ",
     "to_request_approval": " لطلب الموافقة",
+    "approval_not_found": "طلب الموافقة غير موجود أو لم يعد متاحاً",
+    "cannot_open_pdf": "تعذر فتح ملف الموافقة",
     "status": {
       "approved": "موافق عليه",
       "rejected": "مرفوض",

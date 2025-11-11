@@ -10,7 +10,7 @@ platform :android do
       UI.user_error!("Missing FIREBASE_TOKEN environment variable. Set it securely (e.g., CI secret) before running this lane.")
     end
     firebase_app_distribution(
-      app: "1:477815114095:android:3d6f2dbfd9d06958afc09a",
+      app: "1:10939381120:android:d54f086940fe58410ffd65",
       firebase_cli_token: ENV['FIREBASE_TOKEN'],
       android_artifact_type: "APK",
       android_artifact_path: "../build/app/outputs/flutter-apk/app-release.apk",

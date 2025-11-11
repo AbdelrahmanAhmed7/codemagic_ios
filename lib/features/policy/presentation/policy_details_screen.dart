@@ -143,7 +143,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
 
             PolicyCoverageCard(
               serviceName: widget.serviceName,
-              slLimit: '${details.slLimit}',
+              slLimit: '${details.slCopayment}',
               serviceIcon: PolicyServiceHelper.getServiceIcon(widget.serviceName),
             ),
             SizedBox(height: 24.h),

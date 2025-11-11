@@ -130,6 +130,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       isSeen: 1,
       date: oldItem.date,
       time: oldItem.time,
+      notificationData: oldItem.notificationData,
     );
     
     // Force new list instance and emit with incremented counter
@@ -187,6 +188,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         isSeen: 1,
         date: item.date,
         time: item.time,
+        notificationData: item.notificationData,
       );
     }
     final current = state;

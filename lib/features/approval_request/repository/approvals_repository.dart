@@ -32,7 +32,11 @@ class ApprovalsRepository {
     required int approvalId,
   }) async {
     try {
-      final response = await _apiService.getApprovalPdf(lang, approvalId);
+      final response = await _apiService.getApprovalPdf(lang, approvalId)
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw Exception('Request timeout'),
+          );
       if (response.success == true && response.data != null) {
         return ApiResult.success(response);
       } else {

@@ -246,7 +246,6 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
 
   void _addFamilyMember() {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement API call to add family member
       final familyMember = {
         'fullName': _nameController.text.trim(),
         'nationalId': _nationalIdController.text.trim(),

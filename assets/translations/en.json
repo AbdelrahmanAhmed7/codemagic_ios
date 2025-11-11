@@ -17,7 +17,12 @@
     "no_data": "No data available",
     "back": "Back",
     "choose": "Choose",
-    "no_internet": "No internet connection"
+    "no_internet": "No internet connection",
+    "dismiss": "Dismiss",
+    "cannot_open_pdf": "Unable to open PDF file",
+    "pdf_not_available": "PDF file is not available",
+    "error_loading_pdf": "Error loading PDF file",
+    "request_timeout": "Request timeout. Please try again"
   },
   "policy_screen": {
     "title": "Policy",
@@ -26,7 +31,13 @@
     "details": "Policy Details",
     "service_name": "Service Name",
     "coverage": "Coverage",
+    "medication_coverage": "Medication Coverage",
     "coverage_type": "Coverage Type",
+    "standart_copayment": "Co-payment",
+    "standard_copayment": "Standard Co-payment",
+    "higher_copayment": "Higher Co-payment",
+    "highest_copayment": "Highest Co-payment",
+    "view_details": "View Details",
     "providers": "Providers",
     "policy": "policy",
     "pharmacy": "Pharmacy",
@@ -329,6 +340,8 @@
     "view_details": "View Details",
     "empty_state": "You don't have any requests click\nbutton ",
     "to_request_approval": " to request approval",
+    "approval_not_found": "Approval request not found or no longer available",
+    "cannot_open_pdf": "Unable to open approval PDF",
     "status": {
       "approved": "Approved",
       "rejected": "Rejected",

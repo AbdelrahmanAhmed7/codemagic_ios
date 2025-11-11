@@ -10,9 +10,7 @@ class LogoutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       child: Container(
         padding: EdgeInsets.all(24.w),
         decoration: BoxDecoration(
@@ -36,27 +34,27 @@ class LogoutDialog extends StatelessWidget {
                 color: Colors.red.shade400,
               ),
             ),
-            
+
             SizedBox(height: 24.h),
-            
+
             // Title
             Text(
               'profile.log_out'.tr(),
               style: AppTextStyles.font18BlackSemiBold(context),
               textAlign: TextAlign.center,
             ),
-            
+
             SizedBox(height: 12.h),
-            
+
             // Message
             Text(
               'Are you sure you want to logout?',
               style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),
-            
+
             SizedBox(height: 32.h),
-            
+
             // Buttons
             Row(
               children: [
@@ -65,7 +63,9 @@ class LogoutDialog extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.greyClr.withOpacity(0.3)),
+                      side: BorderSide(
+                        color: AppColors.greyClr.withValues(alpha: 0.3),
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
@@ -77,9 +77,9 @@ class LogoutDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(width: 12.w),
-                
+
                 // Logout Button
                 Expanded(
                   child: ElevatedButton(

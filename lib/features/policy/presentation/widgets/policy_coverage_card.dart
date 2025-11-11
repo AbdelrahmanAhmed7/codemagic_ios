@@ -24,57 +24,62 @@ class PolicyCoverageCard extends StatelessWidget {
         color: const Color(0xFFF2F7FF),
         borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'policy_screen.coverage'.tr(),
-                  style: AppTextStyles.font14BlackMedium(context),
-                ),
-                SizedBox(height: 8.h),
-                Row(
+          Text(
+            'policy_screen.medication_coverage'.tr(),
+            style: AppTextStyles.font14BlackMedium(context),
+          ),
+          SizedBox(height: 12.h),
+          
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Row(
                   children: [
                     Icon(
                       serviceIcon,
                       color: AppColors.primaryClr,
-                      size: 14.sp,
+                      size: 16.sp,
                     ),
-                    SizedBox(width: 4.w),
-                    Text(
-                      serviceName,
-                      style: AppTextStyles.font10GreyRegular(context),
+                    SizedBox(width: 6.w),
+                    Flexible(
+                      child: Text(
+                        serviceName,
+                        style: AppTextStyles.font10GreyRegular(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  slLimit,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryClr,
+              ),
+              
+              SizedBox(width: 16.w),
+              
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '$slLimit%',
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryClr,
+                      height: 1,
+                    ),
                   ),
-                ),
-                Text(
-                  'Limit',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.font10GreyRegular(context),
-                ),
-              ],
-            ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'policy_screen.standart_copayment'.tr(),
+                    style: AppTextStyles.font10GreyRegular(context),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

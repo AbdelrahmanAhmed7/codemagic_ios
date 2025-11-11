@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCeFxtAaWBFyIV1x9AzFcjYuuaiitPhxmw',
-    appId: '1:477815114095:android:3d6f2dbfd9d06958afc09a',
-    messagingSenderId: '477815114095',
-    projectId: 'mediconsult-b8437',
-    storageBucket: 'mediconsult-b8437.firebasestorage.app',
+    apiKey: 'AIzaSyDNVaPnLPDyDfSHJHl2v57D0Ph8f7QTKfc',
+    appId: '1:10939381120:android:d54f086940fe58410ffd65',
+    messagingSenderId: '10939381120',
+    projectId: 'mediconsultapp-b1fc9',
+    storageBucket: 'mediconsultapp-b1fc9.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDLKTFWiBsCPdlwwwz8v4tHseDnsgjdiJs',
-    appId: '1:477815114095:ios:8431d664769ff6f1afc09a',
-    messagingSenderId: '477815114095',
-    projectId: 'mediconsult-b8437',
-    storageBucket: 'mediconsult-b8437.firebasestorage.app',
+    apiKey: 'AIzaSyBo5q4NfJW0Z76kReKNIqKEEzqO6jMri5U',
+    appId: '1:10939381120:ios:0e24a69b99e93f8d0ffd65',
+    messagingSenderId: '10939381120',
+    projectId: 'mediconsultapp-b1fc9',
+    storageBucket: 'mediconsultapp-b1fc9.firebasestorage.app',
     iosBundleId: 'com.example.mediconsult',
   );
 }

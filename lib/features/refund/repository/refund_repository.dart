@@ -116,7 +116,11 @@ class RefundRepository {
     required int refundId,
   }) async {
     try {
-      final response = await _apiService.getRefundPdf(lang, refundId);
+      final response = await _apiService.getRefundPdf(lang, refundId)
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw Exception('Request timeout'),
+          );
       if (response.success == true && response.data != null) {
         return ApiResult.success(response);
       } else {

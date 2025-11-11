@@ -70,6 +70,9 @@ NotificationItem _$NotificationItemFromJson(Map<String, dynamic> json) =>
       isSeen: (json['isSeen'] as num).toInt(),
       date: json['date'] as String,
       time: json['time'] as String,
+      notificationData: (json['notificationData'] as List<dynamic>?)
+          ?.map((e) => NotificationData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$NotificationItemToJson(NotificationItem instance) =>
@@ -81,4 +84,21 @@ Map<String, dynamic> _$NotificationItemToJson(NotificationItem instance) =>
       'isSeen': instance.isSeen,
       'date': instance.date,
       'time': instance.time,
+      'notificationData': instance.notificationData
+          ?.map((e) => e.toJson())
+          .toList(),
+    };
+
+NotificationData _$NotificationDataFromJson(Map<String, dynamic> json) =>
+    NotificationData(
+      id: (json['id'] as num).toInt(),
+      keyData: json['keyData'] as String,
+      value: json['value'] as String,
+    );
+
+Map<String, dynamic> _$NotificationDataToJson(NotificationData instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'keyData': instance.keyData,
+      'value': instance.value,
     };
