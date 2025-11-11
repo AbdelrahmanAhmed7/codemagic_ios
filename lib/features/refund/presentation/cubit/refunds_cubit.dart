@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/refund/data/refund_list_models.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_state.dart';
@@ -27,16 +29,26 @@ class RefundsCubit extends Cubit<RefundsState> {
     if (status != null) _status = status;
     if (reset) _page = 1;
 
-    // Check cache first
-    if (!forceRefresh && _cache.containsKey(_status) && _page == 1) {
-      emit(
-        RefundsState.loaded(
-          refunds: _cache[_status]!,
-          pagination: _paginationCache[_status]!,
-          status: _status,
-        ),
-      );
-      return;
+    // Try persistent cache for first page only
+    if (_page == 1 && !forceRefresh) {
+      final cachedData = await CacheService.getCachedRefundsData(_status);
+      if (cachedData != null && cachedData.data != null) {
+        final data = cachedData.data!;
+        _cache[_status] = data.refunds;
+        _paginationCache[_status] = data.pagination;
+        emit(
+          RefundsState.loaded(
+            refunds: data.refunds,
+            pagination: data.pagination,
+            status: _status,
+            loadingMore: false,
+          ),
+        );
+        
+        // Background refresh
+        unawaited(_fetchAndCacheData(lang, isLoadingMore));
+        return;
+      }
     }
 
     // Don't emit loading if we're loading more
@@ -44,6 +56,10 @@ class RefundsCubit extends Cubit<RefundsState> {
       emit(const RefundsState.loading());
     }
 
+    await _fetchAndCacheData(lang, isLoadingMore);
+  }
+
+  Future<void> _fetchAndCacheData(String lang, bool isLoadingMore) async {
     final result = await _repository.getRefunds(
       lang: lang,
       page: _page,
@@ -52,7 +68,7 @@ class RefundsCubit extends Cubit<RefundsState> {
     );
 
     result.when(
-      success: (response) {
+      success: (response) async {
         if (response.data != null) {
           final refunds = response.data!.refunds;
           final pagination = response.data!.pagination;
@@ -61,6 +77,8 @@ class RefundsCubit extends Cubit<RefundsState> {
           if (_page == 1) {
             _cache[_status] = refunds;
             _paginationCache[_status] = pagination;
+            // Cache only first page in persistent storage
+            await CacheService.cacheRefundsData(response, _status);
           } else {
             _cache[_status] = [...(_cache[_status] ?? []), ...refunds];
           }
@@ -116,8 +134,9 @@ class RefundsCubit extends Cubit<RefundsState> {
     await load(lang: lang, reset: true, forceRefresh: true);
   }
 
-  void clearCache() {
+  Future<void> clearCache() async {
     _cache.clear();
     _paginationCache.clear();
+    await CacheService.clearAllRefundsCache();
   }
 }

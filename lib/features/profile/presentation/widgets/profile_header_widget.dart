@@ -8,6 +8,7 @@ import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.da
 import 'package:mediconsult/features/profile/presentation/widgets/profile_header_shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/core/widgets/image_shimmer.dart';
 
 /// Profile header widget showing user info
 class ProfileHeaderWidget extends StatelessWidget {
@@ -38,8 +39,11 @@ class ProfileHeaderWidget extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: data.memberPhoto!,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              Image.asset(AppAssets.profile, fit: BoxFit.cover),
+                          memCacheWidth: 148,
+                          memCacheHeight: 148,
+                          maxWidthDiskCache: 148,
+                          maxHeightDiskCache: 148,
+                          placeholder: (context, url) => const ImageShimmer.circle(),
                           errorWidget: (context, url, error) =>
                               Image.asset(AppAssets.profile, fit: BoxFit.cover),
                         )

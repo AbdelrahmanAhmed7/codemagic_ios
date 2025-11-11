@@ -98,4 +98,32 @@ class ApprovalsFilter {
   Map<String, dynamic> toJson() => _$ApprovalsFilterToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
+class ApprovalPdfResponse {
+  final bool success;
+  final String? timestamp;
+  final String? message;
+  final ApprovalPdfData? data;
+
+  ApprovalPdfResponse({
+    required this.success,
+    this.timestamp,
+    this.message,
+    this.data,
+  });
+
+  factory ApprovalPdfResponse.fromJson(Map<String, dynamic> json) => _$ApprovalPdfResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ApprovalPdfResponseToJson(this);
+}
+
+@JsonSerializable()
+class ApprovalPdfData {
+  final String url;
+
+  ApprovalPdfData({required this.url});
+
+  factory ApprovalPdfData.fromJson(Map<String, dynamic> json) => _$ApprovalPdfDataFromJson(json);
+  Map<String, dynamic> toJson() => _$ApprovalPdfDataToJson(this);
+}
+
 

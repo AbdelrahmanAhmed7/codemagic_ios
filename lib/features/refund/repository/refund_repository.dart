@@ -5,6 +5,7 @@ import 'package:mediconsult/features/refund/data/refund_request_models.dart';
 import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 import 'package:mediconsult/features/refund/data/refund_list_models.dart';
 import 'package:mediconsult/features/refund/service/refund_api_service.dart';
+import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
 
 class RefundRepository {
   final RefundApiService _apiService;
@@ -100,6 +101,23 @@ class RefundRepository {
       );
 
       if (response.success == true) {
+        return ApiResult.success(response);
+      } else {
+        return ApiResult.failure(response.message ?? 'Unknown error');
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.handle(error);
+      return ApiResult.failure(errorMessage);
+    }
+  }
+
+  Future<ApiResult<ApprovalPdfResponse>> getRefundPdf({
+    required String lang,
+    required int refundId,
+  }) async {
+    try {
+      final response = await _apiService.getRefundPdf(lang, refundId);
+      if (response.success == true && response.data != null) {
         return ApiResult.success(response);
       } else {
         return ApiResult.failure(response.message ?? 'Unknown error');

@@ -4,6 +4,7 @@ import 'package:mediconsult/core/network/api_constants.dart';
 import 'package:mediconsult/features/refund/data/refund_request_models.dart';
 import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 import 'package:mediconsult/features/refund/data/refund_list_models.dart';
+import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
 
 part 'refund_api_service.g.dart';
 
@@ -41,5 +42,11 @@ abstract class RefundApiService {
     @Query("page") int page,
     @Query("pageSize") int pageSize,
     @Query("status") String status,
+  );
+
+  @GET("{lang}/Refund/GetRefundPDF/{refundId}")
+  Future<ApprovalPdfResponse> getRefundPdf(
+    @Path("lang") String lang,
+    @Path("refundId") int refundId,
   );
 }

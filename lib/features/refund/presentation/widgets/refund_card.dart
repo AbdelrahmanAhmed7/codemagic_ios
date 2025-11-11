@@ -5,6 +5,10 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/features/refund/data/refund_list_models.dart';
+import 'package:mediconsult/features/refund/repository/refund_repository.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:mediconsult/core/utils/pdf_helper.dart';
+import 'package:mediconsult/core/utils/status_helper.dart';
 
 class RefundCard extends StatelessWidget {
   final RefundItem item;
@@ -13,9 +17,9 @@ class RefundCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color statusColor = _statusColor(item.statusChar);
-    final Color backgroundColor = _backgroundColorForStatus(item.statusChar);
-    final String statusLabel = _statusLabel(item.statusChar);
+    final Color statusColor = StatusHelper.getStatusColor(item.statusChar);
+    final Color backgroundColor = StatusHelper.getBackgroundColor(item.statusChar);
+    final String statusLabel = StatusHelper.getStatusLabel(item.statusChar, 'refund_history');
 
     return Container(
       decoration: BoxDecoration(
@@ -120,7 +124,7 @@ class RefundCard extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () => _openRefundPdf(context),
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
           minimumSize: Size.zero,
@@ -134,39 +138,15 @@ class RefundCard extends StatelessWidget {
     );
   }
 
-  Color _statusColor(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return const Color(0xFF22C55E);
-      case 'R':
-        return const Color(0xFFEF4444);
-      case 'P':
-      default:
-        return const Color(0xFF9CA3AF);
-    }
+  Future<void> _openRefundPdf(BuildContext context) async {
+    await PdfHelper.openPdf(
+      context: context,
+      fetchPdf: () => sl<RefundRepository>().getRefundPdf(
+        lang: context.locale.languageCode,
+        refundId: item.id,
+      ),
+      errorMessageKey: 'refund_history.cannot_open_pdf',
+    );
   }
 
-  Color _backgroundColorForStatus(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return const Color(0xFFD9F2E2);
-      case 'R':
-        return const Color(0xFFF5E1E9);
-      case 'P':
-      default:
-        return const Color(0xFFF2F2F2);
-    }
-  }
-
-  String _statusLabel(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return 'refund_history.status.approved'.tr();
-      case 'R':
-        return 'refund_history.status.rejected'.tr();
-      case 'P':
-      default:
-        return 'refund_history.status.pending'.tr();
-    }
-  }
 }

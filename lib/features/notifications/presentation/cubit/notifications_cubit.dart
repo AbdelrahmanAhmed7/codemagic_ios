@@ -43,6 +43,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
           totalPages: data.pagination.totalPages,
           hasNextPage: data.pagination.hasNextPage,
           loadingMore: false,
+          updateCounter: 0,
         ));
 
         // Background refresh
@@ -89,6 +90,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
           totalPages: data.pagination.totalPages,
           hasNextPage: data.pagination.hasNextPage,
           loadingMore: false,
+          updateCounter: 0,
         ));
       },
       failure: (message) {
@@ -130,11 +132,14 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       time: oldItem.time,
     );
     
-    // Force new list instance and emit
+    // Force new list instance and emit with incremented counter
     final newList = List<NotificationItem>.from(_items);
     final current = state;
     if (current is Loaded) {
-      emit(current.copyWith(notifications: newList));
+      emit(current.copyWith(
+        notifications: newList,
+        updateCounter: current.updateCounter + 1, // Increment to force rebuild
+      ));
     }
     
     // Update badge count
@@ -154,7 +159,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         final revertedList = List<NotificationItem>.from(_items);
         final current = state;
         if (current is Loaded) {
-          emit(current.copyWith(notifications: revertedList));
+          emit(current.copyWith(
+            notifications: revertedList,
+            updateCounter: current.updateCounter + 1,
+          ));
         }
         final unreadCount = revertedList.where((e) => !e.isRead).length;
         NotificationBadgeService.instance.setCount(unreadCount);
@@ -183,7 +191,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     }
     final current = state;
     if (current is Loaded) {
-      emit(current.copyWith(notifications: List.of(_items)));
+      emit(current.copyWith(
+        notifications: List.of(_items),
+        updateCounter: current.updateCounter + 1, // Increment to force rebuild
+      ));
     }
     NotificationBadgeService.instance.setCount(0);
 
@@ -200,7 +211,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         _items.addAll(oldItems);
         final current = state;
         if (current is Loaded) {
-          emit(current.copyWith(notifications: List.of(_items)));
+          emit(current.copyWith(
+            notifications: List.of(_items),
+            updateCounter: current.updateCounter + 1,
+          ));
         }
         NotificationBadgeService.instance.setCount(_items.where((e) => !e.isRead).length);
         ok = false; 

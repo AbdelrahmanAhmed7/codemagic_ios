@@ -14,6 +14,7 @@ class NotificationsState with _$NotificationsState {
     required int totalPages,
     required bool hasNextPage,
     required bool loadingMore,
+    @Default(0) int updateCounter,
   }) = Loaded;
   const factory NotificationsState.failed(String message) = Failed;
 }

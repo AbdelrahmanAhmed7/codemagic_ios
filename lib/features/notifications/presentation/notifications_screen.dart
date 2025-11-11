@@ -108,7 +108,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           failed: (msg) => Center(
                             child: Text(msg, style: AppTextStyles.font14GreyRegular(context)),
                           ),
-                          loaded: (notifications, totalCount, currentPage, totalPages, hasNextPage, loadingMore) {
+                          loaded: (notifications, totalCount, currentPage, totalPages, hasNextPage, loadingMore, updateCounter) {
                             return NotificationsListView(
                               notifications: notifications,
                               controller: _controller,

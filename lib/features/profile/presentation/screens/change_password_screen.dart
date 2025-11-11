@@ -73,11 +73,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget _buildPasswordRequirements() {
     return Row(
       children: [
-        Icon(
-          Icons.info_outline,
-          color: AppColors.primaryClr,
-          size: 16.sp,
-        ),
+        Icon(Icons.info_outline, color: AppColors.primaryClr, size: 16.sp),
         SizedBox(width: 8.w),
         Expanded(
           child: Text(
@@ -190,7 +186,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             loading: () => true,
             orElse: () => false,
           );
-    
+
           return SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -209,9 +205,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           borderRadius: BorderRadius.circular(16.r),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.greyClr.withValues(
-                                alpha: 0.08,
-                              ),
+                              color: AppColors.greyClr.withValues(alpha: 0.08),
                               blurRadius: 24,
                               offset: const Offset(0, 8),
                             ),

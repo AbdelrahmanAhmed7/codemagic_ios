@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
-import 'package:mediconsult/features/approval_request/presentation/widgets/approval_details_bottom_sheet.dart';
+import 'package:mediconsult/features/approval_request/repository/approvals_repository.dart';
+import 'package:mediconsult/core/utils/pdf_helper.dart';
+import 'package:mediconsult/core/utils/status_helper.dart';
 
 class ApprovalCard extends StatelessWidget {
   final ApprovalItem item;
@@ -14,9 +17,9 @@ class ApprovalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color statusColor = _getStatusColor(item.statusChar);
-    final Color backgroundColor = _getBackgroundColorForStatus(item.statusChar);
-    final String statusLabel = _getStatusLabel(item.statusChar);
+    final Color statusColor = StatusHelper.getStatusColor(item.statusChar);
+    final Color backgroundColor = StatusHelper.getBackgroundColor(item.statusChar);
+    final String statusLabel = StatusHelper.getStatusLabel(item.statusChar, 'approval_history');
 
     return Container(
       decoration: BoxDecoration(
@@ -146,7 +149,7 @@ class ApprovalCard extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => ApprovalDetailsBottomSheet.show(context, item),
+        onPressed: () => _openApprovalPdf(context),
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
           minimumSize: Size.zero,
@@ -160,39 +163,15 @@ class ApprovalCard extends StatelessWidget {
     );
   }
 
-  static Color _getStatusColor(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return const Color(0xFF349859);
-      case 'R':
-        return const Color(0xFFB92828);
-      case 'P':
-      default:
-        return const Color(0xFF999999);
-    }
+  Future<void> _openApprovalPdf(BuildContext context) async {
+    await PdfHelper.openPdf(
+      context: context,
+      fetchPdf: () => sl<ApprovalsRepository>().getApprovalPdf(
+        lang: context.locale.languageCode,
+        approvalId: item.id,
+      ),
+      errorMessageKey: 'approval_history.cannot_open_pdf',
+    );
   }
 
-  static Color _getBackgroundColorForStatus(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return const Color(0xFFD9F2E2);
-      case 'R':
-        return const Color(0xFFF5E1E9);
-      case 'P':
-      default:
-        return const Color(0xFFF2F2F2);
-    }
-  }
-
-  static String _getStatusLabel(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return 'approval_history.status.approved'.tr();
-      case 'R':
-        return 'approval_history.status.rejected'.tr();
-      case 'P':
-      default:
-        return 'approval_history.status.pending'.tr();
-    }
-  }
 }

@@ -28,4 +28,10 @@ abstract class ApprovalRequestApiService {
     @Query("pageSize") int pageSize,
     @Query("key") String? key,
   );
+
+  @GET("{lang}/Approval/GetApprovalPDF/{approvalId}")
+  Future<ApprovalPdfResponse> getApprovalPdf(
+    @Path("lang") String lang,
+    @Path("approvalId") int approvalId,
+  );
 }
