@@ -10,6 +10,7 @@ import 'package:mediconsult/features/approval_request/data/approvals_models.dart
 import 'package:mediconsult/features/approval_request/repository/approvals_repository.dart';
 import 'package:mediconsult/core/utils/pdf_helper.dart';
 import 'package:mediconsult/core/utils/status_helper.dart';
+import 'package:mediconsult/core/utils/date_formatter.dart';
 
 class ApprovalCard extends StatelessWidget {
   final ApprovalItem item;
@@ -97,7 +98,7 @@ class ApprovalCard extends StatelessWidget {
         Expanded(
           child: Text(
             '${'approval_history.request_number'.tr()}${item.approvalNumber}',
-            style: AppTextStyles.font10GreyRegular(context),
+            style: AppTextStyles.font10BlackRegular(context),
           ),
         ),
         Container(
@@ -125,8 +126,8 @@ class ApprovalCard extends StatelessWidget {
         Icon(Icons.calendar_today, size: 14.sp, color: AppColors.blueClr),
         SizedBox(width: 5.w),
         Text(
-          '${'approval_history.date'.tr()}${item.date}',
-          style: AppTextStyles.font10GreyRegular(context),
+          DateFormatter.formatDate(item.date),
+          style: AppTextStyles.font10BlackMedium(context),
         ),
       ],
     );
@@ -138,8 +139,8 @@ class ApprovalCard extends StatelessWidget {
         Icon(Icons.access_time, size: 14.sp, color: AppColors.blueClr),
         SizedBox(width: 5.w),
         Text(
-          '${'approval_history.time'.tr()}${item.time}',
-          style: AppTextStyles.font10GreyRegular(context),
+          DateFormatter.formatTime(item.time),
+          style: AppTextStyles.font10BlackMedium(context),
         ),
       ],
     );

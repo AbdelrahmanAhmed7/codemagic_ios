@@ -184,4 +184,16 @@ class AppTextStyles {
     color: AppColors.whiteClr,
     fontFamily: FontManager.getFontFamily(context),
   );
+  static TextStyle font10BlackMedium(BuildContext context) => TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackClr,
+    fontFamily: FontManager.getFontFamily(context),
+  );
+  static TextStyle font10BlackRegular(BuildContext context) => TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.blackClr,
+    fontFamily: FontManager.getFontFamily(context),
+  );
 }

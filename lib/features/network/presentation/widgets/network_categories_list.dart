@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/features/network/data/network_category_response_model.dart';
 
 class NetworkCategoriesList extends StatelessWidget {
@@ -63,25 +63,18 @@ class NetworkCategoriesList extends StatelessWidget {
                       ],
                     ),
                     child: Center(
-                      child: CachedNetworkImage(
-                        imageUrl: category.image,
-                        width: 26.w,
-                        height: 26.h,
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) => SizedBox(
-                          width: 16.w,
-                          height: 16.h,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.w,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Icon(
-                          Icons.medical_services_outlined,
-                          size: 22.sp,
-                          color: category.iconColor,
-                        ),
-                      ),
+                      child: category.categoryIcon != null
+                          ? Image.asset(
+                              category.categoryIcon!,
+                              width: 26.w,
+                              height: 26.h,
+                              fit: BoxFit.contain,
+                            )
+                          : Icon(
+                              Icons.medical_services_outlined,
+                              size: 22.sp,
+                              color: category.iconColor,
+                            ),
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -161,4 +154,32 @@ extension NetworkCategoryUI on NetworkCategory {
   }
 
   Color get textColor => iconColor;
+
+  String? get categoryIcon {
+    final categoryName = name.toLowerCase();
+    
+    // Match based on category name
+    if (categoryName.contains('pharmacy') || categoryName.contains('صيدليات')) {
+      return AppAssets.pharmacyCat;
+    } else if (categoryName.contains('dental') || categoryName.contains('مراكز طب الاسنان')) {
+      return AppAssets.dentalCat;
+    } else if (categoryName.contains('lab') || categoryName.contains('معمل') || categoryName.contains('تحاليل')) {
+      return AppAssets.labCat;
+    } else if (categoryName.contains('optical') || categoryName.contains('نظارات') || categoryName.contains('بصريات')) {
+      return AppAssets.opticalCat;
+    } else if (categoryName.contains('physio') || categoryName.contains('علاج طبيعي')) {
+      return AppAssets.physiotherapyCat;
+    } else if (categoryName.contains('doctor') || categoryName.contains('طبيب') || categoryName.contains('دكتور')) {
+      return AppAssets.doctorCat;
+    } else if (categoryName.contains('scan') || categoryName.contains('أشعة') || categoryName.contains('اشعة')) {
+      return AppAssets.scanLabCat;
+    } else if (categoryName.contains('hospital') || categoryName.contains('مستشفى')) {
+      return AppAssets.hospitalCat;
+    } else if (categoryName.contains('specialized') || categoryName.contains('متخصص')) {
+      return AppAssets.specializedCat;
+    }
+    
+    // Return null for default icon
+    return null;
+  }
 }

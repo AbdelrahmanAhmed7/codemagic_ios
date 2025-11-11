@@ -130,4 +130,15 @@ class AppAssets {
   // network assets
   static const String locationIcon = 'assets/network/MapPinArea.png';
   static const String phoneIconNetwork = 'assets/network/Phone.png';
+
+  // network category icons
+  static const String dentalCat = 'assets/network/dental.png';
+  static const String pharmacyCat = 'assets/network/pharmacy.png';
+  static const String labCat = 'assets/network/lab.png';
+  static const String opticalCat = 'assets/network/optical.png';
+  static const String physiotherapyCat = 'assets/network/physio.png';
+  static const String doctorCat = 'assets/network/doctor.png';
+  static const String scanLabCat = 'assets/network/scan lab.png';
+  static const String hospitalCat = 'assets/network/hospital.png';
+  static const String specializedCat = 'assets/network/specialized.png';
 }

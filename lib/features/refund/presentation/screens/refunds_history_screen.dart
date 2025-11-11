@@ -154,37 +154,45 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                                           if (refunds.isEmpty) {
                                             return const RefundEmptyState();
                                           }
-                                          return ListView.separated(
-                                            controller: _controller,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            cacheExtent: 500,
-                                            addAutomaticKeepAlives: true,
-                                            addRepaintBoundaries: true,
-                                            itemCount:
-                                                refunds.length +
-                                                (pagination.hasNextPage
-                                                    ? 1
-                                                    : 0),
-                                            separatorBuilder: (_, __) =>
-                                                SizedBox(height: 12.h),
-                                            itemBuilder: (context, index) {
-                                              if (index >= refunds.length) {
-                                                return const Center(
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(12),
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                          strokeWidth: 2,
-                                                        ),
-                                                  ),
-                                                );
-                                              }
-                                              return RefundCard(
-                                                key: ValueKey(refunds[index].id),
-                                                item: refunds[index],
-                                              );
+                                          return RefreshIndicator(
+                                            onRefresh: () async {
+                                              final lang = context.locale.languageCode;
+                                              await context.read<RefundsCubit>().refreshRefunds(lang);
                                             },
+                                            child: ListView.separated(
+                                              controller: _controller,
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(
+                                                parent: BouncingScrollPhysics(),
+                                              ),
+                                              cacheExtent: 500,
+                                              addAutomaticKeepAlives: true,
+                                              addRepaintBoundaries: true,
+                                              itemCount:
+                                                  refunds.length +
+                                                  (pagination.hasNextPage
+                                                      ? 1
+                                                      : 0),
+                                              separatorBuilder: (_, __) =>
+                                                  SizedBox(height: 12.h),
+                                              itemBuilder: (context, index) {
+                                                if (index >= refunds.length) {
+                                                  return const Center(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.all(12),
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                            strokeWidth: 2,
+                                                          ),
+                                                    ),
+                                                  );
+                                                }
+                                                return RefundCard(
+                                                  key: ValueKey(refunds[index].id),
+                                                  item: refunds[index],
+                                                );
+                                              },
+                                            ),
                                           );
                                         },
                                   );
