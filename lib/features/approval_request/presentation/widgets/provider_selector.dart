@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -70,10 +71,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
                       borderRadius: BorderRadius.circular(6.r),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: Image.asset(
-                      _assetForProvider(_selectedProvider!.name),
-                      fit: BoxFit.cover,
-                    ),
+                    child: _buildProviderLogo(_selectedProvider!),
                   ),
                 Expanded(
                   child: Text(
@@ -139,6 +137,41 @@ class _ProviderSelectorState extends State<ProviderSelector> {
       });
       widget.onProviderSelected?.call(_selectedProvider);
     }
+  }
+
+  Widget _buildProviderLogo(ProviderItem provider) {
+    // إذا كان فيه logo ن الـ API، استخدمه مع caching
+    if (provider.logo != null && provider.logo!.isNotEmpty) {
+      return CachedNetworkImage(
+        imageUrl: provider.logo!,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: AppColors.lightGreyClr,
+          child: Center(
+            child: SizedBox(
+              width: 12.w,
+              height: 12.w,
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.primaryClr,
+                ),
+              ),
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+          _assetForProvider(provider.name),
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+    
+    // إذا مفيش logo من الـ API، استخدم local asset
+    return Image.asset(
+      _assetForProvider(provider.name),
+      fit: BoxFit.cover,
+    );
   }
 
   String _assetForProvider(String name) {

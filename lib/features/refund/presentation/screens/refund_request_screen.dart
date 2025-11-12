@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -136,7 +137,13 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     return ShowCaseWidget(
       builder: (context) => Scaffold(
         backgroundColor: AppColors.lightGreyClr,
-        body: SafeArea(
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onTap: () {
+            // إزالة focus عند الضغط في أي مكان في الشاشة
+            FocusScope.of(context).unfocus();
+          },
+          child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,6 +366,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -39,8 +39,9 @@ class _PolicyScreenState extends State<PolicyScreen> {
         builder: (context) {
           if (!_hasLoadedInitialData) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.read<GetPolicyCategoriesCubit>()
-                .getPolicyCategories(LanguageHelper.getLanguageCode(context));
+              context.read<GetPolicyCategoriesCubit>().getPolicyCategories(
+                LanguageHelper.getLanguageCode(context),
+              );
             });
             _hasLoadedInitialData = true;
           }
@@ -51,10 +52,12 @@ class _PolicyScreenState extends State<PolicyScreen> {
               child: Column(
                 children: [
                   PageHeader(
-                    title: _showDetails ? 'policy.details'.tr() : 'policy.title'.tr(),
-                    onBack: _showDetails 
-                      ? () => setState(() => _showDetails = false) 
-                      : null,
+                    title: _showDetails
+                        ? 'policy.details'.tr()
+                        : 'policy.title'.tr(),
+                    onBack: _showDetails
+                        ? () => setState(() => _showDetails = false)
+                        : null,
                     backPath: _showDetails ? null : '/home',
                   ),
                   Expanded(
@@ -69,7 +72,9 @@ class _PolicyScreenState extends State<PolicyScreen> {
                             borderRadius: BorderRadius.circular(16.r),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.greyClr.withValues(alpha: 0.08),
+                                color: AppColors.greyClr.withValues(
+                                  alpha: 0.08,
+                                ),
                                 blurRadius: 24,
                                 offset: const Offset(0, 8),
                               ),
@@ -79,19 +84,31 @@ class _PolicyScreenState extends State<PolicyScreen> {
                             padding: const EdgeInsets.all(16.0),
                             child: _showDetails
                                 ? _buildServiceDetails()
-                                : BlocBuilder<GetPolicyCategoriesCubit, GetPolicyCategoriesState>(
+                                : BlocBuilder<
+                                    GetPolicyCategoriesCubit,
+                                    GetPolicyCategoriesState
+                                  >(
                                     builder: (context, state) {
                                       return state.when(
-                                        initial: () => const Center(child: CircularProgressIndicator()),
-                                        loading: () => const Center(child: CircularProgressIndicator()),
+                                        initial: () => const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                        loading: () => const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
                                         failed: (message) => Center(
                                           child: Text(
                                             message,
-                                            style: AppTextStyles.font14BlackMedium(context),
+                                            style:
+                                                AppTextStyles.font14BlackMedium(
+                                                  context,
+                                                ),
                                           ),
                                         ),
                                         loaded: (response) {
-                                          return _buildServicesList(response.data.categories);
+                                          return _buildServicesList(
+                                            response.data.categories,
+                                          );
                                         },
                                       );
                                     },
@@ -119,81 +136,114 @@ class _PolicyScreenState extends State<PolicyScreen> {
           'policy.services'.tr(),
           style: AppTextStyles.font16BlackMedium(context),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 12.h),
+
         Expanded(
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 12.w,
-              mainAxisSpacing: 12.h,
-              childAspectRatio: 0.8,
-            ),
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              final category = categories[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PolicyDetailsScreen(
-                        serviceName: category.serviceClassName,
-                        categoryId: category.id,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(12.w),
-                  decoration: BoxDecoration(
-                    color: _parseColor(category.color),
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 48.w,
-                        height: 48.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteClr,
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipOval(
-                          child: SizedBox(
-                            width: 44.w,
-                            height: 44.w,
-                            child: _getCategoryIcon(category.serviceClassName) != null
-                                ? Image.asset(
-                                    _getCategoryIcon(category.serviceClassName)!,
-                                    fit: BoxFit.contain,
-                                  )
-                                : Icon(
-                                    Icons.local_hospital,
-                                    size: 24.sp,
-                                    color: AppColors.primaryClr,
-                                  ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        category.serviceClassName,
-                        style: AppTextStyles.font12BlackMedium(context).copyWith(
-                          color: AppColors.blackClr,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+  child: ListView.separated(
+    physics: const BouncingScrollPhysics(),
+    itemCount: categories.length,
+    separatorBuilder: (_, __) => SizedBox(height: 12.h),
+    itemBuilder: (context, index) {
+      final category = categories[index];
+      final iconPath = _getCategoryIcon(category.serviceClassName);
+
+      return TweenAnimationBuilder<double>(
+        tween: Tween(begin: 1, end: 1),
+        duration: const Duration(milliseconds: 200),
+        builder: (context, scale, child) => Transform.scale(
+          scale: scale,
+          child: child,
+        ),
+        child: Material(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          elevation: 0,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16.r),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PolicyDetailsScreen(
+                    serviceName: category.serviceClassName,
+                    categoryId: category.id,
                   ),
                 ),
               );
             },
+            splashColor: AppColors.primaryClr.withValues(alpha: 0.1),
+            highlightColor: Colors.transparent,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(
+                  color: AppColors.primaryClr.withValues(alpha: 0.1),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 52.w,
+                    height: 52.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primaryClr.withValues(alpha: 0.15),
+                          AppColors.primaryClr.withValues(alpha: 0.05),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.w),
+                      child: iconPath != null
+                          ? Image.asset(iconPath, fit: BoxFit.contain)
+                          : Icon(
+                              Icons.local_hospital,
+                              color: AppColors.primaryClr,
+                              size: 28.sp,
+                            ),
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Text(
+                      category.serviceClassName,
+                      style: AppTextStyles.font14BlackMedium(context).copyWith(
+                        color: AppColors.blackClr,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 16.sp,
+                    color: Colors.grey[500],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
+      );
+    },
+  ),
+)
       ],
     );
   }
@@ -203,34 +253,51 @@ class _PolicyScreenState extends State<PolicyScreen> {
   }
 
   String? _getCategoryIcon(String categoryName) {
-
-    if (categoryName.contains('Acute Medication') || categoryName.contains('ادويه عاديه')) {
+    if (categoryName.contains('Acute Medication') ||
+        categoryName.contains('ادويه عاديه')) {
       return AppAssets.pharmacyCat;
-    }
-    else if (categoryName.contains('Chronic Medication') || categoryName.contains('ادويه مزمنه')) {
+    } else if (categoryName.contains('Chronic Medication') ||
+        categoryName.contains('ادويه مزمنه')) {
       return AppAssets.pharmacyCat;
-    }else if (categoryName.contains('Dental') || categoryName.contains('مراكز طب الاسنان') || categoryName.contains('أسنان')) {
+    } else if (categoryName.contains('Dental') ||
+        categoryName.contains('مراكز طب الاسنان') ||
+        categoryName.contains('أسنان')) {
       return AppAssets.dentalCat;
-    } else if (categoryName.contains('Lab') || categoryName.contains('معمل') || categoryName.contains('تحاليل')) {
+    } else if (categoryName.contains('Lab') ||
+        categoryName.contains('معمل') ||
+        categoryName.contains('تحاليل')) {
       return AppAssets.labTest;
-    } else if (categoryName.contains('Glasses') || categoryName.contains('نظارة طبية') || categoryName.contains('بصريات')) {
+    } else if (categoryName.contains('Glasses') ||
+        categoryName.contains('نظارة طبية') ||
+        categoryName.contains('بصريات')) {
       return AppAssets.glasses;
-    } else if (categoryName.contains('pre-exsiting cases') || categoryName.contains('الحالات السابقة')) {
+    } else if (categoryName.contains('pre-exsiting cases') ||
+        categoryName.contains('الحالات السابقة')) {
       return AppAssets.pre;
-    } else if (categoryName.contains('Ambulance') || categoryName.contains('سيارة الأسعاف') || categoryName.contains('دكتور')) {
+    } else if (categoryName.contains('Ambulance') ||
+        categoryName.contains('سيارة الأسعاف') ||
+        categoryName.contains('دكتور')) {
       return AppAssets.ambulanceCat;
-    } else if (categoryName.contains('Scan Investigations') || categoryName.contains('أشعة') || categoryName.contains('اشعة')) {
+    } else if (categoryName.contains('Scan Investigations') ||
+        categoryName.contains('أشعة') ||
+        categoryName.contains('اشعة')) {
       return AppAssets.scanCat;
-    } else if (categoryName.contains('Hospitals and Medical Centers Examination') || categoryName.contains('الكشف بالمستشفيات و المراكز الطبية')) {
+    } else if (categoryName.contains(
+          'Hospitals and Medical Centers Examination',
+        ) ||
+        categoryName.contains('الكشف بالمستشفيات و المراكز الطبية')) {
       return AppAssets.hospitalScan;
-    } else if (categoryName.contains('Inpatient') || categoryName.contains('عمليات')) {
+    } else if (categoryName.contains('Inpatient') ||
+        categoryName.contains('عمليات')) {
       return AppAssets.inpatientCat;
-    } else if (categoryName.contains('Critical') || categoryName.contains('الحالات الحرجة')) {
+    } else if (categoryName.contains('Critical') ||
+        categoryName.contains('الحالات الحرجة')) {
       return AppAssets.critical;
-    }else if (categoryName.contains('Emergency (up to 24 hours) ') || categoryName.contains('الطوارئ')) {
+    } else if (categoryName.contains('Emergency (up to 24 hours) ') ||
+        categoryName.contains('الطوارئ')) {
       return AppAssets.emergencyCat;
     }
-    
+
     return null;
   }
 

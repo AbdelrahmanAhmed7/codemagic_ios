@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -32,9 +33,7 @@ class _ProviderListItemState extends State<ProviderListItem>
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppColors.lightGreyClr,
-          foregroundImage: AssetImage(
-            _assetForProvider(widget.item.name),
-          ),
+          child: _buildProviderLogo(),
         ),
         title: Text(
           widget.item.name,
@@ -52,6 +51,55 @@ class _ProviderListItemState extends State<ProviderListItem>
         onTap: widget.onTap,
         dense: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      ),
+    );
+  }
+
+  Widget _buildProviderLogo() {
+    // إذا كان فيه logo من الـ API، استخدمه مع caching
+    if (widget.item.logo != null && widget.item.logo!.isNotEmpty) {
+      return ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: widget.item.logo!,
+          fit: BoxFit.cover,
+          width: 40.w,
+          height: 40.w,
+          placeholder: (context, url) => Container(
+            width: 40.w,
+            height: 40.w,
+            color: AppColors.lightGreyClr,
+            child: Center(
+              child: SizedBox(
+                width: 16.w,
+                height: 16.w,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.primaryClr,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => ClipOval(
+            child: Image.asset(
+              _assetForProvider(widget.item.name),
+              fit: BoxFit.cover,
+              width: 40.w,
+              height: 40.w,
+            ),
+          ),
+        ),
+      );
+    }
+    
+    // إذا مفيش logo من الـ API، استخدم local asset
+    return ClipOval(
+      child: Image.asset(
+        _assetForProvider(widget.item.name),
+        fit: BoxFit.cover,
+        width: 40.w,
+        height: 40.w,
       ),
     );
   }
