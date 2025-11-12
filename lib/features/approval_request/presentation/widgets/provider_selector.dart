@@ -140,7 +140,6 @@ class _ProviderSelectorState extends State<ProviderSelector> {
   }
 
   Widget _buildProviderLogo(ProviderItem provider) {
-    // إذا كان فيه logo ن الـ API، استخدمه مع caching
     if (provider.logo != null && provider.logo!.isNotEmpty) {
       return CachedNetworkImage(
         imageUrl: provider.logo!,
@@ -161,27 +160,13 @@ class _ProviderSelectorState extends State<ProviderSelector> {
           ),
         ),
         errorWidget: (context, url, error) => Image.asset(
-          _assetForProvider(provider.name),
-          fit: BoxFit.cover,
+         AppAssets.logo,
         ),
       );
     }
     
-    // إذا مفيش logo من الـ API، استخدم local asset
     return Image.asset(
-      _assetForProvider(provider.name),
-      fit: BoxFit.cover,
+      AppAssets.logo,
     );
-  }
-
-  String _assetForProvider(String name) {
-    final normalized = name.toLowerCase();
-    if (normalized.contains('shifa')) return AppAssets.shifa;
-    if (normalized.contains('ezaby') || normalized.contains('elezaby')) {
-      return AppAssets.elezaby;
-    }
-    if (normalized.contains('alfa')) return AppAssets.alfaLogo;
-    if (normalized.contains('scan')) return AppAssets.misrScan;
-    return AppAssets.providers;
   }
 }

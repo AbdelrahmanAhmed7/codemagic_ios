@@ -139,111 +139,113 @@ class _PolicyScreenState extends State<PolicyScreen> {
         SizedBox(height: 12.h),
 
         Expanded(
-  child: ListView.separated(
-    physics: const BouncingScrollPhysics(),
-    itemCount: categories.length,
-    separatorBuilder: (_, __) => SizedBox(height: 12.h),
-    itemBuilder: (context, index) {
-      final category = categories[index];
-      final iconPath = _getCategoryIcon(category.serviceClassName);
+          child: ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemCount: categories.length,
+            separatorBuilder: (_, __) => SizedBox(height: 12.h),
+            itemBuilder: (context, index) {
+              final category = categories[index];
+              final iconPath = _getCategoryIcon(category.serviceClassName);
 
-      return TweenAnimationBuilder<double>(
-        tween: Tween(begin: 1, end: 1),
-        duration: const Duration(milliseconds: 200),
-        builder: (context, scale, child) => Transform.scale(
-          scale: scale,
-          child: child,
-        ),
-        child: Material(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          elevation: 0,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16.r),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PolicyDetailsScreen(
-                    serviceName: category.serviceClassName,
-                    categoryId: category.id,
+              return TweenAnimationBuilder<double>(
+                tween: Tween(begin: 1, end: 1),
+                duration: const Duration(milliseconds: 200),
+                builder: (context, scale, child) =>
+                    Transform.scale(scale: scale, child: child),
+                child: Material(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.r),
+                  elevation: 0,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16.r),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PolicyDetailsScreen(
+                            serviceName: category.serviceClassName,
+                            categoryId: category.id,
+                          ),
+                        ),
+                      );
+                    },
+                    splashColor: AppColors.primaryClr.withValues(alpha: 0.1),
+                    highlightColor: Colors.transparent,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeOut,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 14.h,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(
+                          color: AppColors.primaryClr.withValues(alpha: 0.1),
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 52.w,
+                            height: 52.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.primaryClr.withValues(alpha: 0.15),
+                                  AppColors.primaryClr.withValues(alpha: 0.05),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10.w),
+                              child: iconPath != null
+                                  ? Image.asset(iconPath, fit: BoxFit.contain)
+                                  : Icon(
+                                      Icons.local_hospital,
+                                      color: AppColors.primaryClr,
+                                      size: 28.sp,
+                                    ),
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Text(
+                              category.serviceClassName,
+                              style: AppTextStyles.font14BlackMedium(context)
+                                  .copyWith(
+                                    color: AppColors.blackClr,
+                                    height: 1.4,
+                                  ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 16.sp,
+                            color: Colors.grey[500],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               );
             },
-            splashColor: AppColors.primaryClr.withValues(alpha: 0.1),
-            highlightColor: Colors.transparent,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(
-                  color: AppColors.primaryClr.withValues(alpha: 0.1),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 52.w,
-                    height: 52.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primaryClr.withValues(alpha: 0.15),
-                          AppColors.primaryClr.withValues(alpha: 0.05),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(10.w),
-                      child: iconPath != null
-                          ? Image.asset(iconPath, fit: BoxFit.contain)
-                          : Icon(
-                              Icons.local_hospital,
-                              color: AppColors.primaryClr,
-                              size: 28.sp,
-                            ),
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Text(
-                      category.serviceClassName,
-                      style: AppTextStyles.font14BlackMedium(context).copyWith(
-                        color: AppColors.blackClr,
-                        height: 1.4,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16.sp,
-                    color: Colors.grey[500],
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
-      );
-    },
-  ),
-)
       ],
     );
   }
@@ -297,21 +299,6 @@ class _PolicyScreenState extends State<PolicyScreen> {
         categoryName.contains('الطوارئ')) {
       return AppAssets.emergencyCat;
     }
-
     return null;
-  }
-
-  Color _parseColor(String hexColor) {
-    String value = hexColor.trim();
-    if (value.isEmpty) return AppColors.primaryClr;
-    if (value.startsWith('#')) value = value.substring(1);
-    if (value.length == 6) {
-      value = 'FF$value';
-    }
-    try {
-      return Color(int.parse('0x$value'));
-    } catch (_) {
-      return AppColors.primaryClr;
-    }
   }
 }

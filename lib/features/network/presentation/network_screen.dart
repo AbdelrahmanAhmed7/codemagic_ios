@@ -60,16 +60,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
   Future<void> _initializeLocation() async {
     final cubit = context.read<NetworkCubit>();
 
-    // Try to get user location (will show permission dialog)
-    await cubit.getUserLocation();
-
-    // If location retrieved successfully, load providers
-    if (cubit.userLatitude != null && cubit.userLongitude != null) {
-      await cubit.searchProviders(resetPage: true, context: context);
-    } else {
-      // fallback: load random providers or show message
-      await cubit.searchProviders(resetPage: true, context: context);
-    }
+    // Show location permission dialog
+    await cubit.requestLocationWithDialog(context);
   }
 
   void _onScroll() async {

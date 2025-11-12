@@ -11,11 +11,7 @@ class ProviderListItem extends StatefulWidget {
   final ProviderItem item;
   final VoidCallback onTap;
 
-  const ProviderListItem({
-    super.key,
-    required this.item,
-    required this.onTap,
-  });
+  const ProviderListItem({super.key, required this.item, required this.onTap});
 
   @override
   State<ProviderListItem> createState() => _ProviderListItemState();
@@ -56,7 +52,6 @@ class _ProviderListItemState extends State<ProviderListItem>
   }
 
   Widget _buildProviderLogo() {
-    // إذا كان فيه logo من الـ API، استخدمه مع caching
     if (widget.item.logo != null && widget.item.logo!.isNotEmpty) {
       return ClipOval(
         child: CachedNetworkImage(
@@ -82,37 +77,13 @@ class _ProviderListItemState extends State<ProviderListItem>
             ),
           ),
           errorWidget: (context, url, error) => ClipOval(
-            child: Image.asset(
-              _assetForProvider(widget.item.name),
-              fit: BoxFit.cover,
-              width: 40.w,
-              height: 40.w,
-            ),
+            child: Image.asset(AppAssets.logo, width: 40.w, height: 40.w),
           ),
         ),
       );
     }
-    
-    // إذا مفيش logo من الـ API، استخدم local asset
     return ClipOval(
-      child: Image.asset(
-        _assetForProvider(widget.item.name),
-        fit: BoxFit.cover,
-        width: 40.w,
-        height: 40.w,
-      ),
+      child: Image.asset(AppAssets.logo, width: 40.w, height: 40.w),
     );
   }
-
-  String _assetForProvider(String name) {
-    final normalized = name.toLowerCase();
-    if (normalized.contains('shifa')) return AppAssets.shifa;
-    if (normalized.contains('ezaby') || normalized.contains('elezaby')) {
-      return AppAssets.elezaby;
-    }
-    if (normalized.contains('alfa')) return AppAssets.alfaLogo;
-    if (normalized.contains('scan')) return AppAssets.misrScan;
-    return AppAssets.providers;
-  }
 }
-

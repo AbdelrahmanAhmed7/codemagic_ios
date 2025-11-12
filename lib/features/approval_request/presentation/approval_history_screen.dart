@@ -197,6 +197,9 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
             onPressed: () {
               context.push('/approval-request');
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(44.r),
+            ),
             backgroundColor: AppColors.primaryClr,
             child: const Icon(Icons.add, color: Colors.white),
           ),

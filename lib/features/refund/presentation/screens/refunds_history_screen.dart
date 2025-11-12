@@ -174,7 +174,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                                                       ? 1
                                                       : 0),
                                               separatorBuilder: (_, __) =>
-                                                  SizedBox(height: 12.h),
+                                                  SizedBox(height: 20.h),
                                               itemBuilder: (context, index) {
                                                 if (index >= refunds.length) {
                                                   return const Center(
@@ -216,7 +216,10 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
             onPressed: () {
               context.push('/refund-request');
             },
-            backgroundColor: AppColors.primaryClr,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(44.r),
+            ),
+            backgroundColor: Color(0xFF4285F9),
             child: const Icon(Icons.add, color: Colors.white),
           ),
         ),

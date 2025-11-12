@@ -99,7 +99,6 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
           onTap: () {
-            // إزالة focus عند الضغط في أي مكان في الشاشة
             FocusScope.of(context).unfocus();
           },
           child: SafeArea(
