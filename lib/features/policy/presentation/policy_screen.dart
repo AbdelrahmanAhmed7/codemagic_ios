@@ -203,29 +203,32 @@ class _PolicyScreenState extends State<PolicyScreen> {
   }
 
   String? _getCategoryIcon(String categoryName) {
-    final name = categoryName.toLowerCase();
-    
-    if (name.contains('Acute Medication') || name.contains('ادويه عاديه')) {
+
+    if (categoryName.contains('Acute Medication') || categoryName.contains('ادويه عاديه')) {
       return AppAssets.pharmacyCat;
-    } else if (name.contains('dental') || name.contains('مراكز طب الاسنان') || name.contains('أسنان')) {
-      return AppAssets.dentalCat;
-    } else if (name.contains('lab') || name.contains('معمل') || name.contains('تحاليل')) {
-      return AppAssets.labCat;
-    } else if (name.contains('optical') || name.contains('نظارة طبية') || name.contains('بصريات')) {
-      return AppAssets.glasses;
-    } else if (name.contains('physio') || name.contains('علاج طبيعي')) {
-      return AppAssets.physiotherapyCat;
-    } else if (name.contains('doctor') || name.contains('طبيب') || name.contains('دكتور')) {
-      return AppAssets.doctorCat;
-    } else if (name.contains('scan') || name.contains('أشعة') || name.contains('اشعة')) {
-      return AppAssets.scanLabCat;
-    } else if (name.contains('hospital') || name.contains('الكشف بالمستشفيات و المراكز الطبية')) {
-      return AppAssets.hospitalCat;
-    } else if (name.contains('specialized') || name.contains('عمليات')) {
-      return AppAssets.specializedCat;
     }
-    else if (name.contains('pharmacy') || name.contains('الحالات الحرجة')) {
-      return AppAssets.hospitalCat;
+    else if (categoryName.contains('Chronic Medication') || categoryName.contains('ادويه مزمنه')) {
+      return AppAssets.pharmacyCat;
+    }else if (categoryName.contains('Dental') || categoryName.contains('مراكز طب الاسنان') || categoryName.contains('أسنان')) {
+      return AppAssets.dentalCat;
+    } else if (categoryName.contains('Lab') || categoryName.contains('معمل') || categoryName.contains('تحاليل')) {
+      return AppAssets.labTest;
+    } else if (categoryName.contains('Glasses') || categoryName.contains('نظارة طبية') || categoryName.contains('بصريات')) {
+      return AppAssets.glasses;
+    } else if (categoryName.contains('pre-exsiting cases') || categoryName.contains('الحالات السابقة')) {
+      return AppAssets.pre;
+    } else if (categoryName.contains('Ambulance') || categoryName.contains('سيارة الأسعاف') || categoryName.contains('دكتور')) {
+      return AppAssets.ambulanceCat;
+    } else if (categoryName.contains('Scan Investigations') || categoryName.contains('أشعة') || categoryName.contains('اشعة')) {
+      return AppAssets.scanCat;
+    } else if (categoryName.contains('Hospitals and Medical Centers Examination') || categoryName.contains('الكشف بالمستشفيات و المراكز الطبية')) {
+      return AppAssets.hospitalScan;
+    } else if (categoryName.contains('Inpatient') || categoryName.contains('عمليات')) {
+      return AppAssets.inpatientCat;
+    } else if (categoryName.contains('Critical') || categoryName.contains('الحالات الحرجة')) {
+      return AppAssets.critical;
+    }else if (categoryName.contains('Emergency (up to 24 hours) ') || categoryName.contains('الطوارئ')) {
+      return AppAssets.emergencyCat;
     }
     
     return null;

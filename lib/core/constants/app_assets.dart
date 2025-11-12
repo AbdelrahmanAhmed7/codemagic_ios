@@ -141,4 +141,12 @@ class AppAssets {
   static const String scanLabCat = 'assets/network/scan lab.png';
   static const String hospitalCat = 'assets/network/hospital.png';
   static const String specializedCat = 'assets/network/specialized.png';
+  static const String ambulanceCat = 'assets/network/ambulance.png';
+  static const String emergencyCat = 'assets/network/emergency.png';
+  static const String inpatientCat = 'assets/network/inpatient.png';
+  static const String pre = 'assets/network/pre.png';
+  static const String scanCat = 'assets/network/scan.png';
+  static const String hospitalScan = 'assets/network/hospitals s.png';
+  static const String labTest = 'assets/network/labTest.png';
+  static const String critical = 'assets/network/critical.png';
 }
