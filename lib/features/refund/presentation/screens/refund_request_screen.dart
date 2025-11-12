@@ -139,7 +139,6 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
           onTap: () {
-            // إزالة focus عند الضغط في أي مكان في الشاشة
             FocusScope.of(context).unfocus();
           },
           child: SafeArea(
