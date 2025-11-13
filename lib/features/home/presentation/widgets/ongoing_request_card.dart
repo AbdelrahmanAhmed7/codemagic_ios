@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
+import 'package:mediconsult/core/utils/status_helper.dart';
 import 'package:mediconsult/features/home/data/home_response_model.dart';
 
 /// Individual approval card in ongoing requests list
@@ -19,7 +20,8 @@ class OngoingRequestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
-    final statusLabel = _statusLabel(approval.status);
+    final statusColor = StatusHelper.getStatusColor(approval.status);
+    final statusLabel = StatusHelper.getStatusLabel(approval.status, 'approval_history');
 
     // Wrap in RepaintBoundary for better scroll performance
     return RepaintBoundary(
@@ -131,8 +133,7 @@ class OngoingRequestCard extends StatelessWidget {
                         vertical: 2.h,
                       ),
                       decoration: BoxDecoration(
-                        color: _getStatusColor(approval.status)
-                            .withValues(alpha: 0.2),
+                        color: statusColor.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       alignment: Alignment.center,
@@ -141,7 +142,7 @@ class OngoingRequestCard extends StatelessWidget {
                         style: AppTextStyles.font10GreyRegular(context)
                             .copyWith(
                               fontWeight: FontWeight.w600,
-                              color: _getStatusColor(approval.status),
+                              color: statusColor,
                               fontSize: 9.sp,
                             ),
                       ),
@@ -153,16 +154,19 @@ class OngoingRequestCard extends StatelessWidget {
           ),
 
           Positioned(
-            left: 0,
+            left: isArabic ? null : 0,
+            right: isArabic ? 0 : null,
             top: 0,
             bottom: 0,
             child: Container(
               width: 6.w,
               decoration: BoxDecoration(
-                color: _getStatusColor(approval.status),
+                color: statusColor,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.r),
-                  bottomLeft: Radius.circular(12.r),
+                  topLeft: isArabic ? Radius.zero : Radius.circular(12.r),
+                  bottomLeft: isArabic ? Radius.zero : Radius.circular(12.r),
+                  topRight: isArabic ? Radius.circular(12.r) : Radius.zero,
+                  bottomRight: isArabic ? Radius.circular(12.r) : Radius.zero,
                 ),
               ),
             ),
@@ -173,29 +177,5 @@ class OngoingRequestCard extends StatelessWidget {
     );
   }
 
-  static Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case "approved":
-        return Colors.green;
-      case "under review":
-        return const Color(0xFFFFC888);
-      case "rejected":
-        return Colors.redAccent;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  static String _statusLabel(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return 'approval_history.status.approved'.tr();
-      case 'R':
-        return 'approval_history.status.rejected'.tr();
-      case 'P':
-      default:
-        return 'approval_history.status.pending'.tr();
-    }
-  }
 }
 
