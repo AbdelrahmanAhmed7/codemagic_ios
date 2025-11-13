@@ -13,7 +13,7 @@ class StatusHelper {
         return const Color(0xFFDC3545); // Red - Danger
       case 'P': // Pending
       default:
-        return const Color(0xFFFFC107); // Amber - Warning
+        return const Color(0xFF999999); // Grey - Pending
     }
   }
 
@@ -26,7 +26,7 @@ class StatusHelper {
         return const Color(0xFFDC3545).withOpacity(0.1); // Red with 10% opacity
       case 'P': // Pending
       default:
-        return const Color(0xFFFFC107).withOpacity(0.1); // Amber with 10% opacity
+        return const Color(0xFF999999).withOpacity(0.1); // Grey with 10% opacity
     }
   }
 
