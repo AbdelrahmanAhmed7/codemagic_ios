@@ -13,6 +13,7 @@ import 'package:mediconsult/features/network/data/network_provider_response_mode
 import 'package:mediconsult/features/network/logic/network_state.dart';
 import 'package:mediconsult/features/network/repository/network_repository.dart';
 import 'package:mediconsult/shared/widgets/location_permission_dialog.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 
 class NetworkCubit extends Cubit<NetworkState> {
   final NetworkRepository _repository;
@@ -101,6 +102,13 @@ class NetworkCubit extends Cubit<NetworkState> {
         await CacheService.cacheNetworkCategoriesData(response.toJson());
       },
       failure: (message) {
+        // تسجيل فشل تحميل فئات مقدمي الخدمة
+        FirebaseCrashlyticsService.instance.recordError(
+          exception: 'Network Categories Load Failed: $message',
+          reason: 'Failed to load network categories',
+          information: ['Language: $language'],
+        );
+        
         emit(NetworkState.categoriesError(message));
       },
     );
@@ -171,10 +179,11 @@ class NetworkCubit extends Cubit<NetworkState> {
         return;
       }
 
-      // Get current position
+      // Get current position with timeout
       Position position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 10), // Add timeout
         ),
       );
 
@@ -182,7 +191,18 @@ class NetworkCubit extends Cubit<NetworkState> {
       _userLongitude = position.longitude;
 
       emit(NetworkState.locationSuccess(position.latitude, position.longitude));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // تسجيل خطأ الموقع في Crashlytics
+      FirebaseCrashlyticsService.instance.recordError(
+        exception: e,
+        stackTrace: stackTrace,
+        reason: 'Failed to get user location',
+        information: [
+          'Location Services Enabled: ${await Geolocator.isLocationServiceEnabled()}',
+          'Permission Status: ${await Geolocator.checkPermission()}',
+        ],
+      );
+      
       emit(NetworkState.locationError(e.toString()));
     }
   }

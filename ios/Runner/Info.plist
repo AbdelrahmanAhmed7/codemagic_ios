@@ -55,5 +55,77 @@
 		<string>This app requires location access to find nearby healthcare providers.</string>
 		<key>NSLocationAlwaysUsageDescription</key>
 		<string>This app requires location access to find nearby healthcare providers.</string>
+		
+		<!-- Firebase Configuration -->
+		<key>FirebaseCrashlyticsCollectionEnabled</key>
+		<true/>
+		<key>FirebaseMessagingAutoInitEnabled</key>
+		<true/>
+		
+		<!-- App Store Configuration -->
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
+		
+		<!-- Network Security -->
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+			<key>NSExceptionDomains</key>
+			<dict>
+				<key>googleapis.com</key>
+				<dict>
+					<key>NSExceptionAllowsInsecureHTTPLoads</key>
+					<true/>
+					<key>NSExceptionMinimumTLSVersion</key>
+					<string>TLSv1.0</string>
+					<key>NSIncludesSubdomains</key>
+					<true/>
+				</dict>
+				<key>firebase.googleapis.com</key>
+				<dict>
+					<key>NSExceptionAllowsInsecureHTTPLoads</key>
+					<true/>
+					<key>NSExceptionMinimumTLSVersion</key>
+					<string>TLSv1.0</string>
+					<key>NSIncludesSubdomains</key>
+					<true/>
+				</dict>
+			</dict>
+		</dict>
+		
+		<!-- Push Notifications -->
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
+		
+		<!-- File Sharing -->
+		<key>LSSupportsOpeningDocumentsInPlace</key>
+		<true/>
+		<key>UIFileSharingEnabled</key>
+		<true/>
+		
+		<!-- Additional Permissions -->
+		<key>NSMicrophoneUsageDescription</key>
+		<string>This app may require microphone access for voice features.</string>
+		<key>NSContactsUsageDescription</key>
+		<string>This app may require contacts access for emergency contacts.</string>
+		<key>NSCalendarsUsageDescription</key>
+		<string>This app may require calendar access to schedule appointments.</string>
+		<key>NSRemindersUsageDescription</key>
+		<string>This app may require reminders access for medication reminders.</string>
+		
+		<!-- Location Accuracy (iOS 14+) -->
+		<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+		<dict>
+			<key>FindProviders</key>
+			<string>Allow location access to find nearby healthcare providers</string>
+		</dict>
+		
+		<!-- Network Usage -->
+		<key>NSLocalNetworkUsageDescription</key>
+		<string>This app requires network access to connect to healthcare services.</string>
 	</dict>
 </plist>

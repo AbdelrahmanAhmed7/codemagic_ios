@@ -12,6 +12,7 @@ import 'package:mediconsult/features/policy/presentation/cubit/get_policy_catego
 import 'package:mediconsult/features/policy/presentation/cubit/get_policy_categories_state.dart';
 import 'package:mediconsult/core/utils/language_helper.dart';
 import 'package:mediconsult/features/policy/data/policy_categories_response.dart';
+import 'package:mediconsult/shared/widgets/error_state_widget.dart';
 
 class PolicyScreen extends StatefulWidget {
   const PolicyScreen({super.key});
@@ -96,14 +97,19 @@ class _PolicyScreenState extends State<PolicyScreen> {
                                         loading: () => const Center(
                                           child: CircularProgressIndicator(),
                                         ),
-                                        failed: (message) => Center(
-                                          child: Text(
-                                            message,
-                                            style:
-                                                AppTextStyles.font14BlackMedium(
-                                                  context,
-                                                ),
-                                          ),
+                                        failed: (message) => ErrorStateWidget(
+                                          message: message,
+                                          icon: Icons.policy_outlined,
+                                          onRetry: () {
+                                            context
+                                                .read<GetPolicyCategoriesCubit>()
+                                                .getPolicyCategories(
+                                                  LanguageHelper.getLanguageCode(
+                                                    context,
+                                                  ),
+                                                );
+                                          },
+                                          retryButtonText: 'common.try_again'.tr(),
                                         ),
                                         loaded: (response) {
                                           return _buildServicesList(

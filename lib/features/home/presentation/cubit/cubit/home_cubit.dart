@@ -6,6 +6,7 @@ import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/core/services/notification_badge_service.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
 import 'package:mediconsult/features/home/repository/home_repository.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 
 class HomeCubit extends Cubit<HomeCubitState> {
   final HomeRepository _homeRepository;
@@ -30,7 +31,15 @@ class HomeCubit extends Cubit<HomeCubitState> {
       // 
       emit(HomeCubitState.loading());
       await _fetchAndCacheData(lang);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // تسجيل أخطاء تحميل بيانات الصفحة الرئيسية
+      FirebaseCrashlyticsService.instance.recordError(
+        exception: e,
+        stackTrace: stackTrace,
+        reason: 'Failed to load home data',
+        information: ['Language: $lang', 'Force Refresh: $forceRefresh'],
+      );
+      
       emit(HomeCubitState.failed(e.toString()));
     }
   }

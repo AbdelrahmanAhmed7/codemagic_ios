@@ -18,6 +18,8 @@
     "back": "رجوع",
     "choose": "اختر",
     "no_internet": "لا يوجد اتصال بالإنترنت",
+    "connection_error": "خطأ في الاتصال، يرجى التحقق من اتصالك بالإنترنت",
+    "try_again": "حاول مرة أخرى",
     "dismiss": "إغلاق",
     "cannot_open_pdf": "تعذر فتح ملف PDF",
     "pdf_not_available": "ملف PDF غير متاح",
@@ -360,6 +362,7 @@
     "select_date": "اختر التاريخ",
     "note": "ملاحظة",
     "submit": "إرسال",
+    "success_message": "تم إرسال طلب الاسترداد بنجاح!",
     "provider_hint": "أدخل اسم مقدم الخدمة",
     "note_hint": "أضف أي ملاحظات إضافية هنا",
     "validation": {
@@ -369,7 +372,11 @@
       "select_reason": "الرجاء اختيار السبب",
       "enter_amount": "الرجاء إدخال المبلغ",
       "select_date": "الرجاء اختيار تاريخ الخدمة",
-      "add_attachment": "الرجاء إضافة مرفق واحد على الأقل"
+      "add_attachment": "الرجاء إضافة مرفق واحد على الأقل",
+      "future_date_not_allowed": "لا يمكن أن يكون تاريخ الفاتورة في المستقبل",
+      "date_too_old": "لا يمكن أن يكون تاريخ الفاتورة أقدم من 60 يوماً",
+      "invoice_attachment_required": "مرفق الفاتورة مطلوب",
+      "prescription_attachment_required": "مرفق الوصفة الطبية مطلوب"
     }
   },
   "refund_history": {

@@ -11,6 +11,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
 import 'package:mediconsult/core/constants/constants.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 import 'package:mediconsult/core/cache/cache_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
@@ -51,13 +52,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Clear token
       await SharedPrefHelper.removeData(SharedPrefKeys.userToken);
       
+      // Update login status
+      isLoggedInUser = false;
+      
       // Clear all cache
       await CacheService.clearCache();
       await CacheService.clearFamilyCache();
       await CacheService.clearAllApprovalsCache();
       await CacheService.clearNotificationsCache();
       
-      // Navigate to login
+      // Clear any other stored data
+      await SharedPrefHelper.clearAllData();
+      
+      // مسح بيانات Firebase Crashlytics
+      await FirebaseCrashlyticsService.instance.clearUserData();
+      
+      // Navigate to login (this will trigger initState and clear login fields)
       if (context.mounted) {
         context.go('/login');
       }

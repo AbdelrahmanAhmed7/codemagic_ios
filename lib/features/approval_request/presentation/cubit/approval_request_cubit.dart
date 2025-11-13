@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_state.dart';
 import 'package:mediconsult/features/approval_request/repository/approval_request_repository.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 
 class ApprovalRequestCubit extends Cubit<ApprovalRequestState> {
   final ApprovalRequestRepository _repository;
@@ -30,6 +31,17 @@ class ApprovalRequestCubit extends Cubit<ApprovalRequestState> {
         emit(ApprovalRequestState.success(response.data!));
       },
       failure: (message) {
+        // تسجيل فشل طلب الموافقة
+        FirebaseCrashlyticsService.instance.recordError(
+          exception: 'Approval Request Failed: $message',
+          reason: 'Failed to create approval request',
+          information: [
+            'Member ID: $memberId',
+            'Provider ID: $providerId',
+            'Language: $lang',
+          ],
+        );
+        
         emit(ApprovalRequestState.failed(message));
       },
     );

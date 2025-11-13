@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mediconsult/core/constants/constants.dart';
 import 'package:mediconsult/core/helpers/extension.dart';
 import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
 import 'package:mediconsult/core/services/firebase_token_service.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 import 'package:mediconsult/features/notifications/service/push_notifications_service.dart';
 import 'package:mediconsult/firebase_options.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
@@ -20,6 +22,17 @@ Future<void> main() async {
     EasyLocalization.ensureInitialized(),
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]);
+  
+  // تهيئة خدمات Firebase
+  await FirebaseCrashlyticsService.instance.initialize();
+  
+  // إرسال رسالة اختبار لتفعيل Crashlytics Console
+  await FirebaseCrashlyticsService.instance.log('App started successfully - ${DateTime.now()}');
+  
+  // إرسال خطأ اختبار لتفعيل Dashboard (فقط في Release mode)
+  if (!kDebugMode) {
+    await FirebaseCrashlyticsService.instance.sendTestError();
+  }
   
   await ConnectivityService.instance.initialize();
   

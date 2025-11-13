@@ -16,6 +16,7 @@ class GetPolicyDetailsRepository {
       if (response.success == true) {
         return ApiResult.success(response);
       } else {
+        // معالجة رسائل الخطأ من الخادم
         return ApiResult.failure(response.message);
       }
     } catch (error) {

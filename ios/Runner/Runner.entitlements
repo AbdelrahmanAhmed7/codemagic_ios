@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Push Notifications -->
+	<key>aps-environment</key>
+	<string>development</string>
+	
+	<!-- Network Access -->
+	<key>com.apple.developer.networking.wifi-info</key>
+	<true/>
+	
+	<!-- Location Services -->
+	<key>com.apple.developer.location.push</key>
+	<true/>
+	
+	<!-- Background App Refresh -->
+	<key>com.apple.developer.background-processing</key>
+	<array>
+		<string>com.mediconsult.background-fetch</string>
+		<string>com.mediconsult.background-processing</string>
+	</array>
+	
+	<!-- Associated Domains (for deep linking) -->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:mediconsult.com</string>
+		<string>applinks:www.mediconsult.com</string>
+	</array>
+	
+	<!-- Keychain Sharing -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.mediconsult.app</string>
+	</array>
+	
+	<!-- App Groups (for sharing data between app and extensions) -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.mediconsult.app</string>
+	</array>
+	
+	<!-- Network Extensions -->
+	<key>com.apple.developer.networking.networkextension</key>
+	<array>
+		<string>packet-tunnel-provider</string>
+		<string>app-proxy-provider</string>
+	</array>
+	
+	<!-- HealthKit (if needed for health data) -->
+	<key>com.apple.developer.healthkit</key>
+	<true/>
+	<key>com.apple.developer.healthkit.access</key>
+	<array>
+		<string>health-records</string>
+	</array>
+</dict>
+</plist>

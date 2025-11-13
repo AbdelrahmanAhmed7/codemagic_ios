@@ -23,7 +23,7 @@ class RefundHistoryScreen extends StatefulWidget {
 
 class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   final ScrollController _controller = ScrollController();
-  int _currentTab = 0; // 0 All, 1 Pending, 2 Approved, 3 Rejected
+  int _currentTab = 0;
   bool _isLoadingMore = false;
 
   final GlobalKey _tabsKey = GlobalKey();

@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_state.dart';
 import 'package:mediconsult/features/refund/repository/refund_repository.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 
 class RefundRequestCubit extends Cubit<RefundRequestState> {
   final RefundRepository _repository;
@@ -38,6 +39,18 @@ class RefundRequestCubit extends Cubit<RefundRequestState> {
         emit(RefundRequestState.success(response.data!));
       },
       failure: (message) {
+        // تسجيل فشل طلب الاسترداد
+        FirebaseCrashlyticsService.instance.recordError(
+          exception: 'Refund Request Failed: $message',
+          reason: 'Failed to create refund request',
+          information: [
+            'Member ID: $memberId',
+            'Refund Type: $refundTypeId',
+            'Amount: $amount',
+            'Provider: $providerName',
+          ],
+        );
+        
         emit(RefundRequestState.failed(message));
       },
     );

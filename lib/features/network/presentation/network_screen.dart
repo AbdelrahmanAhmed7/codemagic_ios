@@ -193,18 +193,23 @@ class _NetworkScreenState extends State<NetworkScreen> {
                               return Showcase(
                                 key: _categoriesKey,
                                 description: 'tutorial.network.categories'.tr(),
-                                child: NetworkCategoriesList(
-                                  categories: categories,
-                                  selectedCategoryId: context
-                                      .read<NetworkCubit>()
-                                      .selectedCategoryId,
-                                  onCategorySelected: (categoryId) {
-                                    context
-                                        .read<NetworkCubit>()
-                                        .searchProviders(
-                                          categoryId: categoryId,
-                                          resetPage: true,
-                                        );
+                                child: BlocBuilder<NetworkCubit, NetworkState>(
+                                  buildWhen: (previous, current) => true,
+                                  builder: (context, state) {
+                                    return NetworkCategoriesList(
+                                      categories: categories,
+                                      selectedCategoryId: context
+                                          .read<NetworkCubit>()
+                                          .selectedCategoryId,
+                                      onCategorySelected: (categoryId) {
+                                        context
+                                            .read<NetworkCubit>()
+                                            .searchProviders(
+                                              categoryId: categoryId,
+                                              resetPage: true,
+                                            );
+                                      },
+                                    );
                                   },
                                 ),
                               );
@@ -223,16 +228,22 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                   onSearchSubmitted: (value) async {
                                   final cubit = context.read<NetworkCubit>();
 
-                                  // Ensure we have user location before searching
+                                  // Try to get user location but don't block search if it fails
                                   if (cubit.userLatitude == null ||
                                       cubit.userLongitude == null) {
-                                    await cubit.getUserLocation();
+                                    try {
+                                      await cubit.getUserLocation();
+                                    } catch (e) {
+                                      // Location failed, but continue with search anyway
+                                      print('Location failed: $e');
+                                    }
                                   }
 
-                                    cubit.searchProviders(
-                                      searchKey: value.isNotEmpty ? value : null,
-                                      resetPage: true,
-                                    );
+                                  // Always perform search regardless of location status
+                                  cubit.searchProviders(
+                                    searchKey: value.isNotEmpty ? value : null,
+                                    resetPage: true,
+                                  );
                                   },
                                 ),
                               ),
