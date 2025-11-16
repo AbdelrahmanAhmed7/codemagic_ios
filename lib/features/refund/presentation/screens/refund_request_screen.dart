@@ -40,6 +40,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   List<String> _attachmentPaths = [];
   bool _hasInvoiceAttachment = false;
   bool _hasPrescriptionAttachment = false;
+  String? _noteError;
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
@@ -61,6 +62,11 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   }
 
   Future<void> _submitRefundRequest() async {
+    // Clear previous errors
+    setState(() {
+      _noteError = null;
+    });
+
     // Validation
     if (_selectedMember == null) {
       _showError('refund_request.validation.select_member'.tr());
@@ -86,7 +92,15 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       _showError('refund_request.validation.select_date'.tr());
       return;
     }
-    
+
+    // Validate notes character limit
+    if (_noteController.text.length > 300) {
+      setState(() {
+        _noteError = 'refund_request.validation.notes_too_long'.tr();
+      });
+      return;
+    }
+
     // Validate date is within 60 days and not future
     final DateTime now = DateTime.now();
     final DateTime sixtyDaysAgo = now.subtract(const Duration(days: 60));
@@ -351,6 +365,14 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 child: NoteTextField(
                                   controller: _noteController,
                                   maxLength: 300,
+                                  errorText: _noteError,
+                                  onChanged: (value) {
+                                    if (_noteError != null && value.length <= 300) {
+                                      setState(() {
+                                        _noteError = null;
+                                      });
+                                    }
+                                  },
                                 ),
                               ),
                               SizedBox(height: 16.h),

@@ -64,7 +64,7 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
                             }
                           },
                         ),
-                        
+
                         // Content
                         Expanded(
                           child: SingleChildScrollView(
@@ -75,24 +75,35 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
                                   initial: () {
                                     final lang = context.locale.languageCode;
                                     if (_isTermsSelected) {
-                                      context.read<TermsCubit>().loadTerms(lang);
+                                      context.read<TermsCubit>().loadTerms(
+                                        lang,
+                                      );
                                     } else {
-                                      context.read<TermsCubit>().loadPrivacy(lang);
+                                      context.read<TermsCubit>().loadPrivacy(
+                                        lang,
+                                      );
                                     }
-                                    return const Center(child: CircularProgressIndicator());
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
                                   },
-                                  loading: () => const Center(child: CircularProgressIndicator()),
+                                  loading: () => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                   failed: (message) => Text(
                                     message,
-                                    style: AppTextStyles.font12GreyRegular(context),
+                                    style: AppTextStyles.font12GreyRegular(
+                                      context,
+                                    ),
                                   ),
                                   loaded: (resp) {
                                     final html = resp.data.description;
-                                    
+
                                     // Show header with icon for Privacy Policy only
                                     if (!_isTermsSelected) {
                                       return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           // Header with policy icon
                                           Center(
@@ -101,25 +112,28 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
                                                 Container(
                                                   width: 80.w,
                                                   height: 80.w,
-                                                  child: Image.asset( 
-                                                    AppAssets.policy,
+                                                  child: Image.asset(
+                                                    AppAssets.shieldIcon,
                                                     fit: BoxFit.contain,
                                                   ),
                                                 ),
                                                 SizedBox(height: 16.h),
                                                 Text(
-                                                  'terms_policy.privacy_policy'.tr(),
-                                                  style: AppTextStyles.font18BlackSemiBold(context),
+                                                  'terms_policy.privacy_policy'
+                                                      .tr(),
+                                                  style:
+                                                      AppTextStyles.font18BlackSemiBold(
+                                                        context,
+                                                      ),
                                                 ),
                                                 SizedBox(height: 4.h),
                                                 Text(
-                                                  'terms_policy.medical_insurance_app'.tr(),
-                                                  style: AppTextStyles.font12GreyRegular(context),
-                                                ),
-                                                SizedBox(height: 8.h),
-                                                Text(
-                                                  'terms_policy.last_updated'.tr(),
-                                                  style: AppTextStyles.font10GreyRegular(context),
+                                                  'terms_policy.medical_insurance_app'
+                                                      .tr(),
+                                                  style:
+                                                      AppTextStyles.font12GreyRegular(
+                                                        context,
+                                                      ),
                                                 ),
                                               ],
                                             ),
@@ -197,4 +211,3 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
     );
   }
 }
-

@@ -156,14 +156,12 @@ class UserPlanCardWidget extends StatelessWidget {
                                 context,
                               ).copyWith(color: const Color(0xff484848)),
                             ),
-                            SizedBox(width: 6.w),
+                            SizedBox(width: 18.w),
                             Text(
                               formattedDate,
-                              style: AppTextStyles.font8GreyRegular(context)
-                                  .copyWith(
-                                    color: const Color(0xff484848),
-                                    fontSize: 12.sp,
-                                  ),
+                              style: AppTextStyles.font14GreyRegular(
+                                context,
+                              ).copyWith(color: const Color(0xff484848)),
                             ),
                           ],
                         ),

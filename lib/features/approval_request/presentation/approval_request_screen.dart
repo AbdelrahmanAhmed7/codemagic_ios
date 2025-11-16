@@ -32,6 +32,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
   final TextEditingController _noteController = TextEditingController();
   final FocusNode _noteFocusNode = FocusNode();
   final List<String> _attachments = [];
+  String? _noteError;
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
@@ -49,24 +50,37 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
 
   // Method to handle approval request submission
   Future<void> _submitApprovalRequest() async {
+    // Clear previous errors
+    setState(() {
+      _noteError = null;
+    });
+
     // Validation
     if (_selectedFamilyMember == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a family member')),
+        SnackBar(content: Text('approval_request.validation.select_member'.tr())),
       );
       return;
     }
 
     if (_selectedProvider == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please select a provider')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('approval_request.validation.select_provider'.tr())),
+      );
+      return;
+    }
+
+    // Validate notes character limit
+    if (_noteController.text.length > 300) {
+      setState(() {
+        _noteError = 'approval_request.validation.notes_too_long'.tr();
+      });
       return;
     }
 
     if (_attachments.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('At least 1 attachment is required')),
+        SnackBar(content: Text('approval_request.validation.attachment_required'.tr())),
       );
       return;
     }
@@ -200,8 +214,16 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                     key: _noteKey,
                                     description: 'tutorial.note.hint'.tr(),
                                     child: NoteTextField(
-                                    maxLength: 300,
-                                    controller: _noteController,
+                                      maxLength: 300,
+                                      controller: _noteController,
+                                      errorText: _noteError,
+                                      onChanged: (value) {
+                                        if (_noteError != null && value.length <= 300) {
+                                          setState(() {
+                                            _noteError = null;
+                                          });
+                                        }
+                                      },
                                     ),
                                   ),
                                   SizedBox(height: 21.h),

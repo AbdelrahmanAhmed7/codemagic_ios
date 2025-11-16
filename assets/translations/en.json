@@ -326,7 +326,13 @@
     "attachment_required": "At least 1 attachment is required",
     "max_size": "Maximum size 5MB",
     "max_characters": "Maximum 300 characters",
-    "enter_note": "Enter Note"
+    "enter_note": "Enter Note",
+    "validation": {
+      "select_member": "Please select a family member",
+      "select_provider": "Please select a provider",
+      "attachment_required": "At least 1 attachment is required",
+      "notes_too_long": "Notes cannot exceed 300 characters"
+    }
   },
   "approval_history": {
     "title": "Approval History",
@@ -376,7 +382,8 @@
       "future_date_not_allowed": "Invoice date cannot be in the future",
       "date_too_old": "Invoice date cannot be older than 60 days",
       "invoice_attachment_required": "Invoice attachment is required",
-      "prescription_attachment_required": "Prescription attachment is required"
+      "prescription_attachment_required": "Prescription attachment is required",
+      "notes_too_long": "Notes cannot exceed 300 characters"
     }
   },
   "refund_history": {

@@ -326,7 +326,13 @@
     "attachment_required": "مرفق واحد على الأقل مطلوب",
     "max_size": "الحد الأقصى للحجم 5 ميجابايت",
     "max_characters": "الحد الأقصى 300 حرف",
-    "enter_note": "أدخل ملاحظة"
+    "enter_note": "أدخل ملاحظة",
+    "validation": {
+      "select_member": "يرجى اختيار فرد من العائلة",
+      "select_provider": "يرجى اختيار مقدم الخدمة",
+      "attachment_required": "مرفق واحد على الأقل مطلوب",
+      "notes_too_long": "الملاحظات لا يمكن أن تتجاوز 300 حرف"
+    }
   },
   "approval_history": {
     "title": "تاريخ الموافقات",
@@ -376,7 +382,8 @@
       "future_date_not_allowed": "لا يمكن أن يكون تاريخ الفاتورة في المستقبل",
       "date_too_old": "لا يمكن أن يكون تاريخ الفاتورة أقدم من 60 يوماً",
       "invoice_attachment_required": "مرفق الفاتورة مطلوب",
-      "prescription_attachment_required": "مرفق الوصفة الطبية مطلوب"
+      "prescription_attachment_required": "مرفق الوصفة الطبية مطلوب",
+      "notes_too_long": "الملاحظات لا يمكن أن تتجاوز 300 حرف"
     }
   },
   "refund_history": {
