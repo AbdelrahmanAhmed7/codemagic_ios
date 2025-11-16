@@ -13,7 +13,13 @@ class OngoingRequestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final approvals = data.approvals;
+    // Filter to show only reviewing approvals and take last 3
+    final approvals = data.approvals
+        .where((approval) => approval.status.toLowerCase() == 'reviewing')
+        .toList()
+        .reversed
+        .take(3)
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

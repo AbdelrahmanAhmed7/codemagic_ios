@@ -41,7 +41,7 @@ class PolicySection extends StatelessWidget {
           Text(
             title,
             style: AppTextStyles.font14BlueMedium(context).copyWith(
-              color: AppColors.blueClrW,
+              color: const Color(0xFF083D91),
             ),
           ),
           SizedBox(height: 12.h),

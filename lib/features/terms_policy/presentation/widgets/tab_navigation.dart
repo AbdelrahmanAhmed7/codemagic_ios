@@ -38,7 +38,9 @@ class TabNavigation extends StatelessWidget {
                   'terms_policy.terms'.tr(),
                   textAlign: TextAlign.center,
                   style: isTermsSelected 
-                      ? AppTextStyles.font16BlackMedium(context)
+                      ? AppTextStyles.font16BlackMedium(context).copyWith(
+                          color: const Color(0xFF083D91),
+                        )
                       : AppTextStyles.font16BlackMedium(context),
                 ),
               ),
@@ -57,7 +59,9 @@ class TabNavigation extends StatelessWidget {
                   'terms_policy.privacy_policy'.tr(),
                   textAlign: TextAlign.center,
                   style: !isTermsSelected 
-                      ? AppTextStyles.font16BlackMedium(context)
+                      ? AppTextStyles.font16BlackMedium(context).copyWith(
+                          color: const Color(0xFF083D91),
+                        )
                       : AppTextStyles.font16BlackMedium(context),
                 ),
               ),

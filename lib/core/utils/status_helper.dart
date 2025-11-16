@@ -21,12 +21,12 @@ class StatusHelper {
   static Color getBackgroundColor(String statusChar) {
     switch (statusChar.toUpperCase()) {
       case 'A': // Approved
-        return const Color(0xFF28A745).withOpacity(0.1); // Green with 10% opacity
+        return const Color(0xFF28A745).withValues(alpha: 0.1); // Green with 10% opacity
       case 'R': // Rejected
-        return const Color(0xFFDC3545).withOpacity(0.1); // Red with 10% opacity
+        return const Color(0xFFDC3545).withValues(alpha: 0.1); // Red with 10% opacity
       case 'P': // Pending
       default:
-        return const Color(0xFF999999).withOpacity(0.1); // Grey with 10% opacity
+        return const Color(0xFF999999).withValues(alpha: 0.1); // Grey with 10% opacity
     }
   }
 

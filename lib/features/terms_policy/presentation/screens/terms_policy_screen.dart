@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/features/terms_policy/presentation/widgets/policy_section.dart';
 import 'package:mediconsult/features/terms_policy/presentation/widgets/tab_navigation.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +88,97 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
                                   ),
                                   loaded: (resp) {
                                     final html = resp.data.description;
-                                    return Html(data: html);
+                                    
+                                    // Show header with icon for Privacy Policy only
+                                    if (!_isTermsSelected) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // Header with policy icon
+                                          Center(
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  width: 80.w,
+                                                  height: 80.w,
+                                                  child: Image.asset( 
+                                                    AppAssets.policy,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16.h),
+                                                Text(
+                                                  'terms_policy.privacy_policy'.tr(),
+                                                  style: AppTextStyles.font18BlackSemiBold(context),
+                                                ),
+                                                SizedBox(height: 4.h),
+                                                Text(
+                                                  'terms_policy.medical_insurance_app'.tr(),
+                                                  style: AppTextStyles.font12GreyRegular(context),
+                                                ),
+                                                SizedBox(height: 8.h),
+                                                Text(
+                                                  'terms_policy.last_updated'.tr(),
+                                                  style: AppTextStyles.font10GreyRegular(context),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 24.h),
+                                          // HTML content with custom styling
+                                          Html(
+                                            data: html,
+                                            style: {
+                                              "h1": Style(
+                                                color: const Color(0xFF083D91),
+                                                fontSize: FontSize(18.sp),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              "h2": Style(
+                                                color: const Color(0xFF083D91),
+                                                fontSize: FontSize(16.sp),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              "h3": Style(
+                                                color: const Color(0xFF083D91),
+                                                fontSize: FontSize(14.sp),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              "p": Style(
+                                                fontSize: FontSize(12.sp),
+                                                color: AppColors.blackClr,
+                                              ),
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      // Terms content with custom styling
+                                      return Html(
+                                        data: html,
+                                        style: {
+                                          "h1": Style(
+                                            color: const Color(0xFF083D91),
+                                            fontSize: FontSize(18.sp),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          "h2": Style(
+                                            color: const Color(0xFF083D91),
+                                            fontSize: FontSize(16.sp),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          "h3": Style(
+                                            color: const Color(0xFF083D91),
+                                            fontSize: FontSize(14.sp),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          "p": Style(
+                                            fontSize: FontSize(12.sp),
+                                            color: AppColors.blackClr,
+                                          ),
+                                        },
+                                      );
+                                    }
                                   },
                                 );
                               },
@@ -109,131 +198,3 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
   }
 }
 
-class TermsContent extends StatelessWidget {
-  const TermsContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        PolicySection(
-          title: 'terms_policy.sections.introduction'.tr(),
-          content: 'Welcome to Mediconsult medical insurance app. By using our app, you agree to comply with these Terms of Service. If you do not agree, please do not use our services.',
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.eligibility'.tr(),
-          items: const [
-            'You must be 18 years or older to use this app.',
-            'You are responsible for keeping your account secure.',
-          ],
-          useCheckmarks: true,
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.services'.tr(),
-          items: const [
-            'Medical insurance coverage information',
-            'Provider search and booking',
-            'Claims processing',
-            'Customer support',
-          ],
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.contact_us'.tr(),
-          email: 'support@mediconsult.com',
-          icon: Icons.email,
-        ),
-      ],
-    );
-  }
-}
-
-class PrivacyPolicyContent extends StatelessWidget {
-  const PrivacyPolicyContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header with shield icon
-        Center(
-          child: Column(
-            children: [
-              Container(
-                width: 80.w,
-                height: 80.w,
-                child: Image.asset( 
-                  AppAssets.shieldIcon,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                'terms_policy.privacy_policy'.tr(),
-                style: AppTextStyles.font18BlackSemiBold(context),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                'terms_policy.medical_insurance_app'.tr(),
-                style: AppTextStyles.font12GreyRegular(context),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'terms_policy.last_updated'.tr(),
-                style: AppTextStyles.font10GreyRegular(context),
-              ),
-            ],
-          ),
-        ),
-        
-        SizedBox(height: 24.h),
-        
-        PolicySection(
-          title: 'terms_policy.sections.introduction'.tr(),
-          content: 'Your privacy is important to us. This policy explains what data we collect, how we use it, and how we protect it.',
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.info_collect'.tr(),
-          items: const [
-            'Personal Information (Name, DOB, Email, Phone, Insurance ID)',
-            'Location Data (For nearby provider search, with user permission)',
-            'Device & Usage Data (App interactions, error logs)',
-          ],
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.how_we_use'.tr(),
-          items: const [
-            'Provide insurance services',
-            'Improve app functionality',
-            'Ensure security & fraud prevention',
-            'Send important notifications',
-          ],
-          useCheckmarks: true,
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.data_protection'.tr(),
-          items: const [
-            'End-to-end encryption for data storage',
-            'Strict access control measures',
-          ],
-          useIcons: true,
-          iconType: Icons.lock,
-        ),
-        
-        PolicySection(
-          title: 'terms_policy.sections.questions'.tr(),
-          content: 'Contact our privacy team:',
-          email: 'Privacy@mediconsult.com',
-          icon: Icons.email,
-        ),
-      ],
-    );
-  }
-}
