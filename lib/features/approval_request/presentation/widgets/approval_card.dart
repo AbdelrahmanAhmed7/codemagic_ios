@@ -109,11 +109,7 @@ class ApprovalCard extends StatelessWidget {
           ),
           child: Text(
             statusLabel,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 8.sp,
-              fontWeight: FontWeight.w500,
-            ),
+            style: AppTextStyles.font10WhiteRegular(context),
           ),
         ),
       ],
