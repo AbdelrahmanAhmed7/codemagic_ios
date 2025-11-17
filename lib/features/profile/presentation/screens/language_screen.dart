@@ -35,7 +35,27 @@ class _LanguageScreenState extends State<LanguageScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    // Load current language when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Get current locale from EasyLocalization
+      final currentLocale = context.locale.languageCode;
+      setState(() {
+        _selectedLanguage = currentLocale;
+      });
+      
+      // Also load from cubit to ensure consistency
+      context.read<LanguageCubit>().loadSavedLanguage();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return _buildContent(context);
+  }
+
+  Widget _buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightGreyClr,
       body: SafeArea(
@@ -86,7 +106,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                   context,
                                   'profile.language.language_changed'.tr(),
                                 );
-                                context.go('/profile');
+                                // Use pop instead of go to maintain navigation stack
+                                context.pop();
                               }
                             },
                           ),

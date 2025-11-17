@@ -1,13 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 class RefundAmountField extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
 
-  const RefundAmountField({super.key, required this.controller});
+  const RefundAmountField({
+    super.key, 
+    required this.controller,
+    this.focusNode,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +27,14 @@ class RefundAmountField extends StatelessWidget {
         SizedBox(height: 8.h),
         TextField(
           controller: controller,
+          focusNode: focusNode,
           autofocus: false,
           keyboardType: TextInputType.number,
+          enableInteractiveSelection: true,
+          onTapOutside: (_) {
+            FocusScope.of(context).unfocus();
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+          },
           decoration: InputDecoration(
             hintText: 'placeholders.enter_amount'.tr(),
             hintStyle: AppTextStyles.font14GreyRegular(context),

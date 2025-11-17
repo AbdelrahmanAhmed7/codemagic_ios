@@ -14,21 +14,23 @@ class UserPlanCardWidget extends StatelessWidget {
   const UserPlanCardWidget({super.key, required this.data});
 
   Color get planColor {
-    final name = (data.programName.isEmpty)
-        ? 'gold'
-        : data.programName.toLowerCase();
-
-    if (name.contains('gold')) return AppColors.goldPlanColor;
-    if (name.contains('silver')) return AppColors.silverPlanColor;
-    if (name.contains('bronze')) return AppColors.bronzePlanColor;
-    if (name.contains('platinum')) return AppColors.platinumPlanColor;
-    if (name.contains('diamond')) return AppColors.diamondPlanColor;
+    if (data.programColor.isNotEmpty) {
+      try {
+        String colorHex = data.programColor.replaceAll('#', '');
+        if (colorHex.length == 6) {
+          colorHex = 'FF$colorHex';
+        }
+        return Color(int.parse(colorHex, radix: 16));
+      } catch (e) {
+        return AppColors.goldPlanColor;
+      }
+    }
     return AppColors.goldPlanColor;
   }
 
   String get planName {
-    if (data.programName.isEmpty) return 'Gold Plan';
-    return data.programName;
+    if (data.programName.isNotEmpty) return data.programName;
+    return 'Gold Plan';
   }
 
   @override

@@ -14,6 +14,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_
 import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fields.dart';
+import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_state.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
@@ -32,15 +33,17 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _providerController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  final FocusNode _amountFocusNode = FocusNode();
+  final FocusNode _noteFocusNode = FocusNode();
   DateTime? _selectedDate;
   int? _selectedRefundTypeId;
   String? _selectedRefundTypeName;
   int? _selectedReasonId;
   FamilyMember? _selectedMember;
   List<String> _attachmentPaths = [];
-  bool _hasInvoiceAttachment = false;
-  bool _hasPrescriptionAttachment = false;
+  bool _hasAllRequiredAttachments = false;
   String? _noteError;
+  List<RefundAttachment> _selectedRefundAttachments = [];
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
@@ -51,6 +54,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   void _unfocusAll() {
     FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
   @override
@@ -58,6 +62,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     _amountController.dispose();
     _providerController.dispose();
     _noteController.dispose();
+    _amountFocusNode.dispose();
+    _noteFocusNode.dispose();
     super.dispose();
   }
 
@@ -112,12 +118,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       _showError('refund_request.validation.date_too_old'.tr());
       return;
     }
-    if (!_hasInvoiceAttachment) {
-      _showError('refund_request.validation.invoice_attachment_required'.tr());
-      return;
-    }
-    if (!_hasPrescriptionAttachment) {
-      _showError('refund_request.validation.prescription_attachment_required'.tr());
+    if (!_hasAllRequiredAttachments) {
+      _showError('refund_request.validation.add_attachment'.tr());
       return;
     }
 
@@ -166,15 +168,26 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    // إزالة الـ focus من جميع الحقول قبل فتح الـ date picker
+    _unfocusAll();
+
+    // إعطاء فريم بسيط لإخفاء الكيبورد بالكامل
+    await Future.delayed(const Duration(milliseconds: 50));
+
     final DateTime now = DateTime.now();
     final DateTime sixtyDaysAgo = now.subtract(const Duration(days: 60));
-    
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? now,
       firstDate: sixtyDaysAgo,
       lastDate: now,
     );
+
+    // بعد إغلاق الـ date picker نتأكد مرة أخرى من إزالة الـ focus
+    await Future.delayed(const Duration(milliseconds: 50));
+    _unfocusAll();
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -189,9 +202,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
         backgroundColor: AppColors.lightGreyClr,
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
+          onTap: _unfocusAll,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -259,11 +270,12 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 onTap: _unfocusAll,
                                 child: RefundTypeSelector(
                                   selectedTypeId: _selectedRefundTypeId,
-                                  onTypeSelected: (id, name) {
+                                  onTypeSelected: (type) {
                                     _unfocusAll();
                                     setState(() {
-                                      _selectedRefundTypeId = id;
-                                      _selectedRefundTypeName = name;
+                                      _selectedRefundTypeId = type.id;
+                                      _selectedRefundTypeName = type.name;
+                                      _selectedRefundAttachments = type.attachments;
                                     });
                                   },
                                 ),
@@ -342,6 +354,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   Expanded(
                                     child: RefundAmountField(
                                       controller: _amountController,
+                                      focusNode: _amountFocusNode,
                                     ),
                                   ),
                                   SizedBox(width: 16.w),
@@ -364,6 +377,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 description: 'tutorial.note.hint'.tr(),
                                 child: NoteTextField(
                                   controller: _noteController,
+                                  focusNode: _noteFocusNode,
                                   maxLength: 300,
                                   errorText: _noteError,
                                   onChanged: (value) {
@@ -376,20 +390,25 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 ),
                               ),
                               SizedBox(height: 16.h),
-                              Showcase(
-                                key: _attachKey,
-                                description: 'tutorial.attachments.hint'.tr(),
-                                child: AddAttachmentWidget(
-                                  refundTypeName: _selectedRefundTypeName,
-                                  onAttachmentsChanged: (paths, hasInvoice, hasPrescription) {
-                                    setState(() {
-                                      _attachmentPaths = paths;
-                                      _hasInvoiceAttachment = hasInvoice;
-                                      _hasPrescriptionAttachment = hasPrescription;
-                                    });
-                                  },
+                              if (_selectedRefundTypeId != null &&
+                                  _selectedRefundAttachments.isNotEmpty) ...[
+                                SizedBox(height: 16.h),
+                                Showcase(
+                                  key: _attachKey,
+                                  description: 'tutorial.attachments.hint'.tr(),
+                                  child: AddAttachmentWidget(
+                                    refundTypeName: _selectedRefundTypeName,
+                                    attachments: _selectedRefundAttachments,
+                                    onAttachmentsChanged: (paths, hasAllRequired) {
+                                      setState(() {
+                                        _attachmentPaths = paths;
+                                        _hasAllRequiredAttachments = hasAllRequired;
+                                      });
+                                    },
+                                    onAttachmentDialogClosed: _unfocusAll,
+                                  ),
                                 ),
-                              ),
+                              ],
                               SizedBox(height: 20.h),
                               Showcase(
                                 key: _submitKey,
@@ -403,7 +422,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                         state.maybeWhen(
                                           success: (data) {
                                             _showSuccess('refund_request.success_message'.tr());
-                                            SuccessDialog.show(context);
+                                            SuccessDialog.showRefund(context);
                                           },
                                           failed: (message) {
                                             _showError(message);

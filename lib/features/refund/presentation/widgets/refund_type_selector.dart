@@ -15,7 +15,7 @@ class RefundTypeSelector extends StatefulWidget {
     this.selectedTypeId,
   });
 
-  final Function(int id, String name)? onTypeSelected;
+  final Function(RefundType type)? onTypeSelected;
   final int? selectedTypeId;
 
   @override
@@ -177,7 +177,7 @@ class _RefundTypeSelectorState extends State<RefundTypeSelector> {
           _selectedTypeName = type.name;
           _isDropdownOpen = false;
         });
-        widget.onTypeSelected?.call(type.id, type.name);
+        widget.onTypeSelected?.call(type);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),

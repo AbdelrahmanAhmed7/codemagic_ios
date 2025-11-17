@@ -19,6 +19,7 @@ class MockHomeRepository extends Mock implements HomeRepository {}
           memberName: 'User',
           policyExpireDate: '2025-01-01',
           programName: 'Prog',
+          programColor: '#FFCC33',
           notificationsCount: 0,
           approvals: const [],
         ),

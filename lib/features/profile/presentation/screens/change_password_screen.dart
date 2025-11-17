@@ -88,7 +88,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void _showSuccessDialog() {
     SuccessDialog.show(
       context,
-      message: 'change_password.success_message'.tr(),
+      messageKey: 'change_password.success_message',
       onClose: () => Navigator.of(context).pop(),
     );
   }

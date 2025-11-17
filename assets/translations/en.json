@@ -13,6 +13,7 @@
     "search": "Search",
     "loading": "Loading...",
     "error": "Error",
+    "back_home": "Back Home",
     "success": "Success",
     "no_data": "No data available",
     "back": "Back",
@@ -332,6 +333,10 @@
       "select_provider": "Please select a provider",
       "attachment_required": "At least 1 attachment is required",
       "notes_too_long": "Notes cannot exceed 300 characters"
+    },
+    "success": {
+      "title": "Approval Request Submitted Successfully",
+      "subtitle": "We'll notify you once your request is approved"
     }
   },
   "approval_history": {
@@ -384,6 +389,10 @@
       "invoice_attachment_required": "Invoice attachment is required",
       "prescription_attachment_required": "Prescription attachment is required",
       "notes_too_long": "Notes cannot exceed 300 characters"
+    },
+    "success": {
+      "title": "Refund Request Submitted Successfully",
+      "subtitle": "We'll notify you once your refund request is processed"
     }
   },
   "refund_history": {

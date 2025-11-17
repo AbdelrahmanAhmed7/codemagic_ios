@@ -12,11 +12,13 @@ class NoteTextField extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.errorText,
+    this.focusNode,
   });
   final int maxLength;
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final String? errorText;
+  final FocusNode? focusNode;
 
   @override
   State<NoteTextField> createState() => _NoteTextFieldState();
@@ -97,8 +99,14 @@ class _NoteTextFieldState extends State<NoteTextField> {
           ),
           child: TextField(
             controller: _controller,
+            focusNode: widget.focusNode,
             autofocus: false,
             maxLines: 3,
+            enableInteractiveSelection: true,
+            onTapOutside: (_) {
+              FocusScope.of(context).unfocus();
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+            },
             inputFormatters: [
               _lengthFormatter,
             ],

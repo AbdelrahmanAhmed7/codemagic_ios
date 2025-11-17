@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 class SuccessDialog extends StatelessWidget {
-  final String message;
+  final String messageKey;
   final VoidCallback? onClose;
 
   const SuccessDialog({
     super.key,
-    required this.message,
+    required this.messageKey,
     this.onClose,
   });
 
   static Future<void> show(
     BuildContext context, {
-    required String message,
+    required String messageKey,
     VoidCallback? onClose,
   }) {
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => SuccessDialog(
-        message: message,
+        messageKey: messageKey,
         onClose: onClose,
       ),
     );
@@ -79,7 +80,7 @@ class SuccessDialog extends StatelessWidget {
 
             // Success message
             Text(
-              message,
+              messageKey.tr(),
               textAlign: TextAlign.center,
               style: AppTextStyles.font14BlackMedium(context),
             ),

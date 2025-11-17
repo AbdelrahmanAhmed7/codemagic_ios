@@ -28,6 +28,7 @@ HomeData _$HomeDataFromJson(Map<String, dynamic> json) => HomeData(
   memberName: json['memberName'] as String,
   policyExpireDate: json['policyExpireDate'] as String,
   programName: json['programName'] as String,
+  programColor: json['programColor'] as String,
   notificationsCount: (json['notificationsCount'] as num).toInt(),
   memberPhoto: json['memberPhoto'] as String?,
   approvals: (json['approvals'] as List<dynamic>)
@@ -40,6 +41,7 @@ Map<String, dynamic> _$HomeDataToJson(HomeData instance) => <String, dynamic>{
   'memberName': instance.memberName,
   'policyExpireDate': instance.policyExpireDate,
   'programName': instance.programName,
+  'programColor': instance.programColor,
   'notificationsCount': instance.notificationsCount,
   'memberPhoto': instance.memberPhoto,
   'approvals': instance.approvals,
