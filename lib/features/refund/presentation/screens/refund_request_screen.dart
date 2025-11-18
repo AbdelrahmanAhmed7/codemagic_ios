@@ -43,6 +43,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   List<String> _attachmentPaths = [];
   bool _hasAllRequiredAttachments = false;
   String? _noteError;
+  String? _providerError;
+  String? _amountError;
   List<RefundAttachment> _selectedRefundAttachments = [];
 
   // Showcase keys
@@ -71,6 +73,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     // Clear previous errors
     setState(() {
       _noteError = null;
+      _providerError = null;
+      _amountError = null;
     });
 
     // Validation
@@ -82,8 +86,17 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       _showError('refund_request.validation.select_type'.tr());
       return;
     }
-    if (_providerController.text.trim().isEmpty) {
-      _showError('refund_request.validation.enter_provider'.tr());
+    final providerText = _providerController.text.trim();
+    if (providerText.isEmpty) {
+      setState(() {
+        _providerError = 'refund_request.validation.enter_provider'.tr();
+      });
+      return;
+    }
+    if (providerText.length < 2) {
+      setState(() {
+        _providerError = 'refund_request.validation.provider_min_length'.tr();
+      });
       return;
     }
     if (_selectedReasonId == null) {
@@ -91,7 +104,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       return;
     }
     if (_amountController.text.trim().isEmpty) {
-      _showError('refund_request.validation.enter_amount'.tr());
+      setState(() {
+        _amountError = 'refund_request.validation.enter_amount'.tr();
+      });
       return;
     }
     if (_selectedDate == null) {
@@ -125,6 +140,12 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
     final formattedDate = DateFormat('yyyy-MM-dd', 'en').format(_selectedDate!);
     final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
+    if (amount < 1 || amount > 100000) {
+      setState(() {
+        _amountError = 'refund_request.validation.amount_range'.tr();
+      });
+      return;
+    }
 
     // Call cubit
     await context.read<RefundRequestCubit>().createRefundRequest(
@@ -296,6 +317,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     hintStyle: AppTextStyles.font14GreyRegular(
                                       context,
                                     ),
+                                    errorText: _providerError,
+                                    errorMaxLines: 2,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8.r),
                                       borderSide: BorderSide(
@@ -326,6 +349,18 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   style: AppTextStyles.font14BlackMedium(
                                     context,
                                   ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      final text = value.trim();
+                                      if (text.isEmpty) {
+                                        _providerError = 'refund_request.validation.enter_provider'.tr();
+                                      } else if (text.length < 2) {
+                                        _providerError = 'refund_request.validation.provider_min_length'.tr();
+                                      } else {
+                                        _providerError = null;
+                                      }
+                                    });
+                                  },
                                 ),
                               ),
                               SizedBox(height: 16.h),
@@ -353,6 +388,22 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     child: RefundAmountField(
                                       controller: _amountController,
                                       focusNode: _amountFocusNode,
+                                      errorText: _amountError,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          final text = value.trim();
+                                          if (text.isEmpty) {
+                                            _amountError = 'refund_request.validation.enter_amount'.tr();
+                                          } else {
+                                            final amount = double.tryParse(text);
+                                            if (amount == null || amount < 1 || amount > 100000) {
+                                              _amountError = 'refund_request.validation.amount_range'.tr();
+                                            } else {
+                                              _amountError = null;
+                                            }
+                                          }
+                                        });
+                                      },
                                     ),
                                   ),
                                   SizedBox(width: 16.w),

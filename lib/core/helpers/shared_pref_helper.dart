@@ -9,7 +9,8 @@ class SharedPrefHelper {
 
   static Future<void> setData(String key, dynamic value) async {
     final prefs = await SharedPreferences.getInstance();
-    if (kDebugMode) debugPrint("SharedPrefHelper : setData key=$key value=$value");
+    if (kDebugMode)
+      debugPrint("SharedPrefHelper : setData key=$key value=$value");
     if (value is String)
       await prefs.setString(key, value);
     else if (value is int)
@@ -24,6 +25,12 @@ class SharedPrefHelper {
     final prefs = await SharedPreferences.getInstance();
     if (kDebugMode) debugPrint("SharedPrefHelper : getString key=$key");
     return prefs.getString(key) ?? '';
+  }
+
+  static Future<bool> getBool(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    debugPrint("SharedPrefHelper : getBool key=$key");
+    return prefs.getBool(key) ?? false;
   }
 
   static Future<void> removeData(String key) async {

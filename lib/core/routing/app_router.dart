@@ -54,7 +54,9 @@ import 'package:mediconsult/features/policy/presentation/policy_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: isLoggedInUser ? '/home' : '/login',
+    initialLocation: shouldShowOnboarding
+        ? '/'
+        : (isLoggedInUser ? '/home' : '/login'),
     routes: [
       GoRoute(
         path: '/',

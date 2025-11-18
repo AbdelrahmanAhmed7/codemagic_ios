@@ -8,11 +8,15 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 class RefundAmountField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
 
   const RefundAmountField({
     super.key, 
     required this.controller,
     this.focusNode,
+    this.errorText,
+    this.onChanged,
   });
 
   @override
@@ -31,6 +35,7 @@ class RefundAmountField extends StatelessWidget {
           autofocus: false,
           keyboardType: TextInputType.number,
           enableInteractiveSelection: true,
+          onChanged: onChanged,
           onTapOutside: (_) {
             FocusScope.of(context).unfocus();
             SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -38,6 +43,8 @@ class RefundAmountField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'placeholders.enter_amount'.tr(),
             hintStyle: AppTextStyles.font14GreyRegular(context),
+            errorText: errorText,
+            errorMaxLines: 2,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 12.w,
               vertical: 8.h,

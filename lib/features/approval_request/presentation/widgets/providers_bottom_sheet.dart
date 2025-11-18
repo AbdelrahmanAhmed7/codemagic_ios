@@ -139,7 +139,7 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: 'Search providers (min 2 chars)',
+                  hintText: 'approval_request.search_providers_min_2_chars'.tr(),
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(

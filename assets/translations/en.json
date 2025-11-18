@@ -327,6 +327,7 @@
     "attachment_required": "At least 1 attachment is required",
     "max_size": "Maximum size 5MB",
     "max_characters": "Maximum 300 characters",
+    "search_providers_min_2_chars": "Search providers (minimum 2 characters)",
     "enter_note": "Enter Note",
     "validation": {
       "select_member": "Please select a family member",
@@ -380,8 +381,10 @@
       "select_member": "Please select a family member",
       "select_type": "Please select refund type",
       "enter_provider": "Please enter provider name",
+      "provider_min_length": "Provider name must be at least 2 characters",
       "select_reason": "Please select reason",
       "enter_amount": "Please enter amount",
+      "amount_range": "Amount must be between 1 and 100000",
       "select_date": "Please select service date",
       "add_attachment": "Please add at least one attachment",
       "future_date_not_allowed": "Invoice date cannot be in the future",
