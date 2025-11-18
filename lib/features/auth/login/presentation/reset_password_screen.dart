@@ -144,6 +144,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   return 'auth.reset_password.validation.new_password_required'
                       .tr();
                 }
+                if (value.length < 8) {
+                  return 'auth.reset_password.validation.password_length'.tr();
+                }
                 return null;
               },
             ),
@@ -181,7 +184,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               listener: (context, state) {
                 if (state is Success) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showAppSnackBar(context, 'OTP Sent Successfully');
+                    _showSuccessDialog();
                   });
                 }
                 if (state is Failed) {
@@ -203,7 +206,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               _confirmPasswordController.text,
                               context.locale.languageCode,
                             );
-                            _showSuccessDialog();
                           }
                         },
                   child: Container(
