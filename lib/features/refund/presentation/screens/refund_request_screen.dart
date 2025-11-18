@@ -123,8 +123,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       return;
     }
 
-    // Format date
-    final formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+    final formattedDate = DateFormat('yyyy-MM-dd', 'en').format(_selectedDate!);
     final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
 
     // Call cubit
@@ -145,19 +144,19 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   void _showError(String message) {
     if (mounted) {
-      HapticFeedback.lightImpact(); // إضافة اهتزاز خفيف للأخطاء
+      HapticFeedback.lightImpact();
       showAppSnackBar(
         context, 
         message, 
         isError: true,
-        duration: const Duration(seconds: 4), // مدة أطول لرسائل الخطأ
+        duration: const Duration(seconds: 4),
       );
     }
   }
 
   void _showSuccess(String message) {
     if (mounted) {
-      HapticFeedback.selectionClick(); // إضافة اهتزاز للنجاح
+      HapticFeedback.selectionClick();
       showAppSnackBar(
         context, 
         message, 
@@ -168,10 +167,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    // إزالة الـ focus من جميع الحقول قبل فتح الـ date picker
     _unfocusAll();
 
-    // إعطاء فريم بسيط لإخفاء الكيبورد بالكامل
     await Future.delayed(const Duration(milliseconds: 50));
 
     final DateTime now = DateTime.now();
@@ -184,7 +181,6 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       lastDate: now,
     );
 
-    // بعد إغلاق الـ date picker نتأكد مرة أخرى من إزالة الـ focus
     await Future.delayed(const Duration(milliseconds: 50));
     _unfocusAll();
 
@@ -276,6 +272,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                       _selectedRefundTypeId = type.id;
                                       _selectedRefundTypeName = type.name;
                                       _selectedRefundAttachments = type.attachments;
+                                      _attachmentPaths = [];
+                                      _hasAllRequiredAttachments = false;
                                     });
                                   },
                                 ),
@@ -397,6 +395,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   key: _attachKey,
                                   description: 'tutorial.attachments.hint'.tr(),
                                   child: AddAttachmentWidget(
+                                    key: ValueKey(_selectedRefundTypeId),
                                     refundTypeName: _selectedRefundTypeName,
                                     attachments: _selectedRefundAttachments,
                                     onAttachmentsChanged: (paths, hasAllRequired) {

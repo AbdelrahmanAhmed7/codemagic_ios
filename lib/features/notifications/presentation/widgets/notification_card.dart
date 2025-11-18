@@ -198,19 +198,41 @@ class NotificationCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
+    final categoryLabel = _getCategoryLabel();
+    final accentColor = _getIconColor();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Text(
-            item.title,
-            style: AppTextStyles.font14BlackMedium(context),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+        Row(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+              decoration: BoxDecoration(
+                color: accentColor.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(999.r),
+              ),
+              child: Text(
+                categoryLabel,
+                style: AppTextStyles.font10GreyRegular(context).copyWith(
+                  color: accentColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              item.time,
+              style: AppTextStyles.font10GreyRegular(context),
+            ),
+          ],
         ),
+        SizedBox(height: 4.h),
         Text(
-          item.time,
-          style: AppTextStyles.font10GreyRegular(context),
+          item.title,
+          style: AppTextStyles.font14BlackMedium(context),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -230,6 +252,30 @@ class NotificationCard extends StatelessWidget {
   }
 
   IconData _getIcon() {
+    // 1) إشعار تعطيل / تسجيل خروج
+    if (item.hasDataKeyValue('is_disable', '1')) {
+      return Icons.person_off;
+    }
+
+    // 2) إشعار خاص بالـ Refund
+    if (item.hasDataKeyValue('is_refund', '1')) {
+      return Icons.receipt_long;
+    }
+
+    // 3) إشعار موافقة / Approval (طلب أو موافقة صادرة)
+    final approvalId = item.getDataValue('approval_id');
+    final requestId = item.getDataValue('request_id');
+    final isApproved = item.hasDataKeyValue('is_approved', '1');
+    final hasApprovalOrRequest = (approvalId != null &&
+            approvalId.isNotEmpty &&
+            approvalId != '0') ||
+        (requestId != null && requestId.isNotEmpty && requestId != '0');
+
+    if (hasApprovalOrRequest || isApproved) {
+      return Icons.check_circle;
+    }
+
+    // 4) fallback: حسب نص الرسالة القديمة
     final body = item.body.toLowerCase();
     if (body.contains('appointment') || body.contains('موعد')) {
       return Icons.calendar_today;
@@ -239,6 +285,29 @@ class NotificationCard extends StatelessWidget {
       return Icons.medication;
     }
     return Icons.notifications;
+  }
+
+  String _getCategoryLabel() {
+    if (item.hasDataKeyValue('is_disable', '1')) {
+      return 'Account';
+    }
+    if (item.hasDataKeyValue('is_refund', '1')) {
+      return 'Refund';
+    }
+
+    final approvalId = item.getDataValue('approval_id');
+    final requestId = item.getDataValue('request_id');
+    final isApproved = item.hasDataKeyValue('is_approved', '1');
+    final hasApprovalOrRequest = (approvalId != null &&
+            approvalId.isNotEmpty &&
+            approvalId != '0') ||
+        (requestId != null && requestId.isNotEmpty && requestId != '0');
+
+    if (hasApprovalOrRequest || isApproved) {
+      return 'Approval';
+    }
+
+    return 'Notification';
   }
 
   Color _getIconColor() {

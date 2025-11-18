@@ -56,6 +56,23 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
     );
   }
 
+  @override
+  void didUpdateWidget(covariant AddAttachmentWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.attachments.length != widget.attachments.length) {
+      _slotItems = List<AttachmentItem?>.filled(
+        widget.attachments.length,
+        null,
+        growable: false,
+      );
+      _slotPaths = List<String?>.filled(
+        widget.attachments.length,
+        null,
+        growable: false,
+      );
+    }
+  }
+
   bool get _hasAnyAttachment =>
       _slotItems.any((item) => item != null);
 

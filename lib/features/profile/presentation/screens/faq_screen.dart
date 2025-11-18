@@ -55,36 +55,6 @@ class _FAQScreenState extends State<FAQScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Search bar
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.whiteClr,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.borderClr),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.greyClr.withValues(alpha: 0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.search,size: 24,),
-                                hintText: 'profile.faq.search_placeholder'.tr(),
-                                hintStyle:
-                                    AppTextStyles.font12BlackRegular(context).copyWith(
-                                  color: AppColors.greyClr,
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12.w,
-                                  vertical: 12.h,
-                                ),
-                              ),
-                            ),
-                          ),
                           SizedBox(height: 16.h),
 
                           // FAQ list
@@ -123,29 +93,46 @@ class _FAQScreenState extends State<FAQScreen> {
                                           borderRadius: BorderRadius.circular(12.r),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: AppColors.greyClr.withValues(alpha: 0.08),
-                                              blurRadius: 24,
-                                              offset: const Offset(0, 8),
+                                              color: AppColors.greyClr.withValues(alpha: 0.14),
+                                              blurRadius: 30,
+                                              spreadRadius: 1,
+                                              offset: const Offset(0, 10),
                                             ),
                                           ],
                                         ),
-                                        child: ExpansionTile(
-                                          title: Text(
-                                            faq.question,
-                                            style: AppTextStyles.font14BlackMedium(context),
+                                        child: Theme(
+                                          data: Theme.of(context).copyWith(
+                                            dividerColor: Colors.transparent,
                                           ),
-                                          childrenPadding: EdgeInsets.all(12.w),
-                                          children: [
-                                            Text(
-                                              faq.answer,
-                                              style: AppTextStyles
-                                                  .font12BlackRegular(context)
-                                                  .copyWith(
-                                                color: AppColors.greyClr,
-                                                height: 1.4,
+                                          child: ExpansionTile(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12.r),
+                                              side: const BorderSide(
+                                                color: Colors.transparent,
                                               ),
                                             ),
-                                          ],
+                                            collapsedShape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12.r),
+                                              side: const BorderSide(
+                                                color: Colors.transparent,
+                                              ),
+                                            ),
+                                            title: Text(
+                                              faq.question,
+                                              style: AppTextStyles.font14BlackMedium(context),
+                                            ),
+                                            childrenPadding: EdgeInsets.all(12.w),
+                                            children: [
+                                              Text(
+                                                faq.answer,
+                                                style: AppTextStyles
+                                                    .font14GreyRegular(context)
+                                                    .copyWith(
+                                                  height: 1.6,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       );
                                     }).toList(),
