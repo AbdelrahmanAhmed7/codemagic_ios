@@ -152,48 +152,50 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
             ),
             SizedBox(height: 24.h),
 
-            // Providers Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  PolicyServiceHelper.getProvidersPluralLabel(widget.serviceName).tr(),
-                  style: AppTextStyles.font16BlueMedium(context),
-                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => PolicyProvidersScreen(
-                                          serviceName: widget.serviceName,
-                                          categoryId: widget.categoryId,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            if (details.providers.isNotEmpty) ...[
+              // Providers Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    PolicyServiceHelper.getProvidersPluralLabel(widget.serviceName).tr(),
+                    style: AppTextStyles.font16BlueMedium(context),
                   ),
-                  child: Text(
-                    'home.see_all'.tr(),
-                    style: AppTextStyles.font12BlueRegular(context),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PolicyProvidersScreen(
+                            serviceName: widget.serviceName,
+                            categoryId: widget.categoryId,
+                          ),
+                        ),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      'home.see_all'.tr(),
+                      style: AppTextStyles.font12BlueRegular(context),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12.h),
+                ],
+              ),
+              SizedBox(height: 12.h),
 
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: (details.providers.length >= 3) ? 3 : details.providers.length,
-              itemBuilder: (context, index) {
-                return PolicyProviderCard(provider: details.providers[index]);
-              },
-            ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: (details.providers.length >= 3) ? 3 : details.providers.length,
+                itemBuilder: (context, index) {
+                  return PolicyProviderCard(provider: details.providers[index]);
+                },
+              ),
+            ],
           ],
         ),
       ),

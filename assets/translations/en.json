@@ -185,6 +185,12 @@
     "health_tips": "Health Tips",
     "health_tips_title": "Get Regular Check-Ups",
     "health_tips_description": "Annual health check-ups can help detect diseases early and keep you healthier for longer!",
+    "health_tips_hydration_title": "Stay Hydrated",
+    "health_tips_hydration_desc": "Drinking enough water each day is crucial for many reasons: to regulate body temperature, keep joints lubricated, prevent infections, and deliver nutrients to cells.",
+    "health_tips_exercise_title": "Regular Exercise",
+    "health_tips_exercise_desc": "Regular physical activity can improve your muscle strength and boost your endurance.",
+    "health_tips_sleep_title": "Sleep Well",
+    "health_tips_sleep_desc": "Good sleep improves your brain performance, mood, and health.",
     "explore": "Explore"
   },
   "profile": {
