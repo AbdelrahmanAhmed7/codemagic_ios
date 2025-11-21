@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -88,7 +89,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const PageHeader(title: 'Refund Request', backPath: '/home'),
+              PageHeader(title: 'refund_request.title'.tr(), backPath: '/home'),
               Transform.translate(
                 offset: Offset(0, -20.h),
                 child: Padding(
@@ -112,15 +113,15 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Family Members',
-                            style: AppTextStyles.font14BlackMedium,
+                            'refund.family_members'.tr(),
+                            style: AppTextStyles.font14BlackMedium(context),
                           ),
                           SizedBox(height: 12.h),
                           const FamilyMembersSelector(),
                           SizedBox(height: 24.h),
                           Text(
-                            'Refund Type',
-                            style: AppTextStyles.font14BlackMedium,
+                            'refund.refund_type'.tr(),
+                            style: AppTextStyles.font14BlackMedium(context),
                           ),
                           SizedBox(height: 8.h),
                           RefundTypeSelector(
@@ -132,15 +133,15 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                           ),
                           SizedBox(height: 16.h),
                           Text(
-                            'Provider',
-                            style: AppTextStyles.font14BlackMedium,
+                            'refund.provider'.tr(),
+                            style: AppTextStyles.font14BlackMedium(context),
                           ),
                           SizedBox(height: 8.h),
                           const ProviderSelector(),
                           SizedBox(height: 16.h),
                           Text(
-                            'Reason',
-                            style: AppTextStyles.font14BlackMedium,
+                            'refund.reason'.tr(),
+                            style: AppTextStyles.font14BlackMedium(context),
                           ),
                           SizedBox(height: 8.h),
                           const ReasonSelector(),
@@ -152,8 +153,10 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Amount',
-                                      style: AppTextStyles.font14BlackMedium,
+                                      'refund.amount'.tr(),
+                                      style: AppTextStyles.font14BlackMedium(
+                                        context,
+                                      ),
                                     ),
                                     SizedBox(height: 8.h),
                                     TextField(
@@ -162,7 +165,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                       decoration: InputDecoration(
                                         hintText: 'Enter amount',
                                         hintStyle:
-                                            AppTextStyles.font14GreyRegular,
+                                            AppTextStyles.font14GreyRegular(
+                                              context,
+                                            ),
                                         contentPadding: EdgeInsets.symmetric(
                                           horizontal: 12.w,
                                           vertical: 8.h,
@@ -198,8 +203,10 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Service Date',
-                                      style: AppTextStyles.font14BlackMedium,
+                                      'refund.service_date'.tr(),
+                                      style: AppTextStyles.font14BlackMedium(
+                                        context,
+                                      ),
                                     ),
                                     SizedBox(height: 8.h),
                                     GestureDetector(
@@ -228,10 +235,12 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                                   ? 'Select date'
                                                   : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
                                               style: _selectedDate == null
-                                                  ? AppTextStyles
-                                                        .font14GreyRegular
-                                                  : AppTextStyles
-                                                        .font14BlackMedium,
+                                                  ? AppTextStyles.font14GreyRegular(
+                                                      context,
+                                                    )
+                                                  : AppTextStyles.font14BlackMedium(
+                                                      context,
+                                                    ),
                                             ),
                                             Icon(
                                               Icons.calendar_today_outlined,
@@ -248,7 +257,10 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             ],
                           ),
                           SizedBox(height: 16.h),
-                          Text('Note', style: AppTextStyles.font14BlackMedium),
+                          Text(
+                            'Note',
+                            style: AppTextStyles.font14BlackMedium(context),
+                          ),
                           SizedBox(height: 8.h),
                           const NoteTextField(maxLength: 300),
                           SizedBox(height: 16.h),
@@ -264,7 +276,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     child: CircularProgressIndicator(),
                                   )
                                 : AppButton(
-                                    text: 'Submit',
+                                    text: 'common.submit'.tr(),
                                     onPressed: _submitRefundRequest,
                                   ),
                           ),

@@ -107,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 children: [
-                                  TextSpan(text: 'Welcome to ',style: AppTextStyles.font20BlackSemiBold),
+                                  TextSpan(text: 'Welcome to ',style: AppTextStyles.font20BlackSemiBold(context)),
                                   const TextSpan(
                                     text: 'Medi',
                                     style: TextStyle(color: Colors.blue),
@@ -124,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                             Text(
                               'Get access to a wide network of\n hospitals, clinic, pharmacies and labs',
-                              style: AppTextStyles.font16GreyRegular,
+                              style: AppTextStyles.font16GreyRegular(context),
                               textAlign: TextAlign.center,
                             ),
                           ],

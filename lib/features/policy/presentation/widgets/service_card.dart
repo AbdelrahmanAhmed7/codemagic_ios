@@ -45,7 +45,7 @@ class ServiceCard extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               service.name,
-              style: AppTextStyles.font12BlackMedium,
+              style: AppTextStyles.font12BlackMedium(context),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

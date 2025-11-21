@@ -1,13 +1,27 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/features/network/logic/network_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/features/network/logic/network_state.dart';
 
 class EmptyProvidersState extends StatelessWidget {
   const EmptyProvidersState({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // الحصول على حالة الفلترة من NetworkCubit
+    final networkCubit = context.read<NetworkCubit>();
+    final isFiltering = networkCubit.state.maybeWhen(
+      providersEmpty: () => 
+        networkCubit.currentProviderData?.categoryId != null || 
+        networkCubit.currentProviderData?.governmentId != null || 
+        networkCubit.currentProviderData?.cityId != null,
+      orElse: () => false,
+    );
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,8 +45,10 @@ class EmptyProvidersState extends StatelessWidget {
 
           // Title
           Text(
-            'Search for Providers',
-            style: AppTextStyles.font16BlackMedium,
+            isFiltering 
+                ? 'network.filter_no_results'.tr() // رسالة عند عدم وجود نتائج للفلترة
+                : 'network.search_placeholder'.tr(),
+            style: AppTextStyles.font16BlackMedium(context),
           ),
 
           SizedBox(height: 8.h),
@@ -41,8 +57,10 @@ class EmptyProvidersState extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Text(
-              'Use the search bar or filters to find nearby healthcare providers',
-              style: AppTextStyles.font14GreyRegular,
+              isFiltering 
+                  ? 'network.filter_no_results_description'.tr() // وصف عند عدم وجود نتائج للفلترة
+                  : 'network.search_description'.tr(),
+              style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),
           ),

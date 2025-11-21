@@ -1,0 +1,427 @@
+{
+  "common": {
+    "save": "حفظ",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "ok": "موافق",
+    "retry": "إعادة المحاولة",
+    "send": "إرسال",
+    "next": "التالي",
+    "skip": "تخطي",
+    "get_started": "ابدأ الآن",
+    "search": "بحث",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "no_data": "لا توجد بيانات متاحة",
+    "back": "رجوع",
+    "choose": "اختر"
+  },
+  "onboarding": {
+    "welcome_to": "مرحباً بك في ",
+    "medi": "ميدي",
+    "consult": "كونسلت",
+    "welcome_description": "احصل على وصول إلى شبكة واسعة من\nالمستشفيات والعيادات والصيدليات والمختبرات",
+    "insurance_in_pocket": "تأمينك في جيبك",
+    "insurance_description": "ابحث عن مقدمي الخدمات في شبكتك",
+    "find_hospitals": "العثور على المستشفيات والصيدليات",
+    "find_hospitals_description": "عرض قائمة مقدمي الخدمات في شبكتك\nالقريبين من موقعك",
+    "pre_approvals": "الموافقات المسبقة",
+    "pre_approvals_description": "عرض حالة الطلبات المعلقة\nللموافقة"
+  },
+  "auth": {
+    "login": {
+      "title": "مرحباً بعودتك! سعيد لرؤيتك\nمرة أخرى!",
+      "subtitle": "يرجى إدخال بيانات اعتمادك لتسجيل الدخول",
+      "card_id": "رقم البطاقة",
+      "card_id_placeholder": "أدخل رقم البطاقة",
+      "password": "كلمة المرور",
+      "password_placeholder": "أدخل كلمة المرور",
+      "forgot_password": "نسيت كلمة المرور؟",
+      "login_button": "تسجيل الدخول",
+      "logging_in": "جاري تسجيل الدخول...",
+      "dont_have_account": "ليس لديك حساب؟ ",
+      "register": "إنشاء حساب",
+      "login_successful": "تم تسجيل الدخول بنجاح",
+      "validation": {
+        "card_id_required": "يرجى إدخال رقم البطاقة",
+        "card_id_start": "رقم البطاقة يجب أن يبدأ بـ 20",
+        "card_id_length": "رقم البطاقة يجب أن يكون 7 أرقام بالضبط",
+        "card_id_numbers": "رقم البطاقة يجب أن يحتوي على أرقام فقط",
+        "password_required": "يرجى إدخال كلمة المرور",
+        "password_length": "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+      }
+    },
+    "signup": {
+      "title": "مرحباً! سجل للبدء",
+      "subtitle": "يرجى إدخال بيانات اعتمادك",
+      "card_id": "رقم البطاقة ",
+      "card_id_placeholder": "أدخل رقم البطاقة",
+      "national_id": "الرقم القومي ",
+      "national_id_placeholder": "أدخل الرقم القومي",
+      "phone_number": "رقم الهاتف ",
+      "phone_number_placeholder": "أدخل رقم الهاتف",
+      "password": "كلمة المرور ",
+      "password_placeholder": "أدخل كلمة المرور",
+      "confirm_password": "تأكيد كلمة المرور ",
+      "confirm_password_placeholder": "أدخل تأكيد كلمة المرور",
+      "register_button": "إنشاء حساب",
+      "registering": "جاري إنشاء الحساب...",
+      "already_have_account": "لديك حساب بالفعل؟ ",
+      "login": "تسجيل الدخول",
+      "registration_successful": "تم إنشاء الحساب بنجاح",
+      "validation": {
+        "card_id_required": "رقم البطاقة مطلوب",
+        "national_id_required": "الرقم القومي مطلوب",
+        "national_id_invalid": "أدخل رقماً قومياً صحيحاً مكون من 14 رقم",
+        "phone_required": "رقم الهاتف مطلوب",
+        "phone_invalid": "أدخل رقم هاتف مصري صحيح",
+        "password_required": "كلمة المرور مطلوبة",
+        "password_length": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "confirm_password_required": "تأكيد كلمة المرور مطلوب",
+        "passwords_not_match": "كلمات المرور غير متطابقة"
+      }
+    },
+    "forgot_password": {
+      "title": "نسيت كلمة المرور",
+      "description": "لا تقلق! هذا يحدث. يرجى إدخال رقم هاتفك وسنرسل رمز التحقق إلى هذا الرقم.",
+      "phone_number": "رقم الهاتف",
+      "phone_placeholder": "أدخل رقم هاتفك",
+      "send_button": "إرسال",
+      "sending": "جاري الإرسال...",
+      "change_phone": "هل تريد تغيير رقم الهاتف؟",
+      "contact_us": "اتصل بنا",
+      "validation": {
+        "phone_required": "يرجى إدخال رقم هاتفك"
+      }
+    },
+    "reset_password": {
+      "title": "إعادة تعيين كلمة المرور",
+      "description": "أنشئ كلمة مرور جديدة. تأكد من أنها تختلف عن السابقة للأمان.",
+      "new_password": "كلمة المرور الجديدة",
+      "new_password_placeholder": "إنشاء كلمة مرور",
+      "confirm_password": "تأكيد كلمة المرور",
+      "confirm_password_placeholder": "تأكيد كلمة المرور",
+      "confirm_button": "تأكيد",
+      "congratulations": "تهانينا!",
+      "success_message": "تم تغيير كلمة المرور بنجاح\nستتم إعادة توجيهك إلى شاشة تسجيل الدخول الآن",
+      "validation": {
+        "new_password_required": "يرجى إدخال كلمة مرور جديدة",
+        "password_length": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "confirm_password_required": "يرجى تأكيد كلمة المرور",
+        "passwords_not_match": "كلمات المرور غير متطابقة"
+      }
+    }
+  },
+  "home": {
+    "title": "الرئيسية",
+    "error_loading": "حدث خطأ أثناء تحميل البيانات",
+    "quick_access": "الوصول السريع",
+    "approval": "الموافقة",
+    "refund": "الاسترداد",
+    "chronic_medicine": "الأدوية\nالمزمنة",
+    "hello": "مرحباً، ",
+    "health_question": "كيف حالتك الصحية الآن؟",
+    "member_id": "رقم العضوية",
+    "expire_date": "تاريخ الانتهاء",
+    "ongoing_requests": "الطلبات الجارية",
+    "see_all": "عرض الكل",
+    "no_ongoing_requests": "لا توجد طلبات جارية",
+    "service_type": "نوع الخدمة",
+    "no_notes": "لا توجد ملاحظات",
+    "date": "التاريخ",
+    "health_tips": "نصائح صحية",
+    "health_tips_title": "احصل على فحوصات منتظمة",
+    "health_tips_description": "يمكن أن تساعد الفحوصات السنوية على اكتشاف الأمراض مبكرًا والحفاظ على صحتك لفترة أطول!",
+    "explore": "استكشف"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "member_id": "رقم العضوية: ",
+    "error_loading_profile": "خطأ في تحميل الملف الشخصي",
+    "account": "الحساب",
+    "personal_information": "المعلومات الشخصية",
+    "family_members": "أفراد العائلة",
+    "insurance_plan": "خطة التأمين",
+    "settings": "الإعدادات",
+    "change_password": "تغيير كلمة المرور",
+    "language": "اللغة",
+    "help_support": "المساعدة والدعم",
+    "faq": "الأسئلة الشائعة",
+    "contact_us": "اتصل بنا",
+    "terms_privacy": "الشروط وسياسة الخصوصية",
+    "log_out": "تسجيل الخروج"
+  },
+  "personal_info": {
+    "title": "المعلومات الشخصية",
+    "profile_photo": "صورة الملف الشخصي",
+    "full_name": "الاسم الكامل",
+    "insurance_card_id": "رقم بطاقة التأمين",
+    "phone_number": "رقم الهاتف",
+    "date_of_birth": "تاريخ الميلاد",
+    "gender": "الجنس",
+    "email_address": "عنوان البريد الإلكتروني",
+    "address": "العنوان",
+    "validation": {
+      "full_name_required": "الاسم الكامل مطلوب",
+      "insurance_id_required": "رقم بطاقة التأمين مطلوب",
+      "phone_required": "رقم الهاتف مطلوب",
+      "phone_length": "رقم الهاتف يجب أن يكون 11 رقم على الأقل",
+      "dob_required": "تاريخ الميلاد مطلوب",
+      "gender_required": "الجنس مطلوب",
+      "email_invalid": "يرجى إدخال عنوان بريد إلكتروني صحيح"
+    }
+  },
+  "change_password": {
+    "title": "تغيير كلمة المرور",
+    "hint": "كلمة المرور الجديدة يجب أن تختلف عن القديمة",
+    "old_password": "كلمة المرور القديمة",
+    "old_password_placeholder": "أدخل كلمة المرور القديمة",
+    "new_password": "كلمة المرور الجديدة",
+    "new_password_placeholder": "أدخل كلمة المرور الجديدة",
+    "confirm_password": "تأكيد كلمة المرور",
+    "confirm_password_placeholder": "تأكيد كلمة المرور الجديدة",
+    "password_requirements": "كلمة المرور يجب أن تكون 8 أحرف على الأقل وتشمل حرف كبير واحد",
+    "success_message": "تهانينا تم تغيير كلمة المرور بنجاح.",
+    "validation": {
+      "old_password_required": "كلمة المرور القديمة مطلوبة",
+      "new_password_required": "كلمة المرور الجديدة مطلوبة",
+      "password_length": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+      "password_uppercase": "كلمة المرور يجب أن تشمل حرف كبير واحد",
+      "confirm_password_required": "يرجى تأكيد كلمة المرور",
+      "passwords_not_match": "كلمات المرور غير متطابقة"
+    }
+  },
+  "language": {
+    "title": "اللغة",
+    "change_language": "تغيير اللغة",
+    "english": "English",
+    "arabic": "العربية",
+    "language_changed": "تم تغيير اللغة إلى "
+  },
+  "faq": {
+    "title": "الأسئلة الشائعة",
+    "search_placeholder": "بحث",
+    "categories": {
+      "general": "عام",
+      "approval": "الموافقة",
+      "refund": "الاسترداد",
+      "medications": "الأدوية والصيدليات"
+    }
+  },
+  "contact_us": {
+    "title": "اتصل بنا",
+    "chat": "محادثة",
+    "chat_subtitle": "تحدث مع فريقنا",
+    "phone": "رقم الهاتف",
+    "email": "البريد الإلكتروني",
+    "other_contacts": "وسائل التواصل الأخرى",
+    "whatsapp": "واتساب",
+    "website": "الموقع الإلكتروني",
+    "linkedin": "لينكد إن",
+    "instagram": "إنستجرام"
+  },
+  "network": {
+    "title": "شبكة مقدمي الخدمات",
+    "search_placeholder": "البحث عن مقدمي الخدمات...",
+    "no_providers": "لم يتم العثور على مقدمي خدمات",
+    "loading_providers": "جاري تحميل مقدمي الخدمات...",
+    "search_description": "استخدم شريط البحث أو الفلاتر للعثور على مقدمي الرعاية الصحية القريبين",
+    "navigate": "انتقال",
+    "filter_no_results": "لا توجد نتائج للفلترة المحددة",
+    "filter_no_results_description": "حاول تغيير معايير الفلترة للحصول على نتائج"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "no_notifications": "لا توجد إشعارات",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "days": {
+      "monday": "الاثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت",
+      "sunday": "الأحد"
+    },
+    "months": {
+      "jan": "يناير",
+      "feb": "فبراير",
+      "mar": "مارس",
+      "apr": "أبريل",
+      "may": "مايو",
+      "jun": "يونيو",
+      "jul": "يوليو",
+      "aug": "أغسطس",
+      "sep": "سبتمبر",
+      "oct": "أكتوبر",
+      "nov": "نوفمبر",
+      "dec": "ديسمبر"
+    }
+  },
+  "approval_request": {
+    "title": "طلب الموافقة",
+    "family_members": "أفراد العائلة",
+    "provider": "مقدم الخدمة",
+    "note": "ملاحظة",
+    "add_attachments": "إضافة مرفقات",
+    "select_family_member": "يرجى اختيار فرد من العائلة",
+    "select_provider": "اختر مقدم الخدمة",
+    "attachment_required": "مرفق واحد على الأقل مطلوب",
+    "max_size": "الحد الأقصى للحجم 5 ميجابايت",
+    "max_characters": "الحد الأقصى 300 حرف",
+    "enter_note": "أدخل ملاحظة"
+  },
+  "approval_history": {
+    "title": "تاريخ الموافقات",
+    "tabs": {
+      "all": "الكل",
+      "pending": "معلق",
+      "approved": "موافق عليه",
+      "rejected": "مرفوض"
+    },
+    "request_number": "رقم الطلب: ",
+    "date": "التاريخ: ",
+    "time": "الوقت: ",
+    "view_details": "عرض التفاصيل",
+    "empty_state": "ليس لديك أي طلبات اضغط على\nالزر ",
+    "to_request_approval": " لطلب الموافقة",
+    "status": {
+      "approved": "موافق عليه",
+      "rejected": "مرفوض",
+      "pending": "معلق"
+    }
+  },
+  "refund_request": {
+    "title": "طلب الاسترداد",
+    "family_members": "أفراد العائلة",
+    "refund_type": "نوع الاسترداد",
+    "provider": "مقدم الخدمة",
+    "reason": "السبب",
+    "amount": "المبلغ",
+    "amount_placeholder": "أدخل المبلغ",
+    "service_date": "تاريخ الخدمة",
+    "select_date": "اختر التاريخ",
+    "note": "ملاحظة"
+  },
+  "refund_history": {
+    "title": "تاريخ الاستردادات",
+    "tabs": {
+      "all": "الكل",
+      "pending": "معلق",
+      "approved": "موافق عليه",
+      "rejected": "مرفوض"
+    },
+    "request_number": "رقم الطلب: ",
+    "date": "التاريخ: ",
+    "time": "الوقت: ",
+    "view_details": "عرض التفاصيل",
+    "empty_state_title": "لا توجد طلبات استرداد بعد",
+    "empty_state": "ليس لديك أي طلبات اضغط على\nالزر ",
+    "to_request_refund": " لطلب الاسترداد",
+    "status": {
+      "approved": "موافق عليه",
+      "rejected": "مرفوض",
+      "pending": "معلق"
+    }
+  },
+  "family_members": {
+    "title": "أفراد العائلة",
+    "members": "الأعضاء",
+    "no_members": "لم يتم العثور على أفراد العائلة",
+    "activated_member": "عضو مفعل",
+    "gold_plan": "الخطة الذهبية"
+  },
+  "chronic_medicines": {
+    "title": "الأدوية المزمنة",
+    "select_member": "اختر عضو العائلة",
+    "select_medicines": "اختر أدويتك الشهرية",
+    "upcoming_lab": "التحليل القادم",
+    "upload_lab_results": "رفع نتائج التحاليل الربعية",
+    "required_tests": "التحاليل المطلوبة:",
+    "blood_sugar_test": "تحليل السكر",
+    "kidney_function_test": "تحليل وظائف الكلى",
+    "saved": "تم الحفظ",
+    "upcoming_lab_title": "الفحوصات القادمة",
+    "upcoming_lab_subtitle": "الفحوصات التالية بعد شهرين"
+  },
+  "policy": {
+    "title": "السياسة",
+    "services": "الخدمات"
+  },
+  "insurance_plan": {
+    "title": "خطة التأمين",
+    "gold_health_plan": "الخطة الصحية الذهبية",
+    "policy_number": "رقم البوليصة #MED-2025-0123",
+    "valid_until": "صالح حتى",
+    "valid_date": "31 ديسمبر 2025",
+    "status": "الحالة",
+    "active": "نشط",
+    "coverage_details": "تفاصيل التغطية",
+    "coverage_type": "نوع التغطية",
+    "family_plan": "خطة عائلية",
+    "annual_limit": "الحد السنوي",
+    "annual_limit_value": "300,000 جنيه",
+    "deductible": "الخصم",
+    "deductible_value": "1,000 جنيه",
+    "copayment": "المشاركة في التكلفة",
+    "copayment_value": "20%",
+    "coverage_member": "عضو التغطية",
+    "main_member": "العضو الرئيسي",
+    "spouse": "الزوج/الزوجة",
+    "son": "الابن"
+  },
+  "terms_policy": {
+    "title": "الشروط وسياسة الخصوصية",
+    "terms": "الشروط",
+    "privacy_policy": "سياسة الخصوصية",
+    "last_updated": "آخر تحديث: 15 يناير 2025",
+    "medical_insurance_app": "تطبيق التأمين الطبي",
+    "sections": {
+      "introduction": "1. المقدمة",
+      "eligibility": "2. الأهلية وتسجيل الحساب",
+      "services": "3. الخدمات",
+      "contact_us": "اتصل بنا",
+      "info_collect": "2. المعلومات التي نجمعها",
+      "how_we_use": "3. كيفية استخدام معلوماتك",
+      "data_protection": "4. كيفية حماية بياناتك",
+      "questions": "هل لديك أي أسئلة؟"
+    }
+  },
+  "bottom_nav": {
+    "home": "الرئيسية",
+    "provider": "مقدمي الخدمة",
+    "request": "موافقة جديدة",
+    "profile": "الملف الشخصي"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "invalid_email": "عنوان بريد إلكتروني غير صحيح",
+    "invalid_phone": "رقم هاتف غير صحيح"
+  },
+  "messages": {
+    "success": "تمت العملية بنجاح",
+    "error": "حدث خطأ",
+    "no_internet": "لا يوجد اتصال بالإنترنت",
+    "server_error": "خطأ في السيرفر يرجى المحاولة لاحقاً"
+  },
+  "explore": {
+    "providers": "مزودي الخدمة",
+    "providers_description": "ابحث عن شبكات الرعاية الصحية والمستشفيات والصيدليات",
+    "policy": "السياسات",
+    "policy_description": "عرض وإدارة وثائق التأمين",
+    "family": "أفراد العائلة",
+    "family_description": "أضف وأدِر أفراد العائلة"
+  },
+  "bottom_sheet": {
+    "filter": "تصفية",
+    "clear": "مسح",
+    "choose_category": "اختر الفئة",
+    "choose_government": "اختر المحافظة",
+    "choose_city": "اختر المدينة",
+    "no_categories": "لا توجد فئات متاحة",
+    "no_governments": "لا توجد محافظات متاحة"
+  }
+}

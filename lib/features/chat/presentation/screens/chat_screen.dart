@@ -123,7 +123,7 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: EdgeInsets.all(16.w),
           child: Text(
             'Today',
-            style: AppTextStyles.font12GreyRegular,
+            style: AppTextStyles.font12GreyRegular(context),
           ),
         ),
         Expanded(

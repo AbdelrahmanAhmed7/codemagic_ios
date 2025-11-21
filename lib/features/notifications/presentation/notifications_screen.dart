@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,19 +19,27 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   final ScrollController _controller = ScrollController();
+  Locale? _lastLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final currentLocale = context.locale;
+    if (_lastLocale != currentLocale) {
+      _lastLocale = currentLocale;
+      context.read<NotificationsCubit>().load(lang: currentLocale.languageCode);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NotificationsCubit>().load(lang: 'en');
-    });
   }
 
   void _onScroll() {
     if (_controller.position.pixels >= _controller.position.maxScrollExtent * 0.9) {
-      context.read<NotificationsCubit>().loadMore(lang: 'en');
+      context.read<NotificationsCubit>().loadMore(lang: context.locale.languageCode);
     }
   }
 
@@ -68,13 +77,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         final yesterday = today.subtract(const Duration(days: 1));
         
         if (date == today) {
-          return 'Today';
+          return 'notifications.today'.tr();
         } else if (date == yesterday) {
-          return 'Yesterday';
+          return 'notifications.yesterday'.tr();
         } else {
           // Format: "Thursday, 23 Oct 2024"
-          const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          final weekdays = ['notifications.days.monday'.tr(), 'notifications.days.tuesday'.tr(), 'notifications.days.wednesday'.tr(), 'notifications.days.thursday'.tr(), 'notifications.days.friday'.tr(), 'notifications.days.saturday'.tr(), 'notifications.days.sunday'.tr()];
+          final months = ['notifications.months.jan'.tr(), 'notifications.months.feb'.tr(), 'notifications.months.mar'.tr(), 'notifications.months.apr'.tr(), 'notifications.months.may'.tr(), 'notifications.months.jun'.tr(), 'notifications.months.jul'.tr(), 'notifications.months.aug'.tr(), 'notifications.months.sep'.tr(), 'notifications.months.oct'.tr(), 'notifications.months.nov'.tr(), 'notifications.months.dec'.tr()];
           final weekday = weekdays[date.weekday - 1];
           final monthName = months[date.month - 1];
           return '$weekday, ${date.day} $monthName ${date.year}';
@@ -93,7 +102,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const PageHeader(title: 'Notification', backPath: '/home'),
+            PageHeader(title: 'notifications.title'.tr(), backPath: '/home'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -118,14 +127,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           initial: () => const Center(child: CircularProgressIndicator()),
                           loading: () => const Center(child: CircularProgressIndicator()),
                           failed: (msg) => Center(
-                            child: Text(msg, style: AppTextStyles.font14GreyRegular),
+                            child: Text(msg, style: AppTextStyles.font14GreyRegular(context)),
                           ),
                           loaded: (notifications, totalCount, currentPage, totalPages, hasNextPage, loadingMore) {
                             if (notifications.isEmpty) {
                               return Center(
                                 child: Text(
-                                  'No notifications',
-                                  style: AppTextStyles.font14GreyRegular,
+                                  'notifications.no_notifications'.tr(),
+                                  style: AppTextStyles.font14GreyRegular(context),
                                 ),
                               );
                             }
@@ -165,7 +174,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         padding: EdgeInsets.only(bottom: 12.h, top: index == 0 ? 0 : 16.h),
                                         child: Text(
                                           _formatDateHeader(date),
-                                          style: AppTextStyles.font14BlackMedium,
+                                          style: AppTextStyles.font14BlackMedium(context),
                                         ),
                                       ),
                                       // Notifications for this date
@@ -294,21 +303,21 @@ class _NotificationCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         item.title,
-                        style: AppTextStyles.font14BlackMedium,
+                        style: AppTextStyles.font14BlackMedium(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Text(
                       item.time,
-                      style: AppTextStyles.font10GreyRegular,
+                      style: AppTextStyles.font10GreyRegular(context),
                     ),
                   ],
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   item.body,
-                  style: AppTextStyles.font12GreyRegular,
+                  style: AppTextStyles.font12GreyRegular(context),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

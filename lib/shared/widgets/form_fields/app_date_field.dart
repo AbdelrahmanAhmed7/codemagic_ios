@@ -37,14 +37,14 @@ class AppDateField extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   text: label!,
-                  style: AppTextStyles.font12BlackRegular,
+                  style: AppTextStyles.font12BlackRegular(context),
                   children: isRequired
                       ? [
                           TextSpan(
                             text: ' *',
-                            style: AppTextStyles.font12BlackRegular.copyWith(
-                              color: Colors.red,
-                            ),
+                            style: AppTextStyles.font12BlackRegular(
+                              context,
+                            ).copyWith(color: Colors.red),
                           ),
                         ]
                       : [],
@@ -52,7 +52,7 @@ class AppDateField extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
             ],
-            
+
             // Date Field
             Container(
               decoration: BoxDecoration(
@@ -63,7 +63,7 @@ class AppDateField extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 readOnly: true,
-                style: AppTextStyles.font12GreyRegular,
+                style: AppTextStyles.font12GreyRegular(context),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12.w,
@@ -71,7 +71,7 @@ class AppDateField extends StatelessWidget {
                   ),
                   border: InputBorder.none,
                   hintText: 'DD/MM/YYYY',
-                  hintStyle: AppTextStyles.font12GreyRegular,
+                  hintStyle: AppTextStyles.font12GreyRegular(context),
                   suffixIcon: Icon(
                     Icons.date_range_outlined,
                     size: 20.sp,
@@ -81,7 +81,7 @@ class AppDateField extends StatelessWidget {
                 onTap: () async {},
               ),
             ),
-            
+
             // Error message
             if (fieldState.errorText != null)
               Padding(

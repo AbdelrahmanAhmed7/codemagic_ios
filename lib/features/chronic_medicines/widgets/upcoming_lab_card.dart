@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -10,8 +11,11 @@ class UpcomingLabCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
+    final direction = Directionality.of(context);
+
     return Stack(
-      clipBehavior: Clip.none, 
+      clipBehavior: Clip.none,
       children: [
         Container(
           width: double.infinity,
@@ -21,6 +25,7 @@ class UpcomingLabCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Row(
+            textDirection: direction,
             children: [
               SizedBox(
                 width: 24.w,
@@ -33,13 +38,13 @@ class UpcomingLabCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Upcoming Lab Tests',
-                      style: AppTextStyles.font14BlueRegular,
+                      'chronic_medicines.upcoming_lab_title'.tr(),
+                      style: AppTextStyles.font14BlueRegular(context),
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      'Next tests due in 2 months',
-                      style: AppTextStyles.font12BlueRegular
+                      'chronic_medicines.upcoming_lab_subtitle'.tr(),
+                      style: AppTextStyles.font12BlueRegular(context)
                           .copyWith(color: const Color(0xff4285F4)),
                     ),
                   ],
@@ -50,8 +55,9 @@ class UpcomingLabCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          right: -15.w,
           top: -40.h,
+          right: isArabic ? null : -15.w,
+          left: isArabic ? -15.w : null,
           child: Image.asset(
             AppAssets.aalem,
             width: 110.w,

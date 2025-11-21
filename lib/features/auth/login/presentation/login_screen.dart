@@ -11,6 +11,7 @@ import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.d
 import 'package:mediconsult/features/auth/login/presentation/logic/login_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -64,53 +65,53 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 43.h),
 
                 Text(
-                  'Welcome back! Glad to see you,\n Again!',
-                  style: AppTextStyles.font20BlackSemiBold,
+                  'auth.login.title'.tr(),
+                  style: AppTextStyles.font20BlackSemiBold(context),
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  'Please enter your Credentials to login',
-                  style: AppTextStyles.font16GreyRegular,
+                  'auth.login.subtitle'.tr(),
+                  style: AppTextStyles.font16GreyRegular(context),
                 ),
                 SizedBox(height: 40.h),
 
-                Text('Card ID', style: AppTextStyles.font16BlackMedium),
+                Text('auth.login.card_id'.tr(), style: AppTextStyles.font16BlackMedium(context)),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: cardOrPhoneController,
-                  hintText: 'Enter card number',
+                  hintText: 'auth.login.card_id_placeholder'.tr(),
                   prefixImagePath: AppAssets.cardIcon,
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your Card ID';
+                      return 'auth.login.validation.card_id_required'.tr();
                     }
                     if (!value.startsWith('20')) {
-                      return 'Card ID must start with 20';
+                      return 'auth.login.validation.card_id_start'.tr();
                     }
                     if (value.length != 7) {
-                      return 'Card ID must be exactly 7 digits';
+                      return 'auth.login.validation.card_id_length'.tr();
                     }
                     if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return 'Card ID must contain only numbers';
+                      return 'auth.login.validation.card_id_numbers'.tr();
                     }
                     return null;
                   },
                 ),
                 SizedBox(height: 16.h),
 
-                Text('Password', style: AppTextStyles.font16BlackMedium),
+                Text('auth.login.password'.tr(), style: AppTextStyles.font16BlackMedium(context)),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: passwordController,
-                  hintText: 'Enter Password',
+                  hintText: 'auth.login.password_placeholder'.tr(),
                   isPassword: true,
                   prefixImagePath: AppAssets.passwordIcon,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'auth.login.validation.password_required'.tr();
                     } else if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return 'auth.login.validation.password_length'.tr();
                     }
                     return null;
                   },
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       context.go('/forget-password');
                     },
                     child: Text(
-                      'Forgot Password?',
+                      'auth.login.forgot_password'.tr(),
                       style: TextStyle(
                         color: AppColors.primaryClr,
                         fontSize: 13.sp,
@@ -139,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   listener: (context, state) {
                     if (state is Success) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        showAppSnackBar(context, 'Login Successful');
+                        showAppSnackBar(context, 'auth.login.login_successful'.tr());
                         context.go('/home');
                       });
                     } else if (state is Failed) {
@@ -152,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     final isLoading = state is Loading;
 
                     return AppButton(
-                      text: isLoading ? 'Logging in...' : 'Login',
+                      text: isLoading ? 'auth.login.logging_in'.tr() : 'auth.login.login_button'.tr(),
                       isLoading: isLoading,
                       onPressed: isLoading
                           ? null
@@ -161,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context.read<LoginCubit>().login(
                                   cardOrPhoneController.text.trim(),
                                   passwordController.text.trim(),
-                                  'en',
+                                  context.locale.languageCode,
                                 );
                               }
                             },
@@ -173,21 +174,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: Text.rich(
                     TextSpan(
-                      text: "Don’t have an account? ",
+                      text: 'auth.login.dont_have_account'.tr(),
                       style: TextStyle(
                         fontSize: 13.sp,
                         color: Colors.grey[700],
                       ),
                       children: [
                         TextSpan(
-                          text: 'Register',
+                          text: 'auth.login.register'.tr(),
                           style: TextStyle(
                             color: AppColors.primaryClr,
                             fontWeight: FontWeight.w600,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              context.go('/sign-up');
+                              context.go('/signup');
                             },
                         ),
                       ],

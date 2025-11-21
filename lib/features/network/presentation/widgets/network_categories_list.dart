@@ -109,26 +109,26 @@ class NetworkCategoriesList extends StatelessWidget {
 
 extension NetworkCategoryUI on NetworkCategory {
   Color get bgColor {
-    switch (name) {
-      case 'Pharmacy':
+    switch (id) {
+      case 1:
         return const Color(0xFFF6DACA);
-      case 'Lab':
+      case 4:
         return const Color(0xFFD2EDEB);
-      case 'Dental Center':
+      case 9:
         return const Color(0xFFE8D6DB);
-      case 'Hospital':
+      case 5:
         return const Color(0xFFD2DAFF);
-      case 'Scan Center':
+      case 3:
         return const Color(0xFFFFEDC7);
-      case 'Doctor\t':
+      case 6:
         return const Color(0xFFCBCCCF);
-      case 'PhysioThearpy Center':
+      case 10:
         return const Color(0xFFCFE0FC);
-      case 'Optical Center':
+      case 8:
         return const Color(0xFFCFECEF);
-      case 'Specialized Center':
+      case 2:
         return const Color(0xFFF2CBE7);
-      case 'Specialized clinics':
+      case 11:
         return const Color(0xFFF2CBE7);
       default:
         return AppColors.lightGreyClr;
@@ -136,24 +136,24 @@ extension NetworkCategoryUI on NetworkCategory {
   }
 
   Color get iconColor {
-    switch (name.toLowerCase()) {
-      case 'pharmacy':
+    switch (id) {
+      case 1:
         return const Color(0xFFFF9900);
-      case 'lab':
+      case 4:
         return const Color(0xFF33CC99);
-      case 'dental':
+      case 9:
         return const Color(0xFFCC6699);
-      case 'hospital':
+      case 5:
         return const Color(0xFF3366FF);
-      case 'scan lab':
+      case 3:
         return const Color(0xFFFFCC00);
-      case 'doctor':
+      case 6:
         return const Color(0xFF666666);
-      case 'physiotherapy':
+      case 10:
         return const Color(0xFF004CFF);
-      case 'optical center':
+      case 8:
         return const Color(0xFF009999);
-      case 'specialized center':
+      case 2:
         return const Color(0xFFCC66CC);
       default:
         return AppColors.greyClr;

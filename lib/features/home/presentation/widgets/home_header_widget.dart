@@ -6,6 +6,7 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 import 'package:mediconsult/features/home/data/home_response_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
   final HomeData data;
@@ -48,14 +49,14 @@ class HomeHeaderWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hello, ${data.memberName.split(" ").first}',
-                        style: AppTextStyles.font16WhiteRegular.copyWith(
+                        '${'home.hello'.tr()}${data.memberName.split(" ").first}',
+                        style: AppTextStyles.font16WhiteRegular(context).copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        'How is your health now?',
-                        style: AppTextStyles.font8WhiteRegular,
+                        'home.health_question'.tr(),
+                        style: AppTextStyles.font10WhiteRegular(context),
                       ),
                     ],
                   ),

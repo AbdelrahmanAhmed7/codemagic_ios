@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'dart:ui' as ui;
 
 class BottomNavigationBarWidget extends StatelessWidget {
   final int currentIndex;
@@ -15,10 +17,12 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width - 32.w;
+    final isRtl = Directionality.of(context) == ui.TextDirection.rtl;
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
       child: SizedBox(
-        height: 80.h, 
+        height: 80.h,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -35,19 +39,31 @@ class BottomNavigationBarWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(4, (index) {
-                  return _buildNavItem(index);
-                }),
+              child: Directionality(
+                textDirection: isRtl
+                    ? ui.TextDirection.rtl
+                    : ui.TextDirection.ltr,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(4, (index) {
+                    return _buildNavItem(index);
+                  }),
+                ),
               ),
             ),
 
             Positioned(
               top: -25.h,
-              left: (currentIndex * (MediaQuery.of(context).size.width - 32.w) / 4) +
-                  ((MediaQuery.of(context).size.width - 32.w) / 8) -
-                  25.w,
+              left: isRtl
+                  ? null
+                  : (currentIndex * (screenWidth / 4)) +
+                        (screenWidth / 8) -
+                        25.w,
+              right: isRtl
+                  ? (currentIndex * (screenWidth / 4)) +
+                        (screenWidth / 8) -
+                        25.w
+                  : null,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOut,
@@ -110,13 +126,13 @@ class BottomNavigationBarWidget extends StatelessWidget {
   String _getLabel(int index) {
     switch (index) {
       case 0:
-        return 'Home';
+        return 'bottom_nav.home'.tr();
       case 1:
-        return 'Provider';
+        return 'bottom_nav.provider'.tr();
       case 2:
-        return 'Request';
+        return 'bottom_nav.request'.tr();
       case 3:
-        return 'Profile';
+        return 'bottom_nav.profile'.tr();
       default:
         return '';
     }

@@ -4,14 +4,12 @@ import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/home/data/home_response_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UserPlanCardWidget extends StatelessWidget {
   final HomeData data;
 
-  const UserPlanCardWidget({
-    super.key,
-    required this.data,
-  });
+  const UserPlanCardWidget({super.key, required this.data});
 
   Color get planColor {
     final name = (data.programName.isEmpty)
@@ -33,6 +31,7 @@ class UserPlanCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
     return Container(
       width: double.infinity,
       height: 200.h,
@@ -54,19 +53,25 @@ class UserPlanCardWidget extends StatelessWidget {
           // Plan type label
           Positioned(
             top: -16.h,
-            left: -16.w,
+            left: isArabic ? null : -16.w,
+            right: isArabic ? -16.w : null,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 7.h),
               decoration: BoxDecoration(
                 color: planColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  bottomRight: Radius.circular(12.r),
-                ),
+                borderRadius: isArabic
+                    ? BorderRadius.only(
+                        topRight: Radius.circular(12.r),
+                        bottomLeft: Radius.circular(16.r),
+                      )
+                    : BorderRadius.only(
+                        topLeft: Radius.circular(16.r),
+                        bottomRight: Radius.circular(12.r),
+                      ),
               ),
               child: Text(
                 planName,
-                style: AppTextStyles.font12GreyRegular.copyWith(
+                style: AppTextStyles.font12GreyRegular(context).copyWith(
                   color: AppColors.blackClr,
                   fontWeight: FontWeight.w600,
                 ),
@@ -86,7 +91,8 @@ class UserPlanCardWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: AppColors.lightGreyClr,
                     image: DecorationImage(
-                      image: (data.memberPhoto != null &&
+                      image:
+                          (data.memberPhoto != null &&
                               data.memberPhoto!.isNotEmpty)
                           ? NetworkImage(data.memberPhoto!)
                           : const AssetImage(AppAssets.logo) as ImageProvider,
@@ -101,7 +107,7 @@ class UserPlanCardWidget extends StatelessWidget {
                       SizedBox(height: 18.h),
                       Text(
                         data.memberName,
-                        style: AppTextStyles.font14BlackMedium,
+                        style: AppTextStyles.font14BlackMedium(context),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -109,17 +115,17 @@ class UserPlanCardWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Member ID',
-                            style: AppTextStyles.font14GreyRegular.copyWith(
-                              color: const Color(0xff484848),
-                            ),
+                            'home.member_id'.tr(),
+                            style: AppTextStyles.font14GreyRegular(
+                              context,
+                            ).copyWith(color: const Color(0xff484848)),
                           ),
                           SizedBox(width: 20.w),
                           Text(
                             data.memberId.toString(),
-                            style: AppTextStyles.font14GreyRegular.copyWith(
-                              color: const Color(0xff484848),
-                            ),
+                            style: AppTextStyles.font14GreyRegular(
+                              context,
+                            ).copyWith(color: const Color(0xff484848)),
                           ),
                         ],
                       ),
@@ -127,18 +133,21 @@ class UserPlanCardWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Expire Date',
-                            style: AppTextStyles.font10GreyRegular.copyWith(
-                              color: const Color(0xff484848),
-                            ),
+                            'home.expire_date'.tr(),
+                            style: AppTextStyles.font10GreyRegular(
+                              context,
+                            ).copyWith(color: const Color(0xff484848)),
                           ),
                           SizedBox(width: 6.w),
                           Text(
                             data.policyExpireDate,
-                            style: AppTextStyles.font8GreyRegular.copyWith(
-                              color: const Color(0xff484848),
-                              fontSize: 12.sp,
-                            ),
+                            style: AppTextStyles.font8GreyRegular(context)
+                                .copyWith(
+                                  color: const Color(0xff484848),
+                                  fontSize: context.locale.languageCode == 'ar'
+                                      ? 10.sp
+                                      : 12.sp,
+                                ),
                           ),
                         ],
                       ),
@@ -152,7 +161,8 @@ class UserPlanCardWidget extends StatelessWidget {
           // QR Code at bottom right
           Positioned(
             bottom: 8.h,
-            right: 8.w,
+            right: isArabic ? null : 8.w,
+            left: isArabic ? 8.w : null,
             child: Image.asset(
               AppAssets.qrCode,
               width: 42.w,

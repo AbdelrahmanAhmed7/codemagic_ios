@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -16,7 +17,7 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageHeader(title: 'Insurance Plan', backPath: '/profile'),
+            PageHeader(title: 'insurance_plan.title'.tr(), backPath: '/profile'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -39,11 +40,11 @@ class InsurancePlanScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildInsuranceCard(),
+                          _buildInsuranceCard(context),
                           SizedBox(height: 32.h),
-                          _buildCoverageDetails(),
+                          _buildCoverageDetails(context),
                           SizedBox(height: 24.h),
-                          _buildCoverageMembers(),
+                          _buildCoverageMembers(context),
                           SizedBox(height: 8.h),
                         ],
                       ),
@@ -58,7 +59,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInsuranceCard() {
+  Widget _buildInsuranceCard(context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -90,13 +91,13 @@ class InsurancePlanScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Gold Health Plan',
-                        style: AppTextStyles.font20WhiteSemiBold,
+                        'insurance_plan.gold_health_plan'.tr(),
+                        style: AppTextStyles.font20WhiteSemiBold(context),
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        'Policy #MED-2025-0123',
-                        style: AppTextStyles.font14WhiteRegular,
+                        'insurance_plan.policy_number'.tr(),
+                        style: AppTextStyles.font14WhiteRegular(context),
                       ),
                     ],
                   ),
@@ -112,13 +113,13 @@ class InsurancePlanScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Valid until',
-                      style: AppTextStyles.font14WhiteRegular,
+                      'insurance_plan.valid_until'.tr(),
+                      style: AppTextStyles.font14WhiteRegular(context),
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       'Dec 31, 2025',
-                      style: AppTextStyles.font16WhiteRegular.copyWith(
+                      style: AppTextStyles.font16WhiteRegular(context).copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -127,9 +128,9 @@ class InsurancePlanScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('Status', style: AppTextStyles.font14GreenRegular),
+                    Text('Status', style: AppTextStyles.font14GreenRegular(context)),
                     SizedBox(height: 4.h),
-                    Text('Active', style: AppTextStyles.font16GreenMedium),
+                    Text('Active', style: AppTextStyles.font16GreenMedium(context)),
                   ],
                 ),
               ],
@@ -140,7 +141,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCoverageDetails() {
+  Widget _buildCoverageDetails(context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -159,28 +160,28 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Coverage Details', style: AppTextStyles.font14BlackMedium),
+            Text('Coverage Details', style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
-            _buildCoverageItem('Coverage Type', 'Family Plan'),
-            _buildCoverageItem('Annual Limit', 'EGP 300,000'),
-            _buildCoverageItem('Deductible', 'EGP 1,000'),
-            _buildCoverageItem('Copayment', '20%'),
+            _buildCoverageItem('Coverage Type', 'Family Plan',context),
+            _buildCoverageItem('Annual Limit', 'EGP 300,000',context),
+            _buildCoverageItem('Deductible', 'EGP 1,000',context),
+            _buildCoverageItem('Copayment', '20%',context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCoverageItem(String title, String value) {
+  Widget _buildCoverageItem(String title, String value,context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: AppTextStyles.font12GreyRegular),
+          Text(title, style: AppTextStyles.font12GreyRegular(context)),
           Text(
             value,
-            style: AppTextStyles.font12BlueMedium.copyWith(
+            style: AppTextStyles.font12BlueMedium(context).copyWith(
               color: AppColors.blueClrW,
             ),
           ),
@@ -189,7 +190,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCoverageMembers() {
+  Widget _buildCoverageMembers(context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -208,24 +209,27 @@ class InsurancePlanScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Coverage Member', style: AppTextStyles.font14BlackMedium),
+            Text('Coverage Member', style: AppTextStyles.font14BlackMedium(context)),
             SizedBox(height: 16.h),
             _buildMemberItem(
               'Ahmed Mohamed Adel Amin',
               'Main Member',
               'assets/approval/ahmed.png',
+              context
             ),
             Divider(color: AppColors.lightGreyClr),
             _buildMemberItem(
               'Noha Khaled Ali Mohamed',
               'Spouse',
               'assets/approval/noha.png',
+              context
             ),
             Divider(color: AppColors.lightGreyClr),
             _buildMemberItem(
               'Youssef Ahmed Mohamed',
               'Son',
               'assets/approval/ali.png',
+              context
             ),
           ],
         ),
@@ -233,7 +237,7 @@ class InsurancePlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMemberItem(String name, String role, String imagePath) {
+  Widget _buildMemberItem(String name, String role, String imagePath,context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
@@ -244,8 +248,8 @@ class InsurancePlanScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: AppTextStyles.font12BlackMedium),
-                Text(role, style: AppTextStyles.font10GreyRegular.copyWith(
+                Text(name, style: AppTextStyles.font12BlackMedium(context)),
+                Text(role, style: AppTextStyles.font10GreyRegular(context).copyWith(
                   color: Color(0xff484848),
                 )),
               ],

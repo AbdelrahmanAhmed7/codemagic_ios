@@ -9,6 +9,7 @@ import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.da
 import 'package:mediconsult/features/home/presentation/widgets/home_header_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/user_plan_card_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/quick_access_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/features/home/presentation/widgets/khusm_promotion_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/ongoing_request_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/health_tips_widget.dart';
@@ -16,6 +17,7 @@ import 'package:mediconsult/features/home/presentation/widgets/explore_widget.da
 import 'package:mediconsult/features/home/presentation/widgets/bottom_navigation_bar_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/home_loading_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/core/utils/language_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +33,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // call home info when the screen is opened
-    context.read<HomeCubit>().getHomeInfo('en');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkPermissionsAndLoadData();
+    });
+  }
+  
+  Future<void> _checkPermissionsAndLoadData() async {
+    try {
+      // Load home data regardless of permissions
+      context.read<HomeCubit>().getHomeInfo(LanguageHelper.getLanguageCode(context));
+    } catch (e) {
+      // If there's an error, still try to load home data
+      context.read<HomeCubit>().getHomeInfo(LanguageHelper.getLanguageCode(context));
+    }
   }
 
   @override
@@ -50,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 final data = model.data;
                 return RefreshIndicator(
                   onRefresh: () async {
-                    await context.read<HomeCubit>().refreshHomeInfo('en');
+                    await context.read<HomeCubit>().refreshHomeInfo(LanguageHelper.getLanguageCode(context));
                   },
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -113,25 +127,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      'An error occurred while loading the data',
-                      style: AppTextStyles.font16BlackMedium,
+                      'home.error_loading'.tr(),
+                      style: AppTextStyles.font16BlackMedium(context),
                     ),
                     SizedBox(height: 8.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 32.w),
                       child: Text(
                         AppErrorHandler.getUserFriendlyMessage(message),
-                        style: AppTextStyles.font14GreyRegular,
+                        style: AppTextStyles.font14GreyRegular(context),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     SizedBox(height: 24.h),
                     ElevatedButton.icon(
                       onPressed: () {
-                        context.read<HomeCubit>().retry('en');
+                        context.read<HomeCubit>().retry(LanguageHelper.getLanguageCode(context));
                       },
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Retry'),
+                      label: Text('common.retry'.tr()),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryClr,
                         foregroundColor: Colors.white,

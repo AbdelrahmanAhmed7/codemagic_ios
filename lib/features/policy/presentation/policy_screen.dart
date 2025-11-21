@@ -43,7 +43,7 @@ class PolicyScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 16.h),
-                          Text('Services', style: AppTextStyles.font16BlackMedium),
+                          Text('Services', style: AppTextStyles.font16BlackMedium(context)),
                           SizedBox(height: 8.h),
                           Expanded(
                             child: GridView.builder(

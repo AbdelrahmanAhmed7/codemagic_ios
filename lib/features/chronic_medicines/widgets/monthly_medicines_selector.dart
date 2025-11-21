@@ -73,9 +73,9 @@ class _MedicineTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTextStyles.font14BlackMedium),
+                  Text(title, style: AppTextStyles.font14BlackMedium(context)),
                   SizedBox(height: 4.h),
-                  Text(subtitle, style: AppTextStyles.font10GreyRegular),
+                  Text(subtitle, style: AppTextStyles.font10GreyRegular(context)),
                 ],
               ),
             ),

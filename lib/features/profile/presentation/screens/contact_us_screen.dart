@@ -6,6 +6,7 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/contact_tile.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ContactUsScreen extends StatelessWidget {
   const ContactUsScreen({super.key});
@@ -18,7 +19,7 @@ class ContactUsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageHeader(title: 'Contact Us', backPath: '/profile'),
+            PageHeader(title: 'profile.contact_us.title'.tr(), backPath: '/profile'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -41,21 +42,21 @@ class ContactUsScreen extends StatelessWidget {
                       children: [
                         ContactTile(
                           assetPath: AppAssets.chatIcon,
-                          title: 'Chat',
-                          subtitle: 'Chat with our team',
+                          title: 'profile.contact_us.chat'.tr(),
+                          subtitle: 'profile.contact_us.chat_subtitle'.tr(),
                           onTap: () => context.go('/chat'),
                         ),
                         SizedBox(height: 12.h),
                         ContactTile(
                           assetPath: AppAssets.phoneContactIcon,
-                          title: 'Phone Number',
+                          title: 'profile.contact_us.phone'.tr(),
                           subtitle: '+20 1083423719',
                           onTap: () {},
                         ),
                         SizedBox(height: 12.h),
                         ContactTile(
                           assetPath: AppAssets.emailIcon,
-                          title: 'Email',
+                          title: 'profile.contact_us.email'.tr(),
                           subtitle: 'support@Mediconsult.com',
                           onTap: () {},
                         ),
@@ -63,35 +64,35 @@ class ContactUsScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4.w),
                           child: Text(
-                            'Other Contacts',
-                            style: AppTextStyles.font16BlueMedium,
+                            'profile.contact_us.other_contacts'.tr(),
+                            style: AppTextStyles.font16BlueMedium(context),
                           ),
                         ),
                         SizedBox(height: 12.h),
                         ContactTile(
                           assetPath: AppAssets.whatsappIcon,
-                          title: 'WhatsApp',
+                          title: 'profile.contact_us.whatsapp'.tr(),
                           subtitle: '',
                           onTap: () {},
                         ),
                         SizedBox(height: 8.h),
                         ContactTile(
                           assetPath: AppAssets.websiteIcon,
-                          title: 'Website',
+                          title: 'profile.contact_us.website'.tr(),
                           subtitle: '',
                           onTap: () {},
                         ),
                         SizedBox(height: 8.h),
                         ContactTile(
                           assetPath: AppAssets.linkedInIcon,
-                          title: 'LinkedIn',
+                          title: 'profile.contact_us.linkedin'.tr(),
                           subtitle: '',
                           onTap: () {},
                         ),
                         SizedBox(height: 8.h),
                         ContactTile(
                           assetPath: AppAssets.instagramIcon,
-                          title: 'Instagram',
+                          title: 'profile.contact_us.instagram'.tr(),
                           subtitle: '',
                           onTap: () {},
                         ),

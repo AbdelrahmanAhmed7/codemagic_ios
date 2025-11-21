@@ -65,17 +65,17 @@ class MessageBubble extends StatelessWidget {
                 Text(
                   text,
                   style: isUser 
-                      ? AppTextStyles.font14WhiteMedium
-                      : AppTextStyles.font14BlackMedium,
+                      ? AppTextStyles.font14WhiteMedium(context)
+                      : AppTextStyles.font14BlackMedium(context),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   _formatTime(timestamp),
                   style: isUser
-                      ? AppTextStyles.font10WhiteRegular.copyWith(
+                      ? AppTextStyles.font10WhiteRegular(context).copyWith(
                           color: AppColors.whiteClr.withValues(alpha: 0.7),
                         )
-                      : AppTextStyles.font10GreyRegular,
+                      : AppTextStyles.font10GreyRegular(context),
                 ),
               ],
             ),

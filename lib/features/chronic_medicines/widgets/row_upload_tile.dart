@@ -60,9 +60,9 @@ class RowUploadTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTextStyles.font12BlueRegular.copyWith(decoration: TextDecoration.none)),
+                  Text(title, style: AppTextStyles.font12BlueRegular(context).copyWith(decoration: TextDecoration.none)),
                   SizedBox(height: 4.h),
-                  Text(description, style: AppTextStyles.font8GreyRegular.copyWith(decoration: TextDecoration.none)),
+                  Text(description, style: AppTextStyles.font8GreyRegular(context).copyWith(decoration: TextDecoration.none)),
                 ],
               ),
             ),

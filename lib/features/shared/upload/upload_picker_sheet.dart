@@ -133,7 +133,7 @@ class _UploadOption extends StatelessWidget {
           children: [
             Image.asset(assetIcon, width: 48.w, height: 48.w, fit: BoxFit.contain),
             SizedBox(height: 8.h),
-            Text(label, style: AppTextStyles.font14BlackMedium),
+            Text(label, style: AppTextStyles.font14BlackMedium(context)),
           ],
         ),
       ),
@@ -161,7 +161,7 @@ class _PreviewThumb extends StatelessWidget {
           child: Image(image: image, fit: BoxFit.cover),
         ),
         SizedBox(height: 8.h),
-        Text(name, style: AppTextStyles.font14BlackMedium),
+        Text(name, style: AppTextStyles.font14BlackMedium(context)),
       ],
     );
   }

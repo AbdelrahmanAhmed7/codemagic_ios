@@ -19,13 +19,13 @@ class ActionRequiredDialog extends StatelessWidget {
           SizedBox(height: 12.h),
           Text(
             'Action Required: Upload Lab Tests',
-            style: AppTextStyles.font14BlackMedium,
+            style: AppTextStyles.font14BlackMedium(context),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 8.h),
           Text(
             'To continue receiving your chronic medication, please upload all required lab test results.',
-            style: AppTextStyles.font10GreyRegular,
+            style: AppTextStyles.font10GreyRegular(context),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 12.h),

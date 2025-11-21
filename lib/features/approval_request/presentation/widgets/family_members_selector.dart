@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,10 +28,13 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedMember = widget.selectedMember;
-    // Load family members if not already loaded
+    _selectedMember = widget.selectedMember;    
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     if (context.read<FamilyMembersCubit>().state is! Loaded) {
-      context.read<FamilyMembersCubit>().getFamilyMembers('en');
+      context.read<FamilyMembersCubit>().getFamilyMembers(context.locale.languageCode);
     }
   }
 
@@ -75,7 +79,7 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
       child: Center(
         child: Text(
           'Error loading family members',
-          style: AppTextStyles.font12GreyRegular,
+          style: AppTextStyles.font12GreyRegular(context),
         ),
       ),
     );
@@ -88,7 +92,7 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
         child: Center(
           child: Text(
             'No family members found',
-            style: AppTextStyles.font12GreyRegular,
+            style: AppTextStyles.font12GreyRegular(context),
           ),
         ),
       );
@@ -165,8 +169,8 @@ class _FamilyMembersSelectorState extends State<FamilyMembersSelector> {
           Text(
             member.memberName,
             style: isSelected 
-                ? AppTextStyles.font12BlueMedium 
-                : AppTextStyles.font12GreyRegular,
+                ? AppTextStyles.font12BlueMedium(context)
+                : AppTextStyles.font12GreyRegular(context),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),

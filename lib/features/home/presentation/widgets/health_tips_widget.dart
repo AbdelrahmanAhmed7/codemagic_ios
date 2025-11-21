@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -9,15 +11,16 @@ class HealthTipsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Health Tips',
-          style: AppTextStyles.font14BlackMedium,
+          'home.health_tips'.tr(),
+          style: AppTextStyles.font14BlackMedium(context),
         ),
         SizedBox(height: 16.h),
-
         Container(
           width: double.infinity,
           height: 165.h,
@@ -28,25 +31,28 @@ class HealthTipsWidget extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            textDirection: isArabic ? ui.TextDirection.rtl : ui.TextDirection.ltr,
             children: [
-              // Text section
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 12.w),
+                  padding: EdgeInsets.only(
+                    right: isArabic ? 0 : 12.w,
+                    left: isArabic ? 12.w : 0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Get Regular Check-Ups',
-                        style: AppTextStyles.font14BlackMedium.copyWith(
+                        'home.health_tips_title'.tr(),
+                        style: AppTextStyles.font14BlackMedium(context).copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 8.h),
                       Text(
-                        'Annual health check-ups can help detect diseases early and keep you healthier for longer!',
-                        style: AppTextStyles.font14GreyRegular.copyWith(
+                        'home.health_tips_description'.tr(),
+                        style: AppTextStyles.font14GreyRegular(context).copyWith(
                           height: 1.4,
                           fontSize: 11.sp,
                         ),
@@ -55,8 +61,6 @@ class HealthTipsWidget extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // Image section
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
                 child: Image.asset(
@@ -69,10 +73,7 @@ class HealthTipsWidget extends StatelessWidget {
             ],
           ),
         ),
-
         SizedBox(height: 16.h),
-
-        // Pagination dots
         Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -81,7 +82,7 @@ class HealthTipsWidget extends StatelessWidget {
                 width: 8.w,
                 height: 8.h,
                 margin: EdgeInsets.symmetric(horizontal: 4.w),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Color(0xff484848),
                   shape: BoxShape.circle,
                 ),

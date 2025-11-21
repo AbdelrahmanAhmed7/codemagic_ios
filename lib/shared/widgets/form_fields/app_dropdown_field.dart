@@ -37,12 +37,12 @@ class AppDropdownField<T> extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   text: label!,
-                  style: AppTextStyles.font12BlackRegular,
+                  style: AppTextStyles.font12BlackRegular(context),
                   children: isRequired
                       ? [
                           TextSpan(
                             text: ' *',
-                            style: AppTextStyles.font12BlackRegular.copyWith(
+                            style: AppTextStyles.font12BlackRegular(context).copyWith(
                               color: Colors.red,
                             ),
                           ),
@@ -69,7 +69,7 @@ class AppDropdownField<T> extends StatelessWidget {
                   ),
                   border: InputBorder.none,
                   hintText: hintText,
-                  hintStyle: AppTextStyles.font12GreyRegular,
+                  hintStyle: AppTextStyles.font12GreyRegular(context),
                 ),
                 icon: const Icon(Icons.keyboard_arrow_down),
                 items: items,

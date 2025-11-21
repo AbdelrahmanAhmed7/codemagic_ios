@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,15 +27,19 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
     _selectedCategoryId = cubit.selectedCategoryId;
     _selectedGovernmentId = cubit.selectedGovernmentId;
     _selectedCityId = cubit.selectedCityId;
+  }
 
-    // Load governments if not loaded
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final cubit = context.read<NetworkCubit>();
+
     if (cubit.governments.isEmpty) {
-      cubit.getGovernments();
+      cubit.getGovernments(context: context);
     }
 
-    // Load cities if government is selected
     if (_selectedGovernmentId != null) {
-      cubit.getCitiesByGovernment(_selectedGovernmentId!);
+      cubit.getCitiesByGovernment(_selectedGovernmentId!, context: context);
     }
   }
 
@@ -73,8 +78,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Filter',
-                  style: AppTextStyles.font18BlackSemiBold,
+                  'bottom_sheet.filter'.tr(),
+                  style: AppTextStyles.font18BlackSemiBold(context),
                 ),
                 TextButton(
                   onPressed: () {
@@ -85,8 +90,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                     });
                   },
                   child: Text(
-                    'Clear',
-                    style: AppTextStyles.font14PrimaryMedium,
+                    'bottom_sheet.clear'.tr(),
+                    style: AppTextStyles.font14PrimaryMedium(context),
                   ),
                 ),
               ],
@@ -104,8 +109,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                 children: [
                   // Category Dropdown
                   Text(
-                    'Choose category',
-                    style: AppTextStyles.font14BlackMedium,
+                    'bottom_sheet.choose_category'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                   ),
                   SizedBox(height: 12.h),
                   BlocBuilder<NetworkCubit, NetworkState>(
@@ -114,12 +119,14 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                         current is CategoriesSuccess ||
                         current is CategoriesError,
                     builder: (context, state) {
-                      final categories = context.read<NetworkCubit>().categories;
+                      final categories = context
+                          .read<NetworkCubit>()
+                          .categories;
 
                       if (categories.isEmpty) {
                         return Text(
-                          'No categories available',
-                          style: AppTextStyles.font12GreyRegular,
+                          'bottom_sheet.no_categories'.tr(),
+                          style: AppTextStyles.font12GreyRegular(context),
                         );
                       }
 
@@ -138,15 +145,15 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                           ),
                         ),
                         hint: Text(
-                          'Select category',
-                          style: AppTextStyles.font14GreyRegular,
+                          'bottom_sheet.choose_category'.tr(),
+                          style: AppTextStyles.font14GreyRegular(context),
                         ),
                         items: categories.map((category) {
                           return DropdownMenuItem<int>(
                             value: category.id,
                             child: Text(
                               category.name,
-                              style: AppTextStyles.font14BlackRegular,
+                              style: AppTextStyles.font14BlackRegular(context),
                             ),
                           );
                         }).toList(),
@@ -163,8 +170,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
 
                   // Government Dropdown
                   Text(
-                    'Choose government',
-                    style: AppTextStyles.font14BlackMedium,
+                    'bottom_sheet.choose_government'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                   ),
                   SizedBox(height: 12.h),
                   BlocBuilder<NetworkCubit, NetworkState>(
@@ -173,12 +180,14 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                         current is GovernmentsSuccess ||
                         current is GovernmentsError,
                     builder: (context, state) {
-                      final governments = context.read<NetworkCubit>().governments;
+                      final governments = context
+                          .read<NetworkCubit>()
+                          .governments;
 
                       if (governments.isEmpty) {
                         return Text(
-                          'No governments available',
-                          style: AppTextStyles.font12GreyRegular,
+                          'bottom_sheet.no_governments'.tr(),
+                          style: AppTextStyles.font12GreyRegular(context),
                         );
                       }
 
@@ -197,15 +206,15 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                           ),
                         ),
                         hint: Text(
-                          'Select government',
-                          style: AppTextStyles.font14GreyRegular,
+                          'bottom_sheet.choose_government'.tr(),
+                          style: AppTextStyles.font14GreyRegular(context),
                         ),
                         items: governments.map((government) {
                           return DropdownMenuItem<int>(
                             value: government.id,
                             child: Text(
                               government.name,
-                              style: AppTextStyles.font14BlackRegular,
+                              style: AppTextStyles.font14BlackRegular(context),
                             ),
                           );
                         }).toList(),
@@ -214,7 +223,12 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                             _selectedGovernmentId = value;
                             _selectedCityId = null;
                             if (value != null) {
-                              context.read<NetworkCubit>().getCitiesByGovernment(value);
+                              context
+                                  .read<NetworkCubit>()
+                                  .getCitiesByGovernment(
+                                    value,
+                                    context: context,
+                                  );
                             }
                           });
                         },
@@ -226,8 +240,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                   if (_selectedGovernmentId != null) ...[
                     SizedBox(height: 20.h),
                     Text(
-                      'Choose city',
-                      style: AppTextStyles.font14BlackMedium,
+                      'bottom_sheet.choose_city'.tr(),
+                      style: AppTextStyles.font14BlackMedium(context),
                     ),
                     SizedBox(height: 12.h),
                     BlocBuilder<NetworkCubit, NetworkState>(
@@ -246,8 +260,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
 
                         if (cities.isEmpty) {
                           return Text(
-                            'No cities available',
-                            style: AppTextStyles.font12GreyRegular,
+                            'bottom_sheet.no_cities'.tr(),
+                            style: AppTextStyles.font12GreyRegular(context),
                           );
                         }
 
@@ -266,15 +280,17 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                             ),
                           ),
                           hint: Text(
-                            'Select city',
-                            style: AppTextStyles.font14GreyRegular,
+                            'bottom_sheet.choose_city'.tr(),
+                            style: AppTextStyles.font14GreyRegular(context),
                           ),
                           items: cities.map((city) {
                             return DropdownMenuItem<int>(
                               value: city.cityId,
                               child: Text(
                                 city.cityName,
-                                style: AppTextStyles.font14BlackRegular,
+                                style: AppTextStyles.font14BlackRegular(
+                                  context,
+                                ),
                               ),
                             );
                           }).toList(),
@@ -303,11 +319,21 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
               child: ElevatedButton(
                 onPressed: () {
                   context.read<NetworkCubit>().searchProviders(
-                        categoryId: _selectedCategoryId,
-                        governmentId: _selectedGovernmentId,
-                        cityId: _selectedCityId,
-                        resetPage: true,
-                      );
+                    categoryId: _selectedCategoryId,
+                    governmentId: _selectedGovernmentId,
+                    cityId: _selectedCityId,
+                    resetPage: true,
+                    context: context,
+                  );
+                  // تطبيق الفلترة باستخدام المعايير المحددة
+                  final cubit = context.read<NetworkCubit>();
+                  cubit.searchProviders(
+                    categoryId: _selectedCategoryId,
+                    governmentId: _selectedGovernmentId,
+                    cityId: _selectedCityId,
+                    resetPage: true,
+                    context: context,
+                  );
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
@@ -317,8 +343,8 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
                   ),
                 ),
                 child: Text(
-                  'Choose',
-                  style: AppTextStyles.font16WhiteMedium,
+                  'common.choose'.tr(),
+                  style: AppTextStyles.font16WhiteMedium(context),
                 ),
               ),
             ),
@@ -327,5 +353,4 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
       ),
     );
   }
-
 }

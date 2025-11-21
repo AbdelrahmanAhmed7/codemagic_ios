@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -29,31 +30,35 @@ class AppGenderSelector extends StatelessWidget {
             // Label with required asterisk
             RichText(
               text: TextSpan(
-                text: 'Gender',
-                style: AppTextStyles.font12BlackRegular,
+                text: 'personal_info.gender'.tr(),
+                style: AppTextStyles.font12BlackRegular(context),
                 children: isRequired
                     ? [
                         TextSpan(
                           text: ' *',
-                          style: AppTextStyles.font12BlackRegular.copyWith(
-                            color: Colors.red,
-                          ),
+                          style: AppTextStyles.font12BlackRegular(
+                            context,
+                          ).copyWith(color: Colors.red),
                         ),
                       ]
                     : [],
               ),
             ),
             SizedBox(height: 8.h),
-            
+
             // Gender Options
             Row(
               children: [
-                Expanded(child: _buildGenderOption('Male', fieldState)),
+                Expanded(
+                  child: _buildGenderOption('Male', fieldState, context),
+                ),
                 SizedBox(width: 16.w),
-                Expanded(child: _buildGenderOption('Female', fieldState)),
+                Expanded(
+                  child: _buildGenderOption('Female', fieldState, context),
+                ),
               ],
             ),
-            
+
             // Error message
             if (fieldState.errorText != null)
               Padding(
@@ -73,7 +78,11 @@ class AppGenderSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildGenderOption(String gender, FormFieldState<String> fieldState) {
+  Widget _buildGenderOption(
+    String gender,
+    FormFieldState<String> fieldState,
+    context,
+  ) {
     return GestureDetector(
       onTap: () {
         onGenderChanged(gender);
@@ -95,7 +104,7 @@ class AppGenderSelector extends StatelessWidget {
               }
             },
           ),
-          Text(gender, style: AppTextStyles.font12BlackRegular),
+          Text(gender, style: AppTextStyles.font12BlackRegular(context)),
         ],
       ),
     );

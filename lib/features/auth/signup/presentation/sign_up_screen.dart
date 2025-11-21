@@ -11,6 +11,7 @@ import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -51,20 +52,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: 40.h),
                 Text(
-                  'Hello! Register to get started',
-                  style: AppTextStyles.font20BlackSemiBold,
+                  'auth.signup.title'.tr(),
+                  style: AppTextStyles.font20BlackSemiBold(context),
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  'Please enter your Credentials',
-                  style: AppTextStyles.font14GreyRegular,
+                  'auth.signup.subtitle'.tr(),
+                  style: AppTextStyles.font14GreyRegular(context),
                 ),
                 SizedBox(height: 24.h),
 
                 Text.rich(
                   TextSpan(
-                    text: 'Card ID ',
-                    style: AppTextStyles.font14BlackMedium,
+                    text: 'auth.signup.card_id'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                     children: [
                       TextSpan(
                         text: '*',
@@ -76,11 +77,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: cardController,
-                  hintText: 'Enter card number',
+                  hintText: 'auth.signup.card_id_placeholder'.tr(),
                   prefixImagePath: AppAssets.cardIcon,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Card ID is required';
+                      return 'auth.signup.validation.card_id_required'.tr();
                     }
                     return null;
                   },
@@ -89,8 +90,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 Text.rich(
                   TextSpan(
-                    text: 'National ID ',
-                    style: AppTextStyles.font14BlackMedium,
+                    text: 'auth.signup.national_id'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                     children: [
                       TextSpan(
                         text: '*',
@@ -102,15 +103,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: nationalController,
-                  hintText: 'Enter National ID',
+                  hintText: 'auth.signup.national_id_placeholder'.tr(),
                   prefixImagePath: AppAssets.idIcon,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'National ID is required';
+                      return 'auth.signup.validation.national_id_required'.tr();
                     }
                     if (value.length != 14 ||
                         !RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return 'Enter a valid 14-digit National ID';
+                      return 'auth.signup.validation.national_id_invalid'.tr();
                     }
                     return null;
                   },
@@ -119,8 +120,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 Text.rich(
                   TextSpan(
-                    text: 'Phone Number ',
-                    style: AppTextStyles.font14BlackMedium,
+                    text: 'auth.signup.phone_number'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                     children: [
                       TextSpan(
                         text: '*',
@@ -132,15 +133,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: phoneController,
-                  hintText: 'Enter Phone Number',
+                  hintText: 'auth.signup.phone_number_placeholder'.tr(),
                   prefixImagePath: AppAssets.phoneIcon,
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Phone number is required';
+                      return 'auth.signup.validation.phone_required'.tr();
                     }
                     if (!RegExp(r'^(01)[0-9]{9}$').hasMatch(value)) {
-                      return 'Enter a valid Egyptian phone number';
+                      return 'auth.signup.validation.phone_invalid'.tr();
                     }
                     return null;
                   },
@@ -149,8 +150,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 Text.rich(
                   TextSpan(
-                    text: 'Password ',
-                    style: AppTextStyles.font14BlackMedium,
+                    text: 'auth.signup.password'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                     children: [
                       TextSpan(
                         text: '*',
@@ -162,14 +163,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: passwordController,
-                  hintText: 'Enter Password',
+                  hintText: 'auth.signup.password_placeholder'.tr(),
                   isPassword: true,
                   prefixImagePath: AppAssets.passwordIcon,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Password is required';
-                    } else if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return 'auth.signup.validation.password_required'.tr();
+                    } else if (value.length < 8) {
+                      return 'auth.signup.validation.password_length'.tr();
                     }
 
                     return null;
@@ -179,8 +180,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 Text.rich(
                   TextSpan(
-                    text: 'Confirm Password ',
-                    style: AppTextStyles.font14BlackMedium,
+                    text: 'auth.signup.confirm_password'.tr(),
+                    style: AppTextStyles.font14BlackMedium(context),
                     children: [
                       TextSpan(
                         text: '*',
@@ -192,14 +193,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: confirmPasswordController,
-                  hintText: 'Enter Confirm Password',
+                  hintText: 'auth.signup.confirm_password_placeholder'.tr(),
                   isPassword: true,
                   prefixImagePath: AppAssets.passwordIcon,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Confirm password is required';
+                      return 'auth.signup.validation.confirm_password_required'.tr();
                     } else if (value != passwordController.text) {
-                      return 'Passwords do not match';
+                      return 'auth.signup.validation.passwords_not_match'.tr();
                     }
                     return null;
                   },
@@ -210,7 +211,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   listener: (context, state) {
                     if (state is Success) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        showAppSnackBar(context, 'Registration Successful');
+                        showAppSnackBar(context, 'auth.signup.registration_successful'.tr());
                         context.go('/home');
                       });
                     } else if (state is Failed) {
@@ -223,7 +224,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     final isLoading = state is Loading;
 
                     return AppButton(
-                      text: isLoading ? 'Registering...' : 'Register',
+                      text: isLoading ? 'auth.signup.registering'.tr() : 'auth.signup.register_button'.tr(),
                       isLoading: isLoading,
                       onPressed: isLoading
                           ? null
@@ -235,7 +236,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   phoneController.text.trim(),
                                   passwordController.text.trim(),
                                   confirmPasswordController.text.trim(),
-                                  'en',
+                                  context.locale.languageCode,
                                 );
                               }
                             },
@@ -250,14 +251,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onPressed: () {},
                     child: Text.rich(
                       TextSpan(
-                        text: 'Already have an account? ',
+                        text: 'auth.signup.already_have_account'.tr(),
                         style: TextStyle(
                           fontSize: 13.sp,
                           color: Colors.grey[700],
                         ),
                         children: [
                           TextSpan(
-                            text: 'Login',
+                            text: 'auth.signup.login'.tr(),
                             style: TextStyle(
                               color: AppColors.primaryClr,
                               fontWeight: FontWeight.w600,

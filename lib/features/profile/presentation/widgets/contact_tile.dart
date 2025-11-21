@@ -52,10 +52,10 @@ class ContactTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(title, style: AppTextStyles.font12BlackRegular),
+                  Text(title, style: AppTextStyles.font12BlackRegular(context)),
                   if (subtitle.isNotEmpty) ...[
                     SizedBox(height: 2.h),
-                    Text(subtitle, style: AppTextStyles.font10GreyRegular),
+                    Text(subtitle, style: AppTextStyles.font10GreyRegular(context)),
                   ],
                 ],
               ),

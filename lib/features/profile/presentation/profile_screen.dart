@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const PageHeader(title: 'Profile', backPath: '/home'),
+              PageHeader(title: 'profile.title'.tr(), backPath: '/home'),
               Transform.translate(
                 offset: Offset(0, -20.h),
                 child: Padding(
@@ -79,42 +80,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         width: 74.w,
                                         height: 90.w,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8.r),
-                                          child: data.memberPhoto != null && data.memberPhoto!.isNotEmpty
+                                          borderRadius: BorderRadius.circular(
+                                            8.r,
+                                          ),
+                                          child:
+                                              data.memberPhoto != null &&
+                                                  data.memberPhoto!.isNotEmpty
                                               ? CachedNetworkImage(
                                                   imageUrl: data.memberPhoto!,
-                                                  placeholder: (context, url) => Image.asset(
-                                                    AppAssets.profile,
-                                                  ),
-                                                  errorWidget: (context, url, error) => Image.asset(
-                                                    AppAssets.profile,
-                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      Image.asset(
+                                                        AppAssets.profile,
+                                                      ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                            AppAssets.profile,
+                                                          ),
                                                 )
-                                              : Image.asset(
-                                                  AppAssets.profile,
-                                                ),
+                                              : Image.asset(AppAssets.profile),
                                         ),
                                       ),
                                       SizedBox(width: 12.w),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               data.memberName,
-                                              style: AppTextStyles.font14BlackMedium,
+                                              style: AppTextStyles
+                                                  .font14BlackMedium(context),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             SizedBox(height: 4.h),
                                             RichText(
                                               text: TextSpan(
-                                                style: AppTextStyles.font10GreyRegular,
+                                                style: AppTextStyles
+                                                    .font10GreyRegular(context),
                                                 children: [
-                                                  const TextSpan(text: 'Member ID: '),
                                                   TextSpan(
-                                                    text: data.memberId.toString(),
-                                                    style: AppTextStyles.font12BlueRegular,
+                                                    text: 'profile.member_id'
+                                                        .tr(),
+                                                  ),
+                                                  TextSpan(
+                                                    text: data.memberId
+                                                        .toString(),
+                                                    style: AppTextStyles
+                                                        .font12BlueRegular(context),
                                                   ),
                                                 ],
                                               ),
@@ -136,16 +150,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(width: 12.w),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Error loading profile',
-                                              style: AppTextStyles.font14BlackMedium,
+                                              'profile.error_loading_profile'
+                                                  .tr(),
+                                              style: AppTextStyles
+                                                  .font14BlackMedium(context),
                                             ),
                                             SizedBox(height: 4.h),
                                             Text(
                                               message,
-                                              style: AppTextStyles.font10GreyRegular,
+                                              style: AppTextStyles
+                                                  .font10GreyRegular(context),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -160,53 +178,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(height: 16.h),
                           _Section(
-                            title: 'Account',
-                            tiles: const [
+                            title: 'profile.account'.tr(),
+                            tiles: [
                               _Tile(
-                                title: 'Personal Information',
+                                title: 'profile.personal_information'.tr(),
                                 image: AppAssets.personal,
+                                route: '/personal-information',
                               ),
                               _Tile(
-                                title: 'Family Members',
+                                title: 'profile.family_members'.tr(),
                                 image: AppAssets.familyMembers,
+                                route: '/family-members',
                               ),
                               _Tile(
-                                title: 'Insurance Plan',
+                                title: 'profile.insurance_plan'.tr(),
                                 image: AppAssets.insurance,
+                                route: '/insurance-plan',
                               ),
                             ],
                           ),
                           _Section(
-                            title: 'Setting',
-                            tiles: const [
+                            title: 'profile.settings'.tr(),
+                            tiles: [
                               _Tile(
-                                title: 'Change Password',
+                                title: 'profile.change_password'.tr(),
                                 image: AppAssets.change_password,
+                                route: '/change-password',
                               ),
                               _Tile(
-                                title: 'Language',
+                                title: 'profile.language'.tr(),
                                 image: AppAssets.language,
+                                route: '/language',
                               ),
                             ],
                           ),
                           _Section(
-                            title: 'Help & Support',
-                            tiles: const [
-                              _Tile(title: 'FAQ', image: AppAssets.faq),
+                            title: 'profile.help_support'.tr(),
+                            tiles: [
                               _Tile(
-                                title: 'Contact us',
-                                image: AppAssets.contactUs,
+                                title: 'profile.faq'.tr(),
+                                image: AppAssets.faq,
+                                route: '/faq',
                               ),
                               _Tile(
-                                title: 'Terms & Privacy Policy',
+                                title: 'profile.contact_us'.tr(),
+                                image: AppAssets.contactUs,
+                                route: '/contact-us',
+                              ),
+                              _Tile(
+                                title: 'profile.terms_privacy'.tr(),
                                 image: AppAssets.terms,
+                                route: '/terms-privacy',
                               ),
                             ],
                           ),
                           _Section(
                             title: '',
-                            tiles: const [
-                              _Tile(title: 'Log Out', image: AppAssets.logout),
+                            tiles: [
+                              _Tile(
+                                title: 'profile.log_out'.tr(),
+                                image: AppAssets.logout,
+                                route: '/logout',
+                              ),
                             ],
                           ),
                         ],
@@ -238,7 +271,7 @@ class _Section extends StatelessWidget {
           if (title.isNotEmpty)
             Padding(
               padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-              child: Text(title, style: AppTextStyles.font12BlueRegular),
+              child: Text(title, style: AppTextStyles.font12BlueRegular(context)),
             ),
           Container(
             decoration: BoxDecoration(
@@ -255,34 +288,19 @@ class _Section extends StatelessWidget {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({required this.title, required this.image});
+  const _Tile({required this.title, required this.image, this.route});
   final String title;
   final String image;
+  final String? route; 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Image.asset(image, width: 24.h, height: 24.h),
-      title: Text(title, style: AppTextStyles.font12BlackRegular),
+      title: Text(title, style: AppTextStyles.font12BlackRegular(context)),
       trailing: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
-      onTap: () {
-        if (title == 'Personal Information') {
-          context.go('/personal-information');
-        } else if (title == 'Family Members') {
-          context.go('/family-members');
-        } else if (title == 'Insurance Plan') {
-          context.go('/insurance-plan');
-        } else if (title == 'FAQ') {
-          context.go('/faq');
-        } else if (title == 'Contact us') {
-          context.go('/contact-us');
-        } else if (title == 'Terms & Privacy Policy') {
-          context.go('/terms-policy');
-        } else if (title == 'Change Password') {
-          context.go('/change-password');
-        } else if (title == 'Language') {
-          context.go('/language');
-        }
-      },
+      onTap: route != null 
+        ? () => context.go(route!) 
+        : null,
     );
   }
 }

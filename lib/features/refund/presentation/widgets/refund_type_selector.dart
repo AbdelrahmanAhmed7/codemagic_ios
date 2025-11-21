@@ -102,8 +102,8 @@ class _RefundTypeSelectorState extends State<RefundTypeSelector> {
                   child: Text(
                     _selectedType ?? 'Select refund type',
                     style: _selectedType != null
-                        ? AppTextStyles.font14BlackMedium
-                        : AppTextStyles.font14GreyRegular,
+                        ? AppTextStyles.font14BlackMedium(context)
+                        : AppTextStyles.font14GreyRegular(context),
                   ),
                 ),
                 Icon(
@@ -179,7 +179,10 @@ class _RefundTypeSelectorState extends State<RefundTypeSelector> {
             ),
             SizedBox(width: 8.w),
             Expanded(
-              child: Text(type.name, style: AppTextStyles.font14BlackMedium),
+              child: Text(
+                type.name,
+                style: AppTextStyles.font14BlackMedium(context),
+              ),
             ),
           ],
         ),

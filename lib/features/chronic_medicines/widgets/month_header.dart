@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -10,7 +11,9 @@ class MonthHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = _formatMonthYear(date);
+    // ننسّق الشهر والسنة حسب اللغة الحالية
+    final label = DateFormat.yMMMM(context.locale.toString()).format(date);
+
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -19,17 +22,12 @@ class MonthHeader extends StatelessWidget {
           color: const Color(0xFFF4E7C7),
           borderRadius: BorderRadius.circular(8.r),
         ),
-        child: Text(label, style: AppTextStyles.font12BlueRegular.copyWith(color: AppColors.blackClr)),
+        child: Text(
+          label,
+          style: AppTextStyles.font12BlueRegular(context)
+              .copyWith(color: AppColors.blackClr),
+        ),
       ),
     );
   }
-
-  String _formatMonthYear(DateTime d) {
-    const months = [
-      'January','February','March','April','May','June','July','August','September','October','November','December'
-    ];
-    return '${months[d.month - 1]} ${d.year}';
-  }
 }
-
-

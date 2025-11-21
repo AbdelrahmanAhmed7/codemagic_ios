@@ -24,6 +24,7 @@ import 'package:mediconsult/features/approval_request/presentation/cubit/approva
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/language_cubit.dart';
 import 'package:mediconsult/features/profile/presentation/screens/add_family_member_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/contact_us_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/faq_screen.dart';
@@ -243,7 +244,10 @@ class AppRouter {
       GoRoute(
         path: '/language',
         builder: (context, state) {
-          return const LanguageScreen();
+          return BlocProvider(
+            create: (context) => sl<LanguageCubit>(),
+            child: const LanguageScreen(),
+          );
         },
       ),
       GoRoute(
