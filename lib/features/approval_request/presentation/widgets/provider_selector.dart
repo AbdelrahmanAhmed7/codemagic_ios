@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -70,10 +71,7 @@ class _ProviderSelectorState extends State<ProviderSelector> {
                       borderRadius: BorderRadius.circular(6.r),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: Image.asset(
-                      _assetForProvider(_selectedProvider!.name),
-                      fit: BoxFit.cover,
-                    ),
+                    child: _buildProviderLogo(_selectedProvider!),
                   ),
                 Expanded(
                   child: Text(
@@ -141,14 +139,34 @@ class _ProviderSelectorState extends State<ProviderSelector> {
     }
   }
 
-  String _assetForProvider(String name) {
-    final normalized = name.toLowerCase();
-    if (normalized.contains('shifa')) return AppAssets.shifa;
-    if (normalized.contains('ezaby') || normalized.contains('elezaby')) {
-      return AppAssets.elezaby;
+  Widget _buildProviderLogo(ProviderItem provider) {
+    if (provider.logo != null && provider.logo!.isNotEmpty) {
+      return CachedNetworkImage(
+        imageUrl: provider.logo!,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: AppColors.lightGreyClr,
+          child: Center(
+            child: SizedBox(
+              width: 12.w,
+              height: 12.w,
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.primaryClr,
+                ),
+              ),
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+         AppAssets.logo,
+        ),
+      );
     }
-    if (normalized.contains('alfa')) return AppAssets.alfaLogo;
-    if (normalized.contains('scan')) return AppAssets.misrScan;
-    return AppAssets.providers;
+    
+    return Image.asset(
+      AppAssets.logo,
+    );
   }
 }

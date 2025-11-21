@@ -28,7 +28,9 @@ class RefundEmptyState extends StatelessWidget {
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: AppTextStyles.font14BlackMedium(context),
+                    style: AppTextStyles.font14BlackMedium(context).copyWith(
+                      height: 1.5,
+                    ),
                     children: [
                       TextSpan(text: 'refund_history.empty_state'.tr()),
                       WidgetSpan(

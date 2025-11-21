@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -29,6 +30,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
   FamilyMember? _selectedFamilyMember;
   ProviderItem? _selectedProvider;
   final TextEditingController _noteController = TextEditingController();
+  final FocusNode _noteFocusNode = FocusNode();
   final List<String> _attachments = [];
 
   // Showcase keys
@@ -41,6 +43,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
   @override
   void dispose() {
     _noteController.dispose();
+    _noteFocusNode.dispose();
     super.dispose();
   }
 
@@ -93,9 +96,14 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
     return ShowCaseWidget(
       builder: (context) => Scaffold(
         backgroundColor: AppColors.lightGreyClr,
-        body: SafeArea(
-          child: Column(
-            children: [
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SafeArea(
+            child: Column(
+              children: [
               PageHeader(
                 title: 'approval_request.title'.tr(),
                 backPath: '/approval-history',
@@ -206,6 +214,13 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                         _attachments.clear();
                                         _attachments.addAll(attachments);
                                       });
+                                      Future.delayed(const Duration(milliseconds: 300), () {
+                                        if (mounted) {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus?.unfocus();
+                                          SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                        }
+                                      });
                                     },
                                     ),
                                   ),
@@ -260,7 +275,8 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                   ),
                 ),
               ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

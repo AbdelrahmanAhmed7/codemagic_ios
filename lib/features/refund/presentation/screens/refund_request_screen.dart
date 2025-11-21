@@ -136,7 +136,12 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     return ShowCaseWidget(
       builder: (context) => Scaffold(
         backgroundColor: AppColors.lightGreyClr,
-        body: SafeArea(
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,6 +364,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -71,19 +71,15 @@ class RefundCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'refund_history.refund_request'.tr(),
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w500,
+                        'refund_history.request_number'.tr(),
+                        style: AppTextStyles.font12WhiteRegular(context).copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 2.h),
                       Text(
                         '#${item.approvalNumber}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
+                        style: AppTextStyles.font14WhiteMedium(context).copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -105,11 +101,7 @@ class RefundCard extends StatelessWidget {
                   ),
                   child: Text(
                     statusLabel,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTextStyles.font12WhiteRegular(context),
                   ),
                 ),
               ],

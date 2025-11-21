@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -10,11 +11,7 @@ class ProviderListItem extends StatefulWidget {
   final ProviderItem item;
   final VoidCallback onTap;
 
-  const ProviderListItem({
-    super.key,
-    required this.item,
-    required this.onTap,
-  });
+  const ProviderListItem({super.key, required this.item, required this.onTap});
 
   @override
   State<ProviderListItem> createState() => _ProviderListItemState();
@@ -32,9 +29,7 @@ class _ProviderListItemState extends State<ProviderListItem>
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppColors.lightGreyClr,
-          foregroundImage: AssetImage(
-            _assetForProvider(widget.item.name),
-          ),
+          child: _buildProviderLogo(),
         ),
         title: Text(
           widget.item.name,
@@ -56,15 +51,39 @@ class _ProviderListItemState extends State<ProviderListItem>
     );
   }
 
-  String _assetForProvider(String name) {
-    final normalized = name.toLowerCase();
-    if (normalized.contains('shifa')) return AppAssets.shifa;
-    if (normalized.contains('ezaby') || normalized.contains('elezaby')) {
-      return AppAssets.elezaby;
+  Widget _buildProviderLogo() {
+    if (widget.item.logo != null && widget.item.logo!.isNotEmpty) {
+      return ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: widget.item.logo!,
+          fit: BoxFit.cover,
+          width: 40.w,
+          height: 40.w,
+          placeholder: (context, url) => Container(
+            width: 40.w,
+            height: 40.w,
+            color: AppColors.lightGreyClr,
+            child: Center(
+              child: SizedBox(
+                width: 16.w,
+                height: 16.w,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.primaryClr,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => ClipOval(
+            child: Image.asset(AppAssets.logo, width: 40.w, height: 40.w),
+          ),
+        ),
+      );
     }
-    if (normalized.contains('alfa')) return AppAssets.alfaLogo;
-    if (normalized.contains('scan')) return AppAssets.misrScan;
-    return AppAssets.providers;
+    return ClipOval(
+      child: Image.asset(AppAssets.logo, width: 40.w, height: 40.w),
+    );
   }
 }
-

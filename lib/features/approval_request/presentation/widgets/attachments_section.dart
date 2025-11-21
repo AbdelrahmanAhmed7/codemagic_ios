@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -302,7 +303,18 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
         );
       },
     );
+    
+    // إزالة focus بعد إغلاق الـ modal (مع delay)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).unfocus();
+      // إزالة focus من أي TextField موجود
+      FocusManager.instance.primaryFocus?.unfocus();
+      // إخفاء الكيبورد بقوة
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    });
+    
     if (selection == null) return;
+    
     setState(() {
       _items.add(
         AttachmentItem(

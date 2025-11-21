@@ -12,6 +12,7 @@ import 'package:mediconsult/features/network/data/network_provider_response_mode
     as provider_model;
 import 'package:mediconsult/features/network/logic/network_state.dart';
 import 'package:mediconsult/features/network/repository/network_repository.dart';
+import 'package:mediconsult/shared/widgets/location_permission_dialog.dart';
 
 class NetworkCubit extends Cubit<NetworkState> {
   final NetworkRepository _repository;
@@ -105,6 +106,35 @@ class NetworkCubit extends Cubit<NetworkState> {
     );
   }
 
+  /// Show location permission dialog and handle user response
+  Future<void> requestLocationWithDialog(BuildContext context) async {
+    await LocationPermissionDialog.show(
+      context,
+      onEnablePressed: () async {
+        // User chose to enable location access
+        await getUserLocation();
+        // If location retrieved successfully, load providers
+        if (_userLatitude != null && _userLongitude != null) {
+          await searchProviders(resetPage: true, context: context);
+        }
+      },
+      onMaybeLaterPressed: () {
+        // User chose maybe later - load random providers
+        _loadRandomProviders(context);
+      },
+    );
+  }
+
+  /// Load random providers when user declines location access
+  Future<void> _loadRandomProviders(BuildContext context) async {
+    // Clear location data
+    _userLatitude = null;
+    _userLongitude = null;
+    
+    // Search providers without location (will get random results)
+    await searchProviders(resetPage: true, context: context);
+  }
+
   /// Get user's current location
   Future<void> getUserLocation() async {
     emit(const NetworkState.locationLoading());
@@ -114,10 +144,14 @@ class NetworkCubit extends Cubit<NetworkState> {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
       if (!serviceEnabled) {
-        emit(
-          const NetworkState.locationError('Location services are disabled'),
-        );
-        return;
+        // Try to open location settings
+        serviceEnabled = await Geolocator.openLocationSettings();
+        if (!serviceEnabled) {
+          emit(
+            const NetworkState.locationError('Location services are disabled'),
+          );
+          return;
+        }
       }
 
       // Check location permissions
