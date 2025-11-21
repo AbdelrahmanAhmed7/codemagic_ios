@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/widgets/auth_base_layout.dart';
 import 'package:pinput/pinput.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
@@ -62,209 +63,138 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundClr,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SizedBox(height: 60.w),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.black,
-                    ),
-                    onPressed: () => context.go('/forget-password'),
-                  ),
-                  SizedBox(width: 30.w),
-                  Text(
-                    'Forgot Password',
-                    style: AppTextStyles.font20BlackSemiBold(context),
-                  ),
-                ],
-              ),
-              SizedBox(height: 44.h),
-              Text(
-                'OTP Verification',
-                style: AppTextStyles.font20BlackSemiBold(context),
-              ),
-              SizedBox(height: 12.h),
-              Text.rich(
-                TextSpan(
-                  text: 'Please enter the OTP we just sent to ',
-                  style: AppTextStyles.font14GreyRegular(context),
-                  children: [
-                    TextSpan(
-                      text: widget.phoneNumber,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+Widget build(BuildContext context) {
+  return AuthBaseLayout(
+    title: 'auth.forgot_password.otp_title'.tr(),
+    onBack: () => context.go('/forget-password'),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'auth.forgot_password.otp_instruction'.tr(namedArgs: {'phone': widget.phoneNumber}),
+          style: AppTextStyles.font14GreyRegular(context),
+        ),
+        SizedBox(height: 33.h),
+        Form(
+          key: _formKey,
+          child: Center(
+            child: Pinput(
+              controller: _otpController,
+              length: 4,
+              defaultPinTheme: PinTheme(
+                width: 70.w,
+                height: 60.h,
+                textStyle: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
               ),
-              SizedBox(height: 33.h),
-              Form(
-                key: _formKey,
-                child: Center(
-                  child: Pinput(
-                    controller: _otpController,
-                    length: 4,
-                    defaultPinTheme: PinTheme(
-                      width: 70.w,
-                      height: 60.h,
-                      textStyle: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    focusedPinTheme: PinTheme(
-                      width: 70.w,
-                      height: 60.h,
-                      textStyle: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.primaryClr),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    errorPinTheme: PinTheme(
-                      width: 70.w,
-                      height: 60.h,
-                      textStyle: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.red),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length != 4) {
-                        return '';
-                      }
-                      return null;
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    keyboardType: TextInputType.number,
-                    pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                    showCursor: true,
-                  ),
+              focusedPinTheme: PinTheme(
+                width: 70.w,
+                height: 60.h,
+                textStyle: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.primaryClr),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
               ),
-
-              SizedBox(height: 40.h),
-              Center(
-                child: Text(
-                  'The verify code will expire in $_formattedTime',
-                  style: AppTextStyles.font14GreyRegular(context),
-                ),
-              ),
-              SizedBox(height: 16.h),
-              BlocConsumer<ResendOtpCubit, ResendOtpState>(
-                listener: (context, state) {
-                  if (state is ResendFailed) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppSnackBar(context, state.error, isError: true);
-                    });
-                  }
-                  if (state is ResendSuccess) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      // Show OTP in snackbar for 10 seconds
-                      final otpMessage = state.data?.data?.otp != null 
-                          ? 'OTP: ${state.data!.data!.otp!}' 
-                          : 'Otp Resend Successfully';
-                      showAppSnackBar(
-                        context, 
-                        otpMessage,
-                        duration: const Duration(seconds: 10),
-                      );
-                    });
-                  }
-                },
-                builder: (context, state) {
-                  return Center(
-                    child: GestureDetector(
-                      onTap: _secondsRemaining == 0
-                          ? () {
-                              setState(() {
-                                _secondsRemaining = 59;
-                              });
-                              _startTimer();
-                              context
-                                  .read<ResendOtpCubit>()
-                                  .resendOtp(widget.phoneNumber, context.locale.languageCode);
-                            }
-                          : null,
-                      child: Text(
-                        'Resend Code',
-                        style: TextStyle(
-                          color: _secondsRemaining == 0
-                              ? AppColors.primaryClr
-                              : Colors.grey,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 41.h),
-
-              BlocConsumer<VerifyOtpCubit, VerifyOtpState>(
-                listener: (context, state) {
-                  if (state is Success) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppSnackBar(context, 'OTP Verified Successfully');
-                      context.go('/reset-password', extra: widget.phoneNumber);
-                    });
-                  } else if (state is Failed) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppSnackBar(context, state.error, isError: true);
-                    });
-                  }
-                },
-                builder: (context, state) {
-                  final isLoading = state is Loading;
-                  
-                  return AppButton(
-                    text: isLoading ? 'Verifying...' : 'Verify',
-                    isLoading: isLoading,
-                    onPressed: isLoading
-                        ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                final otp = _otpController.text;
-                                context.read<VerifyOtpCubit>().verifyOtp(
-                                  widget.phoneNumber,
-                                  otp,
-                                  context.locale.languageCode,
-                                );
-                              }
-                            },
-                  );
-                },
-              ),
-            ],
+              validator: (value) =>
+                  value == null || value.length != 4 ? '' : null,
+              keyboardType: TextInputType.number,
+              showCursor: true,
+            ),
           ),
         ),
-      ),
-    );
-  }
+        SizedBox(height: 40.h),
+        Center(
+          child: Text(
+            'auth.forgot_password.otp_expire_in'.tr(namedArgs: {'time': _formattedTime}),
+            style: AppTextStyles.font14GreyRegular(context),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        BlocConsumer<ResendOtpCubit, ResendOtpState>(
+          listener: (context, state) {
+            if (state is ResendFailed) {
+              showAppSnackBar(context, state.error, isError: true);
+            } else if (state is ResendSuccess) {
+              final otpMessage = state.data?.data?.otp != null
+                  ? 'auth.forgot_password.otp_message'.tr(namedArgs: {'otp': state.data!.data!.otp!})
+                  : 'auth.forgot_password.otp_resend_success'.tr();
+              showAppSnackBar(
+                context,
+                otpMessage,
+                duration: const Duration(seconds: 10),
+              );
+            }
+          },
+          builder: (context, state) {
+            return Center(
+              child: GestureDetector(
+                onTap: _secondsRemaining == 0
+                    ? () {
+                        setState(() {
+                          _secondsRemaining = 59;
+                        });
+                        _startTimer();
+                        context
+                            .read<ResendOtpCubit>()
+                            .resendOtp(widget.phoneNumber,
+                                context.locale.languageCode);
+                      }
+                    : null,
+                child: Text(
+                  'auth.forgot_password.resend_code'.tr(),
+                  style: TextStyle(
+                    color: _secondsRemaining == 0
+                        ? AppColors.primaryClr
+                        : Colors.grey,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+        SizedBox(height: 41.h),
+        BlocConsumer<VerifyOtpCubit, VerifyOtpState>(
+          listener: (context, state) {
+            if (state is Success) {
+              showAppSnackBar(context, 'auth.forgot_password.otp_verified'.tr());
+              context.push('/reset-password', extra: widget.phoneNumber);
+            } else if (state is Failed) {
+              showAppSnackBar(context, state.error, isError: true);
+            }
+          },
+          builder: (context, state) {
+            final isLoading = state is Loading;
+            return AppButton(
+              text: isLoading ? 'auth.forgot_password.verifying'.tr() : 'auth.forgot_password.verify'.tr(),
+              isLoading: isLoading,
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<VerifyOtpCubit>().verifyOtp(
+                              widget.phoneNumber,
+                              _otpController.text,
+                              context.locale.languageCode,
+                            );
+                      }
+                    },
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
 }

@@ -70,7 +70,7 @@ class HomeHeaderWidget extends StatelessWidget {
           // Notification Icon with Badge
           InkWell(
             onTap: (){
-              context.go('/notifications');
+              context.push('/notifications');
             },
             child: Stack(
               clipBehavior: Clip.none,

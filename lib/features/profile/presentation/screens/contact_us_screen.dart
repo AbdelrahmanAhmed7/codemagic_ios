@@ -44,7 +44,7 @@ class ContactUsScreen extends StatelessWidget {
                           assetPath: AppAssets.chatIcon,
                           title: 'contact_us.chat'.tr(),
                           subtitle: 'contact_us.chat_subtitle'.tr(),
-                          onTap: () => context.go('/chat'),
+                          onTap: () => context.push('/chat'),
                         ),
                         SizedBox(height: 12.h),
                         ContactTile(

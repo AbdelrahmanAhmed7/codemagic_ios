@@ -22,7 +22,7 @@ class PolicyItemCard extends StatelessWidget {
       return GestureDetector(
         onTap: onTap ?? () {
           if (item.route != null) {
-            context.go(item.route!);
+            context.push(item.route!);
           }
         },
         child: Container(

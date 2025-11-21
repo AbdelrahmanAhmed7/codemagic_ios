@@ -180,7 +180,7 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.go('/approval-request');
+          context.push('/approval-request');
         },
         backgroundColor: AppColors.primaryClr,
         child: const Icon(Icons.add, color: Colors.white),

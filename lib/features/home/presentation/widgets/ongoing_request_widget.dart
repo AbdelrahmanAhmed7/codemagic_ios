@@ -28,7 +28,7 @@ class OngoingRequestWidget extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                context.go('/approval-history');
+                context.push('/approval-history');
               },
               child: Text(
                 'home.see_all'.tr(),

@@ -82,7 +82,7 @@ Widget build(BuildContext context) {
                 hintText: widget.hintText,
                 hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
                 filled: true,
-                fillColor: Colors.transparent,
+                fillColor: AppColors.whiteClr,
                 isDense: true,
                 prefixIcon: widget.prefixImagePath != null
                     ? Padding(

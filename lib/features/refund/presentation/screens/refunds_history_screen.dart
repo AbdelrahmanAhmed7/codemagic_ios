@@ -148,7 +148,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.go('/refund-request');
+          context.push('/refund-request');
         },
         backgroundColor: AppColors.primaryClr,
         child: const Icon(Icons.add, color: Colors.white),

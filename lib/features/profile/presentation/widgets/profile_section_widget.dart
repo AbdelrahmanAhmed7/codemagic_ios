@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -60,11 +61,15 @@ class ProfileTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
     return ListTile(
       leading: Image.asset(image, width: 24.h, height: 24.h),
       title: Text(title, style: AppTextStyles.font12BlackRegular(context)),
-      trailing: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
-      onTap: route != null ? () => context.go(route!) : null,
+      trailing: Transform.rotate(
+        angle: isArabic ? 3.14 : 0,
+        child: Image.asset(AppAssets.chevronRight, width: 24.w, height: 29.h),
+      ),
+      onTap: route != null ? () => context.push(route!) : null,
     );
   }
 }
