@@ -53,20 +53,30 @@ class PageHeader extends StatelessWidget {
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                  onPressed: onBack ??
-                      () => backPath != null
-                          ? context.go(backPath!)
-                          : context.pop(),
+                  onPressed: onBack ?? () {
+                    if (Navigator.of(context).canPop()) {
+                      context.pop();
+                    } else if (backPath != null) {
+                      context.go(backPath!);
+                    } else {
+                      context.go('/home');
+                    }
+                  },
                 ),
               ),
             ),
 
             Center(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.font18BlackSemiBold(context)
-                    .copyWith(color: AppColors.whiteClr),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 56.w),
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.font18BlackSemiBold(context)
+                      .copyWith(color: AppColors.whiteClr),
+                ),
               ),
             ),
             if (onHelp != null)

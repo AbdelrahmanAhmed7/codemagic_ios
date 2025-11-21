@@ -25,6 +25,7 @@ import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
 import 'package:mediconsult/features/profile/presentation/cubit/language_cubit.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/personal_info_cubit.dart';
 import 'package:mediconsult/features/profile/presentation/screens/add_family_member_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/contact_us_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/faq_screen.dart';
@@ -35,6 +36,8 @@ import 'package:mediconsult/features/refund/presentation/screens/refund_request_
 import 'package:mediconsult/features/profile/presentation/profile_screen.dart';
 import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart';
 import 'package:mediconsult/features/refund/presentation/screens/refunds_history_screen.dart';
+import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
+import 'package:mediconsult/features/support/presentation/cubit/faq_cubit.dart';
 import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/language_screen.dart';
@@ -43,7 +46,6 @@ import 'package:mediconsult/features/notifications/presentation/cubit/notificati
 import 'package:mediconsult/features/network/presentation/network_screen.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
 import 'package:mediconsult/features/policy/presentation/policy_screen.dart';
-import 'package:mediconsult/features/policy/presentation/policy_details_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -187,7 +189,10 @@ class AppRouter {
       GoRoute(
         path: '/personal-information',
         builder: (context, state) {
-          return const PersonalInformationScreen();
+          return BlocProvider(
+            create: (context) => sl<PersonalInfoCubit>(),
+            child: const PersonalInformationScreen(),
+          );
         },
       ),
       GoRoute(
@@ -208,7 +213,10 @@ class AppRouter {
       GoRoute(
         path: '/faq',
         builder: (context, state) {
-          return const FAQScreen();
+          return BlocProvider(
+            create: (context) => sl<FaqCubit>(),
+            child: const FAQScreen(),
+          );
         },
       ),
       GoRoute(
@@ -220,7 +228,10 @@ class AppRouter {
       GoRoute(
         path: '/contact-us',
         builder: (context, state) {
-          return const ContactUsScreen();
+          return BlocProvider(
+            create: (context) => sl<ContactCubit>(),
+            child: const ContactUsScreen(),
+          );
         },
       ),
       GoRoute(
@@ -274,54 +285,7 @@ class AppRouter {
           return const PolicyScreen();
         },
       ),
-      GoRoute(
-        path: '/pharmacy-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Pharmacy');
-        },
-      ),
-      GoRoute(
-        path: '/lab-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Lab');
-        },
-      ),
-      GoRoute(
-        path: '/hospital-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Hospital');
-        },
-      ),
-      GoRoute(
-        path: '/doctor-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Doctor');
-        },
-      ),
-      GoRoute(
-        path: '/scan-lab-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Scan Lab');
-        },
-      ),
-      GoRoute(
-        path: '/specialized-center-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Specialized Center');
-        },
-      ),
-      GoRoute(
-        path: '/physiotherapy-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Physiotherapy');
-        },
-      ),
-      GoRoute(
-        path: '/optical-center-policy',
-        builder: (context, state) {
-          return const PolicyDetailsScreen(serviceName: 'Optical Center');
-        },
-      ),
+      // Deprecated specific policy detail routes removed. Use in-app navigation with categoryId.
     ],
   );
 }

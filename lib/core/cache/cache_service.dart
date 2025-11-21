@@ -12,6 +12,8 @@ import 'family_cache_service.dart';
 import 'approvals_cache_service.dart';
 import 'notifications_cache_service.dart';
 import 'network_cache_service.dart';
+import 'support_cache_service.dart';
+import 'profile_cache_service.dart';
 
 /// Unified cache service facade
 /// Delegates to specific cache services for better code organization and performance
@@ -144,5 +146,31 @@ class CacheService {
   /// Clear all network cities cache
   static Future<void> clearAllNetworkCitiesCache() async {
     return NetworkCacheService.clearAllNetworkCitiesCache();
+  }
+
+  // ==================== Support (Contacts/FAQs) Cache ====================
+  static Future<void> cacheContactsData(dynamic data) async {
+    return SupportCacheService.cacheContactsData(data);
+  }
+
+  static Future<dynamic> getCachedContactsData() async {
+    return SupportCacheService.getCachedContactsData();
+  }
+
+  static Future<void> cacheFaqsData(dynamic data) async {
+    return SupportCacheService.cacheFaqsData(data);
+  }
+
+  static Future<dynamic> getCachedFaqsData() async {
+    return SupportCacheService.getCachedFaqsData();
+  }
+
+  // ==================== Profile Cache ====================
+  static Future<void> cachePersonalInfo(dynamic data) async {
+    return ProfileCacheService.cachePersonalInfo(data);
+  }
+
+  static Future<dynamic> getCachedPersonalInfo() async {
+    return ProfileCacheService.getCachedPersonalInfo();
   }
 }

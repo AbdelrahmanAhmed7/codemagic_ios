@@ -36,6 +36,19 @@ import 'package:mediconsult/features/network/service/network_api_service.dart';
 import 'package:mediconsult/features/network/repository/network_repository.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_cubit.dart';
+import 'package:mediconsult/features/policy/service/get_policy_categories.dart';
+import 'package:mediconsult/features/policy/repository/get_policy_categories_repo.dart';
+import 'package:mediconsult/features/policy/presentation/cubit/get_policy_categories_cubit.dart';
+import 'package:mediconsult/features/policy/service/get_policy_details.dart';
+import 'package:mediconsult/features/policy/repository/get_policy_details_repo.dart';
+import 'package:mediconsult/features/policy/presentation/cubit/get_policy_details_cubit.dart';
+import 'package:mediconsult/features/support/service/support_api_service.dart';
+import 'package:mediconsult/features/support/repository/support_repository.dart';
+import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
+import 'package:mediconsult/features/support/presentation/cubit/faq_cubit.dart';
+import 'package:mediconsult/features/profile/service/profile_api_service.dart';
+import 'package:mediconsult/features/profile/repository/profile_repository.dart';
+import 'package:mediconsult/features/profile/presentation/cubit/personal_info_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -52,6 +65,10 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<NotificationService>(() => NotificationService(dio));
   sl.registerLazySingleton<NetworkApiService>(() => NetworkApiService(dio));
   sl.registerLazySingleton<LanguageService>(() => LanguageService());
+  sl.registerLazySingleton<GetPolicyCategoriesApiService>(() => GetPolicyCategoriesApiService(dio));
+  sl.registerLazySingleton<GetPolicyDetailsApiService>(() => GetPolicyDetailsApiService(dio));
+  sl.registerLazySingleton<SupportApiService>(() => SupportApiService(dio));
+  sl.registerLazySingleton<ProfileApiService>(() => ProfileApiService(dio));
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -64,6 +81,10 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ApprovalsRepository>(() => ApprovalsRepository(sl()));
   sl.registerLazySingleton<NotificationRepository>(() => NotificationRepository(sl()));
   sl.registerLazySingleton<NetworkRepository>(() => NetworkRepository(sl()));
+  sl.registerLazySingleton<GetPolicyCategoriesRepository>(() => GetPolicyCategoriesRepository(sl()));
+  sl.registerLazySingleton<GetPolicyDetailsRepository>(() => GetPolicyDetailsRepository(sl()));
+  sl.registerLazySingleton<SupportRepository>(() => SupportRepository(sl()));
+  sl.registerLazySingleton<ProfileRepository>(() => ProfileRepository(sl()));
   // Cubits
   sl.registerFactory<LoginCubit>(() => LoginCubit(sl()));
   sl.registerFactory<SignupCubit>(() => SignupCubit(sl()));
@@ -80,4 +101,9 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<NetworkCubit>(() => NetworkCubit(sl()));
   sl.registerFactory<RefundsCubit>(() => RefundsCubit());
   sl.registerFactory<LanguageCubit>(() => LanguageCubit(sl()));
+  sl.registerFactory<GetPolicyCategoriesCubit>(() => GetPolicyCategoriesCubit(sl()));
+  sl.registerFactory<GetPolicyDetailsCubit>(() => GetPolicyDetailsCubit(sl()));
+  sl.registerFactory<ContactCubit>(() => ContactCubit(sl()));
+  sl.registerFactory<FaqCubit>(() => FaqCubit(sl()));
+  sl.registerFactory<PersonalInfoCubit>(() => PersonalInfoCubit(sl()));
 }

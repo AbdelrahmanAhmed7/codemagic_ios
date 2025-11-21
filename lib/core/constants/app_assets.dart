@@ -125,6 +125,7 @@ class AppAssets {
   static const String chatAgent = 'assets/contact/Call_Center.png';
   static const String passwordChanged = 'assets/contact/change_password.png';
   static const String shieldIcon = 'assets/contact/policy.png';
+  static const String facebookIcon = 'assets/contact/facebook.png';
 
   // network assets
   static const String locationIcon = 'assets/network/MapPinArea.png';

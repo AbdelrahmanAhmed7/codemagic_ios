@@ -16,6 +16,7 @@ import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
 import 'package:showcaseview/showcaseview.dart';
+// ignore_for_file: deprecated_member_use
 
 class ApprovalRequestScreen extends StatefulWidget {
   const ApprovalRequestScreen({super.key});

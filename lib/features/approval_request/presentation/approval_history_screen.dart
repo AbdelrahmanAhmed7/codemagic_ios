@@ -16,6 +16,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:mediconsult/shared/widgets/segmented_tabs.dart';
 
+// ignore_for_file: deprecated_member_use
+
 class ApprovalHistoryScreen extends StatefulWidget {
   const ApprovalHistoryScreen({super.key});
 

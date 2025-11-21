@@ -13,6 +13,7 @@ import 'package:mediconsult/features/chronic_medicines/widgets/upcoming_lab_card
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
+// ignore_for_file: deprecated_member_use
 
 class ChronicMedicinesScreen extends StatefulWidget {
   const ChronicMedicinesScreen({super.key});
