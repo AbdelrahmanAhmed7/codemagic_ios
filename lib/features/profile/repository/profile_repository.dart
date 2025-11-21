@@ -18,6 +18,21 @@ class ProfileRepository {
       return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
+
+  Future<ApiResult<bool>> updateFirebaseToken(String lang, String token) async {
+    try {
+      final response = await _apiService.updateFirebaseToken(
+        lang,
+        {'token': token},
+      );
+      if (response.response.statusCode != null && 
+          response.response.statusCode! >= 200 && 
+          response.response.statusCode! < 300) {
+        return const ApiResult.success(true);
+      }
+      return const ApiResult.failure('Failed to update Firebase token');
+    } catch (error) {
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
 }
-
-

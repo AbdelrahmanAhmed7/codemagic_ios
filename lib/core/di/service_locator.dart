@@ -49,6 +49,9 @@ import 'package:mediconsult/features/support/presentation/cubit/faq_cubit.dart';
 import 'package:mediconsult/features/profile/service/profile_api_service.dart';
 import 'package:mediconsult/features/profile/repository/profile_repository.dart';
 import 'package:mediconsult/features/profile/presentation/cubit/personal_info_cubit.dart';
+import 'package:mediconsult/features/terms_policy/service/terms_api_service.dart';
+import 'package:mediconsult/features/terms_policy/repository/terms_repository.dart';
+import 'package:mediconsult/features/terms_policy/presentation/cubit/terms_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -69,6 +72,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<GetPolicyDetailsApiService>(() => GetPolicyDetailsApiService(dio));
   sl.registerLazySingleton<SupportApiService>(() => SupportApiService(dio));
   sl.registerLazySingleton<ProfileApiService>(() => ProfileApiService(dio));
+  sl.registerLazySingleton<TermsApiService>(() => TermsApiService(dio));
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -85,6 +89,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<GetPolicyDetailsRepository>(() => GetPolicyDetailsRepository(sl()));
   sl.registerLazySingleton<SupportRepository>(() => SupportRepository(sl()));
   sl.registerLazySingleton<ProfileRepository>(() => ProfileRepository(sl()));
+  sl.registerLazySingleton<TermsRepository>(() => TermsRepository(sl()));
   // Cubits
   sl.registerFactory<LoginCubit>(() => LoginCubit(sl()));
   sl.registerFactory<SignupCubit>(() => SignupCubit(sl()));
@@ -106,4 +111,5 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<ContactCubit>(() => ContactCubit(sl()));
   sl.registerFactory<FaqCubit>(() => FaqCubit(sl()));
   sl.registerFactory<PersonalInfoCubit>(() => PersonalInfoCubit(sl()));
+  sl.registerFactory<TermsCubit>(() => TermsCubit(sl()));
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/core/network/save_user_token.dart';
+import 'package:mediconsult/core/services/firebase_token_service.dart';
 import 'package:mediconsult/features/auth/signup/data/register_request_model.dart';
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_state.dart';
 import 'package:mediconsult/features/auth/signup/repository/register_repository.dart';
@@ -30,6 +31,9 @@ class SignupCubit extends Cubit<SignupState> {
       success: (response) async {
         await saveUserToken(response.data!.token);
         emit(SignupState.success(response));
+        
+        // Send Firebase token to backend (non-blocking)
+        FirebaseTokenService.instance.sendTokenToBackend(lang);
       },
       failure: (message) {
         emit(SignupState.failed(error: message));

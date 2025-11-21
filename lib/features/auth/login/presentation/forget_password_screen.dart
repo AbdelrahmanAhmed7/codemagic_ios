@@ -71,6 +71,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   key: _formKey,
                   child: AppTextField(
                     controller: phoneNumberController,
+                    prefixImagePath: AppAssets.phoneIcon,
                     hintText: 'auth.forgot_password.phone_placeholder'.tr(),
                     keyboardType: TextInputType.phone,
                     validator: (value) {

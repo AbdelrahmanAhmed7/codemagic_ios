@@ -18,17 +18,6 @@ class PersonalInformationScreen extends StatefulWidget {
 }
 
 class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
-  // Sample data - in a real app, this would come from a user model
-  final userData = {
-    'fullName': 'Ahmed Mohamed Adel Amin',
-    'insuranceCardId': '9765473',
-    'phoneNumber': '01234567890',
-    'dateOfBirth': '05/12/1991',
-    'gender': 'Male',
-    'email': 'ahmed.mohamed@gmail.com',
-    'address': '30 Moussa Galal street  Al-Mohandessine  GIZA',
-  };
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _insuranceIdController = TextEditingController();
@@ -101,14 +90,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                         },
                         builder: (context, state) {
                           return ListView(
-                        padding: EdgeInsets.all(16.w),
-                        children: [
-                          SizedBox(height: 24.h),
-                          _buildProfilePhotoSection(state),
-                          SizedBox(height: 32.h),
-                          _buildFormFields(),
-                          SizedBox(height: 24.h),
-                        ],
+                            padding: EdgeInsets.all(16.w),
+                            children: [
+                              SizedBox(height: 24.h),
+                              _buildProfilePhotoSection(state),
+                              SizedBox(height: 32.h),
+                              _buildFormFields(),
+                              SizedBox(height: 24.h),
+                            ],
                           );
                         },
                       ),
@@ -142,7 +131,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 else
                   CircleAvatar(
                     radius: 45.r,
-                    backgroundImage: const AssetImage('assets/approval/ahmed.png'),
+                    backgroundImage: const AssetImage(
+                      'assets/approval/ahmed.png',
+                    ),
                   ),
               ],
             ),

@@ -24,22 +24,39 @@ class NotificationsResponse {
 @JsonSerializable(explicitToJson: true)
 class NotificationsData {
   final List<NotificationItem> notifications;
-  final int totalCount;
-  final int page;
-  final int pageSize;
-  final int totalPages;
+  final Pagination pagination;
 
   NotificationsData({
     required this.notifications,
-    required this.totalCount,
-    required this.page,
-    required this.pageSize,
-    required this.totalPages,
+    required this.pagination,
   });
 
   factory NotificationsData.fromJson(Map<String, dynamic> json) =>
       _$NotificationsDataFromJson(json);
   Map<String, dynamic> toJson() => _$NotificationsDataToJson(this);
+}
+
+@JsonSerializable()
+class Pagination {
+  @JsonKey(name: 'currentPage')
+  final int currentPage;
+  final int pageSize;
+  final int totalCount;
+  final int totalPages;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
+
+  Pagination({
+    required this.currentPage,
+    required this.pageSize,
+    required this.totalCount,
+    required this.totalPages,
+    required this.hasNextPage,
+    required this.hasPreviousPage,
+  });
+
+  factory Pagination.fromJson(Map<String, dynamic> json) => _$PaginationFromJson(json);
+  Map<String, dynamic> toJson() => _$PaginationToJson(this);
 }
 
 @JsonSerializable()

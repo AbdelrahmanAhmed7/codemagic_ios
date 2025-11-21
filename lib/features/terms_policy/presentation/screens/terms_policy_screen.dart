@@ -7,6 +7,10 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/terms_policy/presentation/widgets/policy_section.dart';
 import 'package:mediconsult/features/terms_policy/presentation/widgets/tab_navigation.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/features/terms_policy/presentation/cubit/terms_cubit.dart';
+import 'package:mediconsult/features/terms_policy/presentation/cubit/terms_state.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class TermsPolicyScreen extends StatefulWidget {
   const TermsPolicyScreen({super.key});
@@ -52,6 +56,13 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
                             setState(() {
                               _isTermsSelected = isTerms;
                             });
+                            final lang = context.locale.languageCode;
+                            final cubit = context.read<TermsCubit>();
+                            if (isTerms) {
+                              cubit.loadTerms(lang);
+                            } else {
+                              cubit.loadPrivacy(lang);
+                            }
                           },
                         ),
                         
@@ -59,9 +70,30 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
                         Expanded(
                           child: SingleChildScrollView(
                             padding: EdgeInsets.all(16.w),
-                            child: _isTermsSelected 
-                                ? const TermsContent()
-                                : const PrivacyPolicyContent(),
+                            child: BlocBuilder<TermsCubit, TermsState>(
+                              builder: (context, state) {
+                                return state.when(
+                                  initial: () {
+                                    final lang = context.locale.languageCode;
+                                    if (_isTermsSelected) {
+                                      context.read<TermsCubit>().loadTerms(lang);
+                                    } else {
+                                      context.read<TermsCubit>().loadPrivacy(lang);
+                                    }
+                                    return const Center(child: CircularProgressIndicator());
+                                  },
+                                  loading: () => const Center(child: CircularProgressIndicator()),
+                                  failed: (message) => Text(
+                                    message,
+                                    style: AppTextStyles.font12GreyRegular(context),
+                                  ),
+                                  loaded: (resp) {
+                                    final html = resp.data.description;
+                                    return Html(data: html);
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ],

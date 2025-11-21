@@ -272,6 +272,10 @@
   "notifications": {
     "title": "Notification",
     "no_notifications": "No notifications",
+    "mark_all_read": "Mark all as read",
+    "marked_all_read": "All notifications marked as read",
+    "mark_read": "Mark as read",
+    "action_failed": "Action failed",
     "today": "Today",
     "yesterday": "Yesterday",
     "days": {

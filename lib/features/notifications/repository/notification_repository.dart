@@ -23,4 +23,33 @@ class NotificationRepository {
       return ApiResult.failure(e.toString());
     }
   }
+
+  Future<ApiResult<bool>> markAsRead({
+    required String lang,
+    required int notificationId,
+  }) async {
+    try {
+      final res = await _notificationService.markAsRead(lang, notificationId);
+      if (res.response.statusCode != null && res.response.statusCode! >= 200 && res.response.statusCode! < 300) {
+        return const ApiResult.success(true);
+      }
+      return const ApiResult.failure('Failed to mark as read');
+    } catch (e) {
+      return ApiResult.failure(e.toString());
+    }
+  }
+
+  Future<ApiResult<bool>> markAllAsRead({
+    required String lang,
+  }) async {
+    try {
+      final res = await _notificationService.markAllAsRead(lang);
+      if (res.response.statusCode != null && res.response.statusCode! >= 200 && res.response.statusCode! < 300) {
+        return const ApiResult.success(true);
+      }
+      return const ApiResult.failure('Failed to mark all as read');
+    } catch (e) {
+      return ApiResult.failure(e.toString());
+    }
+  }
 }

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'profile_api_service.dart';
+part of 'terms_api_service.dart';
 
 // dart format off
 
@@ -10,8 +10,8 @@ part of 'profile_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _ProfileApiService implements ProfileApiService {
-  _ProfileApiService(this._dio, {this.baseUrl, this.errorLogger}) {
+class _TermsApiService implements TermsApiService {
+  _TermsApiService(this._dio, {this.baseUrl, this.errorLogger}) {
     baseUrl ??= 'https://app.mediconsulteg.com/api/';
   }
 
@@ -22,25 +22,25 @@ class _ProfileApiService implements ProfileApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<PersonalInfoResponse> getPersonalInfo(String lang) async {
+  Future<TermsPrivacyResponse> getTerms(String lang) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<PersonalInfoResponse>(
+    final _options = _setStreamType<TermsPrivacyResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/${lang}/Profile/GetPersonalInfo',
+            '/${lang}/PrivacyAndTerms/GetTermsAndConditions',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late PersonalInfoResponse _value;
+    late TermsPrivacyResponse _value;
     try {
-      _value = PersonalInfoResponse.fromJson(_result.data!);
+      _value = TermsPrivacyResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -49,29 +49,30 @@ class _ProfileApiService implements ProfileApiService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> updateFirebaseToken(
-    String lang,
-    Map<String, dynamic> body,
-  ) async {
+  Future<TermsPrivacyResponse> getPrivacy(String lang) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
-    final _options = _setStreamType<HttpResponse<dynamic>>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<TermsPrivacyResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/${lang}/Profile/UpdateFirebaseToken',
+            '/${lang}/PrivacyAndTerms/GetPrivacyPolicy',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late TermsPrivacyResponse _value;
+    try {
+      _value = TermsPrivacyResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

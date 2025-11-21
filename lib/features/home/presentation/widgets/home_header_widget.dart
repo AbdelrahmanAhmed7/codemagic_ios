@@ -8,6 +8,7 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/core/services/notification_badge_service.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
   final HomeData data;
@@ -89,28 +90,34 @@ class HomeHeaderWidget extends StatelessWidget {
                     color: AppColors.blackClr,
                   ),
                 ),
-                if (data.notificationsCount > 0)
-                  Positioned(
-                    top: -2.h,
-                    right: -2.w,
-                    child: Container(
-                      width: 14.w,
-                      height: 14.w,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        data.notificationsCount.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
+                Positioned(
+                  top: -2.h,
+                  right: -2.w,
+                  child: ValueListenableBuilder<int>(
+                    valueListenable: NotificationBadgeService.instance.unreadCount,
+                    builder: (context, count, _) {
+                      final badge = count > 0 ? count : data.notificationsCount;
+                      if (badge <= 0) return const SizedBox.shrink();
+                      return Container(
+                        width: 16.w,
+                        height: 16.w,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          badge.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
                   ),
+                ),
               ],
             ),
           ),
