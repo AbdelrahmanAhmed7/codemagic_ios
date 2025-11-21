@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+
 import 'package:mediconsult/features/home/data/home_response_model.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
@@ -33,7 +34,7 @@ class HomeHeaderWidget extends StatelessWidget {
                     color: AppColors.whiteClr,
                     image: DecorationImage(
                       image: (data.memberPhoto != null && data.memberPhoto!.isNotEmpty)
-                          ? NetworkImage(data.memberPhoto!)
+                          ? AssetImage(data.memberPhoto!)
                           : const AssetImage(AppAssets.logo) as ImageProvider,
                     ),
                   ),

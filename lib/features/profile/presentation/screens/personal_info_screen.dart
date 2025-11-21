@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/shared/widgets/form_fields/profile_app_text_field.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/shared/widgets/form_fields/form_fields.dart';
 

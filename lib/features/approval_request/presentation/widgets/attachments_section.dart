@@ -11,9 +11,14 @@ import 'attachments/upload_option.dart';
 import 'attachments/permissions.dart';
 
 class AttachmentsSection extends StatefulWidget {
-  const AttachmentsSection({super.key, this.deleteIllustrationAsset});
+  const AttachmentsSection({
+    super.key, 
+    this.deleteIllustrationAsset,
+    this.onAttachmentsChanged,
+  });
 
   final String? deleteIllustrationAsset;
+  final Function(List<String>)? onAttachmentsChanged;
 
   @override
   State<AttachmentsSection> createState() => _AttachmentsSectionState();
@@ -228,7 +233,13 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
                         final img = previewCameraImage ?? previewGalleryImage;
                         final name = previewCameraName ?? previewGalleryName;
                         if (img != null && name != null) {
-                          Navigator.of(context).pop(_UploadSelection(image: img, name: name));
+                          // Try to extract the file path from FileImage
+                          String path = '';
+                          final imageProvider = img;
+                          if (imageProvider is FileImage) {
+                            path = imageProvider.file.path;
+                          }
+                          Navigator.of(context).pop(_UploadSelection(image: img, name: name, path: path));
                         } else {
                           Navigator.of(context).pop(null);
                         }
@@ -246,8 +257,14 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
     );
     if (selection == null) return;
     setState(() {
-      _items.add(AttachmentItem(image: selection.image, name: selection.name));
+      _items.add(AttachmentItem(image: selection.image, name: selection.name, path: selection.path));
     });
+    _notifyParent();
+  }
+
+  void _notifyParent() {
+    final filePaths = _items.map((item) => item.path).where((p) => p.isNotEmpty).toList();
+    widget.onAttachmentsChanged?.call(filePaths);
   }
 
   void _confirmDelete(int index) async {
@@ -330,13 +347,15 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
 
   if (confirmed == true) {
     setState(() => _items.removeAt(index));
+    _notifyParent();
   }
 }
 
 }
 
 class _UploadSelection {
-  _UploadSelection({required this.image, required this.name});
+  _UploadSelection({required this.image, required this.name, required this.path});
   final ImageProvider image;
   final String name;
+  final String path;
 }

@@ -62,7 +62,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                       borderRadius: BorderRadius.circular(16.r),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.greyClr.withOpacity(0.08),
+                          color: AppColors.greyClr.withValues(alpha: 0.08),
                           blurRadius: 24,
                           offset: const Offset(0, 8),
                         ),
@@ -110,7 +110,7 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
   }
 
   Widget _buildAddFamilyMemberButton() {
-    return FloatingActionButton( 
+    return FloatingActionButton(
       shape: const CircleBorder(),
       backgroundColor: AppColors.primaryClr,
       onPressed: () {

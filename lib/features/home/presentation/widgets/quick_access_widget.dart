@@ -48,7 +48,7 @@ class QuickAccessWidget extends StatelessWidget {
                 color: AppColors.approvalColor,
                 textColor: AppColors.approvalTextColor,
                 onTap: () {
-                  context.go('/approval-request');
+                  context.go('/approval-history');
                 },
               ),
               _buildQuickAccessButton(

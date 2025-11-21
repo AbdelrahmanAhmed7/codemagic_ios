@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
-import 'package:mediconsult/core/theming/app_text_styles.dart';
 
 class HomeLoadingWidget extends StatelessWidget {
   const HomeLoadingWidget({super.key});
@@ -21,7 +20,7 @@ class HomeLoadingWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 25.r,
-                    backgroundColor: Colors.white.withOpacity(0.3),
+                    backgroundColor: Colors.white.withValues(alpha: 0.3),
                   ),
                   SizedBox(width: 12.w),
                   Column(
@@ -32,7 +31,7 @@ class HomeLoadingWidget extends StatelessWidget {
                         height: 16.h,
                         width: 120.w,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
+                          color: Colors.white.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
@@ -41,7 +40,7 @@ class HomeLoadingWidget extends StatelessWidget {
                         height: 12.h,
                         width: 80.w,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
+                          color: Colors.white.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                       ),
@@ -61,7 +60,7 @@ class HomeLoadingWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),

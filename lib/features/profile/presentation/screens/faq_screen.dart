@@ -80,7 +80,7 @@ class _FAQScreenState extends State<FAQScreen> {
                               border: Border.all(color: AppColors.borderClr),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.greyClr.withOpacity(0.1),
+                                  color: AppColors.greyClr.withValues(alpha: 0.1),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -150,7 +150,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                 boxShadow: [
                                   BoxShadow(
                                     color:
-                                        AppColors.greyClr.withOpacity(0.08),
+                                        AppColors.greyClr.withValues(alpha: 0.08),
                                     blurRadius: 24,
                                     offset: const Offset(0, 8),
                                   ),

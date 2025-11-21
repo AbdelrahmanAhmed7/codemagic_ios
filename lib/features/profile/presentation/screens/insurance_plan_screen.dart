@@ -28,7 +28,7 @@ class InsurancePlanScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.r),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.greyClr.withOpacity(0.08),
+                          color: AppColors.greyClr.withValues(alpha: 0.08),
                           blurRadius: 24,
                           offset: const Offset(0, 8),
                         ),

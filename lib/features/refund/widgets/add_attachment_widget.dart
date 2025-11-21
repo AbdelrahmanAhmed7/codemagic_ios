@@ -194,7 +194,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
     setState(() {
       final item = AttachmentItem(
         image: selection.imageProvider,
-        name: selection.name,
+        name: selection.name, path: '',
       );
       if (slot == _AttachmentSlot.eInvoice) {
         _eInvoice = item;
@@ -238,12 +238,6 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
         ),
       ),
     );
-  }
-
-  void _removeAttachmentAt(int index) {
-    setState(() {
-      _attachments.removeAt(index);
-    });
   }
 
   @override

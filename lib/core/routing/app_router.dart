@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/constants.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_cubit.dart';
+import 'package:mediconsult/features/approval_request/presentation/approval_history_screen.dart';
 import 'package:mediconsult/features/auth/login/presentation/forget_password_screen.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/resend_otp_cubit.dart';
@@ -15,7 +17,9 @@ import 'package:mediconsult/features/auth/signup/presentation/account_verified_s
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
+import 'package:mediconsult/features/family_members/presentation/cubit/family_members_cubit.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
@@ -115,15 +119,24 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/approval-request',
+        path: '/approval-history',
         builder: (context, state) {
-          return const ApprovalRequestScreen();
+          return BlocProvider(
+            create: (context) => sl<ApprovalsCubit>(),
+            child: const ApprovalHistoryScreen(),
+          );
         },
       ),
       GoRoute(
-        path: '/approval-request/form',
+        path: '/approval-request',
         builder: (context, state) {
-          return const ApprovalRequestScreen();
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<FamilyMembersCubit>()),
+              BlocProvider(create: (context) => sl<ApprovalRequestCubit>()),
+            ],
+            child: const ApprovalRequestScreen(),
+          );
         },
       ),
       GoRoute(
