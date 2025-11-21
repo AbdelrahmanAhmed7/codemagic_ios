@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/core/error/app_error_handler.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
 import 'package:mediconsult/features/network/logic/network_state.dart';
 import 'package:mediconsult/features/network/presentation/widgets/empty_providers_state.dart';
@@ -92,8 +93,29 @@ class _NetworkScreenState extends State<NetworkScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightGreyClr,
-      body: SafeArea(
-        child: Column(
+      body: BlocListener<NetworkCubit, NetworkState>(
+        listener: (context, state) {
+          if (state is ProvidersError) {
+            AppErrorHandler.showErrorSnackBar(
+              context,
+              state.error,
+              onRetry: () {
+                context.read<NetworkCubit>().searchProviders(resetPage: true);
+              },
+            );
+          }
+          if (state is CategoriesError) {
+            AppErrorHandler.showErrorSnackBar(
+              context,
+              state.error,
+              onRetry: () {
+                context.read<NetworkCubit>().getCategories();
+              },
+            );
+          }
+        },
+        child: SafeArea(
+          child: Column(
           children: [
             const PageHeader(title: 'Providers Network', backPath: '/home'),
             SizedBox(height: 16.h),
@@ -255,6 +277,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

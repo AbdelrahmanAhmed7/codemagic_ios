@@ -35,7 +35,9 @@ class ExploreWidget extends StatelessWidget {
           description: 'View & manage insurance policies',
           iconPath: AppAssets.policy,
           arrowPath: 'assets/icons/arrow.png',
-          onTap: () {},
+          onTap: () {
+            context.go('/policy');
+          },
         ),
         SizedBox(height: 12.h),
         _buildExploreItem(

@@ -250,166 +250,160 @@ class _ApprovalCard extends StatelessWidget {
     final Color backgroundColor = _backgroundColorForStatus(item.statusChar);
     final String statusLabel = _statusLabel(item.statusChar);
 
-    return GestureDetector(
-      onTap: () {
-        // Show approval details bottom sheet
-        ApprovalDetailsBottomSheet.show(context, item);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        padding: EdgeInsets.all(12.w),
-        child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // logo
-          Container(
-            width: 69.w,
-            height: 69.w,
-            decoration: BoxDecoration(
-              color: AppColors.primaryClr,
-              borderRadius: BorderRadius.circular(12.r),
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      padding: EdgeInsets.all(12.w),
+      child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // logo
+        Container(
+          width: 69.w,
+          height: 69.w,
+          decoration: BoxDecoration(
+            color: AppColors.primaryClr,
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: (item.providerLogo != null && item.providerLogo!.isNotEmpty && item.providerLogo!.startsWith('http'))
+              ? ClipRRect(
+            borderRadius: BorderRadius.circular(12.r),
+            child: CachedNetworkImage(
+              imageUrl: item.providerLogo!,
+              fit: BoxFit.cover,
+              memCacheWidth: 138,
+              memCacheHeight: 138,
+              maxWidthDiskCache: 138,
+              maxHeightDiskCache: 138,
+              placeholder: (context, url) => Center(
+                child: SizedBox(
+                  width: 20.w,
+                  height: 20.w,
+                  child: const CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+              errorWidget: (context, url, error) => Padding(
+                padding: EdgeInsets.all(8.w),
+                child: Image.asset(
+                  AppAssets.logo,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
-            child: (item.providerLogo != null && item.providerLogo!.isNotEmpty && item.providerLogo!.startsWith('http'))
-                ? ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: CachedNetworkImage(
-                imageUrl: item.providerLogo!,
-                fit: BoxFit.cover,
-                memCacheWidth: 138,
-                memCacheHeight: 138,
-                maxWidthDiskCache: 138,
-                maxHeightDiskCache: 138,
-                placeholder: (context, url) => Center(
-                  child: SizedBox(
-                    width: 20.w,
-                    height: 20.w,
-                    child: const CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: Image.asset(
-                    AppAssets.logo,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            )
-                : Padding(
-              padding: EdgeInsets.all(8.w),
-              child: Image.asset(
-                AppAssets.logo,
-                fit: BoxFit.contain,
-              ),
+          )
+              : Padding(
+            padding: EdgeInsets.all(8.w),
+            child: Image.asset(
+              AppAssets.logo,
+              fit: BoxFit.contain,
             ),
           ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // رقم الطلب + الحالة
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Request Number: ${item.approvalNumber}",
-                        style: AppTextStyles.font10GreyRegular,
-                      ),
-                    ),
-                    Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
-                      decoration: BoxDecoration(
-                        color: statusColor,
-                        borderRadius: BorderRadius.circular(24.r),
-                      ),
-                      child: Text(
-                        statusLabel,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 6.h),
-                Row(
-                  children: [
-                    Icon(Icons.calendar_today,
-                        size: 14.sp, color: AppColors.blueClr),
-                    SizedBox(width: 5.w),
-                    Text(
-                      "Date: ${item.date}",
+        ),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // رقم الطلب + الحالة
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Request Number: ${item.approvalNumber}",
                       style: AppTextStyles.font10GreyRegular,
                     ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Icon(Icons.access_time,
-                        size: 14.sp, color: AppColors.blueClr),
-                    SizedBox(width: 5.w),
-                    Text(
-                      "Time: ${item.time}",
-                      style: AppTextStyles.font10GreyRegular,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // TODO: Navigate to details
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  Container(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      borderRadius: BorderRadius.circular(24.r),
                     ),
                     child: Text(
-                      "View Details",
-                      style: AppTextStyles.font12BlueMedium,
+                      statusLabel,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 6.h),
+              Row(
+                children: [
+                  Icon(Icons.calendar_today,
+                      size: 14.sp, color: AppColors.blueClr),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "Date: ${item.date}",
+                    style: AppTextStyles.font10GreyRegular,
+                  ),
+                ],
+              ),
+              SizedBox(height: 4.h),
+              Row(
+                children: [
+                  Icon(Icons.access_time,
+                      size: 14.sp, color: AppColors.blueClr),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "Time: ${item.time}",
+                    style: AppTextStyles.font10GreyRegular,
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    ApprovalDetailsBottomSheet.show(context, item);
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    "View Details",
+                    style: AppTextStyles.font12BlueMedium,
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     ),
-    );
+        );
   }
 
   Color _statusColor(String status) {
     switch (status.toUpperCase()) {
       case 'A':
-        return const Color(0xFF349859); // Green for Approved
+        return const Color(0xFF349859); 
       case 'R':
-        return const Color(0xFFB92828); // Red for Rejected
+        return const Color(0xFFB92828); 
       case 'P':
       default:
-        return const Color(0xFF999999); // Grey for Pending
+        return const Color(0xFF999999); 
     }
   }
 
   Color _backgroundColorForStatus(String status) {
     switch (status.toUpperCase()) {
       case 'A':
-        return const Color(0xFFD9F2E2); // Light Green for Approved
+        return const Color(0xFFD9F2E2);
       case 'R':
-        return const Color(0xFFF5E1E9); // Light Red for Rejected
+        return const Color(0xFFF5E1E9);
       case 'P':
       default:
-        return const Color(0xFFF2F2F2); // Light Grey for Pending
+        return const Color(0xFFF2F2F2);
     }
   }
 

@@ -39,8 +39,14 @@ class HomeCubit extends Cubit<HomeCubitState> {
         await CacheService.cacheHomeData(data);
         emit(HomeCubitState.loaded(data));
       },
-      failure: (message) {
-        emit(HomeCubitState.failed(message));
+      failure: (message) async {
+        // Try to get cached data if API fails
+        final cachedData = await CacheService.getCachedHomeData();
+        if (cachedData != null) {
+          emit(HomeCubitState.loaded(cachedData));
+        } else {
+          emit(HomeCubitState.failed(message));
+        }
       },
     );
   }
@@ -50,6 +56,7 @@ class HomeCubit extends Cubit<HomeCubitState> {
   }
 
   Future<void> retry(String lang) async {
-    await getHomeInfo(lang, forceRefresh: true);
+    // Don't force refresh on retry, allow cache fallback
+    await getHomeInfo(lang, forceRefresh: false);
   }
 }
