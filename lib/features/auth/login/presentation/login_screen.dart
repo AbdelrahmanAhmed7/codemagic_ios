@@ -1,12 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/login_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: () => context.go('/signup'),
                     ),
-                    SizedBox(width: 50.w,),
+                    SizedBox(width: 50.w),
                     Image.asset(
                       AppAssets.logo,
                       width: 172.w,
@@ -70,18 +74,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 40.h),
 
-                Text(
-                  'Card ID , National ID or Phone Number',
-                  style: AppTextStyles.font16BlackMedium,
-                ),
+                Text('Card ID', style: AppTextStyles.font16BlackMedium),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: cardOrPhoneController,
-                  hintText: 'Enter card number or Phone Number',
+                  hintText: 'Enter card number',
                   prefixImagePath: AppAssets.cardIcon,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your Card ID, National ID, or Phone Number';
+                      return 'Please enter your Card ID';
+                    }
+                    if (!value.startsWith('20')) {
+                      return 'Card ID must start with 20';
+                    }
+                    if (value.length != 7) {
+                      return 'Card ID must be exactly 7 digits';
+                    }
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Card ID must contain only numbers';
                     }
                     return null;
                   },
@@ -124,13 +135,37 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 28.h),
 
-                AppButton(
-                  text: 'Login',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // TODO: Handle login API here
-                      context.go('/home');
+                BlocConsumer<LoginCubit, LoginState>(
+                  listener: (context, state) {
+                    if (state is Success) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showAppSnackBar(context, 'Login Successful');
+                        context.go('/home');
+                      });
+                    } else if (state is Failed) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showAppSnackBar(context, state.error, isError: true);
+                      });
                     }
+                  },
+                  builder: (context, state) {
+                    final isLoading = state is Loading;
+
+                    return AppButton(
+                      text: isLoading ? 'Logging in...' : 'Login',
+                      isLoading: isLoading,
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<LoginCubit>().login(
+                                  cardOrPhoneController.text.trim(),
+                                  passwordController.text.trim(),
+                                  'en',
+                                );
+                              }
+                            },
+                    );
                   },
                 ),
                 SizedBox(height: 31.h),

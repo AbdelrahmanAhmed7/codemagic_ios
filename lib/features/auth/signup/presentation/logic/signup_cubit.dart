@@ -1,50 +1,37 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
-import 'package:mediconsult/features/auth/signup/domain/signup_repository.dart';
-
-part 'signup_state.dart';
-part 'signup_cubit.freezed.dart';
+import 'package:mediconsult/features/auth/signup/data/register_request_model.dart';
+import 'package:mediconsult/features/auth/signup/presentation/logic/signup_state.dart';
+import 'package:mediconsult/features/auth/signup/repository/register_repository.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  final SignupRepository _repository;
+  final RegisterRepository _registerRepository;
+  SignupCubit(this._registerRepository) : super(const SignupState.initial());
 
-  SignupCubit(this._repository) : super(const SignupState.initial());
-
-  Future<void> requestOtp(String phoneNumber) async {
+  Future<void> signup(
+    String cardNo,
+    String nationalId,
+    String phoneNumber,
+    String password,
+    String confirmPassword,
+    String lang,
+  ) async {
     emit(const SignupState.loading());
-    final ApiResult<void> result = await _repository.requestOtp(phoneNumber: phoneNumber);
-    result.when(
-      success: (_) => emit(const SignupState.otpRequested()),
-      failure: (message) => emit(SignupState.error(message)),
-    );
-  }
-
-  Future<void> verifyOtp({required String phoneNumber, required String otp}) async {
-    emit(const SignupState.loading());
-    final ApiResult<void> result = await _repository.verifyOtp(phoneNumber: phoneNumber, otp: otp);
-    result.when(
-      success: (_) => emit(const SignupState.otpVerified()),
-      failure: (message) => emit(SignupState.error(message)),
-    );
-  }
-
-  Future<void> createAccount({
-    required String fullName,
-    required String phoneNumber,
-    required String password,
-  }) async {
-    emit(const SignupState.loading());
-    final ApiResult<void> result = await _repository.createAccount(
-      fullName: fullName,
+    final request = RegisterRequestModel(
+      cardNo: cardNo,
+      nationalId: nationalId,
       phoneNumber: phoneNumber,
       password: password,
+      confirmPassword: confirmPassword,
     );
-    result.when(
-      success: (_) => emit(const SignupState.success()),
-      failure: (message) => emit(SignupState.error(message)),
+    final response = await _registerRepository.register(request, lang);
+    response.when(
+      success: (response) {
+        emit(SignupState.success(response));
+      },
+      failure: (message) {
+        emit(SignupState.failed(error: message));
+      },
     );
   }
 }
-
-

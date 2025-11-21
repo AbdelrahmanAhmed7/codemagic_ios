@@ -1,12 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/send_otp_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/send_otp_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -38,10 +42,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.black,
+                    ),
                     onPressed: () => context.go('/login'),
                   ),
-                  SizedBox(width: 30.w,),
+                  SizedBox(width: 30.w),
                   Text(
                     'Forgot Password',
                     style: AppTextStyles.font20BlackSemiBold,
@@ -70,7 +77,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         style: AppTextStyles.font16BlackMedium,
                       ),
                     ),
-                    SizedBox(height: 8.h,),
+                    SizedBox(height: 8.h),
                     Form(
                       key: _formKey,
                       child: AppTextField(
@@ -85,7 +92,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 29.h,),
+                    SizedBox(height: 29.h),
                     RichText(
                       text: TextSpan(
                         text: 'Do you want to change phone number ?',
@@ -99,18 +106,56 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                // Handle "Contact Us" tap
+                                context.go('/contact-us');
                               },
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 40.h,),
-                    AppButton(text: 'Send', onPressed: (){
-                      if (_formKey.currentState!.validate()) {
-                        context.go('/otp-password', extra: phoneNumberController.text);
-                      }
-                    }),
+                    SizedBox(height: 40.h),
+                    BlocConsumer<SendOtpCubit, SendOtpState>(
+                      builder: (BuildContext context, state) {
+                        final isLoading = state is Loading;
+                        
+                        return AppButton(
+                          text: isLoading ? 'Sending...' : 'Send',
+                          isLoading: isLoading,
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<SendOtpCubit>().sendOtp(
+                                          phoneNumberController.text,
+                                          'en',
+                                        );
+                                  }
+                                },
+                        );
+                      },
+                      listener: (BuildContext context, state) {
+                        if(state is Success) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            // Show OTP in snackbar for 10 seconds
+                            final otpMessage = state.data?.data?.otp != null 
+                                ? 'OTP: ${state.data!.data!.otp!}' 
+                                : 'OTP Sent Successfully';
+                            showAppSnackBar(
+                              context, 
+                              otpMessage,
+                              duration: const Duration(seconds: 10),
+                            );
+                            context.go(
+                              '/otp-password',
+                              extra: phoneNumberController.text,
+                            );
+                          });
+                        } else if (state is Failed) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            showAppSnackBar(context, state.error, isError: true);
+                          });
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),

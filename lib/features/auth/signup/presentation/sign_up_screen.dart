@@ -1,12 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
+import 'package:mediconsult/features/auth/signup/presentation/logic/signup_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -202,14 +206,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: 24.h),
 
-                AppButton(
-                  text: 'Register',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.go('/otp', extra: phoneController.text);
+                BlocConsumer<SignupCubit, SignupState>(
+                  listener: (context, state) {
+                    if (state is Success) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showAppSnackBar(context, 'Registration Successful');
+                        context.go('/home');
+                      });
+                    } else if (state is Failed) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showAppSnackBar(context, state.error, isError: true);
+                      });
                     }
                   },
+                  builder: (context, state) {
+                    final isLoading = state is Loading;
+
+                    return AppButton(
+                      text: isLoading ? 'Registering...' : 'Register',
+                      isLoading: isLoading,
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<SignupCubit>().signup(
+                                  cardController.text.trim(),
+                                  nationalController.text.trim(),
+                                  phoneController.text.trim(),
+                                  passwordController.text.trim(),
+                                  confirmPasswordController.text.trim(),
+                                  'en',
+                                );
+                              }
+                            },
+                    );
+                  },
                 ),
+
                 SizedBox(height: 31.h),
 
                 Center(

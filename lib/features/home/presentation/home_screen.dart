@@ -7,7 +7,6 @@ import 'package:mediconsult/features/home/presentation/widgets/user_plan_card_wi
 import 'package:mediconsult/features/home/presentation/widgets/quick_access_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/khusm_promotion_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/ongoing_request_widget.dart';
-import 'package:mediconsult/features/home/presentation/widgets/medicine_reminder_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/health_tips_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/explore_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/bottom_navigation_bar_widget.dart';
@@ -22,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final bool _hasOngoingRequests = true;
-  final bool _hasMedicineReminders = true;
+  // final bool _hasMedicineReminders = true;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 24.h),
                     if (_hasOngoingRequests) ...[
                       const OngoingRequestWidget(),
-                      SizedBox(height: 24.h),
-                    ],
-                    if (_hasMedicineReminders) ...[
-                      const MedicineReminderWidget(),
                       SizedBox(height: 24.h),
                     ],
                     const HealthTipsWidget(),

@@ -1,10 +1,18 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/constants/constants.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/features/auth/login/presentation/forget_password_screen.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/login_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/resend_otp_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/reset_password_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/send_otp_cubit.dart';
+import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/verify_otp_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/login_screen.dart';
 import 'package:mediconsult/features/auth/login/presentation/password_otp.dart';
 import 'package:mediconsult/features/auth/login/presentation/reset_password_screen.dart';
 import 'package:mediconsult/features/auth/signup/presentation/account_verified_screen.dart';
-import 'package:mediconsult/features/auth/signup/presentation/otp_screen.dart';
+import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
@@ -25,7 +33,7 @@ import 'package:mediconsult/features/profile/presentation/screens/language_scree
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: isLoggedInUser? '/home' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -36,22 +44,28 @@ class AppRouter {
       GoRoute(
         path: '/signup',
         builder: (context, state) {
-          return const SignUpScreen();
+          return BlocProvider(
+            create: (context) => sl<SignupCubit>(),
+            child: const SignUpScreen(),
+          );
         },
       ),
       GoRoute(
         path: '/login',
         builder: (context, state) {
-          return const LoginScreen();
+          return BlocProvider(
+            create: (context) => sl<LoginCubit>(),
+            child: const LoginScreen(),
+          );
         },
       ),
-      GoRoute(
-        path: '/otp',
-        builder: (context, state) {
-          final phoneNumber = state.extra as String;
-          return OtpScreen(phoneNumber: phoneNumber);
-        },
-      ),
+      // GoRoute(
+      //   path: '/otp',
+      //   builder: (context, state) {
+      //     final phoneNumber = state.extra as String;
+      //     return OtpScreen(phoneNumber: phoneNumber);
+      //   },
+      // ),
       GoRoute(
         path: '/account-verified',
         builder: (context, state) {
@@ -61,20 +75,33 @@ class AppRouter {
       GoRoute(
         path: '/forget-password',
         builder: (context, state) {
-          return const ForgetPasswordScreen();
+          return BlocProvider(
+            create: (context) => sl<SendOtpCubit>(),
+            child: const ForgetPasswordScreen(),
+          );
         },
       ),
       GoRoute(
         path: '/otp-password',
         builder: (context, state) {
           final phoneNumber = state.extra as String;
-          return PasswordOtpScreen(phoneNumber: phoneNumber);
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<VerifyOtpCubit>()),
+              BlocProvider(create: (context) => sl<ResendOtpCubit>()),
+            ],
+            child: PasswordOtpScreen(phoneNumber: phoneNumber),
+          );
         },
       ),
       GoRoute(
         path: '/reset-password',
         builder: (context, state) {
-          return const ResetPasswordScreen();
+          final phoneNumber = state.extra as String;
+          return BlocProvider(
+            create: (context) => sl<ResetPasswordCubit>(),
+            child: ResetPasswordScreen(phoneNumber: phoneNumber),
+          );
         },
       ),
       GoRoute(
