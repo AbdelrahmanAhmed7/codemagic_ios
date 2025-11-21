@@ -15,6 +15,7 @@ import 'package:mediconsult/features/auth/signup/presentation/account_verified_s
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit.dart';
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
+import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
 import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
@@ -33,7 +34,7 @@ import 'package:mediconsult/features/profile/presentation/screens/language_scree
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: isLoggedInUser? '/home' : '/login',
+    initialLocation: isLoggedInUser ? '/home' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -107,7 +108,10 @@ class AppRouter {
       GoRoute(
         path: '/home',
         builder: (context, state) {
-          return const HomeScreen();
+          return BlocProvider(
+            create: (context) => sl<HomeCubit>(),
+            child: const HomeScreen(),
+          );
         },
       ),
       GoRoute(

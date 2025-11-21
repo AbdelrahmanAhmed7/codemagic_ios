@@ -3,21 +3,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
+import 'package:mediconsult/features/home/data/home_response_model.dart';
 
 class OngoingRequestWidget extends StatelessWidget {
-  const OngoingRequestWidget({super.key});
+  final HomeData data;
+  final VoidCallback? onSeeAll;
+
+  const OngoingRequestWidget({super.key, required this.data, this.onSeeAll});
 
   @override
   Widget build(BuildContext context) {
+    final approvals = data.approvals;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Header Row
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Ongoing Request', style: AppTextStyles.font14BlackMedium),
+            Text('Ongoing Requests', style: AppTextStyles.font14BlackMedium),
             GestureDetector(
-              onTap: () {},
+              onTap: onSeeAll,
               child: Text(
                 'See All',
                 style: AppTextStyles.font14PrimaryMedium.copyWith(
@@ -28,133 +35,194 @@ class OngoingRequestWidget extends StatelessWidget {
           ],
         ),
         SizedBox(height: 16.h),
-        Container(
-          width: double.infinity,
-          height: 120.h,
-          decoration: BoxDecoration(
-            color: AppColors.whiteClr,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.greyClr.withValues(alpha: 0.15),
-                blurRadius: 15,
-                offset: const Offset(0, 4),
+
+        // Check if approvals exist
+        if (approvals.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.h),
+              child: Text(
+                'No ongoing requests',
+                style: AppTextStyles.font12GreyRegular,
               ),
-              BoxShadow(
-                color: AppColors.greyClr.withValues(alpha: 0.05),
-                blurRadius: 30,
-                offset: const Offset(0, 8),
-              ),
-            ],
+            ),
+          )
+        else
+          // Horizontal ListView of approvals
+          SizedBox(
+            height: 140.h,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: approvals.length,
+              separatorBuilder: (_, __) => SizedBox(width: 12.w),
+              itemBuilder: (context, index) {
+                final approval = approvals[index];
+                return SizedBox(
+                  width: 300.w,
+                  child: _buildApprovalCard(context, approval),
+                );
+              },
+            ),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 6.w,
-                height: 120.h,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFC888),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.r),
-                    bottomLeft: Radius.circular(12.r),
-                  ),
-                ),
+      ],
+    );
+  }
+
+  Widget _buildApprovalCard(BuildContext context, Approval approval) {
+    return Container(
+      width: double.infinity,
+      height: 120.h,
+      decoration: BoxDecoration(
+        color: AppColors.whiteClr,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.greyClr.withValues(alpha: 0.15),
+            blurRadius: 15,
+            offset: const Offset(0, 4),
+          ),
+          BoxShadow(
+            color: AppColors.greyClr.withValues(alpha: 0.05),
+            blurRadius: 30,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Left color indicator
+          Container(
+            width: 6.w,
+            height: 120.h,
+            decoration: BoxDecoration(
+              color: _getStatusColor(approval.status),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.r),
+                bottomLeft: Radius.circular(12.r),
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 10.h,
-                  ),
-                  child: Stack(
+            ),
+          ),
+
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+              child: Stack(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.r),
-                            child: Image.asset(
-                              AppAssets.alfaLogo,
-                              width: 48.w,
-                              height: 60.h,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Alfa Lab',
-                                  style: AppTextStyles.font14BlackMedium.copyWith(
-                                    color: Color(0xff062860),
-                                  ),
+                      // Provider logo
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.r),
+                        child: approval.providerLogo.isNotEmpty
+                            ? Image.network(
+                                approval.providerLogo,
+                                width: 48.w,
+                                height: 60.h,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  AppAssets.alfaLogo,
+                                  width: 48.w,
+                                  height: 60.h,
                                 ),
-                                SizedBox(height: 4.h),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Service Type: ',
-                                      style: AppTextStyles.font12GreyRegular,
-                                    ),
-                                    Image.asset(
-                                      AppAssets.bloodIcon,
-                                      width: 20.w,
-                                      height: 20.h,
-                                      fit: BoxFit.contain,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Text(
-                                      'Blood Test',
-                                      style: AppTextStyles.font12GreyRegular,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 22.h),
-                          Padding(
-                            padding: EdgeInsets.only(right: 16.w, top: 22.h),
-                            child: Image.asset(
-                              AppAssets.arrowRight,
-                              width: 25.w,
-                              height: 20.h,
-                            ),
-                          ),
-                        ],
+                              )
+                            : Image.asset(
+                                AppAssets.logo,
+                                width: 48.w,
+                                height: 60.h,
+                              ),
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          width: 100.w,
-                          height: 20.h,
-                          decoration: BoxDecoration(
-                            color: const Color(0x6BFFC888),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Under Review',
-                            style: AppTextStyles.font10GreyRegular.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xffC66D04),
-                              fontSize: 8.sp,
+                      SizedBox(width: 12.w),
+
+                      // Info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              approval.providerName.trim(),
+                              style: AppTextStyles.font14BlackMedium.copyWith(
+                                color: const Color(0xff062860),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              " Service Type : ${approval.notes.isNotEmpty
+                                  ? approval.notes
+                                  : "No notes provided"}",
+                              style: AppTextStyles.font12GreyRegular,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              "Date: ${approval.createdDate.split('T').first}",
+                              style: AppTextStyles.font10GreyRegular,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Arrow
+                      Padding(
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: Image.asset(
+                          AppAssets.arrowRight,
+                          width: 20.w,
+                          height: 18.h,
                         ),
                       ),
                     ],
                   ),
-                ),
+
+                  // Status Badge
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 2.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _getStatusColor(
+                          approval.status,
+                        ).withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        approval.status,
+                        style: AppTextStyles.font10GreyRegular.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: _getStatusColor(approval.status),
+                          fontSize: 9.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case "approved":
+        return Colors.green;
+      case "under review":
+        return const Color(0xFFFFC888);
+      case "rejected":
+        return Colors.redAccent;
+      default:
+        return Colors.grey;
+    }
   }
 }
