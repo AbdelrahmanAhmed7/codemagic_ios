@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/network/data/city_response_model.dart';
 import 'package:mediconsult/features/network/data/government_response_model.dart';
@@ -56,20 +58,46 @@ class NetworkCubit extends Cubit<NetworkState> {
       _selectedCityId != null ||
       (_searchKey != null && _searchKey!.isNotEmpty);
 
-  /// Get all categories
-  Future<void> getCategories({BuildContext? context, String? lang}) async {
+  /// Get all categories with caching
+  Future<void> getCategories({BuildContext? context, String? lang, bool forceRefresh = false}) async {
     emit(const NetworkState.categoriesLoading());
 
     final String language = context != null
         ? context.locale.languageCode
         : (lang ?? 'en');
 
+    // Try cache first if not forcing refresh
+    if (!forceRefresh) {
+      final cachedData = await CacheService.getCachedNetworkCategoriesData();
+      if (cachedData != null) {
+        try {
+          final response = NetworkCategoryResponse.fromJson(cachedData);
+          if (response.success && response.data.categories.isNotEmpty) {
+            _categories = response.data.categories;
+            emit(NetworkState.categoriesSuccess(_categories));
+            
+            // Background refresh
+            unawaited(_fetchAndCacheCategories(language));
+            return;
+          }
+        } catch (e) {
+          // If cache parsing fails, continue to fetch from API
+        }
+      }
+    }
+
+    await _fetchAndCacheCategories(language);
+  }
+
+  Future<void> _fetchAndCacheCategories(String language) async {
     final result = await _repository.getCategories(language);
 
     result.when(
-      success: (response) {
+      success: (response) async {
         _categories = response.data.categories;
         emit(NetworkState.categoriesSuccess(_categories));
+        // Cache the response
+        await CacheService.cacheNetworkCategoriesData(response.toJson());
       },
       failure: (message) {
         emit(NetworkState.categoriesError(message));
@@ -253,15 +281,38 @@ class NetworkCubit extends Cubit<NetworkState> {
     );
   }
 
-  /// Get all governments
-  Future<void> getGovernments({BuildContext? context, String? lang}) async {
+  /// Get all governments with caching
+  Future<void> getGovernments({BuildContext? context, String? lang, bool forceRefresh = false}) async {
     emit(const NetworkState.governmentsLoading());
 
-    // Use context.locale if context is provided, otherwise use provided lang or default to 'en'
     final String language = context != null
         ? context.locale.languageCode
         : (lang ?? 'en');
 
+    // Try cache first if not forcing refresh
+    if (!forceRefresh) {
+      final cachedData = await CacheService.getCachedNetworkGovernmentsData();
+      if (cachedData != null) {
+        try {
+          final response = GovernmentResponse.fromJson(cachedData);
+          if (response.success && response.data.governments.isNotEmpty) {
+            _governments = response.data.governments;
+            emit(NetworkState.governmentsSuccess(_governments));
+            
+            // Background refresh
+            unawaited(_fetchAndCacheGovernments(language));
+            return;
+          }
+        } catch (e) {
+          // If cache parsing fails, continue to fetch from API
+        }
+      }
+    }
+
+    await _fetchAndCacheGovernments(language);
+  }
+
+  Future<void> _fetchAndCacheGovernments(String language) async {
     final result = await _repository.getGovernments(
       language,
       page: 1,
@@ -269,9 +320,11 @@ class NetworkCubit extends Cubit<NetworkState> {
     );
 
     result.when(
-      success: (response) {
+      success: (response) async {
         _governments = response.data.governments;
         emit(NetworkState.governmentsSuccess(_governments));
+        // Cache the response
+        await CacheService.cacheNetworkGovernmentsData(response.toJson());
       },
       failure: (message) {
         emit(NetworkState.governmentsError(message));
@@ -279,17 +332,42 @@ class NetworkCubit extends Cubit<NetworkState> {
     );
   }
 
-  /// Get cities by government
+  /// Get cities by government with caching
   Future<void> getCitiesByGovernment(
     int governmentId, {
     BuildContext? context,
     String? lang,
+    bool forceRefresh = false,
   }) async {
     emit(const NetworkState.citiesLoading());
     final String language = context != null
         ? context.locale.languageCode
         : (lang ?? 'en');
 
+    // Try cache first if not forcing refresh
+    if (!forceRefresh) {
+      final cachedData = await CacheService.getCachedNetworkCitiesData(governmentId);
+      if (cachedData != null) {
+        try {
+          final response = CityResponse.fromJson(cachedData);
+          if (response.success && response.data != null && response.data!.cities.isNotEmpty) {
+            _cities = response.data!.cities;
+            emit(NetworkState.citiesSuccess(_cities));
+            
+            // Background refresh
+            unawaited(_fetchAndCacheCities(language, governmentId));
+            return;
+          }
+        } catch (e) {
+          // If cache parsing fails, continue to fetch from API
+        }
+      }
+    }
+
+    await _fetchAndCacheCities(language, governmentId);
+  }
+
+  Future<void> _fetchAndCacheCities(String language, int governmentId) async {
     final result = await _repository.getCitiesByGovernment(
       language,
       governmentId: governmentId,
@@ -298,9 +376,13 @@ class NetworkCubit extends Cubit<NetworkState> {
     );
 
     result.when(
-      success: (response) {
+      success: (response) async {
         _cities = response.data?.cities ?? [];
         emit(NetworkState.citiesSuccess(_cities));
+        // Cache the response
+        if (response.data != null) {
+          await CacheService.cacheNetworkCitiesData(governmentId, response.toJson());
+        }
       },
       failure: (message) {
         emit(NetworkState.citiesError(message));

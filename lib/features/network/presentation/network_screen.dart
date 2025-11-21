@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
-import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/error/app_error_handler.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
 import 'package:mediconsult/features/network/logic/network_state.dart';
-import 'package:mediconsult/features/network/presentation/widgets/empty_providers_state.dart';
 import 'package:mediconsult/features/network/presentation/widgets/network_categories_list.dart';
 import 'package:mediconsult/features/network/presentation/widgets/network_filter_bottom_sheet.dart';
-import 'package:mediconsult/features/network/presentation/widgets/provider_card.dart';
+import 'package:mediconsult/features/network/presentation/widgets/network_search_bar.dart';
+import 'package:mediconsult/features/network/presentation/widgets/network_providers_list.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class NetworkScreen extends StatefulWidget {
@@ -199,90 +198,35 @@ class _NetworkScreenState extends State<NetworkScreen> {
                               SizedBox(height: 16.h),
 
                               // Search and Filter Bar
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      controller: _searchController,
-                                      decoration: InputDecoration(
-                                        hintText: 'network.search_placeholder'
-                                            .tr(),
-                                        hintStyle:
-                                            AppTextStyles.font14GreyRegular(
-                                              context,
-                                            ),
-                                        prefixIcon: Icon(
-                                          Icons.search,
-                                          color: AppColors.greyClr,
-                                          size: 20.sp,
-                                        ),
-                                        filled: true,
-                                        fillColor: AppColors.lightGreyClr,
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12.r,
-                                          ),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 16.w,
-                                          vertical: 12.h,
-                                        ),
-                                      ),
-                                      onSubmitted: (value) async {
-                                        final cubit = context
-                                            .read<NetworkCubit>();
+                              NetworkSearchBar(
+                                searchController: _searchController,
+                                onFilterTap: _showFilterBottomSheet,
+                                onSearchSubmitted: (value) async {
+                                  final cubit = context.read<NetworkCubit>();
 
-                                        // Ensure we have user location before searching
-                                        if (cubit.userLatitude == null ||
-                                            cubit.userLongitude == null) {
-                                          await cubit.getUserLocation();
-                                        }
+                                  // Ensure we have user location before searching
+                                  if (cubit.userLatitude == null ||
+                                      cubit.userLongitude == null) {
+                                    await cubit.getUserLocation();
+                                  }
 
-                                        cubit.searchProviders(
-                                          searchKey: value.isNotEmpty
-                                              ? value
-                                              : null,
-                                          resetPage: true,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  GestureDetector(
-                                    onTap: _showFilterBottomSheet,
-                                    child: Container(
-                                      padding: EdgeInsets.all(12.w),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            context
-                                                .watch<NetworkCubit>()
-                                                .hasActiveFilters
-                                            ? AppColors.primaryClr
-                                            : AppColors.lightGreyClr,
-                                        borderRadius: BorderRadius.circular(
-                                          12.r,
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.tune,
-                                        color:
-                                            context
-                                                .watch<NetworkCubit>()
-                                                .hasActiveFilters
-                                            ? AppColors.whiteClr
-                                            : AppColors.greyClr,
-                                        size: 20.sp,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  cubit.searchProviders(
+                                    searchKey: value.isNotEmpty ? value : null,
+                                    resetPage: true,
+                                  );
+                                },
                               ),
 
                               SizedBox(height: 16.h),
 
                               // Providers List
-                              SizedBox(height: 500.h, child: _buildListView()),
+                              SizedBox(
+                                height: 500.h,
+                                child: NetworkProvidersList(
+                                  scrollController: _scrollController,
+                                  isLoadingMore: _isLoadingMore,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -298,50 +242,4 @@ class _NetworkScreenState extends State<NetworkScreen> {
     );
   }
 
-  Widget _buildListView() {
-    return BlocBuilder<NetworkCubit, NetworkState>(
-      buildWhen: (previous, current) =>
-          current is ProvidersLoading ||
-          current is ProvidersSuccess ||
-          current is ProvidersError ||
-          current is ProvidersEmpty ||
-          current is ProvidersLoadingMore,
-      builder: (context, state) {
-        final cubit = context.read<NetworkCubit>();
-        final providers = cubit.currentProviders;
-        final hasNextPage =
-            cubit.currentProviderData?.pagination.hasNextPage ?? false;
-
-        // Show loading only when actively searching (first load)
-        if (state is ProvidersLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        // Show empty state (initial state or no results)
-        if (providers.isEmpty) {
-          return const EmptyProvidersState();
-        }
-
-        // Show list of providers with pagination indicator
-        return ListView.builder(
-          controller: _scrollController,
-          shrinkWrap: true,
-          padding: EdgeInsets.only(top: 16.h, bottom: 24.h),
-          itemCount: providers.length + (hasNextPage ? 1 : 0),
-          itemBuilder: (context, index) {
-            // Show provider card
-            if (index < providers.length) {
-              return ProviderCard(provider: providers[index]);
-            }
-
-            // Show loading indicator at the end
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: const Center(child: CircularProgressIndicator()),
-            );
-          },
-        );
-      },
-    );
-  }
 }

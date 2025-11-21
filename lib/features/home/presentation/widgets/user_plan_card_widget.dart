@@ -32,7 +32,9 @@ class UserPlanCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
-    return Container(
+    // Wrap in RepaintBoundary for better scroll performance
+    return RepaintBoundary(
+      child: Container(
       width: double.infinity,
       height: 200.h,
       padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),
@@ -171,6 +173,7 @@ class UserPlanCardWidget extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

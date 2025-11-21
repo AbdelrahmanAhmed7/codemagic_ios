@@ -16,7 +16,18 @@
     "success": "نجح",
     "no_data": "لا توجد بيانات متاحة",
     "back": "رجوع",
-    "choose": "اختر"
+    "choose": "اختر",
+    "no_internet": "لا يوجد اتصال بالإنترنت"
+  },
+  "policy_screen": {
+    "title": "البوليسي",
+    "services": "الخدمات",
+    "search": "بحث",
+    "details": "تفاصيل البوليسي",
+    "service_name": "اسم الخدمة",
+    "coverage": "نسبة التغطية",
+    "coverage_type": "نوع التغطية",
+    "providers": "مقدمي الخدمة"
   },
   "onboarding": {
     "welcome_to": "مرحباً بك في ",

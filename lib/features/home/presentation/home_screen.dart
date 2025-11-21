@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +5,7 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/error/app_error_handler.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
+import 'package:flutter/material.dart';
 import 'package:mediconsult/features/home/presentation/widgets/home_header_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/user_plan_card_widget.dart';
 import 'package:mediconsult/features/home/presentation/widgets/quick_access_widget.dart';
@@ -70,22 +70,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
                       children: [
-                        HomeHeaderWidget(data: data!),
-                        Stack(
+                        // Wrap header in RepaintBoundary for better performance
+                        RepaintBoundary(
+                          child: HomeHeaderWidget(data: data!),
+                        ),
+                        RepaintBoundary(
+                          child: Stack(
                           clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 130.h,
-                              color: AppColors.primaryClr,
-                            ),
-                            Positioned(
-                              bottom: -70.h,
-                              left: 16.w,
-                              right: 16.w,
-                              child: UserPlanCardWidget(data: data),
-                            ),
-                          ],
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 130.h,
+                                color: AppColors.primaryClr,
+                              ),
+                              Positioned(
+                                bottom: -70.h,
+                                left: 16.w,
+                                right: 16.w,
+                                child: UserPlanCardWidget(data: data),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 80.h),
                         Container(
@@ -94,17 +99,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const QuickAccessWidget(),
+                              RepaintBoundary(
+                                child: const QuickAccessWidget(),
+                              ),
                               SizedBox(height: 24.h),
-                              const KhusmPromotionWidget(),
+                              RepaintBoundary(
+                                child: const KhusmPromotionWidget(),
+                              ),
                               SizedBox(height: 24.h),
                               if (data.approvals.isNotEmpty) ...[
-                                OngoingRequestWidget(data: data),
+                                RepaintBoundary(
+                                  child: OngoingRequestWidget(data: data),
+                                ),
                                 SizedBox(height: 24.h),
                               ],
-                              const HealthTipsWidget(),
+                              RepaintBoundary(
+                                child: const HealthTipsWidget(),
+                              ),
                               SizedBox(height: 24.h),
-                              const ExploreWidget(),
+                              RepaintBoundary(
+                                child: const ExploreWidget(),
+                              ),
                               SizedBox(height: 40.h),
                             ],
                           ),

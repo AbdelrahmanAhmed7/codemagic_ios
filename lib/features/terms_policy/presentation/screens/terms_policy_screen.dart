@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -24,7 +25,7 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const PageHeader(title: 'Terms & Privacy Policy', backPath: '/profile'),
+            PageHeader(title: 'terms_policy.title'.tr(), backPath: '/profile'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -85,12 +86,12 @@ class TermsContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         PolicySection(
-          title: '1. Introduction',
+          title: 'terms_policy.sections.introduction'.tr(),
           content: 'Welcome to Mediconsult medical insurance app. By using our app, you agree to comply with these Terms of Service. If you do not agree, please do not use our services.',
         ),
         
         PolicySection(
-          title: '2. Eligibility & Account Registration',
+          title: 'terms_policy.sections.eligibility'.tr(),
           items: const [
             'You must be 18 years or older to use this app.',
             'You are responsible for keeping your account secure.',
@@ -99,7 +100,7 @@ class TermsContent extends StatelessWidget {
         ),
         
         PolicySection(
-          title: '3. Services',
+          title: 'terms_policy.sections.services'.tr(),
           items: const [
             'Medical insurance coverage information',
             'Provider search and booking',
@@ -109,7 +110,7 @@ class TermsContent extends StatelessWidget {
         ),
         
         PolicySection(
-          title: 'Contact Us',
+          title: 'terms_policy.sections.contact_us'.tr(),
           email: 'support@mediconsult.com',
           icon: Icons.email,
         ),
@@ -140,17 +141,17 @@ class PrivacyPolicyContent extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Privacy Policy',
+                'terms_policy.privacy_policy'.tr(),
                 style: AppTextStyles.font18BlackSemiBold(context),
               ),
               SizedBox(height: 4.h),
               Text(
-                'Medical Insurance App',
+                'terms_policy.medical_insurance_app'.tr(),
                 style: AppTextStyles.font12GreyRegular(context),
               ),
               SizedBox(height: 8.h),
               Text(
-                'Last updated: January 15, 2025',
+                'terms_policy.last_updated'.tr(),
                 style: AppTextStyles.font10GreyRegular(context),
               ),
             ],
@@ -160,12 +161,12 @@ class PrivacyPolicyContent extends StatelessWidget {
         SizedBox(height: 24.h),
         
         PolicySection(
-          title: '1. Introduction',
+          title: 'terms_policy.sections.introduction'.tr(),
           content: 'Your privacy is important to us. This policy explains what data we collect, how we use it, and how we protect it.',
         ),
         
         PolicySection(
-          title: '2. Information We Collect',
+          title: 'terms_policy.sections.info_collect'.tr(),
           items: const [
             'Personal Information (Name, DOB, Email, Phone, Insurance ID)',
             'Location Data (For nearby provider search, with user permission)',
@@ -174,7 +175,7 @@ class PrivacyPolicyContent extends StatelessWidget {
         ),
         
         PolicySection(
-          title: '3. How We Use Your Information',
+          title: 'terms_policy.sections.how_we_use'.tr(),
           items: const [
             'Provide insurance services',
             'Improve app functionality',
@@ -185,7 +186,7 @@ class PrivacyPolicyContent extends StatelessWidget {
         ),
         
         PolicySection(
-          title: '4. How We Protect Your Data',
+          title: 'terms_policy.sections.data_protection'.tr(),
           items: const [
             'End-to-end encryption for data storage',
             'Strict access control measures',
@@ -195,7 +196,7 @@ class PrivacyPolicyContent extends StatelessWidget {
         ),
         
         PolicySection(
-          title: 'Do you have any questions?',
+          title: 'terms_policy.sections.questions'.tr(),
           content: 'Contact our privacy team:',
           email: 'Privacy@mediconsult.com',
           icon: Icons.email,
