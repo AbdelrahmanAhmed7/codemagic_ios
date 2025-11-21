@@ -128,7 +128,7 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<RefundItem> refunds,  Pagination pagination,  String status,  bool loadingMore)?  loaded,TResult Function( String message)?  failed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<RefundItem> refunds,  PaginationInfo pagination,  String status,  bool loadingMore)?  loaded,TResult Function( String message)?  failed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -152,7 +152,7 @@ return failed(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<RefundItem> refunds,  Pagination pagination,  String status,  bool loadingMore)  loaded,required TResult Function( String message)  failed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<RefundItem> refunds,  PaginationInfo pagination,  String status,  bool loadingMore)  loaded,required TResult Function( String message)  failed,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case Loading():
@@ -175,7 +175,7 @@ return failed(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<RefundItem> refunds,  Pagination pagination,  String status,  bool loadingMore)?  loaded,TResult? Function( String message)?  failed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<RefundItem> refunds,  PaginationInfo pagination,  String status,  bool loadingMore)?  loaded,TResult? Function( String message)?  failed,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -267,7 +267,7 @@ class Loaded implements RefundsState {
   return EqualUnmodifiableListView(_refunds);
 }
 
- final  Pagination pagination;
+ final  PaginationInfo pagination;
  final  String status;
 @JsonKey() final  bool loadingMore;
 
@@ -301,7 +301,7 @@ abstract mixin class $LoadedCopyWith<$Res> implements $RefundsStateCopyWith<$Res
   factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
 @useResult
 $Res call({
- List<RefundItem> refunds, Pagination pagination, String status, bool loadingMore
+ List<RefundItem> refunds, PaginationInfo pagination, String status, bool loadingMore
 });
 
 
@@ -322,7 +322,7 @@ class _$LoadedCopyWithImpl<$Res>
   return _then(Loaded(
 refunds: null == refunds ? _self._refunds : refunds // ignore: cast_nullable_to_non_nullable
 as List<RefundItem>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
-as Pagination,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as PaginationInfo,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,loadingMore: null == loadingMore ? _self.loadingMore : loadingMore // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

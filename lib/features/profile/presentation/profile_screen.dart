@@ -4,9 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
-import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/profile_header_widget.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/profile_section_widget.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/logout_dialog.dart';
@@ -15,6 +12,9 @@ import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
 import 'package:mediconsult/core/constants/constants.dart';
 import 'package:mediconsult/core/cache/cache_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
 // ignore_for_file: deprecated_member_use
 
 class ProfileScreen extends StatefulWidget {
@@ -31,12 +31,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Load home data if not already loaded
+    // Check if home data exists, if not load from cache only (no API call)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<HomeCubit>();
-      if (cubit.state is! Loaded) {
-        cubit.getHomeInfo('en');
-      }
+      final state = cubit.state;
+      // Only trigger if state is initial (not loaded, not loading, not failed)
+      state.maybeWhen(
+        initial: () => cubit.getHomeInfo(context.locale.languageCode, forceRefresh: false),
+        orElse: () {}, // Do nothing if already loaded/loading/failed
+      );
     });
   }
 

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "477815114095",
-    "project_id": "mediconsult-b8437",
-    "storage_bucket": "mediconsult-b8437.firebasestorage.app"
+    "project_number": "10939381120",
+    "project_id": "mediconsultapp-b1fc9",
+    "storage_bucket": "mediconsultapp-b1fc9.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:477815114095:android:3d6f2dbfd9d06958afc09a",
+        "mobilesdk_app_id": "1:10939381120:android:d54f086940fe58410ffd65",
         "android_client_info": {
           "package_name": "com.example.mediconsult"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCeFxtAaWBFyIV1x9AzFcjYuuaiitPhxmw"
+          "current_key": "AIzaSyDNVaPnLPDyDfSHJHl2v57D0Ph8f7QTKfc"
         }
       ],
       "services": {

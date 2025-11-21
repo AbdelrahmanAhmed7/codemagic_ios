@@ -9,6 +9,7 @@ import 'package:mediconsult/core/utils/language_helper.dart';
 import 'package:mediconsult/features/policy/presentation/cubit/get_policy_details_cubit.dart';
 import 'package:mediconsult/features/policy/presentation/cubit/get_policy_details_state.dart';
 import 'package:mediconsult/features/policy/data/policy_details_response.dart';
+import 'package:mediconsult/features/policy/presentation/widgets/policy_provider_card.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class PolicyProvidersScreen extends StatefulWidget {
@@ -147,70 +148,19 @@ class _ProvidersList extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 16.h),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: details.providers.length,
               itemBuilder: (context, index) {
                 final provider = details.providers[index];
-                return Container(
-                  margin: EdgeInsets.only(bottom: 12.h),
-                  padding: EdgeInsets.all(16.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteClr,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: const Color(0xFFECECEC)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 48.w,
-                        height: 48.w,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1E3A8A),
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(6.r),
-                            child: Image.network(
-                              provider.logo,
-                              width: 48.w,
-                              height: 48.w,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Icon(
-                                Icons.local_hospital,
-                                color: Colors.white,
-                                size: 20.sp,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              provider.providerName,
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              'Copayment: ${provider.copaymentPercent}%',
-                              style: AppTextStyles.font12GreyRegular(context),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.chevron_right),
-                      )
-                    ],
-                  ),
+                return PolicyProviderCard(
+                  provider: provider,
+                  onTap: () {
+                    // TODO: Navigate to provider details
+                    debugPrint('Provider tapped: ${provider.providerName}');
+                  },
                 );
               },
             ),
@@ -220,5 +170,3 @@ class _ProvidersList extends StatelessWidget {
     );
   }
 }
-
-

@@ -198,8 +198,14 @@ class PushNotificationService {
       // Check platform-specific notification data
       final android = message.notification?.android;
       final data = message.data;
-      final imageUrl = data['image'] as String?;
-      final largeIconUrl = data['largeIcon'] as String?;
+      
+      // Support multiple image field names
+      final imageUrl = data['image'] as String? ?? 
+                       data['imageUrl'] as String? ?? 
+                       data['picture'] as String? ??
+                       android?.imageUrl;
+      
+      final largeIconUrl = data['largeIcon'] as String? ?? imageUrl;
       final groupKey = data['group'] as String? ?? 'mc_general_group';
       final colorHex = data['color'] as String?; // e.g. #1E88E5
       final channelId = data['channel'] as String? ?? 'high_importance_channel';
@@ -208,7 +214,13 @@ class PushNotificationService {
           : channelId == 'updates'
           ? 'Updates'
           : 'High Importance Notifications';
-      final forceBigPicture = (data['forceBigPicture'] == 'true');
+      
+      // Auto-enable big picture if image URL exists
+      final forceBigPicture = (data['forceBigPicture'] == 'true') || 
+                              (imageUrl != null && imageUrl.isNotEmpty);
+      
+      debugPrint('📸 Notification Image URL: $imageUrl');
+      debugPrint('🖼️ Force Big Picture: $forceBigPicture');
 
       // حمّل الصورة الكبيرة (largeIcon) مرة واحدة في البداية
       ByteArrayAndroidBitmap? largeIconBitmap;

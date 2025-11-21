@@ -239,8 +239,8 @@ class _NavigateButton extends StatelessWidget {
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8.r),
-            bottomRight: Radius.circular(8.r),
+            topLeft: Radius.circular(12.r),
+            bottomRight: Radius.circular(12.r),
             topRight: Radius.circular(0.r),
             bottomLeft: Radius.circular(0.r),
           ),

@@ -17,7 +17,12 @@
     "no_data": "No data available",
     "back": "Back",
     "choose": "Choose",
-    "no_internet": "No internet connection"
+    "no_internet": "No internet connection",
+    "dismiss": "Dismiss",
+    "cannot_open_pdf": "Unable to open PDF file",
+    "pdf_not_available": "PDF file is not available",
+    "error_loading_pdf": "Error loading PDF file",
+    "request_timeout": "Request timeout. Please try again"
   },
   "policy_screen": {
     "title": "Policy",
@@ -26,7 +31,13 @@
     "details": "Policy Details",
     "service_name": "Service Name",
     "coverage": "Coverage",
+    "medication_coverage": "Medication Coverage",
     "coverage_type": "Coverage Type",
+    "standart_copayment": "Co-payment",
+    "standard_copayment": "Standard Co-payment",
+    "higher_copayment": "Higher Co-payment",
+    "highest_copayment": "Highest Co-payment",
+    "view_details": "View Details",
     "providers": "Providers",
     "policy": "policy",
     "pharmacy": "Pharmacy",
@@ -265,7 +276,7 @@
     "no_providers": "No providers found",
     "loading_providers": "Loading providers...",
     "search_description": "Use the search bar or filters to find nearby healthcare providers",
-    "navigate" : "Navigate",
+    "navigate": "Navigate",
     "filter_no_results": "No results for selected filters",
     "filter_no_results_description": "Try changing filter criteria to get results"
   },
@@ -329,6 +340,8 @@
     "view_details": "View Details",
     "empty_state": "You don't have any requests click\nbutton ",
     "to_request_approval": " to request approval",
+    "approval_not_found": "Approval request not found or no longer available",
+    "cannot_open_pdf": "Unable to open approval PDF",
     "status": {
       "approved": "Approved",
       "rejected": "Rejected",
@@ -345,7 +358,19 @@
     "amount_placeholder": "Enter amount",
     "service_date": "Service Date",
     "select_date": "Select date",
-    "note": "Note"
+    "note": "Note",
+    "submit": "Submit",
+    "provider_hint": "Enter provider name",
+    "note_hint": "Add any additional notes here",
+    "validation": {
+      "select_member": "Please select a family member",
+      "select_type": "Please select refund type",
+      "enter_provider": "Please enter provider name",
+      "select_reason": "Please select reason",
+      "enter_amount": "Please enter amount",
+      "select_date": "Please select service date",
+      "add_attachment": "Please add at least one attachment"
+    }
   },
   "refund_history": {
     "title": "Refunds History",
@@ -495,9 +520,31 @@
       "personal_info": "View and edit your personal information",
       "change_password": "Change your account password"
     },
-    "approval_history" :{
-      "swipe":"Swipe or tap to filter approvals",
+    "approval_history": {
+      "swipe": "Swipe or tap to filter approvals",
       "fab": "Tap to create a new approval request"
     }
+  },
+  "placeholders": {
+    "select_refund_type": "Select Refund Type",
+    "select_refund_reason": "Select Refund Reason",
+    "select_service_date": "Select Date",
+    "enter_amount": "Enter Amount",
+    "add_attachment": "Add Attachment"
+  },
+  "add_attachment": {
+    "attachment": "Attachment",
+    "take_photo": "Take Photo",
+    "upload_file": "Upload File",
+    "upload_e_invoice": "Upload E-Invoice",
+    "upload_prescription": "Upload Prescription",
+    "upload_refund_prescription": "Upload {type} Prescription",
+    "e_invoice_instructions": "Should be included name , national ID and Tax activity code",
+    "prescription_instructions": "Should be included name and date"
+  },
+  "dialog": {
+    "coming_soon_title": "Coming Soon",
+    "coming_soon_message": "This feature is under development.\nStay tuned for updates!",
+    "got_it": "Got it!"
   }
 }

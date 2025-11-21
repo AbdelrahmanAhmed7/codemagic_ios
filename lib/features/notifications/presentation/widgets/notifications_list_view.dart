@@ -66,17 +66,15 @@ class NotificationsListView extends StatelessWidget {
               ...dateNotifications.map((notification) {
                 return Padding(
                   padding: EdgeInsets.only(bottom: 12.h),
-                  child: RepaintBoundary(
-                    child: NotificationCard(
-                      key: ValueKey(notification.id),
-                      item: notification,
-                      onMarkRead: notification.isRead
-                          ? null
-                          : () => context.read<NotificationsCubit>().markAsRead(
-                                lang: context.locale.languageCode,
-                                notificationId: notification.id,
-                              ),
-                    ),
+                  child: NotificationCard(
+                    key: ValueKey('${notification.id}_${notification.isSeen}'),
+                    item: notification,
+                    onMarkRead: notification.isRead
+                        ? null
+                        : () => context.read<NotificationsCubit>().markAsRead(
+                              lang: context.locale.languageCode,
+                              notificationId: notification.id,
+                            ),
                   ),
                 );
               }).toList(),

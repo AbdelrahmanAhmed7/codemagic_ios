@@ -128,12 +128,12 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<NotificationItem> notifications,  int totalCount,  int currentPage,  int totalPages,  bool hasNextPage,  bool loadingMore)?  loaded,TResult Function( String message)?  failed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<NotificationItem> notifications,  int totalCount,  int currentPage,  int totalPages,  bool hasNextPage,  bool loadingMore,  int updateCounter)?  loaded,TResult Function( String message)?  failed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
 return loading();case Loaded() when loaded != null:
-return loaded(_that.notifications,_that.totalCount,_that.currentPage,_that.totalPages,_that.hasNextPage,_that.loadingMore);case Failed() when failed != null:
+return loaded(_that.notifications,_that.totalCount,_that.currentPage,_that.totalPages,_that.hasNextPage,_that.loadingMore,_that.updateCounter);case Failed() when failed != null:
 return failed(_that.message);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return failed(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<NotificationItem> notifications,  int totalCount,  int currentPage,  int totalPages,  bool hasNextPage,  bool loadingMore)  loaded,required TResult Function( String message)  failed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<NotificationItem> notifications,  int totalCount,  int currentPage,  int totalPages,  bool hasNextPage,  bool loadingMore,  int updateCounter)  loaded,required TResult Function( String message)  failed,}) {final _that = this;
 switch (_that) {
 case Initial():
 return initial();case Loading():
 return loading();case Loaded():
-return loaded(_that.notifications,_that.totalCount,_that.currentPage,_that.totalPages,_that.hasNextPage,_that.loadingMore);case Failed():
+return loaded(_that.notifications,_that.totalCount,_that.currentPage,_that.totalPages,_that.hasNextPage,_that.loadingMore,_that.updateCounter);case Failed():
 return failed(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return failed(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<NotificationItem> notifications,  int totalCount,  int currentPage,  int totalPages,  bool hasNextPage,  bool loadingMore)?  loaded,TResult? Function( String message)?  failed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<NotificationItem> notifications,  int totalCount,  int currentPage,  int totalPages,  bool hasNextPage,  bool loadingMore,  int updateCounter)?  loaded,TResult? Function( String message)?  failed,}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
 return loading();case Loaded() when loaded != null:
-return loaded(_that.notifications,_that.totalCount,_that.currentPage,_that.totalPages,_that.hasNextPage,_that.loadingMore);case Failed() when failed != null:
+return loaded(_that.notifications,_that.totalCount,_that.currentPage,_that.totalPages,_that.hasNextPage,_that.loadingMore,_that.updateCounter);case Failed() when failed != null:
 return failed(_that.message);case _:
   return null;
 
@@ -257,7 +257,7 @@ String toString() {
 
 
 class Loaded implements NotificationsState {
-  const Loaded({required final  List<NotificationItem> notifications, required this.totalCount, required this.currentPage, required this.totalPages, required this.hasNextPage, required this.loadingMore}): _notifications = notifications;
+  const Loaded({required final  List<NotificationItem> notifications, required this.totalCount, required this.currentPage, required this.totalPages, required this.hasNextPage, required this.loadingMore, this.updateCounter = 0}): _notifications = notifications;
   
 
  final  List<NotificationItem> _notifications;
@@ -272,6 +272,7 @@ class Loaded implements NotificationsState {
  final  int totalPages;
  final  bool hasNextPage;
  final  bool loadingMore;
+@JsonKey() final  int updateCounter;
 
 /// Create a copy of NotificationsState
 /// with the given fields replaced by the non-null parameter values.
@@ -283,16 +284,16 @@ $LoadedCopyWith<Loaded> get copyWith => _$LoadedCopyWithImpl<Loaded>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&const DeepCollectionEquality().equals(other._notifications, _notifications)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.totalPages, totalPages) || other.totalPages == totalPages)&&(identical(other.hasNextPage, hasNextPage) || other.hasNextPage == hasNextPage)&&(identical(other.loadingMore, loadingMore) || other.loadingMore == loadingMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&const DeepCollectionEquality().equals(other._notifications, _notifications)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.totalPages, totalPages) || other.totalPages == totalPages)&&(identical(other.hasNextPage, hasNextPage) || other.hasNextPage == hasNextPage)&&(identical(other.loadingMore, loadingMore) || other.loadingMore == loadingMore)&&(identical(other.updateCounter, updateCounter) || other.updateCounter == updateCounter));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_notifications),totalCount,currentPage,totalPages,hasNextPage,loadingMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_notifications),totalCount,currentPage,totalPages,hasNextPage,loadingMore,updateCounter);
 
 @override
 String toString() {
-  return 'NotificationsState.loaded(notifications: $notifications, totalCount: $totalCount, currentPage: $currentPage, totalPages: $totalPages, hasNextPage: $hasNextPage, loadingMore: $loadingMore)';
+  return 'NotificationsState.loaded(notifications: $notifications, totalCount: $totalCount, currentPage: $currentPage, totalPages: $totalPages, hasNextPage: $hasNextPage, loadingMore: $loadingMore, updateCounter: $updateCounter)';
 }
 
 
@@ -303,7 +304,7 @@ abstract mixin class $LoadedCopyWith<$Res> implements $NotificationsStateCopyWit
   factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
 @useResult
 $Res call({
- List<NotificationItem> notifications, int totalCount, int currentPage, int totalPages, bool hasNextPage, bool loadingMore
+ List<NotificationItem> notifications, int totalCount, int currentPage, int totalPages, bool hasNextPage, bool loadingMore, int updateCounter
 });
 
 
@@ -320,7 +321,7 @@ class _$LoadedCopyWithImpl<$Res>
 
 /// Create a copy of NotificationsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? notifications = null,Object? totalCount = null,Object? currentPage = null,Object? totalPages = null,Object? hasNextPage = null,Object? loadingMore = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? notifications = null,Object? totalCount = null,Object? currentPage = null,Object? totalPages = null,Object? hasNextPage = null,Object? loadingMore = null,Object? updateCounter = null,}) {
   return _then(Loaded(
 notifications: null == notifications ? _self._notifications : notifications // ignore: cast_nullable_to_non_nullable
 as List<NotificationItem>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
@@ -328,7 +329,8 @@ as int,currentPage: null == currentPage ? _self.currentPage : currentPage // ign
 as int,totalPages: null == totalPages ? _self.totalPages : totalPages // ignore: cast_nullable_to_non_nullable
 as int,hasNextPage: null == hasNextPage ? _self.hasNextPage : hasNextPage // ignore: cast_nullable_to_non_nullable
 as bool,loadingMore: null == loadingMore ? _self.loadingMore : loadingMore // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,updateCounter: null == updateCounter ? _self.updateCounter : updateCounter // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

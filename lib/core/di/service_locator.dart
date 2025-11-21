@@ -35,6 +35,9 @@ import 'package:mediconsult/features/notifications/presentation/cubit/notificati
 import 'package:mediconsult/features/network/service/network_api_service.dart';
 import 'package:mediconsult/features/network/repository/network_repository.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_reasons_cubit.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_request_cubit.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_types_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refunds_cubit.dart';
 import 'package:mediconsult/features/policy/service/get_policy_categories.dart';
 import 'package:mediconsult/features/policy/repository/get_policy_categories_repo.dart';
@@ -42,6 +45,8 @@ import 'package:mediconsult/features/policy/presentation/cubit/get_policy_catego
 import 'package:mediconsult/features/policy/service/get_policy_details.dart';
 import 'package:mediconsult/features/policy/repository/get_policy_details_repo.dart';
 import 'package:mediconsult/features/policy/presentation/cubit/get_policy_details_cubit.dart';
+import 'package:mediconsult/features/refund/repository/refund_repository.dart';
+import 'package:mediconsult/features/refund/service/refund_api_service.dart';
 import 'package:mediconsult/features/support/service/support_api_service.dart';
 import 'package:mediconsult/features/support/repository/support_repository.dart';
 import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
@@ -75,6 +80,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<SupportApiService>(() => SupportApiService(dio));
   sl.registerLazySingleton<ProfileApiService>(() => ProfileApiService(dio));
   sl.registerLazySingleton<TermsApiService>(() => TermsApiService(dio));
+  sl.registerLazySingleton<RefundApiService>(() => RefundApiService(dio));
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -93,6 +99,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ProfileRepository>(() => ProfileRepository(sl()));
   sl.registerLazySingleton<ChangePasswordRepository>(() => ChangePasswordRepository(sl()));
   sl.registerLazySingleton<TermsRepository>(() => TermsRepository(sl()));
+  sl.registerLazySingleton<RefundRepository>(() => RefundRepository(sl()));
   // Cubits
   sl.registerFactory<LoginCubit>(() => LoginCubit(sl()));
   sl.registerFactory<SignupCubit>(() => SignupCubit(sl()));
@@ -107,7 +114,7 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<ApprovalsCubit>(() => ApprovalsCubit(sl()));
   sl.registerFactory<NotificationsCubit>(() => NotificationsCubit(sl()));
   sl.registerFactory<NetworkCubit>(() => NetworkCubit(sl()));
-  sl.registerFactory<RefundsCubit>(() => RefundsCubit());
+  sl.registerFactory<RefundsCubit>(() => RefundsCubit(sl()));
   sl.registerFactory<LanguageCubit>(() => LanguageCubit(sl()));
   sl.registerFactory<GetPolicyCategoriesCubit>(() => GetPolicyCategoriesCubit(sl()));
   sl.registerFactory<GetPolicyDetailsCubit>(() => GetPolicyDetailsCubit(sl()));
@@ -116,4 +123,7 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<PersonalInfoCubit>(() => PersonalInfoCubit(sl()));
   sl.registerFactory<ChangePasswordCubit>(() => ChangePasswordCubit(sl()));
   sl.registerFactory<TermsCubit>(() => TermsCubit(sl()));
+  sl.registerFactory<RefundTypesCubit>(() => RefundTypesCubit(sl()));
+  sl.registerFactory<RefundReasonsCubit>(() => RefundReasonsCubit(sl()));
+  sl.registerFactory<RefundRequestCubit>(() => RefundRequestCubit(sl()));
 }

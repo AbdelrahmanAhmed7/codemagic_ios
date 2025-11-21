@@ -93,3 +93,28 @@ ApprovalsFilter _$ApprovalsFilterFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ApprovalsFilterToJson(ApprovalsFilter instance) =>
     <String, dynamic>{'status': instance.status};
+
+ApprovalPdfResponse _$ApprovalPdfResponseFromJson(Map<String, dynamic> json) =>
+    ApprovalPdfResponse(
+      success: json['success'] as bool,
+      timestamp: json['timestamp'] as String?,
+      message: json['message'] as String?,
+      data: json['data'] == null
+          ? null
+          : ApprovalPdfData.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ApprovalPdfResponseToJson(
+  ApprovalPdfResponse instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'timestamp': instance.timestamp,
+  'message': instance.message,
+  'data': instance.data?.toJson(),
+};
+
+ApprovalPdfData _$ApprovalPdfDataFromJson(Map<String, dynamic> json) =>
+    ApprovalPdfData(url: json['url'] as String);
+
+Map<String, dynamic> _$ApprovalPdfDataToJson(ApprovalPdfData instance) =>
+    <String, dynamic>{'url': instance.url};

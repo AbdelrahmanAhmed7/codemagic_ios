@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/features/refund/presentation/cubit/refund_reasons_cubit.dart';
+import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 
 class ReasonSelector extends StatefulWidget {
-  const ReasonSelector({super.key});
+  const ReasonSelector({
+    super.key,
+    this.onReasonSelected,
+    this.selectedReasonId,
+  });
+
+  final Function(int id, String name)? onReasonSelected;
+  final int? selectedReasonId;
 
   @override
   State<ReasonSelector> createState() => _ReasonSelectorState();
@@ -12,88 +23,125 @@ class ReasonSelector extends StatefulWidget {
 
 class _ReasonSelectorState extends State<ReasonSelector> {
   bool _isDropdownOpen = false;
-  String? _selectedReason;
+  int? _selectedReasonId;
+  String? _selectedReasonName;
 
-  final List<String> _reasons = [
-    'Out of network',
-    'Emergency case',
-    'Not covered by insurance',
-    'Partial coverage',
-    'Other',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _selectedReasonId = widget.selectedReasonId;
+    // Load refund reasons when widget initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<RefundReasonsCubit>().loadRefundReasons(context.locale.languageCode);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isDropdownOpen = !_isDropdownOpen;
-            });
-          },
-          child: Container(
+    return BlocBuilder<RefundReasonsCubit, RefundReasonsState>(
+      builder: (context, state) {
+        if (state is RefundReasonsLoading) {
+          return Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.greyClr.withValues(alpha: 0.2),
-              ),
+              border: Border.all(color: AppColors.greyClr.withValues(alpha: 0.2)),
               borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _selectedReason ?? 'Select reason',
-                    style: _selectedReason != null
-                        ? AppTextStyles.font14BlackMedium(context)
-                        : AppTextStyles.font14GreyRegular(context),
-                  ),
-                ),
-                Icon(
-                  _isDropdownOpen
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: AppColors.greyClr,
-                  size: 24.w,
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_isDropdownOpen)
-          Container(
-            margin: EdgeInsets.only(top: 4.h),
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (state is RefundReasonsFailed) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
             decoration: BoxDecoration(
-              color: AppColors.whiteClr,
+              border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
               borderRadius: BorderRadius.circular(8.r),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.greyClr.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+            ),
+            child: Text(
+              'Failed to load reasons',
+              style: AppTextStyles.font14GreyRegular(context),
+            ),
+          );
+        }
+
+        final reasons = state is RefundReasonsLoaded ? state.reasons : <RefundReason>[];
+
+        return Column(
+          children: [
+            GestureDetector(
+              onTap: reasons.isEmpty ? null : () {
+                setState(() {
+                  _isDropdownOpen = !_isDropdownOpen;
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.greyClr.withValues(alpha: 0.2),
+                  ),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
-              ],
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _selectedReasonName ?? 'placeholders.select_refund_reason'.tr(),
+                        style: _selectedReasonName != null
+                            ? AppTextStyles.font14BlackMedium(context)
+                            : AppTextStyles.font14GreyRegular(context),
+                      ),
+                    ),
+                    Icon(
+                      _isDropdownOpen
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: AppColors.greyClr,
+                      size: 24.w,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            child: Column(
-              children: _reasons
-                  .map((reason) => _buildReasonItem(reason))
-                  .toList(),
-            ),
-          ),
-      ],
+            if (_isDropdownOpen && reasons.isNotEmpty)
+              Container(
+                margin: EdgeInsets.only(top: 4.h),
+                decoration: BoxDecoration(
+                  color: AppColors.whiteClr,
+                  borderRadius: BorderRadius.circular(8.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.greyClr.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                constraints: BoxConstraints(maxHeight: 200.h),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: reasons.length,
+                  itemBuilder: (context, index) => _buildReasonItem(reasons[index]),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildReasonItem(String reason) {
-    final bool isSelected = reason == _selectedReason;
+  Widget _buildReasonItem(RefundReason reason) {
+    final bool isSelected = reason.id == _selectedReasonId;
 
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedReason = reason;
+          _selectedReasonId = reason.id;
+          _selectedReasonName = reason.name;
           _isDropdownOpen = false;
         });
+        widget.onReasonSelected?.call(reason.id, reason.name);
       },
       child: Container(
         width: double.infinity,
@@ -106,7 +154,7 @@ class _ReasonSelectorState extends State<ReasonSelector> {
                 : BorderSide.none,
           ),
         ),
-        child: Text(reason, style: AppTextStyles.font14BlackMedium(context)),
+        child: Text(reason.name, style: AppTextStyles.font14BlackMedium(context)),
       ),
     );
   }

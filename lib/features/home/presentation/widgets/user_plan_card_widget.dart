@@ -5,6 +5,8 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mediconsult/core/widgets/image_shimmer.dart';
 
 class UserPlanCardWidget extends StatelessWidget {
   final HomeData data;
@@ -94,17 +96,26 @@ class UserPlanCardWidget extends StatelessWidget {
                   Container(
                     width: 86.w,
                     height: 104.h,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.lightGreyClr,
-                      image: DecorationImage(
-                        image:
-                            (data.memberPhoto != null &&
-                                data.memberPhoto!.isNotEmpty)
-                            ? NetworkImage(data.memberPhoto!)
-                            : const AssetImage(AppAssets.logo) as ImageProvider,
-                      ),
                     ),
+                    clipBehavior: Clip.antiAlias,
+                    child: data.memberPhoto != null && data.memberPhoto!.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: data.memberPhoto!,
+                            fit: BoxFit.cover,
+                            memCacheWidth: 172,
+                            memCacheHeight: 208,
+                            maxWidthDiskCache: 172,
+                            maxHeightDiskCache: 208,
+                            placeholder: (context, url) => const ImageShimmer.circle(),
+                            errorWidget: (context, url, error) => Image.asset(
+                              AppAssets.logo,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Image.asset(AppAssets.logo, fit: BoxFit.cover),
                   ),
                   SizedBox(width: 18.w),
                   Expanded(
@@ -164,17 +175,17 @@ class UserPlanCardWidget extends StatelessWidget {
             ),
 
             // QR Code at bottom right
-            Positioned(
-              bottom: 8.h,
-              right: isArabic ? null : 8.w,
-              left: isArabic ? 8.w : null,
-              child: Image.asset(
-                AppAssets.qrCode,
-                width: 42.w,
-                height: 52.h,
-                fit: BoxFit.contain,
-              ),
-            ),
+            // Positioned(
+            //   bottom: 8.h,
+            //   right: isArabic ? null : 8.w,
+            //   left: isArabic ? 8.w : null,
+            //   child: Image.asset(
+            //     AppAssets.qrCode,
+            //     width: 42.w,
+            //     height: 52.h,
+            //     fit: BoxFit.contain,
+            //   ),
+            // ),
           ],
         ),
       ),

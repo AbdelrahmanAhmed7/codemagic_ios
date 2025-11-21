@@ -26,6 +26,27 @@ class ApprovalsRepository {
       return ApiResult.failure(errorMessage);
     }
   }
+
+  Future<ApiResult<ApprovalPdfResponse>> getApprovalPdf({
+    required String lang,
+    required int approvalId,
+  }) async {
+    try {
+      final response = await _apiService.getApprovalPdf(lang, approvalId)
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw Exception('Request timeout'),
+          );
+      if (response.success == true && response.data != null) {
+        return ApiResult.success(response);
+      } else {
+        return ApiResult.failure(response.message ?? 'Unknown error');
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.handle(error);
+      return ApiResult.failure(errorMessage);
+    }
+  }
 }
 
 

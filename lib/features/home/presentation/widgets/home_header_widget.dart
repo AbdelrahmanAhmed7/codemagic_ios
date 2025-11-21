@@ -5,10 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-
 import 'package:mediconsult/features/home/data/home_response_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/core/services/notification_badge_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mediconsult/core/widgets/image_shimmer.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
   final HomeData data;
@@ -35,15 +36,25 @@ class HomeHeaderWidget extends StatelessWidget {
                 Container(
                   width: 48.w,
                   height: 48.h,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.whiteClr,
-                    image: DecorationImage(
-                      image: (data.memberPhoto != null && data.memberPhoto!.isNotEmpty)
-                          ? AssetImage(data.memberPhoto!)
-                          : const AssetImage(AppAssets.logo) as ImageProvider,
-                    ),
                   ),
+                  clipBehavior: Clip.antiAlias,
+                  child: data.memberPhoto != null && data.memberPhoto!.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: data.memberPhoto!,
+                          fit: BoxFit.cover,
+                          memCacheWidth: 96,
+                          memCacheHeight: 96,
+                          maxWidthDiskCache: 96,
+                          maxHeightDiskCache: 96,
+                          placeholder: (context, url) => const ImageShimmer.circle(),
+                          errorWidget: (context, url, error) => Image.asset(
+                            AppAssets.logo,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Image.asset(AppAssets.logo, fit: BoxFit.cover),
                 ),
                 SizedBox(width: 12.w),
 
@@ -99,20 +110,11 @@ class HomeHeaderWidget extends StatelessWidget {
                       final badge = count > 0 ? count : data.notificationsCount;
                       if (badge <= 0) return const SizedBox.shrink();
                       return Container(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 10.w,
+                        height: 10.w,
                         decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          badge.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       );
                     },

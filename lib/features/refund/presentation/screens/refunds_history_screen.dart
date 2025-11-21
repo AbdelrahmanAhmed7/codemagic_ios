@@ -24,6 +24,7 @@ class RefundHistoryScreen extends StatefulWidget {
 class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   final ScrollController _controller = ScrollController();
   int _currentTab = 0; // 0 All, 1 Pending, 2 Approved, 3 Rejected
+  bool _isLoadingMore = false;
 
   final GlobalKey _tabsKey = GlobalKey();
   final GlobalKey _fabKey = GlobalKey();
@@ -31,15 +32,25 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<RefundsCubit>().load(status: 'All', reset: true);
     _controller.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final lang = context.locale.languageCode;
+      context.read<RefundsCubit>().load(lang: lang, status: 'All', reset: true);
+    });
   }
 
   void _onScroll() {
-    if (!_controller.hasClients) return;
+    if (!_controller.hasClients || _isLoadingMore) return;
     final position = _controller.position;
-    if (position.pixels >= position.maxScrollExtent * 0.9) {
-      context.read<RefundsCubit>().loadMore();
+    if (position.pixels >= position.maxScrollExtent - 200) {
+      final state = context.read<RefundsCubit>().state;
+      if (state is Loaded && state.pagination.hasNextPage && !state.loadingMore) {
+        _isLoadingMore = true;
+        final lang = context.locale.languageCode;
+        context.read<RefundsCubit>().loadMore(lang).then((_) {
+          _isLoadingMore = false;
+        });
+      }
     }
   }
 
@@ -104,7 +115,9 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                                   'Approved',
                                   'Rejected',
                                 ];
+                                final lang = context.locale.languageCode;
                                 context.read<RefundsCubit>().changeStatus(
+                                  lang,
                                   apiStatus[i],
                                 );
                               },
@@ -141,37 +154,45 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                                           if (refunds.isEmpty) {
                                             return const RefundEmptyState();
                                           }
-                                          return ListView.separated(
-                                            controller: _controller,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            cacheExtent: 500,
-                                            addAutomaticKeepAlives: true,
-                                            addRepaintBoundaries: true,
-                                            itemCount:
-                                                refunds.length +
-                                                (pagination.hasNextPage
-                                                    ? 1
-                                                    : 0),
-                                            separatorBuilder: (_, __) =>
-                                                SizedBox(height: 12.h),
-                                            itemBuilder: (context, index) {
-                                              if (index >= refunds.length) {
-                                                return const Center(
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(12),
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                          strokeWidth: 2,
-                                                        ),
-                                                  ),
-                                                );
-                                              }
-                                              return RefundCard(
-                                                key: ValueKey(refunds[index].id),
-                                                item: refunds[index],
-                                              );
+                                          return RefreshIndicator(
+                                            onRefresh: () async {
+                                              final lang = context.locale.languageCode;
+                                              await context.read<RefundsCubit>().refreshRefunds(lang);
                                             },
+                                            child: ListView.separated(
+                                              controller: _controller,
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(
+                                                parent: BouncingScrollPhysics(),
+                                              ),
+                                              cacheExtent: 500,
+                                              addAutomaticKeepAlives: true,
+                                              addRepaintBoundaries: true,
+                                              itemCount:
+                                                  refunds.length +
+                                                  (pagination.hasNextPage
+                                                      ? 1
+                                                      : 0),
+                                              separatorBuilder: (_, __) =>
+                                                  SizedBox(height: 12.h),
+                                              itemBuilder: (context, index) {
+                                                if (index >= refunds.length) {
+                                                  return const Center(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.all(12),
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                            strokeWidth: 2,
+                                                          ),
+                                                    ),
+                                                  );
+                                                }
+                                                return RefundCard(
+                                                  key: ValueKey(refunds[index].id),
+                                                  item: refunds[index],
+                                                );
+                                              },
+                                            ),
                                           );
                                         },
                                   );

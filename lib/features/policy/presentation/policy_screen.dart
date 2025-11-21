@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/features/policy/presentation/policy_details_screen.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -163,15 +164,16 @@ class _PolicyScreenState extends State<PolicyScreen> {
                           child: SizedBox(
                             width: 44.w,
                             height: 44.w,
-                            child: Image.network(
-                              category.image,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Icon(
-                                Icons.image_not_supported,
-                                size: 20.sp,
-                                color: AppColors.greyClr,
-                              ),
-                            ),
+                            child: _getCategoryIcon(category.serviceClassName) != null
+                                ? Image.asset(
+                                    _getCategoryIcon(category.serviceClassName)!,
+                                    fit: BoxFit.contain,
+                                  )
+                                : Icon(
+                                    Icons.local_hospital,
+                                    size: 24.sp,
+                                    color: AppColors.primaryClr,
+                                  ),
                           ),
                         ),
                       ),
@@ -198,6 +200,35 @@ class _PolicyScreenState extends State<PolicyScreen> {
 
   Widget _buildServiceDetails() {
     return const SizedBox.shrink();
+  }
+
+  String? _getCategoryIcon(String categoryName) {
+    final name = categoryName.toLowerCase();
+    
+    if (name.contains('Acute Medication') || name.contains('ادويه عاديه')) {
+      return AppAssets.pharmacyCat;
+    } else if (name.contains('dental') || name.contains('مراكز طب الاسنان') || name.contains('أسنان')) {
+      return AppAssets.dentalCat;
+    } else if (name.contains('lab') || name.contains('معمل') || name.contains('تحاليل')) {
+      return AppAssets.labCat;
+    } else if (name.contains('optical') || name.contains('نظارة طبية') || name.contains('بصريات')) {
+      return AppAssets.glasses;
+    } else if (name.contains('physio') || name.contains('علاج طبيعي')) {
+      return AppAssets.physiotherapyCat;
+    } else if (name.contains('doctor') || name.contains('طبيب') || name.contains('دكتور')) {
+      return AppAssets.doctorCat;
+    } else if (name.contains('scan') || name.contains('أشعة') || name.contains('اشعة')) {
+      return AppAssets.scanLabCat;
+    } else if (name.contains('hospital') || name.contains('الكشف بالمستشفيات و المراكز الطبية')) {
+      return AppAssets.hospitalCat;
+    } else if (name.contains('specialized') || name.contains('عمليات')) {
+      return AppAssets.specializedCat;
+    }
+    else if (name.contains('pharmacy') || name.contains('الحالات الحرجة')) {
+      return AppAssets.hospitalCat;
+    }
+    
+    return null;
   }
 
   Color _parseColor(String hexColor) {

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -14,15 +15,16 @@ class RefundAmountField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Amount',
+          'refund_request.amount'.tr(),
           style: AppTextStyles.font14BlackMedium(context),
         ),
         SizedBox(height: 8.h),
         TextField(
           controller: controller,
+          autofocus: false,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            hintText: 'Enter amount',
+            hintText: 'placeholders.enter_amount'.tr(),
             hintStyle: AppTextStyles.font14GreyRegular(context),
             contentPadding: EdgeInsets.symmetric(
               horizontal: 12.w,
@@ -63,7 +65,7 @@ class RefundDatePicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Service Date',
+          'refund_request.service_date'.tr(),
           style: AppTextStyles.font14BlackMedium(context),
         ),
         SizedBox(height: 8.h),
@@ -85,7 +87,7 @@ class RefundDatePicker extends StatelessWidget {
               children: [
                 Text(
                   selectedDate == null
-                      ? 'Select date'
+                      ? 'placeholders.select_service_date'.tr()
                       : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
                   style: selectedDate == null
                       ? AppTextStyles.font14GreyRegular(context)

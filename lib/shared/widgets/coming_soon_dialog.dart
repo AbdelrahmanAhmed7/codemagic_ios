@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -35,8 +36,8 @@ class ComingSoonDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.primaryClr.withOpacity(0.1),
-                    AppColors.primaryClr.withOpacity(0.05),
+                    AppColors.primaryClr.withValues(alpha: 0.1),
+                    AppColors.primaryClr.withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -56,7 +57,7 @@ class ComingSoonDialog extends StatelessWidget {
             
             // Title
             Text(
-              title ?? 'Coming Soon',
+              title ?? 'dialog.coming_soon_title'.tr(),
               style: AppTextStyles.font20BlackSemiBold(context),
               textAlign: TextAlign.center,
             ),
@@ -65,7 +66,7 @@ class ComingSoonDialog extends StatelessWidget {
             
             // Message
             Text(
-              message ?? 'This feature is under development.\nStay tuned for updates!',
+              message ?? 'dialog.coming_soon_message'.tr(),
               style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),
@@ -86,7 +87,7 @@ class ComingSoonDialog extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: Text(
-                  'Got it!',
+                  'dialog.got_it'.tr(),
                   style: AppTextStyles.font16WhiteMedium(context),
                 ),
               ),

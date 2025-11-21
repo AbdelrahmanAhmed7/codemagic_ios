@@ -3,8 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/core/constants/app_assets.dart';
-import 'package:mediconsult/features/refund/presentation/cubit/refunds_state.dart';
+import 'package:mediconsult/features/refund/data/refund_list_models.dart';
+import 'package:mediconsult/features/refund/repository/refund_repository.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:mediconsult/core/utils/pdf_helper.dart';
+import 'package:mediconsult/core/utils/status_helper.dart';
+import 'package:mediconsult/core/utils/date_formatter.dart';
 
 class RefundCard extends StatelessWidget {
   final RefundItem item;
@@ -13,31 +17,123 @@ class RefundCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color statusColor = _statusColor(item.statusChar);
-    final Color backgroundColor = _backgroundColorForStatus(item.statusChar);
-    final String statusLabel = _statusLabel(item.statusChar);
+    final Color statusColor = StatusHelper.getStatusColor(item.statusChar);
+    final String statusLabel = StatusHelper.getStatusLabel(item.statusChar, 'refund_history');
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      padding: EdgeInsets.all(12.w),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          _buildLogo(),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          // Header with gradient
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.primaryClr,
+                  AppColors.primaryClr.withValues(alpha: 0.8),
+                ],
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
+              ),
+            ),
+            child: Row(
               children: [
-                _buildHeader(context, statusColor, statusLabel),
-                SizedBox(height: 6.h),
-                _buildDateRow(context),
-                SizedBox(height: 4.h),
-                _buildTimeRow(context),
-                SizedBox(height: 8.h),
+                Container(
+                  padding: EdgeInsets.all(10.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Icon(
+                    Icons.receipt_long_rounded,
+                    color: Colors.white,
+                    size: 24.sp,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'refund_history.refund_request'.tr(),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        '#${item.approvalNumber}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: statusColor,
+                    borderRadius: BorderRadius.circular(20.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: statusColor.withValues(alpha: 0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    statusLabel,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Body
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              children: [
+                _buildInfoRow(
+                  context,
+                  Icons.calendar_today_rounded,
+                  'refund_history.date'.tr(),
+                  DateFormatter.formatDate(item.date),
+                ),
+                SizedBox(height: 12.h),
+                _buildInfoRow(
+                  context,
+                  Icons.access_time_rounded,
+                  'refund_history.time'.tr(),
+                  DateFormatter.formatTime(item.time),
+                ),
+                SizedBox(height: 16.h),
                 _buildViewDetailsButton(context),
               ],
             ),
@@ -47,72 +143,44 @@ class RefundCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value) {
     return Container(
-      width: 69.w,
-      height: 69.w,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: AppColors.primaryClr,
-        borderRadius: BorderRadius.circular(12.r),
+        color: AppColors.greyClr.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(8.r),
       ),
-      child: Padding(
-        padding: EdgeInsets.all(8.w),
-        child: Image.asset(AppAssets.logo, fit: BoxFit.contain),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context, Color statusColor, String statusLabel) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            '${'refund_history.request_number'.tr()}${item.requestNumber}',
-            style: AppTextStyles.font10GreyRegular(context),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
-          decoration: BoxDecoration(
-            color: statusColor,
-            borderRadius: BorderRadius.circular(24.r),
-          ),
-          child: Text(
-            statusLabel,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 8.sp,
-              fontWeight: FontWeight.w500,
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(6.w),
+            decoration: BoxDecoration(
+              color: AppColors.primaryClr.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(6.r),
+            ),
+            child: Icon(
+              icon,
+              size: 16.sp,
+              color: AppColors.primaryClr,
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDateRow(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.calendar_today, size: 14.sp, color: AppColors.blueClr),
-        SizedBox(width: 5.w),
-        Text(
-          '${'refund_history.date'.tr()}${item.date}',
-          style: AppTextStyles.font10GreyRegular(context),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTimeRow(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.access_time, size: 14.sp, color: AppColors.blueClr),
-        SizedBox(width: 5.w),
-        Text(
-          '${'refund_history.time'.tr()}${item.time}',
-          style: AppTextStyles.font10GreyRegular(context),
-        ),
-      ],
+          SizedBox(width: 10.w),
+          Text(
+            label,
+            style: AppTextStyles.font10BlackMedium(context).copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(width: 6.w),
+          Expanded(
+            child: Text(
+              value,
+              style: AppTextStyles.font10BlackMedium(context),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -120,7 +188,7 @@ class RefundCard extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () => _openRefundPdf(context),
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
           minimumSize: Size.zero,
@@ -134,39 +202,15 @@ class RefundCard extends StatelessWidget {
     );
   }
 
-  Color _statusColor(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return const Color(0xFF22C55E);
-      case 'R':
-        return const Color(0xFFEF4444);
-      case 'P':
-      default:
-        return const Color(0xFF9CA3AF);
-    }
+  Future<void> _openRefundPdf(BuildContext context) async {
+    await PdfHelper.openPdf(
+      context: context,
+      fetchPdf: () => sl<RefundRepository>().getRefundPdf(
+        lang: context.locale.languageCode,
+        refundId: item.id,
+      ),
+      errorMessageKey: 'refund_history.cannot_open_pdf',
+    );
   }
 
-  Color _backgroundColorForStatus(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return const Color(0xFFD9F2E2);
-      case 'R':
-        return const Color(0xFFF5E1E9);
-      case 'P':
-      default:
-        return const Color(0xFFF2F2F2);
-    }
-  }
-
-  String _statusLabel(String status) {
-    switch (status.toUpperCase()) {
-      case 'A':
-        return 'refund_history.status.approved'.tr();
-      case 'R':
-        return 'refund_history.status.rejected'.tr();
-      case 'P':
-      default:
-        return 'refund_history.status.pending'.tr();
-    }
-  }
 }

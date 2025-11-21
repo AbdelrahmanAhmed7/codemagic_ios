@@ -15,6 +15,7 @@ import 'network_cache_service.dart';
 import 'support_cache_service.dart';
 import 'profile_cache_service.dart';
 import 'terms_cache_service.dart';
+import 'refunds_cache_service.dart';
 
 /// Unified cache service facade
 /// Delegates to specific cache services for better code organization and performance
@@ -190,5 +191,27 @@ class CacheService {
 
   static Future<dynamic> getCachedPrivacy() async {
     return TermsCacheService.getCachedPrivacy();
+  }
+
+  // ==================== Refunds Cache ====================
+  
+  /// Cache refunds data
+  static Future<void> cacheRefundsData(dynamic data, String status) async {
+    return RefundsCacheService.cacheRefundsData(data, status);
+  }
+
+  /// Get cached refunds data
+  static Future<dynamic> getCachedRefundsData(String status) async {
+    return RefundsCacheService.getCachedRefundsData(status);
+  }
+
+  /// Clear refunds cache for specific status
+  static Future<void> clearRefundsCache(String status) async {
+    return RefundsCacheService.clearRefundsCache(status);
+  }
+
+  /// Clear all refunds cache
+  static Future<void> clearAllRefundsCache() async {
+    return RefundsCacheService.clearAllRefundsCache();
   }
 }

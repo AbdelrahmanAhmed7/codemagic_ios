@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -18,9 +19,14 @@ class _UploadSelection {
 }
 
 class AddAttachmentWidget extends StatefulWidget {
-  const AddAttachmentWidget({super.key, this.refundTypeName});
+  const AddAttachmentWidget({
+    super.key,
+    this.refundTypeName,
+    this.onAttachmentsChanged,
+  });
 
   final String? refundTypeName;
+  final Function(List<String>)? onAttachmentsChanged;
 
   @override
   State<AddAttachmentWidget> createState() => _AddAttachmentWidgetState();
@@ -31,6 +37,16 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
   bool _showAttachmentOptions = false;
   AttachmentItem? _eInvoice;
   AttachmentItem? _prescription;
+  String? _eInvoicePath;
+  String? _prescriptionPath;
+
+  void _notifyPathsChanged() {
+    final paths = <String>[
+      if (_eInvoicePath != null) _eInvoicePath!,
+      if (_prescriptionPath != null) _prescriptionPath!,
+    ];
+    widget.onAttachmentsChanged?.call(paths);
+  }
 
   void _openUploadSheet(_AttachmentSlot slot) async {
     ImageProvider? previewCameraImage;
@@ -71,7 +87,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                             child: (previewCameraImage == null)
                                 ? _buildUploadOption(
                                     AppAssets.camera,
-                                    'Take Photo',
+                                    'add_attachment.take_photo'.tr(),
                                     () async {
                                       final picked =
                                           await ImagePickerService.pickFromCameraWithPermission();
@@ -82,6 +98,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                           );
                                           previewCameraName = picked.name;
                                         });
+                                        // Store path for later use
+                                        if (slot == _AttachmentSlot.eInvoice) {
+                                          _eInvoicePath = picked.path;
+                                        } else {
+                                          _prescriptionPath = picked.path;
+                                        }
                                       }
                                     },
                                   )
@@ -105,7 +127,9 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         previewCameraName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium(context),
+                                        style: AppTextStyles.font14BlackMedium(
+                                          context,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -115,7 +139,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                             child: (previewGalleryImage == null)
                                 ? _buildUploadOption(
                                     AppAssets.upload,
-                                    'Upload File',
+                                    'add_attachment.upload_file'.tr(),
                                     () async {
                                       final picked =
                                           await ImagePickerService.pickFromGallery();
@@ -126,6 +150,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                           );
                                           previewGalleryName = picked.name;
                                         });
+                                        // Store path for later use
+                                        if (slot == _AttachmentSlot.eInvoice) {
+                                          _eInvoicePath = picked.path;
+                                        } else {
+                                          _prescriptionPath = picked.path;
+                                        }
                                       }
                                     },
                                   )
@@ -149,7 +179,9 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         previewGalleryName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium(context),
+                                        style: AppTextStyles.font14BlackMedium(
+                                          context,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -192,9 +224,13 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
 
     if (selection == null) return;
     setState(() {
+      final path = slot == _AttachmentSlot.eInvoice
+          ? _eInvoicePath
+          : _prescriptionPath;
       final item = AttachmentItem(
         image: selection.imageProvider,
-        name: selection.name, path: '',
+        name: selection.name,
+        path: path ?? '',
       );
       if (slot == _AttachmentSlot.eInvoice) {
         _eInvoice = item;
@@ -207,6 +243,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
           if (_eInvoice != null) _eInvoice!,
           if (_prescription != null) _prescription!,
         ]);
+      _notifyPathsChanged();
     });
   }
 
@@ -284,11 +321,11 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Add Attachment ',
+                          text: 'placeholders.add_attachment'.tr(),
                           style: AppTextStyles.font14BlackMedium(context),
                         ),
                         TextSpan(
-                          text: '(maximum size 5MB)',
+                          text: ' (${'approval_request.max_size'.tr()})',
                           style: AppTextStyles.font10GreyRegular(context),
                         ),
                       ],
@@ -303,7 +340,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
             SizedBox(height: 16.h),
             Center(
               child: Text(
-                '${widget.refundTypeName ?? 'Glasses'} Attachment',
+                '${widget.refundTypeName ?? ' '} ${'add_attachment.attachment'.tr()}',
                 style: AppTextStyles.font14BlackMedium(context),
               ),
             ),
@@ -331,12 +368,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Upload E-Invoice',
+                          'add_attachment.upload_e_invoice'.tr(),
                           style: AppTextStyles.font12BlueRegular(context),
                         ),
                         SizedBox(height: 4.h),
                         Text(
-                          'Should be included name , national ID and Tax activity code',
+                          'add_attachment.e_invoice_instructions'.tr(),
                           style: AppTextStyles.font8GreyRegular(context),
                         ),
                       ],
@@ -378,12 +415,14 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Upload ${widget.refundTypeName ?? 'Glasses'} Prescription',
+                          'add_attachment.upload_refund_prescription'.tr(
+                            namedArgs: {'type': widget.refundTypeName ?? ''},
+                          ),
                           style: AppTextStyles.font12BlueRegular(context),
                         ),
                         SizedBox(height: 4.h),
                         Text(
-                          'Should be included name and date',
+                          'add_attachment.prescription_instructions'.tr(),
                           style: AppTextStyles.font8GreyRegular(context),
                         ),
                       ],
