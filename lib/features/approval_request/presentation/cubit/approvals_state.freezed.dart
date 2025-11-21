@@ -55,14 +55,12 @@ extension ApprovalsStatePatterns on ApprovalsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Empty value)?  empty,TResult Function( FormMode value)?  formMode,TResult Function( Loaded value)?  loaded,TResult Function( Failed value)?  failed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Loaded value)?  loaded,TResult Function( Failed value)?  failed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case Loading() when loading != null:
-return loading(_that);case Empty() when empty != null:
-return empty(_that);case FormMode() when formMode != null:
-return formMode(_that);case Loaded() when loaded != null:
+return loading(_that);case Loaded() when loaded != null:
 return loaded(_that);case Failed() when failed != null:
 return failed(_that);case _:
   return orElse();
@@ -82,14 +80,12 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Empty value)  empty,required TResult Function( FormMode value)  formMode,required TResult Function( Loaded value)  loaded,required TResult Function( Failed value)  failed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Loaded value)  loaded,required TResult Function( Failed value)  failed,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case Loading():
-return loading(_that);case Empty():
-return empty(_that);case FormMode():
-return formMode(_that);case Loaded():
+return loading(_that);case Loaded():
 return loaded(_that);case Failed():
 return failed(_that);case _:
   throw StateError('Unexpected subclass');
@@ -108,14 +104,12 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Empty value)?  empty,TResult? Function( FormMode value)?  formMode,TResult? Function( Loaded value)?  loaded,TResult? Function( Failed value)?  failed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Loaded value)?  loaded,TResult? Function( Failed value)?  failed,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case Loading() when loading != null:
-return loading(_that);case Empty() when empty != null:
-return empty(_that);case FormMode() when formMode != null:
-return formMode(_that);case Loaded() when loaded != null:
+return loading(_that);case Loaded() when loaded != null:
 return loaded(_that);case Failed() when failed != null:
 return failed(_that);case _:
   return null;
@@ -134,13 +128,11 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  empty,TResult Function()?  formMode,TResult Function( List<ApprovalItem> approvals,  Pagination pagination,  String status,  bool loadingMore)?  loaded,TResult Function( String message)?  failed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ApprovalItem> approvals,  Pagination pagination,  String status,  bool loadingMore)?  loaded,TResult Function( String message)?  failed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
-return loading();case Empty() when empty != null:
-return empty();case FormMode() when formMode != null:
-return formMode();case Loaded() when loaded != null:
+return loading();case Loaded() when loaded != null:
 return loaded(_that.approvals,_that.pagination,_that.status,_that.loadingMore);case Failed() when failed != null:
 return failed(_that.message);case _:
   return orElse();
@@ -160,13 +152,11 @@ return failed(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  empty,required TResult Function()  formMode,required TResult Function( List<ApprovalItem> approvals,  Pagination pagination,  String status,  bool loadingMore)  loaded,required TResult Function( String message)  failed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ApprovalItem> approvals,  Pagination pagination,  String status,  bool loadingMore)  loaded,required TResult Function( String message)  failed,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case Loading():
-return loading();case Empty():
-return empty();case FormMode():
-return formMode();case Loaded():
+return loading();case Loaded():
 return loaded(_that.approvals,_that.pagination,_that.status,_that.loadingMore);case Failed():
 return failed(_that.message);case _:
   throw StateError('Unexpected subclass');
@@ -185,13 +175,11 @@ return failed(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  empty,TResult? Function()?  formMode,TResult? Function( List<ApprovalItem> approvals,  Pagination pagination,  String status,  bool loadingMore)?  loaded,TResult? Function( String message)?  failed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ApprovalItem> approvals,  Pagination pagination,  String status,  bool loadingMore)?  loaded,TResult? Function( String message)?  failed,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
-return loading();case Empty() when empty != null:
-return empty();case FormMode() when formMode != null:
-return formMode();case Loaded() when loaded != null:
+return loading();case Loaded() when loaded != null:
 return loaded(_that.approvals,_that.pagination,_that.status,_that.loadingMore);case Failed() when failed != null:
 return failed(_that.message);case _:
   return null;
@@ -257,70 +245,6 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'ApprovalsState.loading()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class Empty implements ApprovalsState {
-  const Empty();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Empty);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ApprovalsState.empty()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class FormMode implements ApprovalsState {
-  const FormMode();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FormMode);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ApprovalsState.formMode()';
 }
 
 

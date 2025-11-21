@@ -27,6 +27,9 @@ import 'package:mediconsult/features/approval_request/repository/approval_reques
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
 import 'package:mediconsult/features/approval_request/repository/approvals_repository.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approvals_cubit.dart';
+import 'package:mediconsult/features/notifications/service/notification_service.dart';
+import 'package:mediconsult/features/notifications/repository/notification_repository.dart';
+import 'package:mediconsult/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -40,6 +43,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ProvidersApiService>(() => ProvidersApiService(dio));
   sl.registerLazySingleton<FamilyMemberApiService>(() => FamilyMemberApiService(dio));
   sl.registerLazySingleton<ApprovalRequestApiService>(() => ApprovalRequestApiService(dio));
+  sl.registerLazySingleton<NotificationService>(() => NotificationService(dio));
 
   // Repositories
   sl.registerLazySingleton<LoginRepository>(() => LoginRepository(sl()));
@@ -50,6 +54,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<FamilyMemberRepository>(() => FamilyMemberRepository(sl()));
   sl.registerLazySingleton<ApprovalRequestRepository>(() => ApprovalRequestRepository(sl()));
   sl.registerLazySingleton<ApprovalsRepository>(() => ApprovalsRepository(sl()));
+  sl.registerLazySingleton<NotificationRepository>(() => NotificationRepository(sl()));
   // Cubits
   sl.registerFactory<LoginCubit>(() => LoginCubit(sl()));
   sl.registerFactory<SignupCubit>(() => SignupCubit(sl()));
@@ -62,4 +67,5 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<FamilyMembersCubit>(() => FamilyMembersCubit(sl()));
   sl.registerFactory<ApprovalRequestCubit>(() => ApprovalRequestCubit(sl()));
   sl.registerFactory<ApprovalsCubit>(() => ApprovalsCubit(sl()));
+  sl.registerFactory<NotificationsCubit>(() => NotificationsCubit(sl()));
 }

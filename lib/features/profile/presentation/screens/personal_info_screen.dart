@@ -238,30 +238,30 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
     );
   }
 
-  void _savePersonalInfo() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Implement API call to save personal information
-      // Note: Only editable fields will be updated (Insurance Card ID, Phone Number, Date of Birth, and Gender are read-only)
-      final personalInfo = {
-        'fullName': _nameController.text.trim(),
-        'insuranceCardId': _insuranceIdController.text.trim(), // Read-only
-        'phoneNumber': _phoneController.text.trim(), // Read-only
-        'dateOfBirth': _dobController.text.trim(), // Read-only
-        'gender': _selectedGender, // Read-only
-        'email': _emailController.text.trim(),
-        'address': _addressController.text.trim(),
-      };
+  // void _savePersonalInfo() {
+  //   if (_formKey.currentState!.validate()) {
+  //     // TODO: Implement API call to save personal information
+  //     // Note: Only editable fields will be updated (Insurance Card ID, Phone Number, Date of Birth, and Gender are read-only)
+  //     final personalInfo = {
+  //       'fullName': _nameController.text.trim(),
+  //       'insuranceCardId': _insuranceIdController.text.trim(), // Read-only
+  //       'phoneNumber': _phoneController.text.trim(), // Read-only
+  //       'dateOfBirth': _dobController.text.trim(), // Read-only
+  //       'gender': _selectedGender, // Read-only
+  //       'email': _emailController.text.trim(),
+  //       'address': _addressController.text.trim(),
+  //     };
       
-      print('Saving personal info: $personalInfo');
-      print('Note: Insurance Card ID, Phone Number, Date of Birth, and Gender are read-only fields');
+  //     print('Saving personal info: $personalInfo');
+  //     print('Note: Insurance Card ID, Phone Number, Date of Birth, and Gender are read-only fields');
       
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Personal information saved successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
-  }
+  //     // Show success message
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Personal information saved successfully!'),
+  //         backgroundColor: Colors.green,
+  //       ),
+  //     );
+  //   }
+  // }
 }

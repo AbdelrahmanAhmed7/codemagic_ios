@@ -18,6 +18,7 @@ import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit
 import 'package:mediconsult/features/auth/signup/presentation/sign_up_screen.dart';
 import 'package:mediconsult/features/chronic_medicines/screens/chronic_medicines_screen.dart';
 import 'package:mediconsult/features/family_members/presentation/cubit/family_members_cubit.dart';
+import 'package:mediconsult/features/family_members/presentation/family_members_screen.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/approval_request/presentation/cubit/approval_request_cubit.dart';
 import 'package:mediconsult/features/onboarding/onboarding_screen.dart';
@@ -25,7 +26,6 @@ import 'package:mediconsult/features/home/presentation/home_screen.dart';
 import 'package:mediconsult/features/approval_request/presentation/approval_request_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/add_family_member_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/contact_us_screen.dart';
-import 'package:mediconsult/features/profile/presentation/screens/family_members_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/faq_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/insurance_plan_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/personal_info_screen.dart';
@@ -35,6 +35,8 @@ import 'package:mediconsult/features/chat/presentation/screens/chat_screen.dart'
 import 'package:mediconsult/features/terms_policy/presentation/screens/terms_policy_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:mediconsult/features/profile/presentation/screens/language_screen.dart';
+import 'package:mediconsult/features/notifications/presentation/notifications_screen.dart';
+import 'package:mediconsult/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -142,13 +144,19 @@ class AppRouter {
       GoRoute(
         path: '/refund-request',
         builder: (context, state) {
-          return const RefundRequestScreen();
+          return BlocProvider(
+            create: (context) => sl<FamilyMembersCubit>(),
+            child: const RefundRequestScreen(),
+          );
         },
       ),
       GoRoute(
         path: '/chronic-medicines',
         builder: (context, state) {
-          return const ChronicMedicinesScreen();
+          return BlocProvider(
+            create: (context) => sl<FamilyMembersCubit>(),
+            child: const ChronicMedicinesScreen(),
+          );
         },
       ),
       GoRoute(
@@ -166,7 +174,10 @@ class AppRouter {
       GoRoute(
         path: '/family-members',
         builder: (context, state) {
-          return const FamilyMembersScreen();
+          return BlocProvider(
+            create: (context) => sl<FamilyMembersCubit>(),
+            child: const FamilyMembersScreen(),
+          );
         },
       ),
       GoRoute(
@@ -215,6 +226,15 @@ class AppRouter {
         path: '/language',
         builder: (context, state) {
           return const LanguageScreen();
+        },
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) {
+          return BlocProvider(
+            create: (context) => sl<NotificationsCubit>(),
+            child: const NotificationsScreen(),
+          );
         },
       ),
     ],

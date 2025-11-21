@@ -42,7 +42,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         _showErrorBanner = false;
       });
 
-      // TODO: Implement API call to change password
       final passwordData = {
         'oldPassword': _oldPasswordController.text,
         'newPassword': _newPasswordController.text,

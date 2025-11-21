@@ -171,31 +171,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 31.h),
 
                 Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // TODO: Navigate to SignUp
-                    },
-                    child: Text.rich(
-                      TextSpan(
-                        text: "Don’t have an account? ",
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          color: Colors.grey[700],
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Register',
-                            style: TextStyle(
-                              color: AppColors.primaryClr,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                context.go('/sign-up');
-                              },
-                          ),
-                        ],
+                  child: Text.rich(
+                    TextSpan(
+                      text: "Don’t have an account? ",
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: Colors.grey[700],
                       ),
+                      children: [
+                        TextSpan(
+                          text: 'Register',
+                          style: TextStyle(
+                            color: AppColors.primaryClr,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              context.go('/sign-up');
+                            },
+                        ),
+                      ],
                     ),
                   ),
                 ),
