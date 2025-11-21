@@ -22,7 +22,9 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<FamilyMembersCubit>().getFamilyMembers(LanguageHelper.getLanguageCode(context));
+      context.read<FamilyMembersCubit>().getFamilyMembers(
+        LanguageHelper.getLanguageCode(context),
+      );
     });
   }
 
@@ -63,33 +65,67 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                           ),
                         ),
                         Expanded(
-                          child: BlocBuilder<FamilyMembersCubit, FamilyMembersState>(
-                            builder: (context, state) {
-                              return state.when(
-                                initial: () => const Center(child: CircularProgressIndicator()),
-                                loading: () => const Center(child: CircularProgressIndicator()),
-                                failed: (msg) => Center(child: Text(msg)),
-                                loaded: (model) {
-                                  final members = model.data.familyMembers;
-                                  if (members.isEmpty) {
-                                    return Center(child: Text('family_members.no_members'.tr()));
-                                  }
-                                  return RefreshIndicator(
-                                    onRefresh: () => context.read<FamilyMembersCubit>().refreshFamilyMembers(LanguageHelper.getLanguageCode(context)),
-                                    child: ListView.separated(
-                                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                      itemCount: members.length,
-                                      separatorBuilder: (_, __) => SizedBox(height: 16.h),
-                                      itemBuilder: (context, index) {
-                                        final member = members[index];
-                                        return _buildMemberCard(member);
-                                      },
+                          child:
+                              BlocBuilder<
+                                FamilyMembersCubit,
+                                FamilyMembersState
+                              >(
+                                builder: (context, state) {
+                                  return state.when(
+                                    initial: () => const Center(
+                                      child: CircularProgressIndicator(),
                                     ),
+                                    loading: () => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    failed: (msg) => Center(child: Text(msg)),
+                                    loaded: (model) {
+                                      final members = model.data.familyMembers;
+                                      if (members.isEmpty) {
+                                        return Center(
+                                          child: Text(
+                                            'family_members.no_members'.tr(),
+                                          ),
+                                        );
+                                      }
+                                      return RefreshIndicator(
+                                        onRefresh: () => context
+                                            .read<FamilyMembersCubit>()
+                                            .refreshFamilyMembers(
+                                              LanguageHelper.getLanguageCode(
+                                                context,
+                                              ),
+                                            ),
+                                        child: ListView.separated(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 16.w,
+                                          ),
+                                          itemCount: members.length,
+                                          separatorBuilder: (_, __) => Column(
+                                            children: [
+                                              SizedBox(height: 12.h),
+                                              Divider(
+                                                color: AppColors.greyClr
+                                                    .withValues(alpha: 0.2),
+                                                thickness: 1,
+                                                height: 1,
+                                                indent: 16.w,
+                                                endIndent: 16.w,
+                                              ),
+                                              SizedBox(height: 12.h),
+                                            ],
+                                          ),
+
+                                          itemBuilder: (context, index) {
+                                            final member = members[index];
+                                            return _buildMemberCard(member);
+                                          },
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                          ),
+                              ),
                         ),
                       ],
                     ),
@@ -113,16 +149,18 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
 
   Widget _buildMemberCard(member) {
     // Default to 'Gold Plan' if memberStatus is empty or null
-    final String displayStatus = (member.memberStatus != null && member.memberStatus.isNotEmpty)
+    final String displayStatus =
+        (member.memberStatus != null && member.memberStatus.isNotEmpty)
         ? member.memberStatus
         : 'family_members.activated_member'.tr();
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
           radius: 32.r,
-          backgroundImage: (member.memberImage != null && member.memberImage!.isNotEmpty)
+          backgroundImage:
+              (member.memberImage != null && member.memberImage!.isNotEmpty)
               ? NetworkImage(member.memberImage!)
               : const AssetImage(AppAssets.logo) as ImageProvider,
         ),
@@ -188,9 +226,9 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                     SizedBox(width: 4.w),
                     Text(
                       'family_members.gold_plan'.tr(),
-                      style: AppTextStyles.font12BlackMedium(context).copyWith(
-                        fontSize: 10.sp,
-                      ),
+                      style: AppTextStyles.font12BlackMedium(
+                        context,
+                      ).copyWith(fontSize: 10.sp),
                     ),
                   ],
                 ),

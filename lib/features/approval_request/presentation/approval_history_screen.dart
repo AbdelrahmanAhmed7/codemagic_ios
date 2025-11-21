@@ -13,6 +13,8 @@ import 'package:mediconsult/features/approval_request/presentation/cubit/approva
 import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/approval_details_bottom_sheet.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/segmented_tabs.dart';
 
 class ApprovalHistoryScreen extends StatefulWidget {
   const ApprovalHistoryScreen({super.key});
@@ -26,6 +28,10 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
   int _currentTab = 0;
   Timer? _scrollTimer;
   bool _isLoadingMore = false;
+
+  // Showcase keys
+  final GlobalKey _tabsKey = GlobalKey();
+  final GlobalKey _fabKey = GlobalKey();
 
   @override
   void initState() {
@@ -53,11 +59,12 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
       _scrollTimer = Timer(const Duration(milliseconds: 300), () {
         if (mounted && !_isLoadingMore) {
           _isLoadingMore = true;
-          context.read<ApprovalsCubit>().loadMore(
-            lang: context.locale.languageCode,
-          ).then((_) {
-            _isLoadingMore = false;
-          });
+          context
+              .read<ApprovalsCubit>()
+              .loadMore(lang: context.locale.languageCode)
+              .then((_) {
+                _isLoadingMore = false;
+              });
         }
       });
     }
@@ -72,177 +79,158 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightGreyClr,
-      body: SafeArea(
-        child: Column(
-          children: [
-            PageHeader(title: 'approval_history.title'.tr(), backPath: '/home'),
-            Expanded(
-              child: Transform.translate(
-                offset: Offset(0, -20.h),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteClr,
-                      borderRadius: BorderRadius.circular(16.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.greyClr.withValues(alpha: 0.08),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 16.h),
-                        _buildTabs(),
-                        SizedBox(height: 24.h),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.w),
-                            child: BlocBuilder<ApprovalsCubit, ApprovalsState>(
-                              builder: (context, state) {
-                                return state.when(
-                                  initial: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  failed: (message) => Center(
-                                    child: Text(
-                                      message,
-                                      style: AppTextStyles.font14GreyRegular(
-                                        context,
-                                      ),
-                                    ),
-                                  ),
-                                  loaded:
-                                      (
-                                        approvals,
-                                        pagination,
-                                        status,
-                                        loadingMore,
-                                      ) {
-                                        if (approvals.isEmpty) {
-                                          return _buildEmptyState();
-                                        }
-                                        return ListView.separated(
-                                          controller: _controller,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          cacheExtent: 500,
-                                          addAutomaticKeepAlives: true,
-                                          addRepaintBoundaries: true,
-                                          itemCount:
-                                              approvals.length +
-                                              (pagination.hasNextPage ? 1 : 0),
-                                          separatorBuilder: (_, __) =>
-                                              SizedBox(height: 12.h),
-                                          itemBuilder: (context, index) {
-                                            if (index >= approvals.length) {
-                                              return const Center(
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(12),
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                      ),
-                                                ),
-                                              );
-                                            }
-                                            return _ApprovalCard(
-                                              key: ValueKey(
-                                                approvals[index].id,
-                                              ),
-                                              item: approvals[index],
-                                            );
-                                          },
-                                        );
-                                      },
+    return ShowCaseWidget(
+      builder: (context) => Scaffold(
+        backgroundColor: AppColors.lightGreyClr,
+        body: SafeArea(
+          child: Column(
+            children: [
+            PageHeader(
+                title: 'approval_history.title'.tr(),
+                backPath: '/home',
+              onHelp: () {
+                ShowCaseWidget.of(context).startShowCase([_tabsKey, _fabKey]);
+              },
+              ),
+              Expanded(
+                child: Transform.translate(
+                  offset: Offset(0, -20.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteClr,
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.greyClr.withValues(alpha: 0.08),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 16.h),
+                          Showcase(
+                            key: _tabsKey,
+                            description: 'Swipe or tap to filter approvals',
+                            child: SegmentedTabs(
+                              labels: [
+                                'approval_history.tabs.all'.tr(),
+                                'approval_history.tabs.pending'.tr(),
+                                'approval_history.tabs.approved'.tr(),
+                                'approval_history.tabs.rejected'.tr(),
+                              ],
+                              selectedIndex: _currentTab,
+                              onTap: (i) {
+                                setState(() => _currentTab = i);
+                                final apiStatus = [
+                                  'All',
+                                  'Pending',
+                                  'Approved',
+                                  'Rejected',
+                                ];
+                                context.read<ApprovalsCubit>().changeStatus(
+                                  apiStatus[i],
+                                  lang: context.locale.languageCode,
                                 );
                               },
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 24.h),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              child: BlocBuilder<ApprovalsCubit, ApprovalsState>(
+                                builder: (context, state) {
+                                  return state.when(
+                                    initial: () => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    loading: () => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    failed: (message) => Center(
+                                      child: Text(
+                                        message,
+                                        style: AppTextStyles.font14GreyRegular(
+                                          context,
+                                        ),
+                                      ),
+                                    ),
+                                    loaded:
+                                        (
+                                          approvals,
+                                          pagination,
+                                          status,
+                                          loadingMore,
+                                        ) {
+                                          if (approvals.isEmpty)
+                                            return _buildEmptyState();
+                                          return ListView.separated(
+                                            controller: _controller,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            itemCount:
+                                                approvals.length +
+                                                (pagination.hasNextPage
+                                                    ? 1
+                                                    : 0),
+                                            separatorBuilder: (_, __) =>
+                                                SizedBox(height: 12.h),
+                                            itemBuilder: (context, index) {
+                                              if (index >= approvals.length) {
+                                                return const Center(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.all(12),
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                        ),
+                                                  ),
+                                                );
+                                              }
+                                              return _ApprovalCard(
+                                                key: ValueKey(
+                                                  approvals[index].id,
+                                                ),
+                                                item: approvals[index],
+                                              );
+                                            },
+                                          );
+                                        },
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push('/approval-request');
-        },
-        backgroundColor: AppColors.primaryClr,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-    );
-  }
-
-  Widget _buildTabs() {
-    final tabs = [
-      'approval_history.tabs.all'.tr(),
-      'approval_history.tabs.pending'.tr(),
-      'approval_history.tabs.approved'.tr(),
-      'approval_history.tabs.rejected'.tr(),
-    ];
-
-    final apiStatus = ['All', 'Pending', 'Approved', 'Rejected'];
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(tabs.length, (i) {
-            final selected = _currentTab == i;
-            return GestureDetector(
-              onTap: () {
-                setState(() => _currentTab = i);
-                context.read<ApprovalsCubit>().changeStatus(
-                  apiStatus[i],
-                  lang: context.locale.languageCode,
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.only(right: 22.w),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      tabs[i],
-                      style: selected
-                          ? AppTextStyles.font14BlueMedium(context)
-                          : AppTextStyles.font14GreyRegular(context),
-                    ),
-                    if (selected)
-                      Container(
-                        margin: EdgeInsets.only(top: 6.h),
-                        height: 2.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                          color: AppColors.blueClr,
-                          borderRadius: BorderRadius.circular(1.r),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            );
-          }),
+      floatingActionButton: Showcase(
+          key: _fabKey,
+          description: 'Tap to create a new approval request',
+          child: FloatingActionButton(
+            onPressed: () {
+              context.push('/approval-request');
+            },
+            backgroundColor: AppColors.primaryClr,
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
         ),
       ),
     );
   }
+
+  // removed duplicated tabs builder in favor of SegmentedTabs
 
   Widget _buildEmptyState() {
     return SingleChildScrollView(

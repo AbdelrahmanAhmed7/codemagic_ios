@@ -13,6 +13,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/reason_selector
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 
+@Deprecated('Use refund_request_screen.dart implementation')
 class RefundRequestScreen extends StatefulWidget {
   const RefundRequestScreen({super.key});
 

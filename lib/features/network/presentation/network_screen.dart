@@ -11,6 +11,7 @@ import 'package:mediconsult/features/network/presentation/widgets/network_filter
 import 'package:mediconsult/features/network/presentation/widgets/network_search_bar.dart';
 import 'package:mediconsult/features/network/presentation/widgets/network_providers_list.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class NetworkScreen extends StatefulWidget {
   const NetworkScreen({super.key});
@@ -24,6 +25,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
   bool _hasLoadedInitialData = false;
+
+  // Showcase keys
+  final GlobalKey _categoriesKey = GlobalKey();
+  final GlobalKey _searchKey = GlobalKey();
+  final GlobalKey _navigateKey = GlobalKey();
+  final GlobalKey _phoneKey = GlobalKey();
 
   @override
   void initState() {
@@ -100,7 +107,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ShowCaseWidget(
+      builder: (context) => Scaffold(
       backgroundColor: AppColors.lightGreyClr,
       body: BlocListener<NetworkCubit, NetworkState>(
         listener: (context, state) {
@@ -126,7 +134,18 @@ class _NetworkScreenState extends State<NetworkScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              PageHeader(title: 'network.title'.tr(), backPath: '/home'),
+              PageHeader(
+                title: 'network.title'.tr(),
+                backPath: '/home',
+                onHelp: () {
+                  ShowCaseWidget.of(context).startShowCase([
+                    _categoriesKey,
+                    _searchKey,
+                    _navigateKey,
+                    _phoneKey,
+                  ]);
+                },
+              ),
               SizedBox(height: 16.h),
 
               Expanded(
@@ -178,30 +197,37 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                     return const SizedBox.shrink();
                                   }
 
-                                  return NetworkCategoriesList(
-                                    categories: categories,
-                                    selectedCategoryId: context
+                              return Showcase(
+                                key: _categoriesKey,
+                                description: 'tutorial.network.categories'.tr(),
+                                child: NetworkCategoriesList(
+                                  categories: categories,
+                                  selectedCategoryId: context
+                                      .read<NetworkCubit>()
+                                      .selectedCategoryId,
+                                  onCategorySelected: (categoryId) {
+                                    context
                                         .read<NetworkCubit>()
-                                        .selectedCategoryId,
-                                    onCategorySelected: (categoryId) {
-                                      context
-                                          .read<NetworkCubit>()
-                                          .searchProviders(
-                                            categoryId: categoryId,
-                                            resetPage: true,
-                                          );
-                                    },
-                                  );
+                                        .searchProviders(
+                                          categoryId: categoryId,
+                                          resetPage: true,
+                                        );
+                                  },
+                                ),
+                              );
                                 },
                               ),
 
                               SizedBox(height: 16.h),
 
                               // Search and Filter Bar
-                              NetworkSearchBar(
-                                searchController: _searchController,
-                                onFilterTap: _showFilterBottomSheet,
-                                onSearchSubmitted: (value) async {
+                              Showcase(
+                                key: _searchKey,
+                                description: 'tutorial.network.search'.tr(),
+                                child: NetworkSearchBar(
+                                  searchController: _searchController,
+                                  onFilterTap: _showFilterBottomSheet,
+                                  onSearchSubmitted: (value) async {
                                   final cubit = context.read<NetworkCubit>();
 
                                   // Ensure we have user location before searching
@@ -210,11 +236,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                     await cubit.getUserLocation();
                                   }
 
-                                  cubit.searchProviders(
-                                    searchKey: value.isNotEmpty ? value : null,
-                                    resetPage: true,
-                                  );
-                                },
+                                    cubit.searchProviders(
+                                      searchKey: value.isNotEmpty ? value : null,
+                                      resetPage: true,
+                                    );
+                                  },
+                                ),
                               ),
 
                               SizedBox(height: 16.h),
@@ -225,6 +252,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                 child: NetworkProvidersList(
                                   scrollController: _scrollController,
                                   isLoadingMore: _isLoadingMore,
+                                  firstNavigateKey: _navigateKey,
+                                  firstPhoneKey: _phoneKey,
                                 ),
                               ),
                             ],
@@ -239,6 +268,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 

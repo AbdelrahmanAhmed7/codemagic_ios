@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Background message handler - must be top-level function
@@ -119,6 +121,20 @@ class PushNotificationService {
         enableVibration: true,
       );
 
+      // Optional extra channels for future use (won't affect current behavior)
+      const promoChannel = AndroidNotificationChannel(
+        'promotions',
+        'Promotions',
+        description: 'Offers and campaigns',
+        importance: Importance.high,
+      );
+      const updatesChannel = AndroidNotificationChannel(
+        'updates',
+        'Updates',
+        description: 'App and policy updates',
+        importance: Importance.defaultImportance,
+      );
+
       // Create Android notification channel
       await _localNotifications
           .resolvePlatformSpecificImplementation<
@@ -126,13 +142,34 @@ class PushNotificationService {
           >()
           ?.createNotificationChannel(channel);
 
+      // Create extra channels (safe no-op if already exists)
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(promoChannel);
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(updatesChannel);
+
       // Initialize settings for both platforms
-      const initializationSettings = InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      final initializationSettings = InitializationSettings(
+        android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
           requestSoundPermission: false,
+          notificationCategories: <DarwinNotificationCategory>[
+            DarwinNotificationCategory(
+              'MC_GENERAL',
+              actions: <DarwinNotificationAction>[
+                DarwinNotificationAction.plain('view', 'View'),
+                DarwinNotificationAction.plain('mark_read', 'Mark as read'),
+              ],
+            ),
+          ],
         ),
       );
 
@@ -162,18 +199,94 @@ class PushNotificationService {
 
       // Check platform-specific notification data
       final android = message.notification?.android;
+      final data = message.data;
+      final imageUrl = data['image'] as String?;
+      final largeIconUrl = data['largeIcon'] as String?;
+      final groupKey = data['group'] as String? ?? 'mc_general_group';
+      final colorHex = data['color'] as String?; // e.g. #1E88E5
+      final channelId = data['channel'] as String? ?? 'high_importance_channel';
+      final channelName = channelId == 'promotions'
+          ? 'Promotions'
+          : channelId == 'updates'
+          ? 'Updates'
+          : 'High Importance Notifications';
+      final forceBigPicture = (data['forceBigPicture'] == 'true');
+
+      // حمّل الصورة الكبيرة (largeIcon) مرة واحدة في البداية
+      ByteArrayAndroidBitmap? largeIconBitmap;
+      if (largeIconUrl != null && largeIconUrl.isNotEmpty) {
+        try {
+          largeIconBitmap = ByteArrayAndroidBitmap(
+            await _downloadBytes(largeIconUrl),
+          );
+          debugPrint('✅ Large icon loaded successfully');
+        } catch (e) {
+          debugPrint('⚠️ Failed to load large icon: $e');
+        }
+      }
 
       // Prepare notification details
-      final androidDetails = AndroidNotificationDetails(
-        'high_importance_channel',
-        'High Importance Notifications',
-        channelDescription: 'This channel is used for important notifications.',
-        importance: Importance.high,
-        priority: Priority.high,
-        icon: android?.smallIcon ?? '@mipmap/ic_launcher',
-        playSound: true,
-        enableVibration: true,
-      );
+      StyleInformation styleInfo;
+      if (forceBigPicture && imageUrl != null && imageUrl.isNotEmpty) {
+        try {
+          final bigPicture = ByteArrayAndroidBitmap(
+            await _downloadBytes(imageUrl),
+          );
+          styleInfo = BigPictureStyleInformation(
+            bigPicture,
+            largeIcon: largeIconBitmap, // استخدم نفس الصورة في الوضع الموسّع
+            contentTitle: notification.title,
+            summaryText: notification.body,
+            hideExpandedLargeIcon: false,
+          );
+          debugPrint('✅ Big picture style loaded successfully');
+        } catch (e) {
+          debugPrint('⚠️ Failed to load big picture: $e');
+          styleInfo = BigTextStyleInformation(
+            notification.body ?? '',
+            contentTitle: notification.title,
+            summaryText: data['summary'],
+          );
+        }
+      } else {
+        styleInfo = BigTextStyleInformation(
+          notification.body ?? '',
+          contentTitle: notification.title,
+          summaryText: data['summary'],
+        );
+      }
+
+      final AndroidNotificationDetails androidDetails =
+          AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: 'This channel is used for notifications.',
+            importance: Importance.high,
+            priority: Priority.high,
+            icon: android?.smallIcon ?? '@mipmap/ic_launcher',
+            playSound: true,
+            enableVibration: true,
+            styleInformation: styleInfo,
+            showWhen: true,
+            ticker: notification.title,
+            largeIcon: largeIconBitmap, // هنا هتظهر في الوضع العادي (collapsed)
+            color: colorHex != null ? _parseColor(colorHex) : null,
+            groupKey: groupKey,
+            actions: <AndroidNotificationAction>[
+              const AndroidNotificationAction(
+                'view',
+                'View',
+                showsUserInterface: true,
+                cancelNotification: true,
+              ),
+              const AndroidNotificationAction(
+                'mark_read',
+                'Mark as read',
+                showsUserInterface: false,
+                cancelNotification: true,
+              ),
+            ],
+          );
 
       const iosDetails = DarwinNotificationDetails(
         presentAlert: true,
@@ -200,6 +313,19 @@ class PushNotificationService {
     } catch (e) {
       debugPrint('❌ Error showing notification: $e');
     }
+  }
+
+  // ---- Helpers for rich notifications (Android) ----
+  Future<Uint8List> _downloadBytes(String url) async {
+    final req = await HttpClient().getUrl(Uri.parse(url));
+    final res = await req.close();
+    return consolidateHttpClientResponseBytes(res);
+  }
+
+  Color _parseColor(String hex) {
+    final normalized = hex.replaceFirst('#', '');
+    final value = int.parse(normalized, radix: 16);
+    return Color(normalized.length == 6 ? (0xFF000000 | value) : value);
   }
 
   /// Setup message handlers for different app states

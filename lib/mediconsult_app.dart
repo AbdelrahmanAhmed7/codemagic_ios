@@ -32,8 +32,23 @@ class MediConsultApp extends StatelessWidget {
                 context.pop();
                 return;
               }
-              // At root: consume back press and do nothing (prevents app exit)
-              return;
+              String? loc;
+              try {
+                loc = GoRouter.of(context).routeInformationProvider.value.location;
+              } catch (_) {}
+              if (loc != null) {
+                if (loc.startsWith('/profile')) {
+                  context.go('/profile');
+                } else if (loc.startsWith('/approval-request')) {
+                  context.go('/approval-request');
+                } else if (loc.startsWith('/network')) {
+                  context.go('/network');
+                } else {
+                  context.go('/home');
+                }
+              } else {
+                context.go('/home');
+              }
             },
             child: Stack(
               children: [

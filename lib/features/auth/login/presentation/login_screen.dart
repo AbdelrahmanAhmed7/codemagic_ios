@@ -65,7 +65,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 40.h),
 
-                Text('auth.login.card_id'.tr(), style: AppTextStyles.font16BlackMedium(context)),
+                Text(
+                  'auth.login.card_id'.tr(),
+                  style: AppTextStyles.font16BlackMedium(context),
+                ),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: cardOrPhoneController,
@@ -90,7 +93,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                Text('auth.login.password'.tr(), style: AppTextStyles.font16BlackMedium(context)),
+                Text(
+                  'auth.login.password'.tr(),
+                  style: AppTextStyles.font16BlackMedium(context),
+                ),
                 SizedBox(height: 8.h),
                 AppTextField(
                   controller: passwordController,
@@ -130,7 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   listener: (context, state) {
                     if (state is Success) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        showAppSnackBar(context, 'auth.login.login_successful'.tr());
+                        showAppSnackBar(
+                          context,
+                          'auth.login.login_successful'.tr(),
+                        );
                         context.push('/home');
                       });
                     } else if (state is Failed) {
@@ -143,7 +152,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     final isLoading = state is Loading;
 
                     return AppButton(
-                      text: isLoading ? 'auth.login.logging_in'.tr() : 'auth.login.login_button'.tr(),
+                      text: isLoading
+                          ? 'auth.login.logging_in'.tr()
+                          : 'auth.login.login_button'.tr(),
                       isLoading: isLoading,
                       onPressed: isLoading
                           ? null

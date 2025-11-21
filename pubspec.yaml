@@ -34,7 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  flutter_bloc: 8.1.6
+  flutter_bloc: ^8.1.6
   go_router: ^16.2.4
   flutter_screenutil: ^5.9.3
   flutter_native_splash: ^2.4.6
@@ -70,6 +70,7 @@ dependencies:
   flutter_local_notifications: ^19.5.0
   # Offline support
   connectivity_plus: ^6.1.0
+  showcaseview: ^5.0.1
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +85,7 @@ dependency_overrides:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo/Logo.png"
+  image_path: "assets/logo/Mask group.png"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

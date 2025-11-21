@@ -7,12 +7,21 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/network/data/network_provider_response_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class ProviderCard extends StatelessWidget {
   final NetworkProvider provider;
   final VoidCallback? onTap;
+  final GlobalKey? navigateKey;
+  final GlobalKey? phoneKey;
 
-  const ProviderCard({super.key, required this.provider, this.onTap});
+  const ProviderCard({
+    super.key,
+    required this.provider,
+    this.onTap,
+    this.navigateKey,
+    this.phoneKey,
+  });
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
@@ -179,46 +188,70 @@ class ProviderCard extends StatelessWidget {
                     height: 16.h,
                   ),
                   SizedBox(width: 8.w),
-                  Text(
-                    provider.mobile,
-                    style: AppTextStyles.font12GreyRegular(context),
-                  ),
+                  phoneKey == null
+                      ? Text(
+                          provider.mobile,
+                          style: AppTextStyles.font12GreyRegular(context),
+                        )
+                      : Showcase(
+                          key: phoneKey!,
+                          description: 'tutorial.network.call'.tr(),
+                          child: Text(
+                            provider.mobile,
+                            style: AppTextStyles.font12GreyRegular(context),
+                          ),
+                        ),
                   Spacer(),
                   // Details Button
-                  ElevatedButton(
-                    onPressed:
-                        (provider.latitude != 0 && provider.longitude != 0)
-                        ? _openMaps
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryClr,
-                      foregroundColor: AppColors.whiteClr,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 10.h,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8.r),
-                          bottomRight: Radius.circular(8.r),
-                          topRight: Radius.circular(0.r),
-                          bottomLeft: Radius.circular(0.r),
+                  navigateKey == null
+                      ? _NavigateButton(onOpen: _openMaps)
+                      : Showcase(
+                          key: navigateKey!,
+                          description: 'tutorial.network.navigate'.tr(),
+                          child: _NavigateButton(onOpen: _openMaps),
                         ),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'network.navigate'.tr(),
-                      style: AppTextStyles.font14WhiteMedium(
-                        context,
-                      ).copyWith(fontSize: 10.sp),
-                    ),
-                  ),
                 ],
               ),
             ),
+            if (phoneKey != null)
+              const SizedBox(height: 0),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _NavigateButton extends StatelessWidget {
+  final VoidCallback onOpen;
+  const _NavigateButton({required this.onOpen});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onOpen,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryClr,
+        foregroundColor: AppColors.whiteClr,
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 10.h,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8.r),
+            bottomRight: Radius.circular(8.r),
+            topRight: Radius.circular(0.r),
+            bottomLeft: Radius.circular(0.r),
+          ),
+        ),
+        elevation: 0,
+      ),
+      child: Text(
+        'network.navigate'.tr(),
+        style: AppTextStyles.font14WhiteMedium(
+          context,
+        ).copyWith(fontSize: 10.sp),
       ),
     );
   }
