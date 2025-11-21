@@ -25,7 +25,9 @@ class ExploreWidget extends StatelessWidget {
           description: 'Find healthcare networks, hospitals and Pharmacies',
           iconPath: AppAssets.providers,
           arrowPath: 'assets/icons/arrow.png',
-          onTap: () {},
+          onTap: () {
+            context.go('/network');
+          },
         ),
         SizedBox(height: 12.h),
         _buildExploreItem(

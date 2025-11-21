@@ -43,7 +43,7 @@ dependencies:
   freezed: ^3.2.3
   equatable: ^2.0.7
   retrofit:
-  json_annotation:
+  json_annotation: ^4.9.0
   freezed_annotation: ^3.1.0
   get_it: ^8.2.0
   animated_bottom_navigation_bar: ^1.0.2
@@ -58,6 +58,12 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  # Map dependencies
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.1
+  geolocator: ^14.0.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -104,6 +110,7 @@ flutter:
     - assets/profile/
     - assets/familymem/
     - assets/contact/
+    - assets/network/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

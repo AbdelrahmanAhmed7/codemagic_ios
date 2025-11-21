@@ -7,9 +7,9 @@ import 'package:mediconsult/features/approval_request/presentation/widgets/attac
 import 'package:mediconsult/features/approval_request/presentation/widgets/family_members_selector.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/provider_selector.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/note_text_field.dart';
-import 'package:mediconsult/features/refund/widgets/add_attachment_widget.dart';
-import 'package:mediconsult/features/refund/widgets/reason_selector.dart';
-import 'package:mediconsult/features/refund/widgets/refund_type_selector.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_widget.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class RefundRequestScreen extends StatefulWidget {
@@ -252,7 +252,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                           SizedBox(height: 8.h),
                           const NoteTextField(maxLength: 300),
                           SizedBox(height: 16.h),
-                          AddAttachmentWidget(refundTypeName: _selectedRefundType),
+                          AddAttachmentWidget(
+                            refundTypeName: _selectedRefundType,
+                          ),
                           SizedBox(height: 20.h),
                           SizedBox(
                             width: double.infinity,

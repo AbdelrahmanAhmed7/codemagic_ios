@@ -54,49 +54,47 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
-                    children: [
-                      HomeHeaderWidget(data: data!),
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 130.h,
-                            color: AppColors.primaryClr,
-                          ),
-                          Positioned(
-                            bottom: -70.h,
-                            left: 16.w,
-                            right: 16.w,
-                            child: UserPlanCardWidget(
-                              data: data,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 80.h),
-                      Container(
-                        color: AppColors.lightGreyClr,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        HomeHeaderWidget(data: data!),
+                        Stack(
+                          clipBehavior: Clip.none,
                           children: [
-                            const QuickAccessWidget(),
-                            SizedBox(height: 24.h),
-                            const KhusmPromotionWidget(),
-                            SizedBox(height: 24.h),
-                            if (data.approvals.isNotEmpty) ...[
-                              OngoingRequestWidget(data: data), 
-                              SizedBox(height: 24.h),
-                            ],
-                            const HealthTipsWidget(),
-                            SizedBox(height: 24.h),
-                            const ExploreWidget(),
-                            SizedBox(height: 40.h),
+                            Container(
+                              width: double.infinity,
+                              height: 130.h,
+                              color: AppColors.primaryClr,
+                            ),
+                            Positioned(
+                              bottom: -70.h,
+                              left: 16.w,
+                              right: 16.w,
+                              child: UserPlanCardWidget(data: data),
+                            ),
                           ],
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 80.h),
+                        Container(
+                          color: AppColors.lightGreyClr,
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const QuickAccessWidget(),
+                              SizedBox(height: 24.h),
+                              const KhusmPromotionWidget(),
+                              SizedBox(height: 24.h),
+                              if (data.approvals.isNotEmpty) ...[
+                                OngoingRequestWidget(data: data),
+                                SizedBox(height: 24.h),
+                              ],
+                              const HealthTipsWidget(),
+                              SizedBox(height: 24.h),
+                              const ExploreWidget(),
+                              SizedBox(height: 40.h),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -133,7 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryClr,
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 12.h,
+                        ),
                       ),
                     ),
                   ],
@@ -149,7 +150,13 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentIndex = index;
           });
-          if (index == 3) context.go('/profile');
+          if (index == 1) {
+            context.go('/network');
+          } else if (index == 2) {
+            context.go('/approval-request');
+          } else if (index == 3) {
+            context.go('/profile');
+          }
         },
       ),
     );
