@@ -254,7 +254,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   // void _savePersonalInfo() {
   //   if (_formKey.currentState!.validate()) {
-  //     // TODO: Implement API call to save personal information
   //     // Note: Only editable fields will be updated (Insurance Card ID, Phone Number, Date of Birth, and Gender are read-only)
   //     final personalInfo = {
   //       'fullName': _nameController.text.trim(),

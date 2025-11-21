@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
 import 'package:mediconsult/core/constants/constants.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -45,14 +46,16 @@ class DioFactory {
         baseDelay: const Duration(seconds: 2),
       ),
     );
-    
+
     // Add logger interceptor
-    _dio?.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-      ),
-    );
+    if (kDebugMode) {
+      _dio?.interceptors.add(
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+        ),
+      );
+    }
   }
 }

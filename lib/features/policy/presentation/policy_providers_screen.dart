@@ -11,6 +11,7 @@ import 'package:mediconsult/features/policy/presentation/cubit/get_policy_detail
 import 'package:mediconsult/features/policy/data/policy_details_response.dart';
 import 'package:mediconsult/features/policy/presentation/widgets/policy_provider_card.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:mediconsult/shared/widgets/error_state_widget.dart';
 
 class PolicyProvidersScreen extends StatefulWidget {
   final String serviceName;
@@ -73,11 +74,18 @@ class _PolicyProvidersScreenState extends State<PolicyProvidersScreen> {
                               return state.when(
                                 initial: () => const Center(child: CircularProgressIndicator()),
                                 loading: () => const Center(child: CircularProgressIndicator()),
-                                failed: (message) => Center(
-                                  child: Text(
-                                    message,
-                                    style: AppTextStyles.font14BlackMedium(context),
-                                  ),
+                                failed: (message) => ErrorStateWidget(
+                                  message: message,
+                                  icon: Icons.policy_outlined,
+                                  onRetry: () {
+                                    context
+                                        .read<GetPolicyDetailsCubit>()
+                                        .getDetails(
+                                          LanguageHelper.getLanguageCode(context),
+                                          widget.categoryId,
+                                        );
+                                  },
+                                  retryButtonText: 'common.try_again'.tr(),
                                 ),
                                 loaded: (response) => _ProvidersList(
                                   details: response.data,
@@ -148,19 +156,17 @@ class _ProvidersList extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
-            ListView.builder(
+            SizedBox(height: 4.h),
+            ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: details.providers.length,
+              separatorBuilder: (_, __) => SizedBox(height: 16.h),
               itemBuilder: (context, index) {
                 final provider = details.providers[index];
                 return PolicyProviderCard(
                   provider: provider,
-                  onTap: () {
-                    // TODO: Navigate to provider details
-                    debugPrint('Provider tapped: ${provider.providerName}');
-                  },
+                  onTap: () {},
                 );
               },
             ),

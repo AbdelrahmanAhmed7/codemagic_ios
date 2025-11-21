@@ -109,11 +109,7 @@ class ApprovalCard extends StatelessWidget {
           ),
           child: Text(
             statusLabel,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 8.sp,
-              fontWeight: FontWeight.w500,
-            ),
+            style: AppTextStyles.font10WhiteRegular(context),
           ),
         ),
       ],
@@ -126,7 +122,7 @@ class ApprovalCard extends StatelessWidget {
         Icon(Icons.calendar_today, size: 14.sp, color: AppColors.blueClr),
         SizedBox(width: 5.w),
         Text(
-          DateFormatter.formatDate(item.date),
+          item.date,
           style: AppTextStyles.font10BlackMedium(context),
         ),
       ],

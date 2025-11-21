@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -16,6 +17,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fie
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_state.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 import 'package:showcaseview/showcaseview.dart';
 // ignore_for_file: deprecated_member_use
 
@@ -36,6 +38,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   int? _selectedReasonId;
   FamilyMember? _selectedMember;
   List<String> _attachmentPaths = [];
+  bool _hasInvoiceAttachment = false;
+  bool _hasPrescriptionAttachment = false;
+  String? _noteError;
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
@@ -57,6 +62,11 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   }
 
   Future<void> _submitRefundRequest() async {
+    // Clear previous errors
+    setState(() {
+      _noteError = null;
+    });
+
     // Validation
     if (_selectedMember == null) {
       _showError('refund_request.validation.select_member'.tr());
@@ -82,8 +92,32 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       _showError('refund_request.validation.select_date'.tr());
       return;
     }
-    if (_attachmentPaths.isEmpty) {
-      _showError('refund_request.validation.add_attachment'.tr());
+
+    // Validate notes character limit
+    if (_noteController.text.length > 300) {
+      setState(() {
+        _noteError = 'refund_request.validation.notes_too_long'.tr();
+      });
+      return;
+    }
+
+    // Validate date is within 60 days and not future
+    final DateTime now = DateTime.now();
+    final DateTime sixtyDaysAgo = now.subtract(const Duration(days: 60));
+    if (_selectedDate!.isAfter(now)) {
+      _showError('refund_request.validation.future_date_not_allowed'.tr());
+      return;
+    }
+    if (_selectedDate!.isBefore(sixtyDaysAgo)) {
+      _showError('refund_request.validation.date_too_old'.tr());
+      return;
+    }
+    if (!_hasInvoiceAttachment) {
+      _showError('refund_request.validation.invoice_attachment_required'.tr());
+      return;
+    }
+    if (!_hasPrescriptionAttachment) {
+      _showError('refund_request.validation.prescription_attachment_required'.tr());
       return;
     }
 
@@ -100,28 +134,46 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       amount: amount,
       serviceDate: formattedDate,
       providerName: _providerController.text.trim(),
-      notes: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
+      notes: _noteController.text.trim().isEmpty
+          ? null
+          : _noteController.text.trim(),
       attachmentPaths: _attachmentPaths,
     );
   }
 
   void _showError(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Colors.red,
-        ),
+      HapticFeedback.lightImpact(); // إضافة اهتزاز خفيف للأخطاء
+      showAppSnackBar(
+        context, 
+        message, 
+        isError: true,
+        duration: const Duration(seconds: 4), // مدة أطول لرسائل الخطأ
+      );
+    }
+  }
+
+  void _showSuccess(String message) {
+    if (mounted) {
+      HapticFeedback.selectionClick(); // إضافة اهتزاز للنجاح
+      showAppSnackBar(
+        context, 
+        message, 
+        isError: false,
+        duration: const Duration(seconds: 3),
       );
     }
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime sixtyDaysAgo = now.subtract(const Duration(days: 60));
+    
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+      initialDate: _selectedDate ?? now,
+      firstDate: sixtyDaysAgo,
+      lastDate: now,
     );
     if (picked != null && picked != _selectedDate) {
       setState(() {
@@ -129,7 +181,6 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -142,229 +193,254 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
             FocusScope.of(context).unfocus();
           },
           child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PageHeader(
-                  title: 'refund_request.title'.tr(),
-                  backPath: '/home',
-                  onHelp: () {
-                    ShowCaseWidget.of(context).startShowCase([
-                      _familyKey,
-                      _providerKey,
-                      _noteKey,
-                      _attachKey,
-                      _submitKey,
-                    ]);
-                  },
-                ),
-                Transform.translate(
-                  offset: Offset(0, -20.h),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteClr,
-                        borderRadius: BorderRadius.circular(16.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.greyClr.withValues(alpha: 0.08),
-                            blurRadius: 24,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(16.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'refund_request.family_members'.tr(),
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 12.h),
-                            Showcase(
-                              key: _familyKey,
-                              description: 'tutorial.family_member.select'
-                                  .tr(),
-                              child: FamilyMembersSelector(
-                                onMemberSelected: (member) {
-                                  setState(() {
-                                    _selectedMember = member;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 24.h),
-                            Text(
-                              'refund_request.refund_type'.tr(),
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 8.h),
-                            GestureDetector(
-                              onTap: _unfocusAll,
-                              child: RefundTypeSelector(
-                                selectedTypeId: _selectedRefundTypeId,
-                                onTypeSelected: (id, name) {
-                                  _unfocusAll();
-                                  setState(() {
-                                    _selectedRefundTypeId = id;
-                                    _selectedRefundTypeName = name;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            Text(
-                              'refund_request.provider'.tr(),
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 8.h),
-                            Showcase(
-                              key: _providerKey,
-                              description: 'tutorial.provider.select'.tr(),
-                              child: TextField(
-                                controller: _providerController,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  hintText: 'refund_request.provider_hint'.tr(),
-                                  hintStyle: AppTextStyles.font14GreyRegular(context),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8.r),
-                                    borderSide: BorderSide(
-                                      color: AppColors.greyClr.withValues(alpha: 0.2),
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8.r),
-                                    borderSide: BorderSide(
-                                      color: AppColors.greyClr.withValues(alpha: 0.2),
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8.r),
-                                    borderSide: BorderSide(
-                                      color: AppColors.primaryClr,
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 12.w,
-                                    vertical: 12.h,
-                                  ),
-                                ),
-                                style: AppTextStyles.font14BlackMedium(context),
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            Text(
-                              'refund_request.reason'.tr(),
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 8.h),
-                            GestureDetector(
-                              onTap: _unfocusAll,
-                              child: ReasonSelector(
-                                selectedReasonId: _selectedReasonId,
-                                onReasonSelected: (id, name) {
-                                  _unfocusAll();
-                                  setState(() {
-                                    _selectedReasonId = id;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: RefundAmountField(
-                                    controller: _amountController,
-                                  ),
-                                ),
-                                SizedBox(width: 16.w),
-                                Expanded(
-                                  child: RefundDatePicker(
-                                    selectedDate: _selectedDate,
-                                    onTap: _selectDate,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 16.h),
-                            Text(
-                              'refund_request.note'.tr(),
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 8.h),
-                            Showcase(
-                              key: _noteKey,
-                              description: 'tutorial.note.hint'.tr(),
-                              child: NoteTextField(
-                                controller: _noteController,
-                                maxLength: 300,
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            Showcase(
-                              key: _attachKey,
-                              description: 'tutorial.attachments.hint'.tr(),
-                              child: AddAttachmentWidget(
-                                refundTypeName: _selectedRefundTypeName,
-                                onAttachmentsChanged: (paths) {
-                                  setState(() {
-                                    _attachmentPaths = paths;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            Showcase(
-                              key: _submitKey,
-                              description: 'tutorial.submit.tap'.tr(),
-                              child: BlocConsumer<RefundRequestCubit, RefundRequestState>(
-                                listener: (context, state) {
-                                  state.maybeWhen(
-                                    success: (data) {
-                                      SuccessDialog.show(context);
-                                    },
-                                    failed: (message) {
-                                      _showError(message);
-                                    },
-                                    orElse: () {},
-                                  );
-                                },
-                                builder: (context, state) {
-                                  final isLoading = state.maybeWhen(
-                                    loading: () => true,
-                                    orElse: () => false,
-                                  );
-                                  return isLoading
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                      : AppButton(
-                                          onPressed: _submitRefundRequest,
-                                          text: 'refund_request.submit'.tr(),
-                                        );
-                                },
-                              ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PageHeader(
+                    title: 'refund_request.title'.tr(),
+                    backPath: '/home',
+                    onHelp: () {
+                      ShowCaseWidget.of(context).startShowCase([
+                        _familyKey,
+                        _providerKey,
+                        _noteKey,
+                        _attachKey,
+                        _submitKey,
+                      ]);
+                    },
+                  ),
+                  Transform.translate(
+                    offset: Offset(0, -20.h),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteClr,
+                          borderRadius: BorderRadius.circular(16.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.greyClr.withValues(alpha: 0.08),
+                              blurRadius: 24,
+                              offset: const Offset(0, 8),
                             ),
                           ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'refund_request.family_members'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
+                              SizedBox(height: 12.h),
+                              Showcase(
+                                key: _familyKey,
+                                description: 'tutorial.family_member.select'
+                                    .tr(),
+                                child: FamilyMembersSelector(
+                                  onMemberSelected: (member) {
+                                    setState(() {
+                                      _selectedMember = member;
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 24.h),
+                              Text(
+                                'refund_request.refund_type'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
+                              SizedBox(height: 8.h),
+                              GestureDetector(
+                                onTap: _unfocusAll,
+                                child: RefundTypeSelector(
+                                  selectedTypeId: _selectedRefundTypeId,
+                                  onTypeSelected: (id, name) {
+                                    _unfocusAll();
+                                    setState(() {
+                                      _selectedRefundTypeId = id;
+                                      _selectedRefundTypeName = name;
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              Text(
+                                'refund_request.provider'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
+                              SizedBox(height: 8.h),
+                              Showcase(
+                                key: _providerKey,
+                                description: 'tutorial.provider.select'.tr(),
+                                child: TextField(
+                                  controller: _providerController,
+                                  autofocus: false,
+                                  decoration: InputDecoration(
+                                    hintText: 'refund_request.provider_hint'
+                                        .tr(),
+                                    hintStyle: AppTextStyles.font14GreyRegular(
+                                      context,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      borderSide: BorderSide(
+                                        color: AppColors.greyClr.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      borderSide: BorderSide(
+                                        color: AppColors.greyClr.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      borderSide: BorderSide(
+                                        color: AppColors.primaryClr,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 12.w,
+                                      vertical: 12.h,
+                                    ),
+                                  ),
+                                  style: AppTextStyles.font14BlackMedium(
+                                    context,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              Text(
+                                'refund_request.reason'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
+                              SizedBox(height: 8.h),
+                              GestureDetector(
+                                onTap: _unfocusAll,
+                                child: ReasonSelector(
+                                  selectedReasonId: _selectedReasonId,
+                                  onReasonSelected: (id, name) {
+                                    _unfocusAll();
+                                    setState(() {
+                                      _selectedReasonId = id;
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: RefundAmountField(
+                                      controller: _amountController,
+                                    ),
+                                  ),
+                                  SizedBox(width: 16.w),
+                                  Expanded(
+                                    child: RefundDatePicker(
+                                      selectedDate: _selectedDate,
+                                      onTap: _selectDate,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16.h),
+                              Text(
+                                'refund_request.note'.tr(),
+                                style: AppTextStyles.font14BlackMedium(context),
+                              ),
+                              SizedBox(height: 8.h),
+                              Showcase(
+                                key: _noteKey,
+                                description: 'tutorial.note.hint'.tr(),
+                                child: NoteTextField(
+                                  controller: _noteController,
+                                  maxLength: 300,
+                                  errorText: _noteError,
+                                  onChanged: (value) {
+                                    if (_noteError != null && value.length <= 300) {
+                                      setState(() {
+                                        _noteError = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              Showcase(
+                                key: _attachKey,
+                                description: 'tutorial.attachments.hint'.tr(),
+                                child: AddAttachmentWidget(
+                                  refundTypeName: _selectedRefundTypeName,
+                                  onAttachmentsChanged: (paths, hasInvoice, hasPrescription) {
+                                    setState(() {
+                                      _attachmentPaths = paths;
+                                      _hasInvoiceAttachment = hasInvoice;
+                                      _hasPrescriptionAttachment = hasPrescription;
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              Showcase(
+                                key: _submitKey,
+                                description: 'tutorial.submit.tap'.tr(),
+                                child:
+                                    BlocConsumer<
+                                      RefundRequestCubit,
+                                      RefundRequestState
+                                    >(
+                                      listener: (context, state) {
+                                        state.maybeWhen(
+                                          success: (data) {
+                                            _showSuccess('refund_request.success_message'.tr());
+                                            SuccessDialog.show(context);
+                                          },
+                                          failed: (message) {
+                                            _showError(message);
+                                          },
+                                          orElse: () {},
+                                        );
+                                      },
+                                      builder: (context, state) {
+                                        final isLoading = state.maybeWhen(
+                                          loading: () => true,
+                                          orElse: () => false,
+                                        );
+                                        return isLoading
+                                            ? const CircularProgressIndicator(
+                                                color: Colors.white,
+                                              )
+                                            : AppButton(
+                                                onPressed: _submitRefundRequest,
+                                                text: 'refund_request.submit'
+                                                    .tr(),
+                                              );
+                                      },
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 8.h),
-              ],
+                  SizedBox(height: 8.h),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 }

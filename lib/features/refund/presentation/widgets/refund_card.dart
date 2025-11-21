@@ -116,7 +116,7 @@ class RefundCard extends StatelessWidget {
                   context,
                   Icons.calendar_today_rounded,
                   'refund_history.date'.tr(),
-                  DateFormatter.formatDate(item.date),
+                  item.date,
                 ),
                 SizedBox(height: 12.h),
                 _buildInfoRow(

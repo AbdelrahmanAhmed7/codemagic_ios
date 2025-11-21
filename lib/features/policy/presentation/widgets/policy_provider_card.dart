@@ -70,15 +70,6 @@ class PolicyProviderCard extends StatelessWidget {
                         color: _getCopaymentColor(),
                       ),
                     ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      'policy_screen.view_details'.tr(),
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primaryClr,
-                      ),
-                    ),
                   ],
                 ),
               ],

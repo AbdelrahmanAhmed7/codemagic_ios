@@ -11,10 +11,10 @@ import 'package:mediconsult/features/policy/presentation/cubit/get_policy_detail
 import 'package:mediconsult/features/policy/presentation/cubit/get_policy_details_state.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/features/policy/presentation/policy_providers_screen.dart';
-import 'package:mediconsult/features/policy/presentation/widgets/policy_search_bar.dart';
 import 'package:mediconsult/features/policy/presentation/widgets/policy_coverage_card.dart';
 import 'package:mediconsult/features/policy/presentation/widgets/policy_provider_card.dart';
 import 'package:mediconsult/features/policy/presentation/widgets/policy_service_helper.dart';
+import 'package:mediconsult/shared/widgets/error_state_widget.dart';
 
 class PolicyDetailsScreen extends StatefulWidget {
   final String serviceName;
@@ -98,13 +98,18 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
                                     loading: () => const Center(
                                       child: CircularProgressIndicator(),
                                     ),
-                                    failed: (message) => Center(
-                                      child: Text(
-                                        message,
-                                        style: AppTextStyles.font14BlackMedium(
-                                          context,
-                                        ),
-                                      ),
+                                    failed: (message) => ErrorStateWidget(
+                                      message: message,
+                                      icon: Icons.policy_outlined,
+                                      onRetry: () {
+                                        context
+                                            .read<GetPolicyDetailsCubit>()
+                                            .getDetails(
+                                              LanguageHelper.getLanguageCode(context),
+                                              widget.categoryId,
+                                            );
+                                      },
+                                      retryButtonText: 'common.try_again'.tr(),
                                     ),
                                     loaded: (response) =>
                                         _buildDetailsContent(response.data),
@@ -131,8 +136,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PolicySearchBar(controller: _searchController),
-            SizedBox(height: 24.h),
+            SizedBox(height: 14.h),
 
             // Policy Details Section
             Text(

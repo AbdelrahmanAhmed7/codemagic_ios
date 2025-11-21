@@ -6,6 +6,7 @@ import 'package:mediconsult/features/notifications/data/notification_models.dart
 import 'package:mediconsult/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:mediconsult/features/notifications/repository/notification_repository.dart';
 import 'package:mediconsult/core/services/notification_badge_service.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {
   final NotificationRepository _repository;
@@ -95,6 +96,18 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       },
       failure: (message) {
         _loadingMore = false;
+        
+        // تسجيل فشل تحميل الإشعارات
+        FirebaseCrashlyticsService.instance.recordError(
+          exception: 'Notifications Load Failed: $message',
+          reason: 'Failed to load notifications',
+          information: [
+            'Language: $lang',
+            'Page: $_page',
+            'Page Size: $_pageSize',
+          ],
+        );
+        
         emit(NotificationsState.failed(message));
       },
     );

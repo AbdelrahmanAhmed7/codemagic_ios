@@ -26,7 +26,7 @@ class AddAttachmentWidget extends StatefulWidget {
   });
 
   final String? refundTypeName;
-  final Function(List<String>)? onAttachmentsChanged;
+  final Function(List<String>, bool, bool)? onAttachmentsChanged;
 
   @override
   State<AddAttachmentWidget> createState() => _AddAttachmentWidgetState();
@@ -45,7 +45,9 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
       if (_eInvoicePath != null) _eInvoicePath!,
       if (_prescriptionPath != null) _prescriptionPath!,
     ];
-    widget.onAttachmentsChanged?.call(paths);
+    final hasInvoice = _eInvoicePath != null;
+    final hasPrescription = _prescriptionPath != null;
+    widget.onAttachmentsChanged?.call(paths, hasInvoice, hasPrescription);
   }
 
   void _openUploadSheet(_AttachmentSlot slot) async {

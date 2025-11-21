@@ -26,6 +26,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // مسح حقول تسجيل الدخول عند فتح الصفحة
+    // هذا مفيد خاصة بعد عمل logout لضمان عدم بقاء البيانات السابقة
+    _clearFields();
+  }
+
+  void _clearFields() {
+    cardOrPhoneController.clear();
+    passwordController.clear();
+  }
+
+  @override
   void dispose() {
     cardOrPhoneController.dispose();
     passwordController.dispose();
@@ -140,6 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           'auth.login.login_successful'.tr(),
                         );
+                        _clearFields(); // مسح الحقول بعد نجاح تسجيل الدخول
                         context.push('/home');
                       });
                     } else if (state is Failed) {

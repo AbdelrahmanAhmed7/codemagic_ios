@@ -1,0 +1,92 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '12.0'
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_ios_podfile_setup
+
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  
+  # Firebase specific pods (if needed)
+  # pod 'Firebase/Core'
+  # pod 'Firebase/Crashlytics'
+  # pod 'Firebase/Messaging'
+  
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    
+    # Firebase Crashlytics and general iOS settings
+    target.build_configurations.each do |config|
+      # iOS Deployment Target
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      
+      # Disable Bitcode (required for Firebase Crashlytics)
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      
+      # Strip Debug Symbols in Release
+      if config.name == 'Release'
+        config.build_settings['STRIP_INSTALLED_PRODUCT'] = 'YES'
+        config.build_settings['SEPARATE_STRIP'] = 'YES'
+        config.build_settings['COPY_PHASE_STRIP'] = 'YES'
+      end
+      
+      # Code Signing
+      config.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
+      config.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
+      
+      # Architecture settings
+      config.build_settings['ONLY_ACTIVE_ARCH'] = config.name == 'Debug' ? 'YES' : 'NO'
+      
+      # Swift settings
+      config.build_settings['SWIFT_VERSION'] = '5.0'
+      
+      # Linker settings
+      config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -ObjC'
+      
+      # Privacy settings
+      config.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
+      
+      # Performance settings
+      config.build_settings['GCC_OPTIMIZATION_LEVEL'] = config.name == 'Debug' ? '0' : 's'
+      
+      # Security settings
+      config.build_settings['ENABLE_HARDENED_RUNTIME'] = 'YES'
+      
+      # Network settings for Firebase
+      config.build_settings['FIREBASE_ANALYTICS_COLLECTION_ENABLED'] = 'YES'
+      config.build_settings['FIREBASE_CRASHLYTICS_COLLECTION_ENABLED'] = 'YES'
+    end
+  end
+end

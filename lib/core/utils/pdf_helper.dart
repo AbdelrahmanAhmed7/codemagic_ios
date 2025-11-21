@@ -15,21 +15,18 @@ class PdfHelper {
     String? errorMessageKey,
   }) async {
     if (!context.mounted) return;
-    
+
     bool dialogShown = false;
-    
+
     try {
       // Show loading indicator
       showDialog(
         context: context,
+        useRootNavigator: true,
         barrierDismissible: false,
-        builder: (dialogContext) => WillPopScope(
-          onWillPop: () async => false,
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        builder: (_) => const Center(child: CircularProgressIndicator()),
       );
+
       dialogShown = true;
 
       final result = await fetchPdf();
@@ -78,7 +75,8 @@ class PdfHelper {
             String errorMsg = error;
             if (error.contains('Approval not found') || error.contains('404')) {
               errorMsg = 'approval_history.approval_not_found';
-            } else if (error.contains('timeout') || error.contains('Request timeout')) {
+            } else if (error.contains('timeout') ||
+                error.contains('Request timeout')) {
               errorMsg = 'common.request_timeout';
             }
             _showError(context, errorMsg);
@@ -94,14 +92,11 @@ class PdfHelper {
           // Dialog already closed
         }
       }
-      
+
       await Future.delayed(const Duration(milliseconds: 150));
-      
+
       if (context.mounted) {
-        _showError(
-          context,
-          errorMessageKey ?? 'common.error_loading_pdf',
-        );
+        _showError(context, errorMessageKey ?? 'common.error_loading_pdf');
       }
     }
   }
@@ -111,11 +106,7 @@ class PdfHelper {
       SnackBar(
         content: Row(
           children: [
-            Icon(
-              Icons.error_outline,
-              color: Colors.white,
-              size: 24.sp,
-            ),
+            Icon(Icons.error_outline, color: Colors.white, size: 24.sp),
             SizedBox(width: 12.w),
             Expanded(
               child: Text(

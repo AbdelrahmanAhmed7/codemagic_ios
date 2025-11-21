@@ -9,7 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 /// Background message handler - must be top-level function
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('📬 Background message: ${message.messageId}');
+  if (kDebugMode) debugPrint('Background message: ${message.messageId}');
   await PushNotificationService.instance.setupFlutterNotifications();
   await PushNotificationService.instance.showNotification(message);
 }
@@ -41,12 +41,12 @@ class PushNotificationService {
   /// Call this in main() before runApp()
   Future<bool> initialize() async {
     if (_isInitialized) {
-      debugPrint('⚠️ PushNotificationService already initialized');
+      if (kDebugMode) debugPrint('PushNotificationService already initialized');
       return true;
     }
 
     try {
-      debugPrint('🔧 Initializing PushNotificationService...');
+      if (kDebugMode) debugPrint('Initializing PushNotificationService...');
 
       // Set background message handler
       FirebaseMessaging.onBackgroundMessage(
@@ -56,7 +56,7 @@ class PushNotificationService {
       // Request permissions
       final permissionGranted = await _requestPermission();
       if (!permissionGranted) {
-        debugPrint('❌ Notification permission denied');
+        if (kDebugMode) debugPrint('Notification permission denied');
         return false;
       }
 
@@ -70,11 +70,11 @@ class PushNotificationService {
       await _setupTokenHandling();
 
       _isInitialized = true;
-      debugPrint('✅ PushNotificationService initialized successfully');
+      if (kDebugMode) debugPrint('PushNotificationService initialized successfully');
       return true;
     } catch (e, stackTrace) {
-      debugPrint('❌ Error initializing PushNotificationService: $e');
-      debugPrint('Stack trace: $stackTrace');
+      if (kDebugMode) debugPrint('Error initializing PushNotificationService: $e');
+      if (kDebugMode) debugPrint('Stack trace: $stackTrace');
       return false;
     }
   }
@@ -96,10 +96,10 @@ class PushNotificationService {
           settings.authorizationStatus == AuthorizationStatus.authorized ||
           settings.authorizationStatus == AuthorizationStatus.provisional;
 
-      debugPrint('🔐 Permission status: ${settings.authorizationStatus}');
+      if (kDebugMode) debugPrint('Permission status: ${settings.authorizationStatus}');
       return isAuthorized;
     } catch (e) {
-      debugPrint('❌ Error requesting permission: $e');
+      if (kDebugMode) debugPrint('Error requesting permission: $e');
       return false;
     }
   }
@@ -179,9 +179,9 @@ class PushNotificationService {
       );
 
       _isFlutterLocalNotificationsInitialized = true;
-      debugPrint('✅ Local notifications initialized');
+      if (kDebugMode) debugPrint('Local notifications initialized');
     } catch (e) {
-      debugPrint('❌ Error setting up local notifications: $e');
+      if (kDebugMode) debugPrint('Error setting up local notifications: $e');
       rethrow;
     }
   }
@@ -191,7 +191,7 @@ class PushNotificationService {
     try {
       final notification = message.notification;
       if (notification == null) {
-        debugPrint('⚠️ Message has no notification payload');
+        if (kDebugMode) debugPrint('Message has no notification payload');
         return;
       }
 
@@ -219,8 +219,8 @@ class PushNotificationService {
       final forceBigPicture = (data['forceBigPicture'] == 'true') || 
                               (imageUrl != null && imageUrl.isNotEmpty);
       
-      debugPrint('📸 Notification Image URL: $imageUrl');
-      debugPrint('🖼️ Force Big Picture: $forceBigPicture');
+      if (kDebugMode) debugPrint('Notification Image URL: $imageUrl');
+      if (kDebugMode) debugPrint('Force Big Picture: $forceBigPicture');
 
       // حمّل الصورة الكبيرة (largeIcon) مرة واحدة في البداية
       ByteArrayAndroidBitmap? largeIconBitmap;
@@ -229,9 +229,9 @@ class PushNotificationService {
           largeIconBitmap = ByteArrayAndroidBitmap(
             await _downloadBytes(largeIconUrl),
           );
-          debugPrint('✅ Large icon loaded successfully');
+          if (kDebugMode) debugPrint('Large icon loaded successfully');
         } catch (e) {
-          debugPrint('⚠️ Failed to load large icon: $e');
+          if (kDebugMode) debugPrint('Failed to load large icon: $e');
         }
       }
 
@@ -244,14 +244,14 @@ class PushNotificationService {
           );
           styleInfo = BigPictureStyleInformation(
             bigPicture,
-            largeIcon: largeIconBitmap, // استخدم نفس الصورة في الوضع الموسّع
+            largeIcon: largeIconBitmap,
             contentTitle: notification.title,
             summaryText: notification.body,
             hideExpandedLargeIcon: false,
           );
-          debugPrint('✅ Big picture style loaded successfully');
+          if (kDebugMode) debugPrint('Big picture style loaded successfully');
         } catch (e) {
-          debugPrint('⚠️ Failed to load big picture: $e');
+          if (kDebugMode) debugPrint('Failed to load big picture: $e');
           styleInfo = BigTextStyleInformation(
             notification.body ?? '',
             contentTitle: notification.title,
@@ -279,7 +279,7 @@ class PushNotificationService {
             styleInformation: styleInfo,
             showWhen: true,
             ticker: notification.title,
-            largeIcon: largeIconBitmap, // هنا هتظهر في الوضع العادي (collapsed)
+            largeIcon: largeIconBitmap,
             color: colorHex != null ? _parseColor(colorHex) : null,
             groupKey: groupKey,
             actions: <AndroidNotificationAction>[
@@ -319,9 +319,9 @@ class PushNotificationService {
         payload: message.data.isNotEmpty ? jsonEncode(message.data) : null,
       );
 
-      debugPrint('✅ Notification shown: ${notification.title}');
+      if (kDebugMode) debugPrint('Notification shown: ${notification.title}');
     } catch (e) {
-      debugPrint('❌ Error showing notification: $e');
+      if (kDebugMode) debugPrint('Error showing notification: $e');
     }
   }
 
@@ -343,20 +343,20 @@ class PushNotificationService {
     try {
       // Foreground messages
       FirebaseMessaging.onMessage.listen((message) {
-        debugPrint('📱 Foreground message: ${message.messageId}');
+        if (kDebugMode) debugPrint('Foreground message: ${message.messageId}');
         showNotification(message);
       });
 
       // Background messages (app in background, user taps notification)
       FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        debugPrint('👆 Notification opened (background): ${message.messageId}');
+        if (kDebugMode) debugPrint('Notification opened (background): ${message.messageId}');
         _handleMessageOpen(message);
       });
 
       // Terminated state (app was closed, user taps notification)
       final initialMessage = await _messaging.getInitialMessage();
       if (initialMessage != null) {
-        debugPrint(
+        if (kDebugMode) debugPrint(
           '🚀 App opened from notification: ${initialMessage.messageId}',
         );
         // Delay to ensure app is fully initialized
@@ -365,9 +365,9 @@ class PushNotificationService {
         });
       }
 
-      debugPrint('✅ Message handlers setup complete');
+      if (kDebugMode) debugPrint('Message handlers setup complete');
     } catch (e) {
-      debugPrint('❌ Error setting up message handlers: $e');
+      if (kDebugMode) debugPrint('Error setting up message handlers: $e');
     }
   }
 
@@ -377,25 +377,25 @@ class PushNotificationService {
       // Get initial token
       _currentToken = await _messaging.getToken();
       if (_currentToken != null) {
-        debugPrint('🎫 FCM Token: $_currentToken');
+        if (kDebugMode) debugPrint('FCM Token: $_currentToken');
         _tokenController.add(_currentToken!);
       }
 
       // Listen to token refresh
       _messaging.onTokenRefresh.listen((token) {
-        debugPrint('🔄 Token refreshed: $token');
+        if (kDebugMode) debugPrint('Token refreshed: $token');
         _currentToken = token;
         _tokenController.add(token);
       });
     } catch (e) {
-      debugPrint('❌ Error setting up token handling: $e');
+      if (kDebugMode) debugPrint('Error setting up token handling: $e');
     }
   }
 
   /// Handle notification tap
   @pragma('vm:entry-point')
   static void _handleNotificationTap(NotificationResponse response) {
-    debugPrint('👆 Notification tapped: ${response.id}');
+    if (kDebugMode) debugPrint('Notification tapped: ${response.id}');
 
     if (response.payload != null) {
       try {
@@ -408,7 +408,7 @@ class PushNotificationService {
           ),
         );
       } catch (e) {
-        debugPrint('❌ Error parsing notification payload: $e');
+        if (kDebugMode) debugPrint('Error parsing notification payload: $e');
       }
     }
   }
@@ -428,10 +428,10 @@ class PushNotificationService {
   Future<bool> subscribeToTopic(String topic) async {
     try {
       await _messaging.subscribeToTopic(topic);
-      debugPrint('✅ Subscribed to topic: $topic');
+      if (kDebugMode) debugPrint('Subscribed to topic: $topic');
       return true;
     } catch (e) {
-      debugPrint('❌ Error subscribing to topic: $e');
+      if (kDebugMode) debugPrint('Error subscribing to topic: $e');
       return false;
     }
   }
@@ -440,10 +440,10 @@ class PushNotificationService {
   Future<bool> unsubscribeFromTopic(String topic) async {
     try {
       await _messaging.unsubscribeFromTopic(topic);
-      debugPrint('✅ Unsubscribed from topic: $topic');
+      if (kDebugMode) ('Unsubscribed from topic: $topic');
       return true;
     } catch (e) {
-      debugPrint('❌ Error unsubscribing from topic: $e');
+      if  (kDebugMode) debugPrint('Error unsubscribing from topic: $e');
       return false;
     }
   }
@@ -453,10 +453,10 @@ class PushNotificationService {
     try {
       await _messaging.deleteToken();
       _currentToken = null;
-      debugPrint('✅ FCM token deleted');
+      if (kDebugMode) debugPrint('FCM token deleted');
       return true;
     } catch (e) {
-      debugPrint('❌ Error deleting token: $e');
+      if (kDebugMode) debugPrint('Error deleting token: $e');
       return false;
     }
   }
@@ -465,9 +465,9 @@ class PushNotificationService {
   Future<void> cancelAllNotifications() async {
     try {
       await _localNotifications.cancelAll();
-      debugPrint('✅ All notifications cancelled');
+      if (kDebugMode) debugPrint('All notifications cancelled');
     } catch (e) {
-      debugPrint('❌ Error cancelling notifications: $e');
+      if (kDebugMode) debugPrint('Error cancelling notifications: $e');
     }
   }
 
@@ -475,9 +475,9 @@ class PushNotificationService {
   Future<void> cancelNotification(int id) async {
     try {
       await _localNotifications.cancel(id);
-      debugPrint('✅ Notification $id cancelled');
+      if (kDebugMode) debugPrint('Notification $id cancelled');
     } catch (e) {
-      debugPrint('❌ Error cancelling notification: $e');
+      if (kDebugMode) debugPrint('Error cancelling notification: $e');
     }
   }
 
@@ -486,7 +486,7 @@ class PushNotificationService {
     try {
       return await _localNotifications.pendingNotificationRequests();
     } catch (e) {
-      debugPrint('❌ Error getting pending notifications: $e');
+      if (kDebugMode) debugPrint('Error getting pending notifications: $e');
       return [];
     }
   }
@@ -510,7 +510,7 @@ class PushNotificationService {
   void dispose() {
     _notificationActionController.close();
     _tokenController.close();
-    debugPrint('🧹 PushNotificationService disposed');
+    if (kDebugMode) debugPrint('PushNotificationService disposed');
   }
 }
 

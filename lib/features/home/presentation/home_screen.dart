@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: const KhusmPromotionWidget(),
                               ),
                               SizedBox(height: 24.h),
-                              if (data.approvals.isNotEmpty) ...[
+                              if (data.approvals.any((approval) => approval.status.toLowerCase() == 'reviewing')) ...[
                                 RepaintBoundary(
                                   child: OngoingRequestWidget(data: data),
                                 ),

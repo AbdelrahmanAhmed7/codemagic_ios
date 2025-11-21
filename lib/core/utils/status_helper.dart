@@ -8,12 +8,12 @@ class StatusHelper {
   static Color getStatusColor(String statusChar) {
     switch (statusChar.toUpperCase()) {
       case 'A': // Approved
-        return const Color(0xFF349859);
+        return const Color(0xFF28A745); // Green - Success
       case 'R': // Rejected
-        return const Color(0xFFB92828);
+        return const Color(0xFFDC3545); // Red - Danger
       case 'P': // Pending
       default:
-        return const Color(0xFF999999);
+        return const Color(0xFF999999); // Grey - Pending
     }
   }
 
@@ -21,12 +21,12 @@ class StatusHelper {
   static Color getBackgroundColor(String statusChar) {
     switch (statusChar.toUpperCase()) {
       case 'A': // Approved
-        return const Color(0xFFD9F2E2);
+        return const Color(0xFF28A745).withValues(alpha: 0.1); // Green with 10% opacity
       case 'R': // Rejected
-        return const Color(0xFFF5E1E9);
+        return const Color(0xFFDC3545).withValues(alpha: 0.1); // Red with 10% opacity
       case 'P': // Pending
       default:
-        return const Color(0xFFF2F2F2);
+        return const Color(0xFF999999).withValues(alpha: 0.1); // Grey with 10% opacity
     }
   }
 

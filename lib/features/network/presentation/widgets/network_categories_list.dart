@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -30,19 +31,29 @@ class NetworkCategoriesList extends StatelessWidget {
 
           return GestureDetector(
             onTap: () {
+              HapticFeedback.lightImpact();
               onCategorySelected(isSelected ? null : category.id);
             },
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
               width: 70.w,
               height: 80.h,
               margin: EdgeInsets.only(right: 12.w),
               decoration: BoxDecoration(
-                color: category.bgColor,
+                color: isSelected ? AppColors.primaryClr : category.bgColor,
                 borderRadius: BorderRadius.circular(40.r),
                 border: Border.all(
-                  color: isSelected ? Colors.blue : Colors.transparent,
-                  width: 2.w,
+                  color: isSelected ? AppColors.primaryClr : Colors.transparent,
+                  width: 3.w,
                 ),
+                boxShadow: isSelected ? [
+                  BoxShadow(
+                    color: AppColors.primaryClr.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ] : null,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -53,12 +64,18 @@ class NetworkCategoriesList extends StatelessWidget {
                     height: 55.h,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
+                      color: isSelected ? Colors.white.withValues(alpha: 0.2) : Colors.white,
+                      boxShadow: isSelected ? [
+                        BoxShadow(
+                          color: Colors.white.withValues(alpha: 0.3),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ] : [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 3,
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -69,11 +86,12 @@ class NetworkCategoriesList extends StatelessWidget {
                               width: 26.w,
                               height: 26.h,
                               fit: BoxFit.contain,
+                              color: isSelected ? Colors.white : null,
                             )
                           : Icon(
                               Icons.medical_services_outlined,
                               size: 22.sp,
-                              color: category.iconColor,
+                              color: isSelected ? Colors.white : category.iconColor,
                             ),
                     ),
                   ),
@@ -84,7 +102,7 @@ class NetworkCategoriesList extends StatelessWidget {
                       fontSize: 12.sp,
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.w500,
-                      color: category.textColor,
+                      color: isSelected ? Colors.white : category.textColor,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 2,

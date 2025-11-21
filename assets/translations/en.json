@@ -18,6 +18,8 @@
     "back": "Back",
     "choose": "Choose",
     "no_internet": "No internet connection",
+    "connection_error": "Connection error, please check your internet connection",
+    "try_again": "Try Again",
     "dismiss": "Dismiss",
     "cannot_open_pdf": "Unable to open PDF file",
     "pdf_not_available": "PDF file is not available",
@@ -324,7 +326,13 @@
     "attachment_required": "At least 1 attachment is required",
     "max_size": "Maximum size 5MB",
     "max_characters": "Maximum 300 characters",
-    "enter_note": "Enter Note"
+    "enter_note": "Enter Note",
+    "validation": {
+      "select_member": "Please select a family member",
+      "select_provider": "Please select a provider",
+      "attachment_required": "At least 1 attachment is required",
+      "notes_too_long": "Notes cannot exceed 300 characters"
+    }
   },
   "approval_history": {
     "title": "Approval History",
@@ -360,6 +368,7 @@
     "select_date": "Select date",
     "note": "Note",
     "submit": "Submit",
+    "success_message": "Refund request submitted successfully!",
     "provider_hint": "Enter provider name",
     "note_hint": "Add any additional notes here",
     "validation": {
@@ -369,7 +378,12 @@
       "select_reason": "Please select reason",
       "enter_amount": "Please enter amount",
       "select_date": "Please select service date",
-      "add_attachment": "Please add at least one attachment"
+      "add_attachment": "Please add at least one attachment",
+      "future_date_not_allowed": "Invoice date cannot be in the future",
+      "date_too_old": "Invoice date cannot be older than 60 days",
+      "invoice_attachment_required": "Invoice attachment is required",
+      "prescription_attachment_required": "Prescription attachment is required",
+      "notes_too_long": "Notes cannot exceed 300 characters"
     }
   },
   "refund_history": {

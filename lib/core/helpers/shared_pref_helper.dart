@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +10,7 @@ class SharedPrefHelper {
 
   static Future<void> setData(String key, dynamic value) async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint("SharedPrefHelper : setData key=$key value=$value");
+    if (kDebugMode) debugPrint("SharedPrefHelper : setData key=$key value=$value");
     if (value is String)
       await prefs.setString(key, value);
     else if (value is int)
@@ -22,7 +23,7 @@ class SharedPrefHelper {
 
   static Future<String> getString(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint("SharedPrefHelper : getString key=$key");
+    if (kDebugMode) debugPrint("SharedPrefHelper : getString key=$key");
     return prefs.getString(key) ?? '';
   }
 
@@ -41,17 +42,17 @@ class SharedPrefHelper {
   static const _secureStorage = FlutterSecureStorage();
 
   static Future<void> setSecuredString(String key, String value) async {
-    debugPrint("SecureStorage : set $key = $value");
+    if (kDebugMode) debugPrint("SecureStorage : set $key = $value");
     await _secureStorage.write(key: key, value: value);
   }
 
   static Future<String> getSecuredString(String key) async {
-    debugPrint("SecureStorage : get $key");
+    if (kDebugMode) debugPrint("SecureStorage : get $key");
     return await _secureStorage.read(key: key) ?? '';
   }
 
   static Future<void> clearAllSecuredData() async {
-    debugPrint("SecureStorage : cleared all");
+    if (kDebugMode) ("SecureStorage : cleared all");
     await _secureStorage.deleteAll();
   }
 }

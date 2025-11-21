@@ -15,28 +15,35 @@ class MockLoginRepository extends Mock implements LoginRepository {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  // Register fallback for mocktail when using any<LoginRequestModel>()
+
   setUpAll(() {
     registerFallbackValue(LoginRequestModel(cardNo: '', password: ''));
-    const channel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
-    TestWidgetsFlutterBinding.ensureInitialized();
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      switch (methodCall.method) {
-        case 'read':
-          return null;
-        case 'write':
-          return true;
-        case 'delete':
-          return true;
-        case 'deleteAll':
-          return true;
-        case 'readAll':
-          return <String, String>{};
-        default:
-          return null;
-      }
-    });
+
+    const MethodChannel secureStorageChannel =
+    MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      secureStorageChannel,
+          (MethodCall methodCall) async {
+        switch (methodCall.method) {
+          case 'read':
+            return null;
+          case 'write':
+            return true;
+          case 'delete':
+            return true;
+          case 'deleteAll':
+            return true;
+          case 'readAll':
+            return <String, String>{};
+          default:
+            return null;
+        }
+      },
+    );
   });
+
   late MockLoginRepository repository;
   late LoginCubit cubit;
 
@@ -55,19 +62,19 @@ void main() {
     build: () {
       when(() => repository.login(any<LoginRequestModel>(), any()))
           .thenAnswer((_) async => ApiResult.success(
-                LoginResponseModel(
-                  success: true,
-                  timestamp: 'now',
-                  message: 'ok',
-                  data: LoginDataModel(
-                    token: 't',
-                    memberId: 1,
-                    memberName: 'name',
-                    phoneNumber: '010',
-                    nationalId: '123',
-                  ),
-                ),
-              ));
+        LoginResponseModel(
+          success: true,
+          timestamp: 'now',
+          message: 'ok',
+          data: LoginDataModel(
+            token: 't',
+            memberId: 1,
+            memberName: 'name',
+            phoneNumber: '010',
+            nationalId: '123',
+          ),
+        ),
+      ));
       return cubit;
     },
     act: (c) => c.login('123', 'pwd', 'ar'),
@@ -93,5 +100,3 @@ void main() {
     ],
   );
 }
-
-
