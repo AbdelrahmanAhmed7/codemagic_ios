@@ -29,7 +29,7 @@ PolicyDetailsData _$PolicyDetailsDataFromJson(Map<String, dynamic> json) =>
       slCopayment: json['slCopayment'] as num,
       slLimit: json['slLimit'] as num,
       slServiceCount: json['slServiceCount'] as num,
-      providerCategoryId: (json['providerCategoryId'] as num).toInt(),
+      providerCategoryId: (json['providerCategoryId'] as num?)?.toInt(),
       providers: (json['providers'] as List<dynamic>)
           .map((e) => PolicyProviderItem.fromJson(e as Map<String, dynamic>))
           .toList(),

@@ -14,6 +14,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_
 import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fields.dart';
+import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_state.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
@@ -32,15 +33,19 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _providerController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  final FocusNode _amountFocusNode = FocusNode();
+  final FocusNode _noteFocusNode = FocusNode();
   DateTime? _selectedDate;
   int? _selectedRefundTypeId;
   String? _selectedRefundTypeName;
   int? _selectedReasonId;
   FamilyMember? _selectedMember;
   List<String> _attachmentPaths = [];
-  bool _hasInvoiceAttachment = false;
-  bool _hasPrescriptionAttachment = false;
+  bool _hasAllRequiredAttachments = false;
   String? _noteError;
+  String? _providerError;
+  String? _amountError;
+  List<RefundAttachment> _selectedRefundAttachments = [];
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
@@ -51,6 +56,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   void _unfocusAll() {
     FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
   @override
@@ -58,6 +64,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     _amountController.dispose();
     _providerController.dispose();
     _noteController.dispose();
+    _amountFocusNode.dispose();
+    _noteFocusNode.dispose();
     super.dispose();
   }
 
@@ -65,6 +73,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     // Clear previous errors
     setState(() {
       _noteError = null;
+      _providerError = null;
+      _amountError = null;
     });
 
     // Validation
@@ -76,8 +86,17 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       _showError('refund_request.validation.select_type'.tr());
       return;
     }
-    if (_providerController.text.trim().isEmpty) {
-      _showError('refund_request.validation.enter_provider'.tr());
+    final providerText = _providerController.text.trim();
+    if (providerText.isEmpty) {
+      setState(() {
+        _providerError = 'refund_request.validation.enter_provider'.tr();
+      });
+      return;
+    }
+    if (providerText.length < 2) {
+      setState(() {
+        _providerError = 'refund_request.validation.provider_min_length'.tr();
+      });
       return;
     }
     if (_selectedReasonId == null) {
@@ -85,7 +104,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       return;
     }
     if (_amountController.text.trim().isEmpty) {
-      _showError('refund_request.validation.enter_amount'.tr());
+      setState(() {
+        _amountError = 'refund_request.validation.enter_amount'.tr();
+      });
       return;
     }
     if (_selectedDate == null) {
@@ -112,18 +133,19 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       _showError('refund_request.validation.date_too_old'.tr());
       return;
     }
-    if (!_hasInvoiceAttachment) {
-      _showError('refund_request.validation.invoice_attachment_required'.tr());
-      return;
-    }
-    if (!_hasPrescriptionAttachment) {
-      _showError('refund_request.validation.prescription_attachment_required'.tr());
+    if (!_hasAllRequiredAttachments) {
+      _showError('refund_request.validation.add_attachment'.tr());
       return;
     }
 
-    // Format date
-    final formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+    final formattedDate = DateFormat('yyyy-MM-dd', 'en').format(_selectedDate!);
     final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
+    if (amount < 1 || amount > 100000) {
+      setState(() {
+        _amountError = 'refund_request.validation.amount_range'.tr();
+      });
+      return;
+    }
 
     // Call cubit
     await context.read<RefundRequestCubit>().createRefundRequest(
@@ -143,19 +165,19 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   void _showError(String message) {
     if (mounted) {
-      HapticFeedback.lightImpact(); // إضافة اهتزاز خفيف للأخطاء
+      HapticFeedback.lightImpact();
       showAppSnackBar(
         context, 
         message, 
         isError: true,
-        duration: const Duration(seconds: 4), // مدة أطول لرسائل الخطأ
+        duration: const Duration(seconds: 4),
       );
     }
   }
 
   void _showSuccess(String message) {
     if (mounted) {
-      HapticFeedback.selectionClick(); // إضافة اهتزاز للنجاح
+      HapticFeedback.selectionClick();
       showAppSnackBar(
         context, 
         message, 
@@ -166,15 +188,23 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    _unfocusAll();
+
+    await Future.delayed(const Duration(milliseconds: 50));
+
     final DateTime now = DateTime.now();
     final DateTime sixtyDaysAgo = now.subtract(const Duration(days: 60));
-    
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? now,
       firstDate: sixtyDaysAgo,
       lastDate: now,
     );
+
+    await Future.delayed(const Duration(milliseconds: 50));
+    _unfocusAll();
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -189,9 +219,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
         backgroundColor: AppColors.lightGreyClr,
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
+          onTap: _unfocusAll,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -259,11 +287,14 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 onTap: _unfocusAll,
                                 child: RefundTypeSelector(
                                   selectedTypeId: _selectedRefundTypeId,
-                                  onTypeSelected: (id, name) {
+                                  onTypeSelected: (type) {
                                     _unfocusAll();
                                     setState(() {
-                                      _selectedRefundTypeId = id;
-                                      _selectedRefundTypeName = name;
+                                      _selectedRefundTypeId = type.id;
+                                      _selectedRefundTypeName = type.name;
+                                      _selectedRefundAttachments = type.attachments;
+                                      _attachmentPaths = [];
+                                      _hasAllRequiredAttachments = false;
                                     });
                                   },
                                 ),
@@ -286,6 +317,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     hintStyle: AppTextStyles.font14GreyRegular(
                                       context,
                                     ),
+                                    errorText: _providerError,
+                                    errorMaxLines: 2,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8.r),
                                       borderSide: BorderSide(
@@ -316,6 +349,18 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   style: AppTextStyles.font14BlackMedium(
                                     context,
                                   ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      final text = value.trim();
+                                      if (text.isEmpty) {
+                                        _providerError = 'refund_request.validation.enter_provider'.tr();
+                                      } else if (text.length < 2) {
+                                        _providerError = 'refund_request.validation.provider_min_length'.tr();
+                                      } else {
+                                        _providerError = null;
+                                      }
+                                    });
+                                  },
                                 ),
                               ),
                               SizedBox(height: 16.h),
@@ -342,6 +387,23 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   Expanded(
                                     child: RefundAmountField(
                                       controller: _amountController,
+                                      focusNode: _amountFocusNode,
+                                      errorText: _amountError,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          final text = value.trim();
+                                          if (text.isEmpty) {
+                                            _amountError = 'refund_request.validation.enter_amount'.tr();
+                                          } else {
+                                            final amount = double.tryParse(text);
+                                            if (amount == null || amount < 1 || amount > 100000) {
+                                              _amountError = 'refund_request.validation.amount_range'.tr();
+                                            } else {
+                                              _amountError = null;
+                                            }
+                                          }
+                                        });
+                                      },
                                     ),
                                   ),
                                   SizedBox(width: 16.w),
@@ -364,6 +426,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 description: 'tutorial.note.hint'.tr(),
                                 child: NoteTextField(
                                   controller: _noteController,
+                                  focusNode: _noteFocusNode,
                                   maxLength: 300,
                                   errorText: _noteError,
                                   onChanged: (value) {
@@ -376,20 +439,26 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 ),
                               ),
                               SizedBox(height: 16.h),
-                              Showcase(
-                                key: _attachKey,
-                                description: 'tutorial.attachments.hint'.tr(),
-                                child: AddAttachmentWidget(
-                                  refundTypeName: _selectedRefundTypeName,
-                                  onAttachmentsChanged: (paths, hasInvoice, hasPrescription) {
-                                    setState(() {
-                                      _attachmentPaths = paths;
-                                      _hasInvoiceAttachment = hasInvoice;
-                                      _hasPrescriptionAttachment = hasPrescription;
-                                    });
-                                  },
+                              if (_selectedRefundTypeId != null &&
+                                  _selectedRefundAttachments.isNotEmpty) ...[
+                                SizedBox(height: 16.h),
+                                Showcase(
+                                  key: _attachKey,
+                                  description: 'tutorial.attachments.hint'.tr(),
+                                  child: AddAttachmentWidget(
+                                    key: ValueKey(_selectedRefundTypeId),
+                                    refundTypeName: _selectedRefundTypeName,
+                                    attachments: _selectedRefundAttachments,
+                                    onAttachmentsChanged: (paths, hasAllRequired) {
+                                      setState(() {
+                                        _attachmentPaths = paths;
+                                        _hasAllRequiredAttachments = hasAllRequired;
+                                      });
+                                    },
+                                    onAttachmentDialogClosed: _unfocusAll,
+                                  ),
                                 ),
-                              ),
+                              ],
                               SizedBox(height: 20.h),
                               Showcase(
                                 key: _submitKey,
@@ -403,7 +472,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                         state.maybeWhen(
                                           success: (data) {
                                             _showSuccess('refund_request.success_message'.tr());
-                                            SuccessDialog.show(context);
+                                            SuccessDialog.showRefund(context);
                                           },
                                           failed: (message) {
                                             _showError(message);

@@ -26,6 +26,7 @@ class NetworkSearchBar extends StatelessWidget {
         Expanded(
           child: TextField(
             controller: searchController,
+            textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: 'network.search_placeholder'.tr(),
               hintStyle: AppTextStyles.font14GreyRegular(context),
@@ -72,4 +73,3 @@ class NetworkSearchBar extends StatelessWidget {
     );
   }
 }
-

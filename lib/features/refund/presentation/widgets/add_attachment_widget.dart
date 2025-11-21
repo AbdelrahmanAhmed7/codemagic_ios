@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/attachments/attachment_item.dart';
+import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 import 'package:mediconsult/core/utils/image_picker_service.dart';
-
-enum _AttachmentSlot { eInvoice, prescription }
 
 class _UploadSelection {
   final ImageProvider imageProvider;
@@ -22,35 +22,86 @@ class AddAttachmentWidget extends StatefulWidget {
   const AddAttachmentWidget({
     super.key,
     this.refundTypeName,
+    required this.attachments,
     this.onAttachmentsChanged,
+    this.onAttachmentDialogClosed,
   });
 
   final String? refundTypeName;
-  final Function(List<String>, bool, bool)? onAttachmentsChanged;
+  final List<RefundAttachment> attachments;
+  final Function(List<String>, bool hasAllRequired)? onAttachmentsChanged;
+  final VoidCallback? onAttachmentDialogClosed;
 
   @override
   State<AddAttachmentWidget> createState() => _AddAttachmentWidgetState();
 }
 
 class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
-  final List<AttachmentItem> _attachments = [];
+  late List<AttachmentItem?> _slotItems;
+  late List<String?> _slotPaths;
   bool _showAttachmentOptions = false;
-  AttachmentItem? _eInvoice;
-  AttachmentItem? _prescription;
-  String? _eInvoicePath;
-  String? _prescriptionPath;
 
-  void _notifyPathsChanged() {
-    final paths = <String>[
-      if (_eInvoicePath != null) _eInvoicePath!,
-      if (_prescriptionPath != null) _prescriptionPath!,
-    ];
-    final hasInvoice = _eInvoicePath != null;
-    final hasPrescription = _prescriptionPath != null;
-    widget.onAttachmentsChanged?.call(paths, hasInvoice, hasPrescription);
+  @override
+  void initState() {
+    super.initState();
+    _slotItems = List<AttachmentItem?>.filled(
+      widget.attachments.length,
+      null,
+      growable: false,
+    );
+    _slotPaths = List<String?>.filled(
+      widget.attachments.length,
+      null,
+      growable: false,
+    );
   }
 
-  void _openUploadSheet(_AttachmentSlot slot) async {
+  @override
+  void didUpdateWidget(covariant AddAttachmentWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.attachments.length != widget.attachments.length) {
+      _slotItems = List<AttachmentItem?>.filled(
+        widget.attachments.length,
+        null,
+        growable: false,
+      );
+      _slotPaths = List<String?>.filled(
+        widget.attachments.length,
+        null,
+        growable: false,
+      );
+    }
+  }
+
+  bool get _hasAnyAttachment =>
+      _slotItems.any((item) => item != null);
+
+  bool get _hasAllRequiredAttachments {
+    for (int i = 0; i < widget.attachments.length; i++) {
+      final attachment = widget.attachments[i];
+      if (attachment.isRequired && _slotPaths[i] == null) {
+        return false;
+      }
+    }
+    return widget.attachments.isNotEmpty;
+  }
+
+  void _notifyPathsChanged() {
+    final paths = <String>[];
+    for (final path in _slotPaths) {
+      if (path != null) {
+        paths.add(path);
+      }
+    }
+    final hasAllRequired = _hasAllRequiredAttachments;
+    widget.onAttachmentsChanged?.call(paths, hasAllRequired);
+  }
+
+  void _openUploadSheet(int index) async {
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    await Future.delayed(const Duration(milliseconds: 50));
+
     ImageProvider? previewCameraImage;
     String? previewCameraName;
     ImageProvider? previewGalleryImage;
@@ -100,12 +151,8 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                           );
                                           previewCameraName = picked.name;
                                         });
-                                        // Store path for later use
-                                        if (slot == _AttachmentSlot.eInvoice) {
-                                          _eInvoicePath = picked.path;
-                                        } else {
-                                          _prescriptionPath = picked.path;
-                                        }
+                                        // Store path for this slot
+                                        _slotPaths[index] = picked.path;
                                       }
                                     },
                                   )
@@ -152,12 +199,8 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                                           );
                                           previewGalleryName = picked.name;
                                         });
-                                        // Store path for later use
-                                        if (slot == _AttachmentSlot.eInvoice) {
-                                          _eInvoicePath = picked.path;
-                                        } else {
-                                          _prescriptionPath = picked.path;
-                                        }
+                                        // Store path for this slot
+                                        _slotPaths[index] = picked.path;
                                       }
                                     },
                                   )
@@ -224,27 +267,19 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
       },
     );
 
+    // استدعاء الـ callback لإزالة الـ focus بعد إغلاق الـ dialog
+    await Future.delayed(const Duration(milliseconds: 50));
+    widget.onAttachmentDialogClosed?.call();
+
     if (selection == null) return;
     setState(() {
-      final path = slot == _AttachmentSlot.eInvoice
-          ? _eInvoicePath
-          : _prescriptionPath;
+      final path = _slotPaths[index];
       final item = AttachmentItem(
         image: selection.imageProvider,
         name: selection.name,
         path: path ?? '',
       );
-      if (slot == _AttachmentSlot.eInvoice) {
-        _eInvoice = item;
-      } else {
-        _prescription = item;
-      }
-      _attachments
-        ..clear()
-        ..addAll([
-          if (_eInvoice != null) _eInvoice!,
-          if (_prescription != null) _prescription!,
-        ]);
+      _slotItems[index] = item;
       _notifyPathsChanged();
     });
   }
@@ -306,13 +341,13 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                   width: 24.w,
                   height: 24.w,
                   decoration: BoxDecoration(
-                    color: _attachments.isNotEmpty
+                    color: _hasAnyAttachment
                         ? AppColors.successClr
                         : AppColors.primaryClr,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    _attachments.isNotEmpty ? Icons.check : Icons.add,
+                    _hasAnyAttachment ? Icons.check : Icons.add,
                     color: AppColors.whiteClr,
                     size: 18,
                   ),
@@ -347,101 +382,62 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
               ),
             ),
             SizedBox(height: 12.h),
-            GestureDetector(
-              onTap: () => _openUploadSheet(_AttachmentSlot.eInvoice),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 73.w,
-                    height: 59.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGreyClr,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: (_eInvoice == null)
-                        ? Image.asset(AppAssets.uploadIcon, fit: BoxFit.contain)
-                        : Image(image: _eInvoice!.image, fit: BoxFit.cover),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'add_attachment.upload_e_invoice'.tr(),
-                          style: AppTextStyles.font12BlueRegular(context),
+            // كروت رفع ديناميكية بعدد المرفقات القادمة من الـ API
+            ...List.generate(widget.attachments.length, (index) {
+              final attachment = widget.attachments[index];
+              final item = _slotItems[index];
+              final hasFile = item != null;
+
+              return Padding(
+                padding: EdgeInsets.only(bottom: 12.h),
+                child: GestureDetector(
+                  onTap: () => _openUploadSheet(index),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 73.w,
+                        height: 59.h,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGreyClr,
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          'add_attachment.e_invoice_instructions'.tr(),
-                          style: AppTextStyles.font8GreyRegular(context),
+                        clipBehavior: Clip.antiAlias,
+                        child: (item == null)
+                            ? Image.asset(
+                                AppAssets.uploadIcon,
+                                fit: BoxFit.contain,
+                              )
+                            : Image(
+                                image: item.image,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              attachment.isRequired
+                                  ? '${attachment.title} *'
+                                  : attachment.title,
+                              style: AppTextStyles.font12BlueRegular(context),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Icon(
+                        hasFile ? Icons.check_circle : Icons.radio_button_unchecked,
+                        color:
+                            hasFile ? AppColors.successClr : AppColors.greyClr,
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 8.w),
-                  Icon(
-                    _eInvoice != null
-                        ? Icons.check_circle
-                        : Icons.radio_button_unchecked,
-                    color: _eInvoice != null
-                        ? AppColors.successClr
-                        : AppColors.greyClr,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16.h),
-            GestureDetector(
-              onTap: () => _openUploadSheet(_AttachmentSlot.prescription),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 73.w,
-                    height: 59.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGreyClr,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: (_prescription == null)
-                        ? Image.asset(AppAssets.uploadIcon, fit: BoxFit.contain)
-                        : Image(image: _prescription!.image, fit: BoxFit.cover),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'add_attachment.upload_refund_prescription'.tr(
-                            namedArgs: {'type': widget.refundTypeName ?? ''},
-                          ),
-                          style: AppTextStyles.font12BlueRegular(context),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          'add_attachment.prescription_instructions'.tr(),
-                          style: AppTextStyles.font8GreyRegular(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Icon(
-                    _prescription != null
-                        ? Icons.check_circle
-                        : Icons.radio_button_unchecked,
-                    color: _prescription != null
-                        ? AppColors.successClr
-                        : AppColors.greyClr,
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            }),
             SizedBox(height: 20.h),
             SizedBox(
               width: double.infinity,
@@ -449,13 +445,13 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
               child: AppButton(
                 text: 'Upload',
                 onPressed: () {
-                  if (_eInvoice != null && _prescription != null) {
+                  if (_hasAllRequiredAttachments) {
                     setState(() {
                       _showAttachmentOptions = false;
                     });
                   }
                 },
-                isEnabled: _eInvoice != null && _prescription != null,
+                isEnabled: _hasAllRequiredAttachments,
               ),
             ),
           ],

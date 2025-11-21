@@ -26,7 +26,7 @@ class PolicyDetailsData {
   final num slCopayment;
   final num slLimit;
   final num slServiceCount;
-  final int providerCategoryId;
+  final int? providerCategoryId;
   final List<PolicyProviderItem> providers;
 
   PolicyDetailsData({

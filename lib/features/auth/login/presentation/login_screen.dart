@@ -28,9 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // مسح حقول تسجيل الدخول عند فتح الصفحة
-    // هذا مفيد خاصة بعد عمل logout لضمان عدم بقاء البيانات السابقة
-    _clearFields();
+    _clearFields(); 
   }
 
   void _clearFields() {
@@ -153,8 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           'auth.login.login_successful'.tr(),
                         );
-                        _clearFields(); // مسح الحقول بعد نجاح تسجيل الدخول
-                        context.push('/home');
+                        _clearFields();
+                        context.go('/home');
                       });
                     } else if (state is Failed) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {

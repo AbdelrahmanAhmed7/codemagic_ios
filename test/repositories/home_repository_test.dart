@@ -26,6 +26,7 @@ void main() {
         memberName: 'n',
         policyExpireDate: '2025-01-01',
         programName: 'p',
+        programColor: '#FFCC33',
         notificationsCount: 0,
         approvals: const [],
       ),

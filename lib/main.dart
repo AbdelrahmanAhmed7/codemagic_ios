@@ -17,30 +17,33 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   EasyLocalization.logger.enableBuildModes = [];
-  
+
   await Future.wait<void>([
     EasyLocalization.ensureInitialized(),
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]);
-  
+
   // تهيئة خدمات Firebase
   await FirebaseCrashlyticsService.instance.initialize();
-  
+
   // إرسال رسالة اختبار لتفعيل Crashlytics Console
-  await FirebaseCrashlyticsService.instance.log('App started successfully - ${DateTime.now()}');
-  
+  await FirebaseCrashlyticsService.instance.log(
+    'App started successfully - ${DateTime.now()}',
+  );
+
   // إرسال خطأ اختبار لتفعيل Dashboard (فقط في Release mode)
   if (!kDebugMode) {
     await FirebaseCrashlyticsService.instance.sendTestError();
   }
-  
+
   await ConnectivityService.instance.initialize();
-  
+
   await PushNotificationService.instance.initialize();
-  
+
   await Future.wait<void>([
     setupServiceLocator(),
     checkIfLoggedInUser(),
+    checkOnboardingStatus(),
   ]);
 
   // Send Firebase token if user is logged in
@@ -48,10 +51,10 @@ Future<void> main() async {
     // Get saved language or use default 'ar'
     final savedLocale = await SharedPrefHelper.getString('locale');
     final lang = (savedLocale.isEmpty) ? 'ar' : savedLocale;
-    
+
     // Send token in background (non-blocking)
     FirebaseTokenService.instance.sendTokenToBackend(lang);
-    
+
     // Listen to token refresh and send to backend
     FirebaseTokenService.instance.listenToTokenRefresh(lang);
   }
@@ -77,4 +80,11 @@ checkIfLoggedInUser() async {
   } else {
     isLoggedInUser = false;
   }
+}
+
+checkOnboardingStatus() async {
+  final hasSeen = await SharedPrefHelper.getBool(
+    SharedPrefKeys.hasSeenOnboarding,
+  );
+  shouldShowOnboarding = !hasSeen;
 }

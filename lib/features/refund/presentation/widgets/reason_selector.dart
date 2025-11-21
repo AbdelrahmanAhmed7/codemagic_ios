@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -70,11 +71,15 @@ class _ReasonSelectorState extends State<ReasonSelector> {
         return Column(
           children: [
             GestureDetector(
-              onTap: reasons.isEmpty ? null : () {
-                setState(() {
-                  _isDropdownOpen = !_isDropdownOpen;
-                });
-              },
+              onTap: reasons.isEmpty
+                  ? null
+                  : () {
+                      FocusScope.of(context).unfocus();
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      setState(() {
+                        _isDropdownOpen = !_isDropdownOpen;
+                      });
+                    },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                 decoration: BoxDecoration(

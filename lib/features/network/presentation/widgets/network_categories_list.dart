@@ -41,19 +41,12 @@ class NetworkCategoriesList extends StatelessWidget {
               height: 80.h,
               margin: EdgeInsets.only(right: 12.w),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryClr : category.bgColor,
+                color: category.bgColor,
                 borderRadius: BorderRadius.circular(40.r),
                 border: Border.all(
                   color: isSelected ? AppColors.primaryClr : Colors.transparent,
-                  width: 3.w,
+                  width: 2.w,
                 ),
-                boxShadow: isSelected ? [
-                  BoxShadow(
-                    color: AppColors.primaryClr.withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ] : null,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -64,14 +57,8 @@ class NetworkCategoriesList extends StatelessWidget {
                     height: 55.h,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isSelected ? Colors.white.withValues(alpha: 0.2) : Colors.white,
-                      boxShadow: isSelected ? [
-                        BoxShadow(
-                          color: Colors.white.withValues(alpha: 0.3),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ] : [
+                      color: Colors.white,
+                      boxShadow: [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 3,
@@ -86,12 +73,12 @@ class NetworkCategoriesList extends StatelessWidget {
                               width: 26.w,
                               height: 26.h,
                               fit: BoxFit.contain,
-                              color: isSelected ? Colors.white : null,
+                              color: null,
                             )
                           : Icon(
                               Icons.medical_services_outlined,
                               size: 22.sp,
-                              color: isSelected ? Colors.white : category.iconColor,
+                              color: category.iconColor,
                             ),
                     ),
                   ),
@@ -102,7 +89,7 @@ class NetworkCategoriesList extends StatelessWidget {
                       fontSize: 12.sp,
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.w500,
-                      color: isSelected ? Colors.white : category.textColor,
+                      color: category.textColor,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 2,

@@ -38,14 +38,33 @@ class RefundType {
   final int id;
   final String name;
 
+  @JsonKey(defaultValue: const [])
+  final List<RefundAttachment> attachments;
+
   RefundType({
     required this.id,
     required this.name,
+    required this.attachments,
   });
 
   factory RefundType.fromJson(Map<String, dynamic> json) =>
       _$RefundTypeFromJson(json);
   Map<String, dynamic> toJson() => _$RefundTypeToJson(this);
+}
+
+@JsonSerializable()
+class RefundAttachment {
+  final String title;
+  final bool isRequired;
+
+  RefundAttachment({
+    required this.title,
+    required this.isRequired,
+  });
+
+  factory RefundAttachment.fromJson(Map<String, dynamic> json) =>
+      _$RefundAttachmentFromJson(json);
+  Map<String, dynamic> toJson() => _$RefundAttachmentToJson(this);
 }
 
 // Refund Reasons Response

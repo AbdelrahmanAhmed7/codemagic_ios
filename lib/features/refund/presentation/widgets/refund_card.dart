@@ -62,7 +62,7 @@ class RefundCard extends StatelessWidget {
                   child: Icon(
                     Icons.receipt_long_rounded,
                     color: Colors.white,
-                    size: 24.sp,
+                    size: 16.sp,
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -71,23 +71,16 @@ class RefundCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'refund_history.request_number'.tr(),
-                        style: AppTextStyles.font12WhiteRegular(context).copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        '#${item.approvalNumber}',
-                        style: AppTextStyles.font14WhiteMedium(context).copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        '${'refund_history.request_number'.tr()}: ${item.approvalNumber}',
+                        style: AppTextStyles.font14WhiteMedium(context).copyWith(fontSize: 12.sp),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: statusColor,
                     borderRadius: BorderRadius.circular(20.r),

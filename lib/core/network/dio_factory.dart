@@ -7,7 +7,7 @@ import 'package:mediconsult/core/network/retry_interceptor.dart';
 import 'package:mediconsult/core/network/connectivity_service.dart';
 
 class DioFactory {
-  DioFactory._(); // private constructor
+  DioFactory._();
   static Dio? _dio;
 
   static Future<Dio> getDio() async {

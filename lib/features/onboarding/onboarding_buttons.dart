@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingButtons extends StatelessWidget {
   final PageController pageController;
   final int currentPage;
   final bool isLastPage;
+  final Future<void> Function() onFinish;
 
   const OnboardingButtons({
     super.key,
     required this.pageController,
     required this.currentPage,
     required this.isLastPage,
+    required this.onFinish,
   });
 
   @override
@@ -61,7 +62,7 @@ class OnboardingButtons extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           if (isLastPage) {
-            context.go('/signup');
+            onFinish();
           } else {
             pageController.nextPage(
               duration: const Duration(milliseconds: 300),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/core/constants/constants.dart';
+import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
 import 'package:mediconsult/features/onboarding/onboarding_buttons.dart';
 import 'package:mediconsult/features/onboarding/onboarding_model';
 import 'onboarding_page.dart';
@@ -36,8 +38,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
   ];
 
-  void _finish() {
-    context.go('/signup');
+  Future<void> _finish() async {
+    await SharedPrefHelper.setData(
+      SharedPrefKeys.hasSeenOnboarding,
+      true,
+    );
+    shouldShowOnboarding = false;
+    if (!mounted) return;
+    if (isLoggedInUser) {
+      context.go('/home');
+    } else {
+      context.go('/login');
+    }
   }
 
   @override
@@ -54,7 +66,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Align(
                 alignment: isRtl ? Alignment.topRight : Alignment.topLeft,
                 child: TextButton(
-                  onPressed: _finish,
+                  onPressed: () {
+                    _finish();
+                  },
                   child: Text(
                     tr('common.skip'),
                     style: TextStyle(
@@ -157,11 +171,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               SizedBox(height: 48.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: OnboardingButtons(
-                  pageController: _controller,
-                  currentPage: _currentPage,
-                  isLastPage: _currentPage == _pages.length,
-                ),
+                  child: OnboardingButtons(
+                    pageController: _controller,
+                    currentPage: _currentPage,
+                    isLastPage: _currentPage == _pages.length,
+                    onFinish: _finish,
+                  ),
               ),
               SizedBox(height: 53.h),
               Image.asset(

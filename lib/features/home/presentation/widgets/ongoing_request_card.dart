@@ -63,7 +63,6 @@ class OngoingRequestCard extends StatelessWidget {
                                   approval.providerLogo,
                                   width: 48.w,
                                   height: 60.h,
-                                  fit: BoxFit.cover,
                                   errorBuilder: (_, __, ___) => Image.asset(
                                     AppAssets.alfaLogo,
                                     width: 48.w,
@@ -109,18 +108,18 @@ class OngoingRequestCard extends StatelessWidget {
                         ),
 
                         // Arrow
-                        Padding(
-                          padding: EdgeInsets.only(right: 8.w),
-                          child: Transform.rotate(
-                            angle: isArabic ? 3.1416 : 0,
-                            child: Image.asset(
-                              AppAssets.arrowRight,
-                              width: 25.w,
-                              height: 20.h,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(right: 8.w),
+                        //   child: Transform.rotate(
+                        //     angle: isArabic ? 3.1416 : 0,
+                        //     child: Image.asset(
+                        //       AppAssets.arrowRight,
+                        //       width: 25.w,
+                        //       height: 20.h,
+                        //       fit: BoxFit.contain,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
 
