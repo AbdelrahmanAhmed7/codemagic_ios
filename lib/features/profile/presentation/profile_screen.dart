@@ -9,7 +9,12 @@ import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.da
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/profile_header_widget.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/profile_section_widget.dart';
+import 'package:mediconsult/features/profile/presentation/widgets/logout_dialog.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
+import 'package:mediconsult/core/constants/constants.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 // ignore_for_file: deprecated_member_use
 
 class ProfileScreen extends StatefulWidget {
@@ -22,6 +27,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey _personalInfoKey = GlobalKey();
   final GlobalKey _changePasswordKey = GlobalKey();
+  
   @override
   void initState() {
     super.initState();
@@ -32,6 +38,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         cubit.getHomeInfo('en');
       }
     });
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    // Show confirmation dialog
+    final shouldLogout = await LogoutDialog.show(context);
+
+    if (shouldLogout == true) {
+      // Clear token
+      await SharedPrefHelper.removeData(SharedPrefKeys.userToken);
+      
+      // Clear all cache
+      await CacheService.clearCache();
+      await CacheService.clearFamilyCache();
+      await CacheService.clearAllApprovalsCache();
+      await CacheService.clearNotificationsCache();
+      
+      // Navigate to login
+      if (context.mounted) {
+        context.go('/login');
+      }
+    }
   }
 
   @override
@@ -95,11 +122,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   image: AppAssets.familyMembers,
                                   route: '/family-members',
                                 ),
-                                ProfileTileWidget(
-                                  title: 'profile.insurance_plan'.tr(),
-                                  image: AppAssets.insurance,
-                                  route: '/insurance-plan',
-                                ),
                               ],
                             ),
                             ProfileSectionWidget(
@@ -147,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ProfileTileWidget(
                                   title: 'profile.log_out'.tr(),
                                   image: AppAssets.logout,
-                                  route: '/logout',
+                                  onTap: () => _handleLogout(context),
                                 ),
                               ],
                             ),

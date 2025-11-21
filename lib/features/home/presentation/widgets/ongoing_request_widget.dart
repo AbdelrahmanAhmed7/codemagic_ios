@@ -24,7 +24,8 @@ class OngoingRequestWidget extends StatelessWidget {
           children: [
             Text(
               'home.ongoing_requests'.tr(),
-              style: AppTextStyles.font14BlackMedium(context),
+              style: AppTextStyles.font16BlackMedium(context).copyWith(
+                fontWeight: FontWeight.w600,),
             ),
             GestureDetector(
               onTap: () {

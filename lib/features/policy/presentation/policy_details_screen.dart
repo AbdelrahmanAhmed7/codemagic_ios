@@ -11,6 +11,10 @@ import 'package:mediconsult/features/policy/presentation/cubit/get_policy_detail
 import 'package:mediconsult/features/policy/presentation/cubit/get_policy_details_state.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/features/policy/presentation/policy_providers_screen.dart';
+import 'package:mediconsult/features/policy/presentation/widgets/policy_search_bar.dart';
+import 'package:mediconsult/features/policy/presentation/widgets/policy_coverage_card.dart';
+import 'package:mediconsult/features/policy/presentation/widgets/policy_provider_card.dart';
+import 'package:mediconsult/features/policy/presentation/widgets/policy_service_helper.dart';
 
 class PolicyDetailsScreen extends StatefulWidget {
   final String serviceName;
@@ -58,7 +62,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
               return Column(
                 children: [
                   PageHeader(
-                    title: '${_localizedServiceName(context)} ${'policy_screen.policy'.tr()}',
+                    title: '${PolicyServiceHelper.getLocalizedServiceName(widget.serviceName)} ${'policy_screen.policy'.tr()}',
                     backPath: '/policy',
                   ),
                   Expanded(
@@ -127,43 +131,7 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search Bar
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'policy_screen.search'.tr(),
-                  hintStyle: AppTextStyles.font14GreyRegular(context),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: AppColors.greyClr,
-                    size: 20.sp,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 12.h,
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-            ),
+            PolicySearchBar(controller: _searchController),
             SizedBox(height: 24.h),
 
             // Policy Details Section
@@ -173,67 +141,10 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
             ),
             SizedBox(height: 16.h),
 
-            // Coverage Card
-            Container(
-              padding: EdgeInsets.all(16.w),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF2F7FF),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'policy_screen.coverage'.tr(),
-                          style: AppTextStyles.font14BlackMedium(context),
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          children: [
-                            Icon(
-                              _getServiceIcon(),
-                              color: AppColors.primaryClr,
-                              size: 14.sp,
-                            ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              widget.serviceName,
-                              style: AppTextStyles.font10GreyRegular(context),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                                  Flexible(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          '${details.slLimit}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 24.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.primaryClr,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Limit',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppTextStyles.font10GreyRegular(context),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                ],
-              ),
+            PolicyCoverageCard(
+              serviceName: widget.serviceName,
+              slLimit: '${details.slLimit}',
+              serviceIcon: PolicyServiceHelper.getServiceIcon(widget.serviceName),
             ),
             SizedBox(height: 24.h),
 
@@ -241,8 +152,8 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                                Text(
-                                  _providersPluralLabel(context).tr(),
+                Text(
+                  PolicyServiceHelper.getProvidersPluralLabel(widget.serviceName).tr(),
                   style: AppTextStyles.font16BlueMedium(context),
                 ),
                                 TextButton(
@@ -271,73 +182,12 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
             ),
             SizedBox(height: 12.h),
 
-            // Providers List
-                            ListView.builder(
+            ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: (details.providers.length >= 3) ? 3 : details.providers.length,
+              itemCount: (details.providers.length >= 3) ? 3 : details.providers.length,
               itemBuilder: (context, index) {
-                final provider = details.providers[index];
-                return Container(
-                  margin: EdgeInsets.only(bottom: 12.h),
-                  padding: EdgeInsets.all(16.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteClr,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: const Color(0xFFECECEC)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 48.w,
-                        height: 48.w,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1E3A8A),
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(6.r),
-                            child: Image.network(
-                              provider.logo,
-                              width: 48.w,
-                              height: 48.w,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Icon(
-                                Icons.local_hospital,
-                                color: Colors.white,
-                                size: 20.sp,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              provider.providerName,
-                              style: AppTextStyles.font14BlackMedium(context),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              'Copayment: ${provider.copaymentPercent}%',
-                              style: AppTextStyles.font12GreyRegular(context),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          // Future: call provider details by providerId and navigate
-                        },
-                        icon: const Icon(Icons.chevron_right),
-                      ),
-                    ],
-                  ),
-                );
+                return PolicyProviderCard(provider: details.providers[index]);
               },
             ),
           ],
@@ -346,46 +196,4 @@ class _PolicyDetailsScreenState extends State<PolicyDetailsScreen> {
     );
   }
 
-  IconData _getServiceIcon() {
-    switch (widget.serviceName.toLowerCase()) {
-      case 'pharmacy':
-        return Icons.local_pharmacy;
-      case 'lab':
-        return Icons.biotech;
-      case 'hospital':
-        return Icons.local_hospital;
-      case 'doctor':
-        return Icons.medical_services;
-      case 'scan lab':
-        return Icons.scanner;
-      default:
-        return Icons.business;
-    }
-  }
-
-  String _providersPluralLabel(BuildContext context) {
-    final name = widget.serviceName.toLowerCase();
-    if (name.contains('pharmacy')) return 'policy_screen.pharmacies';
-    if (name.contains('lab')) return 'policy_screen.labs';
-    if (name.contains('hospital')) return 'policy_screen.hospitals';
-    if (name.contains('doctor')) return 'policy_screen.doctors';
-    if (name.contains('scan')) return 'policy_screen.scan_labs';
-    if (name.contains('specialized')) return 'policy_screen.specialized_centers';
-    if (name.contains('physio')) return 'policy_screen.physiotherapy';
-    if (name.contains('optical')) return 'policy_screen.optical_centers';
-    return 'policy_screen.providers';
-  }
-
-  String _localizedServiceName(BuildContext context) {
-    final name = widget.serviceName.toLowerCase();
-    if (name.contains('pharmacy')) return 'policy_screen.pharmacy'.tr();
-    if (name.contains('lab')) return 'policy_screen.lab'.tr();
-    if (name.contains('hospital')) return 'policy_screen.hospital'.tr();
-    if (name.contains('doctor')) return 'policy_screen.doctor'.tr();
-    if (name.contains('scan')) return 'policy_screen.scan_lab'.tr();
-    if (name.contains('specialized')) return 'policy_screen.specialized_center'.tr();
-    if (name.contains('physio')) return 'policy_screen.physiotherapy'.tr();
-    if (name.contains('optical')) return 'policy_screen.optical_center'.tr();
-    return widget.serviceName;
-  }
 }

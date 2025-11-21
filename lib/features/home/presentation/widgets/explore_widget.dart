@@ -16,7 +16,9 @@ class ExploreWidget extends StatelessWidget {
       children: [
         Text(
           'home.explore'.tr(),
-          style: AppTextStyles.font14BlackMedium(context),
+          style: AppTextStyles.font16BlackMedium(context).copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
         SizedBox(height: 16.h),
 

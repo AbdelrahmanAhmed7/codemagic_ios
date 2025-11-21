@@ -5,6 +5,7 @@ import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/shared/widgets/coming_soon_dialog.dart';
 
 class QuickAccessWidget extends StatelessWidget {
   const QuickAccessWidget({super.key});
@@ -69,7 +70,7 @@ class QuickAccessWidget extends StatelessWidget {
                 color: AppColors.chronicMedicineColor,
                 textColor: AppColors.chronicMedicineTextColor,
                 onTap: () {
-                  context.push('/chronic-medicines');
+                  ComingSoonDialog.show(context);
                 },
                 context: context,
               ),

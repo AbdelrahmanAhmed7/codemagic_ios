@@ -18,7 +18,9 @@ class HealthTipsWidget extends StatelessWidget {
       children: [
         Text(
           'home.health_tips'.tr(),
-          style: AppTextStyles.font14BlackMedium(context),
+          style: AppTextStyles.font16BlackMedium(context).copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
         SizedBox(height: 16.h),
         Container(
@@ -54,7 +56,7 @@ class HealthTipsWidget extends StatelessWidget {
                         'home.health_tips_description'.tr(),
                         style: AppTextStyles.font14GreyRegular(context).copyWith(
                           height: 1.4,
-                          fontSize: 11.sp,
+                          fontSize: 13.sp,
                         ),
                       ),
                     ],
