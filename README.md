@@ -1,6 +1,6 @@
 # MediConsult App
 
-تطبيق MediConsult للتأمين الصحي مبني بـ Flutter مع Firebase Integration.
+تطبيق MediConsult للتأمين الصحي .
 
 ## 🚀 الميزات الرئيسية
 
