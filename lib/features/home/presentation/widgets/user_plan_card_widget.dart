@@ -83,7 +83,7 @@ class UserPlanCardWidget extends StatelessWidget {
                 child: Text(
                   planName,
                   style: AppTextStyles.font12GreyRegular(context).copyWith(
-                    color: AppColors.blackClr,
+                    color: AppColors.whiteClr,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

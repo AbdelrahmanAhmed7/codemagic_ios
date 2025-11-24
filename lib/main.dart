@@ -59,11 +59,18 @@ Future<void> main() async {
     FirebaseTokenService.instance.listenToTokenRefresh(lang);
   }
 
+  // Get saved language for EasyLocalization
+  final savedLocale = await SharedPrefHelper.getString('locale');
+  final startLocale = savedLocale.isNotEmpty 
+      ? Locale(savedLocale) 
+      : const Locale('en'); 
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
+      startLocale: startLocale, // Use saved locale
       useOnlyLangCode: true,
       saveLocale: true,
       child: const MediConsultApp(),
@@ -87,4 +94,7 @@ checkOnboardingStatus() async {
     SharedPrefKeys.hasSeenOnboarding,
   );
   shouldShowOnboarding = !hasSeen;
+  if (kDebugMode) {
+    debugPrint('Onboarding Status: hasSeen=$hasSeen, shouldShow=$shouldShowOnboarding');
+  }
 }

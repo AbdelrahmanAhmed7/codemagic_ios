@@ -48,7 +48,7 @@ class LogoutDialog extends StatelessWidget {
 
             // Message
             Text(
-              'Are you sure you want to logout?',
+              'logout.confirmation_message'.tr(),
               style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),
@@ -72,7 +72,7 @@ class LogoutDialog extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 14.h),
                     ),
                     child: Text(
-                      'Cancel',
+                      'common.cancel'.tr(),
                       style: AppTextStyles.font14BlackMedium(context),
                     ),
                   ),
@@ -93,7 +93,7 @@ class LogoutDialog extends StatelessWidget {
                       elevation: 0,
                     ),
                     child: Text(
-                      'Logout',
+                      'logout.confirm_button'.tr(),
                       style: AppTextStyles.font14WhiteMedium(context),
                     ),
                   ),

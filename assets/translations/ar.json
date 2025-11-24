@@ -27,6 +27,23 @@
     "error_loading_pdf": "حدث خطأ أثناء تحميل ملف PDF",
     "request_timeout": "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى"
   },
+  "errors": {
+    "connection_timeout": "انتهت مهلة الاتصال، يرجى المحاولة لاحقاً",
+    "bad_request": "طلب غير صحيح، يرجى التحقق من البيانات المدخلة",
+    "unauthorized": "غير مصرح، يرجى تسجيل الدخول مرة أخرى",
+    "access_denied": "تم رفض الوصول",
+    "not_found": "الصفحة المطلوبة غير موجودة",
+    "internal_server_error": "خطأ في الخادم الداخلي",
+    "unexpected_error": "خطأ غير متوقع في الخادم",
+    "no_internet": "لا يوجد اتصال بالإنترنت، يرجى التحقق من الشبكة",
+    "connection_error": "خطأ في الاتصال، يرجى التحقق من اتصالك بالإنترنت",
+    "something_went_wrong": "حدث خطأ ما، يرجى المحاولة مرة أخرى",
+    "unexpected_error_occurred": "حدث خطأ غير متوقع"
+  },
+  "logout": {
+    "confirmation_message": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "confirm_button": "تسجيل الخروج"
+  },
   "policy_screen": {
     "title": "البوليسي",
     "services": "الخدمات",

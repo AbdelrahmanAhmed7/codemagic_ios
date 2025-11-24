@@ -27,6 +27,23 @@
     "error_loading_pdf": "Error loading PDF file",
     "request_timeout": "Request timeout. Please try again"
   },
+  "errors": {
+    "connection_timeout": "Connection timeout, please try again later",
+    "bad_request": "Bad request. Please check your input",
+    "unauthorized": "Unauthorized. Please log in again",
+    "access_denied": "Access denied",
+    "not_found": "Endpoint not found",
+    "internal_server_error": "Internal server error",
+    "unexpected_error": "Unexpected server error",
+    "no_internet": "No internet connection. Please check your network",
+    "connection_error": "Connection error. Please check your internet connection",
+    "something_went_wrong": "Something went wrong. Please try again",
+    "unexpected_error_occurred": "Unexpected error occurred"
+  },
+  "logout": {
+    "confirmation_message": "Are you sure you want to logout?",
+    "confirm_button": "Logout"
+  },
   "policy_screen": {
     "title": "Policy",
     "services": "Services",

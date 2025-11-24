@@ -87,6 +87,18 @@ post_install do |installer|
       # Network settings for Firebase
       config.build_settings['FIREBASE_ANALYTICS_COLLECTION_ENABLED'] = 'YES'
       config.build_settings['FIREBASE_CRASHLYTICS_COLLECTION_ENABLED'] = 'YES'
+      
+      # Permission Handler Configuration
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_LOCATION=1',
+        'PERMISSION_CAMERA=1',
+        'PERMISSION_PHOTOS=1',
+        'PERMISSION_MICROPHONE=1',
+        'PERMISSION_CONTACTS=1',
+        'PERMISSION_EVENTS=1',
+        'PERMISSION_REMINDERS=1',
+      ]
     end
   end
 end
