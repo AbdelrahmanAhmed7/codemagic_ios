@@ -27,7 +27,7 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _otpController = TextEditingController();
 
-  int _secondsRemaining = 180; // 3 minutes
+  int _secondsRemaining = 180;
   late final _timer;
 
   @override
@@ -136,7 +136,7 @@ Widget build(BuildContext context) {
                 onTap: _secondsRemaining == 0
                     ? () {
                         setState(() {
-                          _secondsRemaining = 180; // 3 minutes
+                          _secondsRemaining = 180;
                         });
                         _startTimer();
                         context

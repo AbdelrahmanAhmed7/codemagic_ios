@@ -63,7 +63,7 @@ Future<void> main() async {
   final savedLocale = await SharedPrefHelper.getString('locale');
   final startLocale = savedLocale.isNotEmpty 
       ? Locale(savedLocale) 
-      : const Locale('ar'); // Default to Arabic
+      : const Locale('en'); 
 
   runApp(
     EasyLocalization(
