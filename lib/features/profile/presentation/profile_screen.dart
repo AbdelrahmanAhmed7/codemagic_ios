@@ -49,6 +49,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final shouldLogout = await LogoutDialog.show(context);
 
     if (shouldLogout == true) {
+      // Save onboarding status before clearing
+      final hasSeenOnboarding = await SharedPrefHelper.getBool(
+        SharedPrefKeys.hasSeenOnboarding,
+      );
+      
       // Clear token
       await SharedPrefHelper.removeData(SharedPrefKeys.userToken);
       
@@ -61,8 +66,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await CacheService.clearAllApprovalsCache();
       await CacheService.clearNotificationsCache();
       
-      // Clear any other stored data
+      // Clear all SharedPreferences data
       await SharedPrefHelper.clearAllData();
+      
+      // Restore onboarding status (don't show onboarding again after logout)
+      await SharedPrefHelper.setData(
+        SharedPrefKeys.hasSeenOnboarding,
+        hasSeenOnboarding,
+      );
+      
+      // Clear secure storage (token)
+      await SharedPrefHelper.clearAllSecuredData();
       
       // مسح بيانات Firebase Crashlytics
       await FirebaseCrashlyticsService.instance.clearUserData();

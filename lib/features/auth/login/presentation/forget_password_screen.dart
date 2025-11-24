@@ -126,15 +126,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   listener: (context, state) {
                     if (state is Success) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        final otpMessage = state.data?.data?.otp != null
-                            ? 'auth.forgot_password.otp_message'.tr(
-                                namedArgs: {'otp': state.data!.data!.otp!},
-                              )
-                            : 'auth.forgot_password.otp_sent_success'.tr();
                         showAppSnackBar(
                           context,
-                          otpMessage,
-                          duration: const Duration(seconds: 10),
+                          'auth.forgot_password.otp_sent_success'.tr(),
                         );
                         context.push(
                           '/otp-password',

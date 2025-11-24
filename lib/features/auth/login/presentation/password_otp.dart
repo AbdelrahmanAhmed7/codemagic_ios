@@ -27,7 +27,7 @@ class _PasswordOtpScreenState extends State<PasswordOtpScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _otpController = TextEditingController();
 
-  int _secondsRemaining = 59;
+  int _secondsRemaining = 180; // 3 minutes
   late final _timer;
 
   @override
@@ -124,13 +124,9 @@ Widget build(BuildContext context) {
             if (state is ResendFailed) {
               showAppSnackBar(context, state.error, isError: true);
             } else if (state is ResendSuccess) {
-              final otpMessage = state.data?.data?.otp != null
-                  ? 'auth.forgot_password.otp_message'.tr(namedArgs: {'otp': state.data!.data!.otp!})
-                  : 'auth.forgot_password.otp_resend_success'.tr();
               showAppSnackBar(
                 context,
-                otpMessage,
-                duration: const Duration(seconds: 10),
+                'auth.forgot_password.otp_resend_success'.tr(),
               );
             }
           },
@@ -140,7 +136,7 @@ Widget build(BuildContext context) {
                 onTap: _secondsRemaining == 0
                     ? () {
                         setState(() {
-                          _secondsRemaining = 59;
+                          _secondsRemaining = 180; // 3 minutes
                         });
                         _startTimer();
                         context
