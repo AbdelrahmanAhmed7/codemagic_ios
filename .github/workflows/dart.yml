@@ -40,3 +40,11 @@ jobs:
           tag: dev-v1.0
           overwrite: true
           body: "This is first release"
+
+      - name: Create Auto Tag
+        run: |
+          TAG="dev-v1.${{ github.run_number }}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          git tag $TAG
+          git push origin $TAG
+
