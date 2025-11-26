@@ -7,6 +7,44 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:10939381120:android:d54f086940fe58410ffd65",
+        "android_client_info": {
+          "package_name": "com.example.mediconsult"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNVaPnLPDyDfSHJHl2v57D0Ph8f7QTKfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10939381120:android:8582f62c850f58180ffd65",
+        "android_client_info": {
+          "package_name": "com.mediconsult.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNVaPnLPDyDfSHJHl2v57D0Ph8f7QTKfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:10939381120:android:1f10c2136ea4abd40ffd65",
         "android_client_info": {
           "package_name": "com.mediconsulteg.mciapp"

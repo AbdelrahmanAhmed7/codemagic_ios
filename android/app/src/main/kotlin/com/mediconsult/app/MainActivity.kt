@@ -1,4 +1,4 @@
-package com.mediconsulteg.mciapp
+package com.mediconsult.app
 
 import io.flutter.embedding.android.FlutterActivity
 

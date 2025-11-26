@@ -16,7 +16,7 @@
 -keep class * implements com.google.gson.JsonDeserializer
 
 # JSON Serialization - Keep all model classes
--keep class com.mediconsulteg.mciapp.** { *; }
+-keep class com.mediconsult.app.** { *; }
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;
 }
