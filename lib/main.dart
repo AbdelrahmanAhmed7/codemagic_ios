@@ -1,22 +1,25 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mediconsult/core/constants/constants.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/core/helpers/extension.dart';
 import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
-import 'package:mediconsult/core/services/firebase_token_service.dart';
+import 'package:mediconsult/core/network/connectivity_service.dart';
 import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
+import 'package:mediconsult/core/services/firebase_token_service.dart';
 import 'package:mediconsult/features/notifications/service/push_notifications_service.dart';
 import 'package:mediconsult/firebase_options.dart';
-import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/mediconsult_app.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:mediconsult/core/network/connectivity_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   EasyLocalization.logger.enableBuildModes = [];
+
+  await _clearDataOnReinstall();
 
   await Future.wait<void>([
     EasyLocalization.ensureInitialized(),
@@ -61,9 +64,9 @@ Future<void> main() async {
 
   // Get saved language for EasyLocalization
   final savedLocale = await SharedPrefHelper.getString('locale');
-  final startLocale = savedLocale.isNotEmpty 
-      ? Locale(savedLocale) 
-      : const Locale('en'); 
+  final startLocale = savedLocale.isNotEmpty
+      ? Locale(savedLocale)
+      : const Locale('en');
 
   runApp(
     EasyLocalization(
@@ -95,6 +98,26 @@ checkOnboardingStatus() async {
   );
   shouldShowOnboarding = !hasSeen;
   if (kDebugMode) {
-    debugPrint('Onboarding Status: hasSeen=$hasSeen, shouldShow=$shouldShowOnboarding');
+    debugPrint(
+      'Onboarding Status: hasSeen=$hasSeen, shouldShow=$shouldShowOnboarding',
+    );
+  }
+}
+
+Future<void> _clearDataOnReinstall() async {
+  final prefs = await SharedPreferences.getInstance();
+  const key = 'app_installed_before';
+
+  final hasInstalledBefore = prefs.getBool(key) ?? false;
+
+  if (!hasInstalledBefore) {
+    await SharedPrefHelper.clearAllSecuredData();
+    await SharedPrefHelper.clearAllData();
+
+    await prefs.setBool(key, true);
+
+    if (kDebugMode) {
+      debugPrint('First launch after install - cleared all cached data');
+    }
   }
 }
