@@ -22,7 +22,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.mediconsult.app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "28.0.12916984"
+    ndkVersion = "29.0.14206865"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -52,21 +52,17 @@ android {
     }
 
     signingConfigs {
-        if (keystorePropertiesFile.exists() && keystoreProperties.containsKey("keyAlias")) {
-            create("release") {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-            }
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
         }
     }
 
     buildTypes {
         release {
-            if (keystorePropertiesFile.exists() && keystoreProperties.containsKey("keyAlias")) {
-                signingConfig = signingConfigs.getByName("release")
-            }
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isShrinkResources = false
         }
