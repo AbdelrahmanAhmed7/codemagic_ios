@@ -44,6 +44,7 @@ FamilyMember _$FamilyMemberFromJson(Map<String, dynamic> json) => FamilyMember(
   isHeadOfFamily: json['isHeadOfFamily'] as bool,
   isActive: json['isActive'] as bool,
   memberStatus: json['memberStatus'] as String,
+  programName: json['programName'] as String?,
 );
 
 Map<String, dynamic> _$FamilyMemberToJson(FamilyMember instance) =>
@@ -56,4 +57,5 @@ Map<String, dynamic> _$FamilyMemberToJson(FamilyMember instance) =>
       'isHeadOfFamily': instance.isHeadOfFamily,
       'isActive': instance.isActive,
       'memberStatus': instance.memberStatus,
+      'programName': instance.programName,
     };

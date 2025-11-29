@@ -3,9 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/core/services/url_launcher_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class KhusmPromotionWidget extends StatelessWidget {
   const KhusmPromotionWidget({super.key});
+
+  Future<void> _visitWebsite() async {
+    final urlLauncher = UrlLauncherService();
+    await urlLauncher.launchURL('https://khusm.com');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,20 +67,23 @@ class KhusmPromotionWidget extends StatelessWidget {
 
                 SizedBox(height: 20.h),
 
-                // Download App Button
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xff4F8787),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Text(
-                    'Download app',
-                    style: AppTextStyles.font12GreyRegular(context).copyWith(
-                      color: AppColors.whiteClr,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 10.sp,
+                // Visit Website Button
+                GestureDetector(
+                  onTap: _visitWebsite,
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff4F8787),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Text(
+                      'home.visit_website'.tr(),
+                      style: AppTextStyles.font12GreyRegular(context).copyWith(
+                        color: AppColors.whiteClr,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                      ),
                     ),
                   ),
                 ),

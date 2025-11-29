@@ -11,6 +11,7 @@ import 'package:mediconsult/features/auth/signup/presentation/logic/signup_cubit
 import 'package:mediconsult/features/auth/signup/presentation/logic/signup_state.dart';
 import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:mediconsult/shared/widgets/form_fields/form_fields.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -131,20 +132,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 SizedBox(height: 8.h),
-                AppTextField(
+                EgyptianPhoneField(
                   controller: phoneController,
-                  hintText: 'auth.signup.phone_number_placeholder'.tr(),
-                  prefixImagePath: AppAssets.phoneIcon,
-                  keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'auth.signup.validation.phone_required'.tr();
-                    }
-                    if (!RegExp(r'^(01)[0-9]{9}$').hasMatch(value)) {
-                      return 'auth.signup.validation.phone_invalid'.tr();
-                    }
-                    return null;
-                  },
+                  phoneRequiredKey: 'auth.signup.validation.phone_required',
+                  phoneInvalidKey: 'auth.signup.validation.phone_invalid',
+                  hintText: 'auth.signup.validation.phone_hint'.tr(),
                 ),
                 SizedBox(height: 16.h),
 
@@ -230,10 +222,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ? null
                           : () {
                               if (_formKey.currentState!.validate()) {
+                                // Remove leading 0 if exists, then add it back for backend
+                                final phoneNumber = EgyptianPhoneField.formatPhoneNumber(
+                                  phoneController.text.trim(),
+                                );
                                 context.read<SignupCubit>().signup(
                                   cardController.text.trim(),
                                   nationalController.text.trim(),
-                                  phoneController.text.trim(),
+                                  phoneNumber,
                                   passwordController.text.trim(),
                                   confirmPasswordController.text.trim(),
                                   context.locale.languageCode,

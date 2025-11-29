@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LocationPermissionDialog extends StatelessWidget {
   final VoidCallback? onEnablePressed;
@@ -15,11 +16,20 @@ class LocationPermissionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.r),
-      ),
-      child: Container(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) {
+          // Handle back button press - treat it as "Maybe Later"
+          Navigator.of(context).pop();
+          onMaybeLaterPressed?.call();
+        }
+      },
+      child: Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.r),
+        ),
+        child: Container(
         padding: EdgeInsets.all(32.w),
         decoration: BoxDecoration(
           color: AppColors.whiteClr,
@@ -64,7 +74,7 @@ class LocationPermissionDialog extends StatelessWidget {
             
             // Title
             Text(
-              'Allow Location Access',
+              'location_permission.title'.tr(),
               style: AppTextStyles.font20BlackSemiBold(context),
               textAlign: TextAlign.center,
             ),
@@ -73,7 +83,7 @@ class LocationPermissionDialog extends StatelessWidget {
             
             // Message
             Text(
-              'Allow MCI Mobile to access your location to quickly find doctors, hospitals, and pharmacies within your area.',
+              'location_permission.message'.tr(),
               style: AppTextStyles.font14GreyRegular(context),
               textAlign: TextAlign.center,
             ),
@@ -97,7 +107,7 @@ class LocationPermissionDialog extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: Text(
-                  'Enable Location Access',
+                  'location_permission.enable_button'.tr(),
                   style: AppTextStyles.font16WhiteMedium(context),
                 ),
               ),
@@ -120,7 +130,7 @@ class LocationPermissionDialog extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'MAYBE LATER',
+                  'location_permission.maybe_later'.tr(),
                   style: AppTextStyles.font14GreyRegular(context).copyWith(
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,
@@ -130,6 +140,7 @@ class LocationPermissionDialog extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

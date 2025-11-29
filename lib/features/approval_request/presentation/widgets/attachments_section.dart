@@ -7,7 +7,6 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mediconsult/core/utils/app_button.dart';
 import 'attachments/attachment_item.dart';
 import 'attachments/upload_option.dart';
 import 'attachments/permissions.dart';
@@ -127,183 +126,95 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
   }
 
   void _openUploadSheet() async {
-    ImageProvider? previewCameraImage;
-    String? previewCameraName;
-    ImageProvider? previewGalleryImage;
-    String? previewGalleryName;
-
     final selection = await showModalBottomSheet<_UploadSelection>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Container(
-              decoration: BoxDecoration(
-                color: AppColors.whiteClr,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-              ),
-              child: SafeArea(
-                top: false,
-                child: Padding(
-                  padding: EdgeInsets.all(16.w),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.whiteClr,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: EdgeInsets.all(16.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 36.w,
+                    height: 4.h,
+                    margin: EdgeInsets.only(bottom: 12.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGreyClr,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  Row(
                     children: [
-                      Container(
-                        width: 36.w,
-                        height: 4.h,
-                        margin: EdgeInsets.only(bottom: 12.h),
-                        decoration: BoxDecoration(
-                          color: AppColors.lightGreyClr,
-                          borderRadius: BorderRadius.circular(2.r),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: (previewCameraImage == null)
-                                ? UploadOption(
-                                    assetIcon: AppAssets.camera,
-                                    label: 'add_attachment.take_photo'.tr(),
-                                    onTap: () async {
-                                      final ok =
-                                          await AttachmentsPermissions.ensureCamera();
-                                      if (!ok) return;
-                                      final picker = ImagePicker();
-                                      final picked = await picker.pickImage(
-                                        source: ImageSource.camera,
-                                        maxWidth: 1600,
-                                      );
-                                      if (picked != null) {
-                                        setModalState(() {
-                                          previewCameraImage = FileImage(
-                                            File(picked.path),
-                                          );
-                                          previewCameraName = picked.name;
-                                        });
-                                      }
-                                    },
-                                  )
-                                : Column(
-                                    children: [
-                                      Container(
-                                        height: 150.h,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.lightGreyClr,
-                                          borderRadius: BorderRadius.circular(
-                                            12.r,
-                                          ),
-                                        ),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: Image(
-                                          image: previewCameraImage!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      Text(
-                                        previewCameraName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium(
-                                          context,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: (previewGalleryImage == null)
-                                ? UploadOption(
-                                    assetIcon: AppAssets.upload,
-                                    label: 'add_attachment.upload_file'.tr(),
-                                    onTap: () async {
-                                      final picker = ImagePicker();
-                                      final picked = await picker.pickImage(
-                                        source: ImageSource.gallery,
-                                        maxWidth: 1600,
-                                      );
-                                      if (picked != null) {
-                                        setModalState(() {
-                                          previewGalleryImage = FileImage(
-                                            File(picked.path),
-                                          );
-                                          previewGalleryName = picked.name;
-                                        });
-                                      }
-                                    },
-                                  )
-                                : Column(
-                                    children: [
-                                      Container(
-                                        height: 150.h,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.lightGreyClr,
-                                          borderRadius: BorderRadius.circular(
-                                            12.r,
-                                          ),
-                                        ),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: Image(
-                                          image: previewGalleryImage!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      Text(
-                                        previewGalleryName ?? 'selected',
-                                        style: AppTextStyles.font14BlackMedium(
-                                          context,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16.h),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 44.h,
-                        child: AppButton(
-                          text: 'Upload',
-                          onPressed: () {
-                            final img =
-                                previewCameraImage ?? previewGalleryImage;
-                            final name =
-                                previewCameraName ?? previewGalleryName;
-                            if (img != null && name != null) {
-                              // Try to extract the file path from FileImage
-                              String path = '';
-                              final imageProvider = img;
-                              if (imageProvider is FileImage) {
-                                path = imageProvider.file.path;
-                              }
+                      Expanded(
+                        child: UploadOption(
+                          assetIcon: AppAssets.camera,
+                          label: 'add_attachment.take_photo'.tr(),
+                          onTap: () async {
+                            final ok =
+                                await AttachmentsPermissions.ensureCamera();
+                            if (!ok) return;
+                            final picker = ImagePicker();
+                            final picked = await picker.pickImage(
+                              source: ImageSource.camera,
+                              maxWidth: 1600,
+                            );
+                            if (picked != null) {
+                              // Auto-upload: close modal immediately with selection
+                              String path = picked.path;
                               Navigator.of(context).pop(
                                 _UploadSelection(
-                                  image: img,
-                                  name: name,
+                                  image: FileImage(File(path)),
+                                  name: picked.name,
                                   path: path,
                                 ),
                               );
-                            } else {
-                              Navigator.of(context).pop(null);
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: UploadOption(
+                          assetIcon: AppAssets.upload,
+                          label: 'add_attachment.upload_file'.tr(),
+                          onTap: () async {
+                            final picker = ImagePicker();
+                            final picked = await picker.pickImage(
+                              source: ImageSource.gallery,
+                              maxWidth: 1600,
+                            );
+                            if (picked != null) {
+                              // Auto-upload: close modal immediately with selection
+                              String path = picked.path;
+                              Navigator.of(context).pop(
+                                _UploadSelection(
+                                  image: FileImage(File(path)),
+                                  name: picked.name,
+                                  path: path,
+                                ),
+                              );
                             }
                           },
                         ),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     );
-    
+
     // إزالة focus بعد إغلاق الـ modal (مع delay)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).unfocus();
@@ -312,9 +223,9 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
       // إخفاء الكيبورد بقوة
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
-    
+
     if (selection == null) return;
-    
+
     setState(() {
       _items.add(
         AttachmentItem(

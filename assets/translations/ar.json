@@ -134,7 +134,8 @@
         "national_id_required": "الرقم القومي مطلوب",
         "national_id_invalid": "أدخل رقماً قومياً صحيحاً مكون من 14 رقم",
         "phone_required": "رقم الهاتف مطلوب",
-        "phone_invalid": "أدخل رقم هاتف مصري صحيح",
+        "phone_starts_with_zero": "يرجى إدخال رقم الهاتف بدون البدء بصفر",
+        "phone_invalid": "يرجى إدخال رقم هاتف مصري صحيح يبدأ بـ 10 أو 11 أو 12 أو 15",
         "password_required": "كلمة المرور مطلوبة",
         "password_length": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
         "confirm_password_required": "تأكيد كلمة المرور مطلوب",
@@ -161,7 +162,9 @@
       "verifying": "جارٍ التحقق...",
       "verify": "تحقق",
       "validation": {
-        "phone_required": "يرجى إدخال رقم هاتفك"
+        "phone_required": "يرجى إدخال رقم هاتفك",
+        "phone_starts_with_zero": "يرجى إدخال رقم الهاتف بدون البدء بصفر",
+        "phone_invalid": "يرجى إدخال رقم هاتف مصري صحيح يبدأ بـ 10 أو 11 أو 12 أو 15"
       }
     },
     "reset_password": {
@@ -208,7 +211,8 @@
     "health_tips_exercise_desc": "النشاط البدني المنتظم يمكن أن يحسن قوة عضلاتك ويعزز قدرتك على التحمل.",
     "health_tips_sleep_title": "نم جيداً",
     "health_tips_sleep_desc": "النوم الجيد يحسن أداء عقلك ومزاجك وصحتك.",
-    "explore": "استكشف"
+    "explore": "استكشف",
+    "visit_website": "زيارة الموقع"
   },
   "profile": {
     "title": "الملف الشخصي",
@@ -576,7 +580,13 @@
     },
     "profile": {
       "personal_info": "اعرض وعدّل معلوماتك الشخصية",
-      "change_password": "قم بتغيير كلمة مرور حسابك"
+      "family_members": "أضف وأدر أفراد عائلتك",
+      "change_password": "قم بتغيير كلمة مرور حسابك",
+      "language": "غيّر لغة التطبيق",
+      "faq": "تصفح الأسئلة الشائعة",
+      "contact_us": "تواصل مع فريق الدعم",
+      "terms_privacy": "اقرأ الشروط وسياسة الخصوصية",
+      "log_out": "تسجيل الخروج من حسابك"
     }
   },
   "placeholders": {
@@ -600,5 +610,11 @@
     "coming_soon_title": "قريباً",
     "coming_soon_message": "نعمل على تطوير هذه الميزة\nترقب التحديثات قريباً!",
     "got_it": "فهمت"
+  },
+  "location_permission": {
+    "title": "السماح بالوصول إلى الموقع",
+    "message": "اسمح لتطبيق MCI Mobile بالوصول إلى موقعك للعثور بسرعة على الأطباء والمستشفيات والصيدليات في منطقتك.",
+    "enable_button": "تفعيل الوصول إلى الموقع",
+    "maybe_later": "ربما لاحقاً"
   }
 }

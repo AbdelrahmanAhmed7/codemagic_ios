@@ -205,34 +205,41 @@ class _FamilyMembersScreenState extends State<FamilyMembersScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFC107),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.r),
-                    bottomRight: Radius.circular(8.r),
+              // Only show plan if programName is available
+              if (member.programName != null && member.programName!.isNotEmpty) ...[
+                SizedBox(height: 8.h),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryClr,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.r),
+                      bottomRight: Radius.circular(8.r),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        AppAssets.goldPlan,
+                        width: 12.sp,
+                        height: 12.sp,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        member.programName!,
+                        style: AppTextStyles.font12BlackMedium(
+                          context,
+                        ).copyWith(
+                          fontSize: 10.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      AppAssets.goldPlan,
-                      width: 12.sp,
-                      height: 12.sp,
-                    ),
-                    SizedBox(width: 4.w),
-                    Text(
-                      'family_members.gold_plan'.tr(),
-                      style: AppTextStyles.font12BlackMedium(
-                        context,
-                      ).copyWith(fontSize: 10.sp),
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ],
           ),
         ),

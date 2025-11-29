@@ -134,7 +134,8 @@
         "national_id_required": "National ID is required",
         "national_id_invalid": "Enter a valid 14-digit National ID",
         "phone_required": "Phone number is required",
-        "phone_invalid": "Enter a valid Egyptian phone number",
+        "phone_starts_with_zero": "Please enter the phone number without starting with 0",
+        "phone_invalid": "Please enter a valid Egyptian phone number starting with 10, 11, 12, or 15",
         "password_required": "Password is required",
         "password_length": "Password must be at least 8 characters",
         "confirm_password_required": "Confirm password is required",
@@ -161,7 +162,9 @@
       "verifying": "Verifying...",
       "verify": "Verify",
       "validation": {
-        "phone_required": "Please enter your phone number"
+        "phone_required": "Please enter your phone number",
+        "phone_starts_with_zero": "Please enter the phone number without starting with 0",
+        "phone_invalid": "Please enter a valid Egyptian phone number starting with 10, 11, 12, or 15"
       }
     },
     "reset_password": {
@@ -208,7 +211,8 @@
     "health_tips_exercise_desc": "Regular physical activity can improve your muscle strength and boost your endurance.",
     "health_tips_sleep_title": "Sleep Well",
     "health_tips_sleep_desc": "Good sleep improves your brain performance, mood, and health.",
-    "explore": "Explore"
+    "explore": "Explore",
+    "visit_website": "Visit website"
   },
   "profile": {
     "title": "Profile",
@@ -567,7 +571,13 @@
     },
     "profile": {
       "personal_info": "View and edit your personal information",
-      "change_password": "Change your account password"
+      "family_members": "Add and manage your family members",
+      "change_password": "Change your account password",
+      "language": "Change the app language",
+      "faq": "Browse frequently asked questions",
+      "contact_us": "Get in touch with our support team",
+      "terms_privacy": "Read our terms and privacy policy",
+      "log_out": "Sign out from your account"
     },
     "approval_history": {
       "swipe": "Swipe or tap to filter approvals",
@@ -595,5 +605,11 @@
     "coming_soon_title": "Coming Soon",
     "coming_soon_message": "This feature is under development.\nStay tuned for updates!",
     "got_it": "Got it!"
+  },
+  "location_permission": {
+    "title": "Allow Location Access",
+    "message": "Allow MCI Mobile to access your location to quickly find doctors, hospitals, and pharmacies within your area.",
+    "enable_button": "Enable Location Access",
+    "maybe_later": "MAYBE LATER"
   }
 }
