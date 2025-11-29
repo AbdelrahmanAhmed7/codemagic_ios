@@ -196,18 +196,19 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                 child: BlocBuilder<NetworkCubit, NetworkState>(
                                   buildWhen: (previous, current) => true,
                                   builder: (context, state) {
+                                    final cubit = context.read<NetworkCubit>();
                                     return NetworkCategoriesList(
                                       categories: categories,
-                                      selectedCategoryId: context
-                                          .read<NetworkCubit>()
-                                          .selectedCategoryId,
+                                      selectedCategoryId: cubit.selectedCategoryId,
                                       onCategorySelected: (categoryId) {
-                                        context
-                                            .read<NetworkCubit>()
-                                            .searchProviders(
-                                              categoryId: categoryId,
-                                              resetPage: true,
-                                            );
+                                        // Preserve existing filters (government and city) when selecting category
+                                        cubit.searchProviders(
+                                          categoryId: categoryId,
+                                          governmentId: cubit.selectedGovernmentId,
+                                          cityId: cubit.selectedCityId,
+                                          resetPage: true,
+                                          context: context,
+                                        );
                                       },
                                     );
                                   },
@@ -239,10 +240,14 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                     }
                                   }
 
-                                  // Always perform search regardless of location status
+                                  // Preserve existing filters when searching
                                   cubit.searchProviders(
                                     searchKey: value.isNotEmpty ? value : null,
+                                    categoryId: cubit.selectedCategoryId,
+                                    governmentId: cubit.selectedGovernmentId,
+                                    cityId: cubit.selectedCityId,
                                     resetPage: true,
+                                    context: context,
                                   );
                                   },
                                 ),

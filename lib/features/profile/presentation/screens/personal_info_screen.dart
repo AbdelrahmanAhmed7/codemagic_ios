@@ -8,6 +8,9 @@ import 'package:mediconsult/shared/widgets/form_fields/form_fields.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/features/profile/presentation/cubit/personal_info_cubit.dart';
 import 'package:mediconsult/features/profile/presentation/cubit/personal_info_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mediconsult/core/widgets/image_shimmer.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 
 class PersonalInformationScreen extends StatefulWidget {
   const PersonalInformationScreen({super.key});
@@ -120,23 +123,23 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             width: 100.w,
             height: 100.w,
             decoration: BoxDecoration(shape: BoxShape.circle),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                if (state is Loaded && state.data.data.image.isNotEmpty)
-                  CircleAvatar(
-                    radius: 45.r,
-                    backgroundImage: NetworkImage(state.data.data.image),
-                  )
-                else
-                  CircleAvatar(
-                    radius: 45.r,
-                    backgroundImage: const AssetImage(
-                      'assets/approval/ahmed.png',
+            clipBehavior: Clip.antiAlias,
+            child: state is Loaded && state.data.data.image.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: state.data.data.image,
+                    fit: BoxFit.cover,
+                    memCacheWidth: 200,
+                    memCacheHeight: 200,
+                    maxWidthDiskCache: 200,
+                    maxHeightDiskCache: 200,
+                    cacheKey: state.data.data.image,
+                    placeholder: (context, url) => const ImageShimmer.circle(),
+                    errorWidget: (context, url, error) => Image.asset(
+                      AppAssets.profile,
+                      fit: BoxFit.cover,
                     ),
-                  ),
-              ],
-            ),
+                  )
+                : const ImageShimmer.circle(),
           ),
           SizedBox(height: 8.h),
           Text(

@@ -47,7 +47,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                           errorWidget: (context, url, error) =>
                               Image.asset(AppAssets.profile, fit: BoxFit.cover),
                         )
-                      : Image.asset(AppAssets.profile, fit: BoxFit.cover),
+                      : const ImageShimmer.circle(),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(

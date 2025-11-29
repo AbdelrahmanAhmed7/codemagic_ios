@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/services/url_launcher_service.dart';
 import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
@@ -88,13 +87,13 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                         return ListView(
                           padding: EdgeInsets.all(16.w),
                           children: [
-                            ContactTile(
-                              assetPath: AppAssets.chatIcon,
-                              title: 'contact_us.chat'.tr(),
-                              subtitle: 'contact_us.chat_subtitle'.tr(),
-                              onTap: () => context.push('/chat'),
-                            ),
-                            SizedBox(height: 12.h),
+                            // ContactTile(
+                            //   assetPath: AppAssets.chatIcon,
+                            //   title: 'contact_us.chat'.tr(),
+                            //   subtitle: 'contact_us.chat_subtitle'.tr(),
+                            //   onTap: () => context.push('/chat'),
+                            // ),
+                            // SizedBox(height: 12.h),
                             ContactTile(
                               assetPath: AppAssets.phoneContactIcon,
                               title: 'contact_us.phone'.tr(),

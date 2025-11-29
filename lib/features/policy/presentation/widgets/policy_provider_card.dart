@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/policy/data/policy_details_response.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class PolicyProviderCard extends StatelessWidget {
@@ -114,6 +115,9 @@ class PolicyProviderCard extends StatelessWidget {
   }
 
   Widget _buildProviderLogo() {
+    // Check if logo is empty or null
+    final hasLogo = provider.logo.isNotEmpty;
+
     return Container(
       width: 48.w,
       height: 48.w,
@@ -124,33 +128,29 @@ class PolicyProviderCard extends StatelessWidget {
       padding: EdgeInsets.all(4.w),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4.r),
-        child: CachedNetworkImage(
-          imageUrl: provider.logo,
-          fit: BoxFit.contain,
-          placeholder: (context, url) => Container(
-            color: Colors.grey[100],
-            child: Center(
-              child: SizedBox(
-                width: 16.w,
-                height: 16.w,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    AppColors.primaryClr,
+        child: hasLogo
+            ? CachedNetworkImage(
+                imageUrl: provider.logo,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[100],
+                  child: Center(
+                    child: SizedBox(
+                      width: 16.w,
+                      height: 16.w,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primaryClr,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          errorWidget: (context, url, error) => Container(
-            color: Colors.grey[100],
-            child: Icon(
-              Icons.local_hospital,
-              color: AppColors.primaryClr,
-              size: 20.sp,
-            ),
-          ),
-        ),
+                errorWidget: (context, url, error) =>
+                    Image.asset(AppAssets.logo, fit: BoxFit.contain),
+              )
+            : Image.asset(AppAssets.logo, fit: BoxFit.contain),
       ),
     );
   }

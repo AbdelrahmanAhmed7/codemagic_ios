@@ -36,20 +36,20 @@ Map<String, dynamic> _$RefundTypesDataToJson(RefundTypesData instance) =>
     <String, dynamic>{'refundTypes': instance.refundTypes};
 
 RefundType _$RefundTypeFromJson(Map<String, dynamic> json) => RefundType(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      attachments: (json['attachments'] as List<dynamic>?)
-              ?.map(
-                  (e) => RefundAttachment.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
-    );
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  attachments:
+      (json['attachments'] as List<dynamic>?)
+          ?.map((e) => RefundAttachment.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
+);
 
 Map<String, dynamic> _$RefundTypeToJson(RefundType instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'attachments': instance.attachments.map((e) => e.toJson()).toList(),
+      'attachments': instance.attachments,
     };
 
 RefundAttachment _$RefundAttachmentFromJson(Map<String, dynamic> json) =>

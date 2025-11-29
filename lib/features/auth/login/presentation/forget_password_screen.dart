@@ -10,8 +10,8 @@ import 'package:mediconsult/core/utils/app_button.dart';
 import 'package:mediconsult/core/widgets/auth_base_layout.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/cubit/send_otp_cubit.dart';
 import 'package:mediconsult/features/auth/login/presentation/logic/reset_password/send_otp_state.dart';
-import 'package:mediconsult/features/auth/signup/presentation/widgets/app_text_field.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:mediconsult/shared/widgets/form_fields/form_fields.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -69,18 +69,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 SizedBox(height: 8.h),
                 Form(
                   key: _formKey,
-                  child: AppTextField(
+                  child: EgyptianPhoneField(
                     controller: phoneNumberController,
-                    prefixImagePath: AppAssets.phoneIcon,
-                    hintText: 'auth.forgot_password.phone_placeholder'.tr(),
-                    keyboardType: TextInputType.phone,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'auth.forgot_password.validation.phone_required'
-                            .tr();
-                      }
-                      return null;
-                    },
+                    phoneRequiredKey: 'auth.forgot_password.validation.phone_required',
+                    phoneInvalidKey: 'auth.forgot_password.validation.phone_invalid',
+                    hintText: 'auth.forgot_password.validation.phone_hint'.tr(),
                   ),
                 ),
                 SizedBox(height: 29.h),
@@ -115,8 +108,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           ? null
                           : () {
                               if (_formKey.currentState!.validate()) {
-                                context.read<SendOtpCubit>().sendOtp(
+                                final phoneNumber = EgyptianPhoneField.formatPhoneNumber(
                                   phoneNumberController.text,
+                                );
+                                context.read<SendOtpCubit>().sendOtp(
+                                  phoneNumber,
                                   context.locale.languageCode,
                                 );
                               }
@@ -130,9 +126,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           context,
                           'auth.forgot_password.otp_sent_success'.tr(),
                         );
+                        final phoneNumber = EgyptianPhoneField.formatPhoneNumber(
+                          phoneNumberController.text,
+                        );
                         context.push(
                           '/otp-password',
-                          extra: phoneNumberController.text,
+                          extra: phoneNumber,
                         );
                       });
                     } else if (state is Failed) {

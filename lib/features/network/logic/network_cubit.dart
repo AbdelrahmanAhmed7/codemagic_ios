@@ -115,15 +115,63 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   /// Show location permission dialog and handle user response
+  /// Only shows dialog if permission is not already granted
+  /// Handles "Allow Once" case: if permission was granted but now denied, it means "Allow Once" expired
   Future<void> requestLocationWithDialog(BuildContext context) async {
+    // Check permission status first
+    LocationPermission permission = await Geolocator.checkPermission();
+    
+    // If permission is already granted (whileInUse or always), get location directly
+    if (permission == LocationPermission.whileInUse || 
+        permission == LocationPermission.always) {
+      // Permission already granted, get location directly
+      await getUserLocation();
+      // If location retrieved successfully, load providers
+      if (_userLatitude != null && _userLongitude != null) {
+        await searchProviders(resetPage: true, context: context);
+      } else {
+        // Location failed, load random providers
+        _loadRandomProviders(context);
+      }
+      return;
+    }
+    
+    // If permission is denied forever, don't show dialog again
+    if (permission == LocationPermission.deniedForever) {
+      _loadRandomProviders(context);
+      return;
+    }
+    
+    // Permission is denied or not determined
+    // This could be:
+    // 1. First time asking for permission
+    // 2. User chose "Allow Once" previously and it expired
+    // 3. User denied permission previously
+    
+    // Clear any cached location data (in case "Allow Once" expired)
+    if (permission == LocationPermission.denied && 
+        (_userLatitude != null || _userLongitude != null)) {
+      // Likely "Allow Once" expired, clear cached location
+      _userLatitude = null;
+      _userLongitude = null;
+    }
+    
+    // Show dialog to request permission
     await LocationPermissionDialog.show(
       context,
       onEnablePressed: () async {
         // User chose to enable location access
+        // This will show system dialog where user can choose:
+        // - Allow all the time
+        // - Allow only while using the app
+        // - Allow once (Android) / Ask each time (iOS)
         await getUserLocation();
         // If location retrieved successfully, load providers
         if (_userLatitude != null && _userLongitude != null) {
           await searchProviders(resetPage: true, context: context);
+        } else {
+          // Location failed, load random providers
+          _loadRandomProviders(context);
         }
       },
       onMaybeLaterPressed: () {
@@ -165,7 +213,11 @@ class NetworkCubit extends Cubit<NetworkState> {
       // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
 
+      // Handle "Allow Once" case: if permission was granted before but now is denied,
+      // it means user chose "Allow Once" previously
       if (permission == LocationPermission.denied) {
+        // Check if we have cached location from previous "Allow Once" session
+        // If not, request permission again (user might choose "Allow Once" again or grant permanently)
         permission = await Geolocator.requestPermission();
 
         if (permission == LocationPermission.denied) {
@@ -180,6 +232,7 @@ class NetworkCubit extends Cubit<NetworkState> {
       }
 
       // Get current position with timeout
+      // This will work even if user chose "Allow Once" (as long as permission is still valid)
       Position position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
@@ -192,6 +245,18 @@ class NetworkCubit extends Cubit<NetworkState> {
 
       emit(NetworkState.locationSuccess(position.latitude, position.longitude));
     } catch (e, stackTrace) {
+      // Check if error is due to permission being revoked (Allow Once expired)
+      LocationPermission currentPermission = await Geolocator.checkPermission();
+      
+      if (currentPermission == LocationPermission.denied) {
+        // Permission was revoked (likely "Allow Once" expired)
+        // Clear cached location
+        _userLatitude = null;
+        _userLongitude = null;
+        emit(const NetworkState.locationPermissionDenied());
+        return;
+      }
+      
       // تسجيل خطأ الموقع في Crashlytics
       FirebaseCrashlyticsService.instance.recordError(
         exception: e,

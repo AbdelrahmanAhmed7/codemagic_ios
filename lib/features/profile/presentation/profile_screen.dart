@@ -27,7 +27,13 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey _personalInfoKey = GlobalKey();
+  final GlobalKey _familyMembersKey = GlobalKey();
   final GlobalKey _changePasswordKey = GlobalKey();
+  final GlobalKey _languageKey = GlobalKey();
+  final GlobalKey _faqKey = GlobalKey();
+  final GlobalKey _contactUsKey = GlobalKey();
+  final GlobalKey _termsPrivacyKey = GlobalKey();
+  final GlobalKey _logoutKey = GlobalKey();
   
   @override
   void initState() {
@@ -104,7 +110,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onHelp: () {
                     ShowCaseWidget.of(
                       context,
-                    ).startShowCase([_personalInfoKey, _changePasswordKey]);
+                    ).startShowCase([
+                      _personalInfoKey,
+                      _familyMembersKey,
+                      _changePasswordKey,
+                      _languageKey,
+                      _faqKey,
+                      _contactUsKey,
+                      _termsPrivacyKey,
+                      _logoutKey,
+                    ]);
                   },
                 ),
                 Transform.translate(
@@ -137,17 +152,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Showcase(
                                   key: _personalInfoKey,
                                   description:
-                                      'View and edit your personal information',
+                                      'tutorial.profile.personal_info'.tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.personal_information'.tr(),
                                     image: AppAssets.personal,
                                     route: '/personal-information',
                                   ),
                                 ),
-                                ProfileTileWidget(
-                                  title: 'profile.family_members'.tr(),
-                                  image: AppAssets.familyMembers,
-                                  route: '/family-members',
+                                Showcase(
+                                  key: _familyMembersKey,
+                                  description:
+                                      'tutorial.profile.family_members'.tr(),
+                                  child: ProfileTileWidget(
+                                    title: 'profile.family_members'.tr(),
+                                    image: AppAssets.familyMembers,
+                                    route: '/family-members',
+                                  ),
                                 ),
                               ],
                             ),
@@ -156,47 +176,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               tiles: [
                                 Showcase(
                                   key: _changePasswordKey,
-                                  description: 'Change your account password',
+                                  description: 'tutorial.profile.change_password'.tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.change_password'.tr(),
                                     image: AppAssets.change_password,
                                     route: '/change-password',
                                   ),
                                 ),
-                                ProfileTileWidget(
-                                  title: 'profile.language'.tr(),
-                                  image: AppAssets.language,
-                                  route: '/language',
+                                Showcase(
+                                  key: _languageKey,
+                                  description: 'tutorial.profile.language'.tr(),
+                                  child: ProfileTileWidget(
+                                    title: 'profile.language'.tr(),
+                                    image: AppAssets.language,
+                                    route: '/language',
+                                  ),
                                 ),
                               ],
                             ),
                             ProfileSectionWidget(
                               title: 'profile.help_support'.tr(),
                               tiles: [
-                                ProfileTileWidget(
-                                  title: 'profile.faq'.tr(),
-                                  image: AppAssets.faq,
-                                  route: '/faq',
+                                Showcase(
+                                  key: _faqKey,
+                                  description: 'tutorial.profile.faq'.tr(),
+                                  child: ProfileTileWidget(
+                                    title: 'profile.faq'.tr(),
+                                    image: AppAssets.faq,
+                                    route: '/faq',
+                                  ),
                                 ),
-                                ProfileTileWidget(
-                                  title: 'profile.contact_us'.tr(),
-                                  image: AppAssets.contactUs,
-                                  route: '/contact-us',
+                                Showcase(
+                                  key: _contactUsKey,
+                                  description: 'tutorial.profile.contact_us'.tr(),
+                                  child: ProfileTileWidget(
+                                    title: 'profile.contact_us'.tr(),
+                                    image: AppAssets.contactUs,
+                                    route: '/contact-us',
+                                  ),
                                 ),
-                                ProfileTileWidget(
-                                  title: 'profile.terms_privacy'.tr(),
-                                  image: AppAssets.terms,
-                                  route: '/terms-policy',
+                                Showcase(
+                                  key: _termsPrivacyKey,
+                                  description: 'tutorial.profile.terms_privacy'.tr(),
+                                  child: ProfileTileWidget(
+                                    title: 'profile.terms_privacy'.tr(),
+                                    image: AppAssets.terms,
+                                    route: '/terms-policy',
+                                  ),
                                 ),
                               ],
                             ),
                             ProfileSectionWidget(
                               title: '',
                               tiles: [
-                                ProfileTileWidget(
-                                  title: 'profile.log_out'.tr(),
-                                  image: AppAssets.logout,
-                                  onTap: () => _handleLogout(context),
+                                Showcase(
+                                  key: _logoutKey,
+                                  description: 'tutorial.profile.log_out'.tr(),
+                                  child: ProfileTileWidget(
+                                    title: 'profile.log_out'.tr(),
+                                    image: AppAssets.logout,
+                                    onTap: () => _handleLogout(context),
+                                  ),
                                 ),
                               ],
                             ),

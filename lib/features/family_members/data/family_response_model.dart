@@ -44,6 +44,7 @@ class FamilyMember {
   final bool isHeadOfFamily;
   final bool isActive;
   final String memberStatus;
+  final String? programName;
 
   FamilyMember({
     required this.memberId,
@@ -54,6 +55,7 @@ class FamilyMember {
     required this.isHeadOfFamily,
     required this.isActive,
     required this.memberStatus,
+    this.programName,
   });
 
   factory FamilyMember.fromJson(Map<String, dynamic> json) => _$FamilyMemberFromJson(json);
