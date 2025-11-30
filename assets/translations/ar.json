@@ -134,6 +134,7 @@
         "national_id_required": "الرقم القومي مطلوب",
         "national_id_invalid": "أدخل رقماً قومياً صحيحاً مكون من 14 رقم",
         "phone_required": "رقم الهاتف مطلوب",
+        "phone_hint": "أدخل رقم الهاتف",
         "phone_starts_with_zero": "يرجى إدخال رقم الهاتف بدون البدء بصفر",
         "phone_invalid": "يرجى إدخال رقم هاتف مصري صحيح يبدأ بـ 10 أو 11 أو 12 أو 15",
         "password_required": "كلمة المرور مطلوبة",
@@ -163,6 +164,7 @@
       "verify": "تحقق",
       "validation": {
         "phone_required": "يرجى إدخال رقم هاتفك",
+        "phone_hint": "أدخل رقم الهاتف",
         "phone_starts_with_zero": "يرجى إدخال رقم الهاتف بدون البدء بصفر",
         "phone_invalid": "يرجى إدخال رقم هاتف مصري صحيح يبدأ بـ 10 أو 11 أو 12 أو 15"
       }
@@ -260,7 +262,7 @@
     "new_password_placeholder": "أدخل كلمة المرور الجديدة",
     "confirm_password": "تأكيد كلمة المرور",
     "confirm_password_placeholder": "تأكيد كلمة المرور الجديدة",
-    "password_requirements": "كلمة المرور يجب أن تكون 8 أحرف على الأقل وتشمل حرف كبير واحد",
+    "password_requirements": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
     "success_message": "تهانينا تم تغيير كلمة المرور بنجاح.",
     "validation": {
       "old_password_required": "كلمة المرور القديمة مطلوبة",

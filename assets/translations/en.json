@@ -134,6 +134,7 @@
         "national_id_required": "National ID is required",
         "national_id_invalid": "Enter a valid 14-digit National ID",
         "phone_required": "Phone number is required",
+        "phone_hint": "Enter phone number",
         "phone_starts_with_zero": "Please enter the phone number without starting with 0",
         "phone_invalid": "Please enter a valid Egyptian phone number starting with 10, 11, 12, or 15",
         "password_required": "Password is required",
@@ -163,6 +164,7 @@
       "verify": "Verify",
       "validation": {
         "phone_required": "Please enter your phone number",
+        "phone_hint": "Enter phone number",
         "phone_starts_with_zero": "Please enter the phone number without starting with 0",
         "phone_invalid": "Please enter a valid Egyptian phone number starting with 10, 11, 12, or 15"
       }
@@ -260,7 +262,7 @@
     "new_password_placeholder": "Enter new password",
     "confirm_password": "Confirm Password",
     "confirm_password_placeholder": "Confirm new password",
-    "password_requirements": "Password must be at least 8 characters included 1 upper case",
+    "password_requirements": "Password must be at least 8 characters",
     "success_message": "Congratulations your password has been changed.",
     "validation": {
       "old_password_required": "Old password is required",

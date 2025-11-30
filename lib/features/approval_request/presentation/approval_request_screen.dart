@@ -15,6 +15,7 @@ import 'package:mediconsult/features/approval_request/presentation/cubit/approva
 import 'package:mediconsult/features/family_members/data/family_response_model.dart';
 import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
 import 'package:showcaseview/showcaseview.dart';
 // ignore_for_file: deprecated_member_use
@@ -57,16 +58,12 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
 
     // Validation
     if (_selectedFamilyMember == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('approval_request.validation.select_member'.tr())),
-      );
+      _showError('approval_request.validation.select_member'.tr());
       return;
     }
 
     if (_selectedProvider == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('approval_request.validation.select_provider'.tr())),
-      );
+      _showError('approval_request.validation.select_provider'.tr());
       return;
     }
 
@@ -79,9 +76,7 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
     }
 
     if (_attachments.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('approval_request.validation.attachment_required'.tr())),
-      );
+      _showError('approval_request.validation.attachment_required'.tr());
       return;
     }
 
@@ -93,6 +88,18 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
       notes: _noteController.text.isNotEmpty ? _noteController.text : null,
       attachmentPaths: _attachments,
     );
+  }
+
+  void _showError(String message) {
+    if (mounted) {
+      HapticFeedback.lightImpact();
+      showAppSnackBar(
+        context,
+        message,
+        isError: true,
+        duration: const Duration(seconds: 4),
+      );
+    }
   }
 
   void _resetForm() {

@@ -158,7 +158,7 @@ class EgyptianPhoneField extends StatelessWidget {
                             horizontal: 12.w,
                             vertical: 12.h,
                           ),
-                          hintText: hintText ?? '1012345678',
+                          hintText: hintText ?? 'auth.signup.validation.phone_hint'.tr(),
                           hintStyle: TextStyle(
                             fontSize: 14.sp,
                             color: Colors.grey,

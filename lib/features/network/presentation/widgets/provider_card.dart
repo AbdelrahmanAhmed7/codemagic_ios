@@ -99,27 +99,28 @@ class ProviderCard extends StatelessWidget {
                     child: provider.hasLogo
                         ? CachedNetworkImage(
                             imageUrl: provider.providerLogo,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Center(
-                              child: SizedBox(
-                                width: 20.w,
-                                height: 20.h,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.w,
-                                  color: AppColors.primaryClr,
-                                ),
+                            fit: BoxFit.contain,
+                            placeholder: (context, url) => Padding(
+                              padding: EdgeInsets.all(4.w),
+                              child: Image.asset(
+                                AppAssets.logo,
+                                fit: BoxFit.contain,
                               ),
                             ),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.local_hospital,
-                              size: 28.sp,
-                              color: AppColors.greyClr,
+                            errorWidget: (context, url, error) => Padding(
+                              padding: EdgeInsets.all(4.w),
+                              child: Image.asset(
+                                AppAssets.logo,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           )
-                        : Icon(
-                            Icons.local_hospital,
-                            size: 28.sp,
-                            color: AppColors.greyClr,
+                        : Padding(
+                            padding: EdgeInsets.all(4.w),
+                            child: Image.asset(
+                              AppAssets.logo,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                   ),
                 ),

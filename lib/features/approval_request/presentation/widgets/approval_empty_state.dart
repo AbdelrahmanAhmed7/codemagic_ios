@@ -46,7 +46,12 @@ class ApprovalEmptyState extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12.h),
-          Image.asset(AppAssets.arrow, width: 130.w, height: 130.h),
+          Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..scale(context.locale.languageCode == 'ar' ? -1.0 : 1.0, 1.0),
+            child: Image.asset(AppAssets.arrow, width: 130.w, height: 130.h),
+          ),
           SizedBox(height: 20.h),
         ],
       ),

@@ -5,7 +5,7 @@ void showAppSnackBar(
   BuildContext context,
   String message, {
   bool isError = false,
-  Duration duration = const Duration(seconds: 3),
+  Duration duration = const Duration(seconds: 2),
 }) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
 

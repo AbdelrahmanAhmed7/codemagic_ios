@@ -88,15 +88,19 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     }
     final providerText = _providerController.text.trim();
     if (providerText.isEmpty) {
+      final errorMsg = 'refund_request.validation.enter_provider'.tr();
       setState(() {
-        _providerError = 'refund_request.validation.enter_provider'.tr();
+        _providerError = errorMsg;
       });
+      _showError(errorMsg);
       return;
     }
     if (providerText.length < 2) {
+      final errorMsg = 'refund_request.validation.provider_min_length'.tr();
       setState(() {
-        _providerError = 'refund_request.validation.provider_min_length'.tr();
+        _providerError = errorMsg;
       });
+      _showError(errorMsg);
       return;
     }
     if (_selectedReasonId == null) {
@@ -104,9 +108,11 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       return;
     }
     if (_amountController.text.trim().isEmpty) {
+      final errorMsg = 'refund_request.validation.enter_amount'.tr();
       setState(() {
-        _amountError = 'refund_request.validation.enter_amount'.tr();
+        _amountError = errorMsg;
       });
+      _showError(errorMsg);
       return;
     }
     if (_selectedDate == null) {
@@ -116,9 +122,11 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
     // Validate notes character limit
     if (_noteController.text.length > 300) {
+      final errorMsg = 'refund_request.validation.notes_too_long'.tr();
       setState(() {
-        _noteError = 'refund_request.validation.notes_too_long'.tr();
+        _noteError = errorMsg;
       });
+      _showError(errorMsg);
       return;
     }
 
@@ -141,9 +149,11 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     final formattedDate = DateFormat('yyyy-MM-dd', 'en').format(_selectedDate!);
     final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
     if (amount < 1 || amount > 100000) {
+      final errorMsg = 'refund_request.validation.amount_range'.tr();
       setState(() {
-        _amountError = 'refund_request.validation.amount_range'.tr();
+        _amountError = errorMsg;
       });
+      _showError(errorMsg);
       return;
     }
 
@@ -170,7 +180,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
         context, 
         message, 
         isError: true,
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 2),
       );
     }
   }

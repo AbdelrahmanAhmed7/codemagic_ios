@@ -103,6 +103,8 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
     final selection = await showModalBottomSheet<_UploadSelection>(
       context: context,
       backgroundColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
@@ -180,9 +182,14 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
       },
     );
 
+    // إزالة الـ focus فوراً بعد إغلاق الـ bottom sheet
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    
     // استدعاء الـ callback لإزالة الـ focus بعد إغلاق الـ dialog
-    await Future.delayed(const Duration(milliseconds: 50));
-    widget.onAttachmentDialogClosed?.call();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onAttachmentDialogClosed?.call();
+    });
 
     if (selection == null) return;
     setState(() {

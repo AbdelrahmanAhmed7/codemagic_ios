@@ -11,7 +11,7 @@ class KhusmPromotionWidget extends StatelessWidget {
 
   Future<void> _visitWebsite() async {
     final urlLauncher = UrlLauncherService();
-    await urlLauncher.launchURL('https://khusm.com');
+    await urlLauncher.launchURL('https://www.khusm.com');
   }
 
   @override

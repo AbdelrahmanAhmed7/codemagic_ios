@@ -50,15 +50,20 @@ class NetworkProvidersList extends StatelessWidget {
         return ListView.builder(
           controller: scrollController,
           shrinkWrap: true,
-          padding: EdgeInsets.only(top: 16.h, bottom: 24.h),
+          padding: EdgeInsets.only(top: 16.h, bottom: 40.h),
           itemCount: providers.length + (hasNextPage ? 1 : 0),
+          physics: const AlwaysScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             // Show provider card
             if (index < providers.length) {
-              return ProviderCard(
-                provider: providers[index],
-                navigateKey: index == 0 ? firstNavigateKey : null,
-                phoneKey: index == 0 ? firstPhoneKey : null,
+              final isLastItem = index == providers.length - 1 && !hasNextPage;
+              return Padding(
+                padding: EdgeInsets.only(bottom: isLastItem ? 60.h : 0),
+                child: ProviderCard(
+                  provider: providers[index],
+                  navigateKey: index == 0 ? firstNavigateKey : null,
+                  phoneKey: index == 0 ? firstPhoneKey : null,
+                ),
               );
             }
 
