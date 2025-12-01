@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:mediconsult/core/constants/api_result.dart';
 import 'package:mediconsult/features/approval_request/data/approvals_models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Helper class for opening PDF documents
 class PdfHelper {
@@ -102,7 +102,14 @@ class PdfHelper {
   }
 
   static void _showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) return;
+
+    // إخفاء أي SnackBar موجود مسبقاً
+    messenger.hideCurrentSnackBar();
+
+    // عرض SnackBar جديد
+    messenger.showSnackBar(
       SnackBar(
         content: Row(
           children: [
@@ -128,14 +135,22 @@ class PdfHelper {
         margin: EdgeInsets.all(16.w),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         duration: const Duration(seconds: 3),
+        dismissDirection: DismissDirection.horizontal,
         action: SnackBarAction(
           label: 'common.dismiss'.tr(),
           textColor: Colors.white,
           onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            messenger.hideCurrentSnackBar();
           },
         ),
       ),
     );
+
+    // إجبار الإخفاء بعد 3 ثواني (حتى لو المستخدم ما داس dismiss)
+    Future.delayed(const Duration(seconds: 3), () {
+      if (context.mounted) {
+        messenger.hideCurrentSnackBar();
+      }
+    });
   }
 }
