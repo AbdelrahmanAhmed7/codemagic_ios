@@ -385,6 +385,10 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
   }
 
   void _confirmDelete(int index) async {
+    // إخفاء الكيبورد قبل فتح الـ dialog
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
@@ -426,7 +430,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context, false),
+                      onPressed: () {
+                        // إخفاء الكيبورد عند الضغط على Cancel
+                        FocusScope.of(context).unfocus();
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        Navigator.pop(context, false);
+                      },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColors.lightGreyClr),
                         shape: RoundedRectangleBorder(
@@ -443,7 +452,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                   SizedBox(width: 12.w),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context, true),
+                      onPressed: () {
+                        // إخفاء الكيبورد عند الضغط على Delete
+                        FocusScope.of(context).unfocus();
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        Navigator.pop(context, true);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.errorClr,
                         shape: RoundedRectangleBorder(
@@ -464,6 +478,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
         );
       },
     );
+
+    // إخفاء الكيبورد بعد إغلاق الـ dialog
+    if (mounted) {
+      FocusScope.of(context).unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
 
     if (confirmed == true) {
       setState(() {

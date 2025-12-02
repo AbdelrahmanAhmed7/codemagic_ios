@@ -7,26 +7,11 @@ class AttachmentsPermissions {
     final req = await Permission.camera.request();
     return req.isGranted;
   }
+
+  static Future<bool> ensurePhotos() async {
+    final status = await Permission.photos.status;
+    if (status.isGranted || status.isLimited) return true;
+    final req = await Permission.photos.request();
+    return req.isGranted || req.isLimited;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBo5q4NfJW0Z76kReKNIqKEEzqO6jMri5U',
-    appId: '1:10939381120:ios:0e24a69b99e93f8d0ffd65',
+    appId: '1:10939381120:ios:dd70ef9743eb2add0ffd65',
     messagingSenderId: '10939381120',
     projectId: 'mediconsultapp-b1fc9',
     storageBucket: 'mediconsultapp-b1fc9.firebasestorage.app',
-    iosBundleId: 'com.example.mediconsult',
+    iosBundleId: 'com.mediconsult.app',
   );
 
 }

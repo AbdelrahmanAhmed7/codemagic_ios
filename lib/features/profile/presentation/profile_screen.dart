@@ -1,21 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconsult/core/constants/app_assets.dart';
-import 'package:mediconsult/core/theming/app_colors.dart';
-import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:mediconsult/features/profile/presentation/widgets/profile_header_widget.dart';
-import 'package:mediconsult/features/profile/presentation/widgets/profile_section_widget.dart';
-import 'package:mediconsult/features/profile/presentation/widgets/logout_dialog.dart';
-import 'package:showcaseview/showcaseview.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
-import 'package:mediconsult/core/constants/constants.dart';
-import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
-import 'package:mediconsult/core/cache/cache_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
+import 'package:mediconsult/core/constants/constants.dart';
+import 'package:mediconsult/core/helpers/shared_pref_helper.dart';
+import 'package:mediconsult/core/services/firebase_crashlytics_service.dart';
+import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_state.dart';
+import 'package:mediconsult/features/profile/presentation/widgets/logout_dialog.dart';
+import 'package:mediconsult/features/profile/presentation/widgets/profile_header_widget.dart';
+import 'package:mediconsult/features/profile/presentation/widgets/profile_section_widget.dart';
+import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:showcaseview/showcaseview.dart';
 // ignore_for_file: deprecated_member_use
 
 class ProfileScreen extends StatefulWidget {
@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey _contactUsKey = GlobalKey();
   final GlobalKey _termsPrivacyKey = GlobalKey();
   final GlobalKey _logoutKey = GlobalKey();
-  
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +44,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final state = cubit.state;
       // Only trigger if state is initial (not loaded, not loading, not failed)
       state.maybeWhen(
-        initial: () => cubit.getHomeInfo(context.locale.languageCode, forceRefresh: false),
+        initial: () =>
+            cubit.getHomeInfo(context.locale.languageCode, forceRefresh: false),
         orElse: () {}, // Do nothing if already loaded/loading/failed
       );
     });
@@ -59,34 +60,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final hasSeenOnboarding = await SharedPrefHelper.getBool(
         SharedPrefKeys.hasSeenOnboarding,
       );
-      
+
       // Clear token
       await SharedPrefHelper.removeData(SharedPrefKeys.userToken);
-      
+
       // Update login status
       isLoggedInUser = false;
-      
+
       // Clear all cache
       await CacheService.clearCache();
       await CacheService.clearFamilyCache();
       await CacheService.clearAllApprovalsCache();
       await CacheService.clearNotificationsCache();
-      
+
       // Clear all SharedPreferences data
       await SharedPrefHelper.clearAllData();
-      
+
       // Restore onboarding status (don't show onboarding again after logout)
       await SharedPrefHelper.setData(
         SharedPrefKeys.hasSeenOnboarding,
         hasSeenOnboarding,
       );
-      
+
       // Clear secure storage (token)
       await SharedPrefHelper.clearAllSecuredData();
-      
+
       // مسح بيانات Firebase Crashlytics
       await FirebaseCrashlyticsService.instance.clearUserData();
-      
+
       // Navigate to login (this will trigger initState and clear login fields)
       if (context.mounted) {
         context.go('/login');
@@ -108,9 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: 'profile.title'.tr(),
                   backPath: '/home',
                   onHelp: () {
-                    ShowCaseWidget.of(
-                      context,
-                    ).startShowCase([
+                    ShowCaseWidget.of(context).startShowCase([
                       _personalInfoKey,
                       _familyMembersKey,
                       _changePasswordKey,
@@ -151,8 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               tiles: [
                                 Showcase(
                                   key: _personalInfoKey,
-                                  description:
-                                      'tutorial.profile.personal_info'.tr(),
+                                  description: 'tutorial.profile.personal_info'
+                                      .tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.personal_information'.tr(),
                                     image: AppAssets.personal,
@@ -161,8 +160,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Showcase(
                                   key: _familyMembersKey,
-                                  description:
-                                      'tutorial.profile.family_members'.tr(),
+                                  description: 'tutorial.profile.family_members'
+                                      .tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.family_members'.tr(),
                                     image: AppAssets.familyMembers,
@@ -176,7 +175,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               tiles: [
                                 Showcase(
                                   key: _changePasswordKey,
-                                  description: 'tutorial.profile.change_password'.tr(),
+                                  description:
+                                      'tutorial.profile.change_password'.tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.change_password'.tr(),
                                     image: AppAssets.change_password,
@@ -208,7 +208,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Showcase(
                                   key: _contactUsKey,
-                                  description: 'tutorial.profile.contact_us'.tr(),
+                                  description: 'tutorial.profile.contact_us'
+                                      .tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.contact_us'.tr(),
                                     image: AppAssets.contactUs,
@@ -217,7 +218,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Showcase(
                                   key: _termsPrivacyKey,
-                                  description: 'tutorial.profile.terms_privacy'.tr(),
+                                  description: 'tutorial.profile.terms_privacy'
+                                      .tr(),
                                   child: ProfileTileWidget(
                                     title: 'profile.terms_privacy'.tr(),
                                     image: AppAssets.terms,

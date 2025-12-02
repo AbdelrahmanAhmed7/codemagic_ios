@@ -62,9 +62,10 @@ post_install do |installer|
         config.build_settings['COPY_PHASE_STRIP'] = 'YES'
       end
       
-      # Code Signing
+      # Code Signing - Add Development Team for all Pods (including Privacy Extensions)
       config.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
       config.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
+      config.build_settings['DEVELOPMENT_TEAM'] = 'T44DDJPM9D'
       
       # Architecture settings
       config.build_settings['ONLY_ACTIVE_ARCH'] = config.name == 'Debug' ? 'YES' : 'NO'

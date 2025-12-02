@@ -1,13 +1,15 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
+import 'package:mediconsult/features/approval_request/presentation/widgets/provider_list_item.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_cubit.dart';
 import 'package:mediconsult/features/providers/presentation/cubit/providers_state.dart';
-import 'package:mediconsult/features/approval_request/presentation/widgets/provider_list_item.dart';
 
 /// Bottom sheet for selecting providers with search and pagination
 class ProvidersBottomSheet extends StatefulWidget {
@@ -44,6 +46,10 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
   void _onScroll() {
     if (!_scrollController.hasClients || _isDisposed) return;
 
+    // Dismiss keyboard once user starts scrolling
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
     final position = _scrollController.position;
     final maxExtent = position.maxScrollExtent;
     final currentOffset = position.pixels;
@@ -57,11 +63,11 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
         _page = state.pagination.currentPage + 1;
         if (!_isDisposed) {
           context.read<ProvidersCubit>().loadProviders(
-                lang: context.locale.languageCode,
-                page: _page,
-                pageSize: _pageSize,
-                search: _search,
-              );
+            lang: context.locale.languageCode,
+            page: _page,
+            pageSize: _pageSize,
+            search: _search,
+          );
         }
       }
     }
@@ -75,11 +81,11 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
       _search = null;
       _page = 1;
       context.read<ProvidersCubit>().loadProviders(
-            lang: context.locale.languageCode,
-            page: _page,
-            pageSize: _pageSize,
-            search: _search,
-          );
+        lang: context.locale.languageCode,
+        page: _page,
+        pageSize: _pageSize,
+        search: _search,
+      );
       return;
     }
 
@@ -89,11 +95,11 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
         _search = value.trim();
         _page = 1;
         context.read<ProvidersCubit>().loadProviders(
-              lang: context.locale.languageCode,
-              page: _page,
-              pageSize: _pageSize,
-              search: _search,
-            );
+          lang: context.locale.languageCode,
+          page: _page,
+          pageSize: _pageSize,
+          search: _search,
+        );
       }
     });
   }
@@ -139,7 +145,8 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: 'approval_request.search_providers_min_2_chars'.tr(),
+                  hintText: 'approval_request.search_providers_min_2_chars'
+                      .tr(),
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
@@ -153,8 +160,10 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 10.h,
+                  ),
                 ),
               ),
               SizedBox(height: 12.h),
@@ -178,7 +187,8 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
                       controller: _scrollController,
                       shrinkWrap: true,
                       itemCount:
-                          items.length + (loaded.pagination.hasNextPage ? 1 : 0),
+                          items.length +
+                          (loaded.pagination.hasNextPage ? 1 : 0),
                       separatorBuilder: (_, __) => const Divider(
                         color: AppColors.lightGreyClr,
                         height: 1,
@@ -197,7 +207,9 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
                               child: SizedBox(
                                 width: 20,
                                 height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               ),
                             ),
                           );
@@ -220,4 +232,3 @@ class _ProvidersBottomSheetState extends State<ProvidersBottomSheet> {
     );
   }
 }
-

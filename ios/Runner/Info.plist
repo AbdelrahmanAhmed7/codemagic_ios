@@ -57,10 +57,7 @@
 		<string>This app requires permission to save photos for document uploads.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app requires location access to find nearby healthcare providers.</string>
-		<key>NSLocationAlwaysUsageDescription</key>
-		<string>This app requires location access to find nearby healthcare providers.</string>
-		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>This app requires location access to provide background provider alerts.</string>
+		<!-- Removed NSLocationAlwaysUsageDescription - not needed, only using whenInUse -->
 		
 		<!-- Firebase Configuration -->
 		<key>FirebaseCrashlyticsCollectionEnabled</key>
@@ -75,27 +72,16 @@
 		<!-- Network Security -->
 		<key>NSAppTransportSecurity</key>
 		<dict>
-			<key>NSAllowsArbitraryLoads</key>
-			<true/>
+			<!-- Removed NSAllowsArbitraryLoads - App Store rejects apps with this -->
+			<!-- Only allow specific exceptions if absolutely necessary -->
 			<key>NSExceptionDomains</key>
 			<dict>
-				<key>googleapis.com</key>
+				<key>mediconsulteg.com</key>
 				<dict>
-					<key>NSExceptionAllowsInsecureHTTPLoads</key>
-					<true/>
-					<key>NSExceptionMinimumTLSVersion</key>
-					<string>TLSv1.0</string>
 					<key>NSIncludesSubdomains</key>
 					<true/>
-				</dict>
-				<key>firebase.googleapis.com</key>
-				<dict>
-					<key>NSExceptionAllowsInsecureHTTPLoads</key>
-					<true/>
-					<key>NSExceptionMinimumTLSVersion</key>
-					<string>TLSv1.0</string>
-					<key>NSIncludesSubdomains</key>
-					<true/>
+					<key>NSExceptionRequiresForwardSecrecy</key>
+					<false/>
 				</dict>
 			</dict>
 		</dict>
@@ -107,21 +93,14 @@
 			<string>remote-notification</string>
 		</array>
 		
-		<!-- File Sharing -->
-		<key>LSSupportsOpeningDocumentsInPlace</key>
-		<true/>
-		<key>UIFileSharingEnabled</key>
-		<true/>
-		
-		<!-- Additional Permissions -->
-		<key>NSMicrophoneUsageDescription</key>
-		<string>This app may require microphone access for voice features.</string>
-		<key>NSContactsUsageDescription</key>
-		<string>This app may require contacts access for emergency contacts.</string>
-		<key>NSCalendarsUsageDescription</key>
-		<string>This app may require calendar access to schedule appointments.</string>
-		<key>NSRemindersUsageDescription</key>
-		<string>This app may require reminders access for medication reminders.</string>
+		<!-- Additional Permissions (only include if actually used) -->
+		<!-- Removed unused permissions to avoid App Store rejection:
+		     - NSMicrophoneUsageDescription (not used)
+		     - NSContactsUsageDescription (not used)
+		     - NSCalendarsUsageDescription (not used)
+		     - NSRemindersUsageDescription (not used)
+		     - File Sharing (not needed)
+		-->
 		
 		<!-- Location Accuracy (iOS 14+) -->
 		<key>NSLocationTemporaryUsageDescriptionDictionary</key>
