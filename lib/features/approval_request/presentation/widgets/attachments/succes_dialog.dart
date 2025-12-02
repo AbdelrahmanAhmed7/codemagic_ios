@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:mediconsult/core/utils/language_helper.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
 
 class SuccessDialog extends StatelessWidget {
   final String titleKey;
@@ -72,6 +76,8 @@ class SuccessDialog extends StatelessWidget {
                   text: buttonTextKey.tr(),
                   onPressed: () {
                     Navigator.of(context).pop();
+                    // Refresh home data before navigating to show the new approval request
+                    _refreshHomeData(context);
                     context.go('/home'); 
                   },
                 ),
@@ -83,6 +89,26 @@ class SuccessDialog extends StatelessWidget {
     );
   }
   
+  // Helper method to refresh home data
+  static void _refreshHomeData(BuildContext context) {
+    try {
+      // Try to get HomeCubit from context (if available in widget tree)
+      final homeCubit = context.read<HomeCubit>();
+      final lang = LanguageHelper.getLanguageCode(context);
+      homeCubit.refreshHomeInfo(lang);
+    } catch (e) {
+      // If HomeCubit is not available in context, try service locator
+      try {
+        final homeCubit = sl<HomeCubit>();
+        final lang = LanguageHelper.getLanguageCode(context);
+        homeCubit.refreshHomeInfo(lang);
+      } catch (e2) {
+        // If both fail, it's okay - data will refresh when user navigates to home
+        print('Could not refresh home data: $e2');
+      }
+    }
+  }
+
   // Helper method to show the dialog for approval
   static void show(BuildContext context) {
     showDialog(

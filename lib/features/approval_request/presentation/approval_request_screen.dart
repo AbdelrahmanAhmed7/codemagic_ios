@@ -18,6 +18,9 @@ import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:mediconsult/core/utils/language_helper.dart';
 // ignore_for_file: deprecated_member_use
 
 class ApprovalRequestScreen extends StatefulWidget {
@@ -88,6 +91,19 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
       notes: _noteController.text.isNotEmpty ? _noteController.text : null,
       attachmentPaths: _attachments,
     );
+  }
+
+  void _refreshHomeData() {
+    // Refresh home data to show the newly created approval request
+    // Use service locator to get HomeCubit instance
+    try {
+      final homeCubit = sl<HomeCubit>();
+      final lang = LanguageHelper.getLanguageCode(context);
+      homeCubit.refreshHomeInfo(lang);
+    } catch (e) {
+      // If HomeCubit is not available, it's okay - the data will refresh when user navigates to home
+      print('Could not refresh home data: $e');
+    }
   }
 
   void _showError(String message) {
@@ -280,6 +296,8 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                                 initial: () {},
                                                 loading: () {},
                                                 success: (data) {
+                                                  // Refresh home data to show the new approval request
+                                                  _refreshHomeData();
                                                   SuccessDialog.show(context);
                                                   _resetForm();
                                                 },

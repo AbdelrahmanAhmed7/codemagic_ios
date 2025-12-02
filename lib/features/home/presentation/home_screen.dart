@@ -37,6 +37,33 @@ class _HomeScreenState extends State<HomeScreen> {
       _checkPermissionsAndLoadData();
     });
   }
+
+  bool _hasLoadedOnce = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh home data when screen becomes visible again (after first load)
+    // This ensures data is updated after returning from other screens (e.g., after submitting approval request)
+    if (_hasLoadedOnce) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          final cubit = context.read<HomeCubit>();
+          final state = cubit.state;
+          // Only refresh if we have loaded data (not initial/loading state)
+          state.when(
+            initial: () {},
+            loading: () {},
+            loaded: (_) {
+              // Refresh data when returning to home screen to show newly created approval requests
+              cubit.refreshHomeInfo(LanguageHelper.getLanguageCode(context));
+            },
+            failed: (_) {},
+          );
+        }
+      });
+    }
+  }
   
   Future<void> _checkPermissionsAndLoadData() async {
     try {
@@ -61,6 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               /// when the data is loaded, show the page with the real data
               loaded: (model) {
+                // Mark that we've loaded data at least once
+                if (!_hasLoadedOnce) {
+                  _hasLoadedOnce = true;
+                }
                 final data = model.data;
                 return RefreshIndicator(
                   onRefresh: () async {

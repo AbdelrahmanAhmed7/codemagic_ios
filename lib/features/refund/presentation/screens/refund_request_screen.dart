@@ -60,10 +60,16 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   
   // Scroll controller for auto-scrolling during ShowCase
   final ScrollController _scrollController = ScrollController();
+  
+  // Flag to track if ShowCase is active
+  bool _isShowCaseActive = false;
 
   void _unfocusAll() {
-    FocusScope.of(context).unfocus();
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    if (!_isShowCaseActive) {
+      FocusScope.of(context).unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
   }
 
   @override
@@ -231,6 +237,16 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
   }
 
   void _startShowCaseWithAutoScroll(BuildContext context) {
+    // Unfocus all fields and hide keyboard before starting ShowCase
+    FocusManager.instance.primaryFocus?.unfocus();
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    
+    // Set flag to prevent interactions during ShowCase
+    setState(() {
+      _isShowCaseActive = true;
+    });
+    
     final showcaseKeys = [
       _familyKey,
       _typeKey,
@@ -248,40 +264,106 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
     // Auto-scroll to each field as ShowCase progresses
     // ShowCase typically shows each item for 2-3 seconds
-    // We'll scroll slightly before each item is shown to ensure it's visible
+    // We'll scroll when each item is shown
     for (int i = 0; i < showcaseKeys.length; i++) {
       // Scroll timing: 
-      // - First item: scroll immediately (0ms)
-      // - Other items: scroll 300ms before they appear (to give time for animation)
+      // - First item: scroll after 1000ms (to ensure ShowCase started)
+      // - Other items: scroll when they appear (i * 2500ms)
       // ShowCase shows each item for about 2.5 seconds
-      final int delayMs = i == 0 ? 300 : (i * 2500) + 300;
+      final int delayMs = i == 0 ? 1000 : (i * 2500);
       
       Future.delayed(Duration(milliseconds: delayMs), () {
-        if (!mounted) return;
+        if (!mounted || !_isShowCaseActive) return;
         
-        // Wait for next frame to ensure widget is built
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          _scrollToShowCaseTarget(showcaseKeys[i]);
+        // Try scrolling multiple times to ensure it works
+        _scrollToShowCaseTarget(showcaseKeys[i]);
+        
+        // Retry after a short delay
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _isShowCaseActive) {
+            _scrollToShowCaseTarget(showcaseKeys[i]);
+          }
         });
       });
     }
+    
+    // Reset flag after ShowCase completes (approximately 9 items * 2.5 seconds = 22.5 seconds)
+    // Add extra time for safety
+    Future.delayed(const Duration(seconds: 25), () {
+      if (mounted) {
+        setState(() {
+          _isShowCaseActive = false;
+        });
+        // Ensure focus is cleared after ShowCase
+        FocusManager.instance.primaryFocus?.unfocus();
+        FocusScope.of(context).unfocus();
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      }
+    });
   }
 
   void _scrollToShowCaseTarget(GlobalKey key) {
-    if (!mounted || !_scrollController.hasClients) return;
+    if (!mounted) return;
+    
+    // Wait for scroll controller to be ready
+    if (!_scrollController.hasClients) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted && _isShowCaseActive) {
+          _scrollToShowCaseTarget(key);
+        }
+      });
+      return;
+    }
 
     final BuildContext? targetContext = key.currentContext;
-    if (targetContext == null) return;
+    if (targetContext == null) {
+      // Retry if context is not available yet
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && _isShowCaseActive) {
+          _scrollToShowCaseTarget(key);
+        }
+      });
+      return;
+    }
 
-    // Use Scrollable.ensureVisible for reliable scrolling
-    Scrollable.ensureVisible(
-      targetContext,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-      alignment: 0.3, // Position the target at 30% from top (not too high, not too low)
-      alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-    );
+    // Try Scrollable.ensureVisible first (most reliable)
+    try {
+      Scrollable.ensureVisible(
+        targetContext,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        alignment: 0.15, // Position at 15% from top
+        alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+      );
+    } catch (e) {
+      // Fallback: manual scrolling
+      final RenderObject? renderObject = targetContext.findRenderObject();
+      if (renderObject != null && renderObject is RenderBox) {
+        final box = renderObject as RenderBox;
+        final position = box.localToGlobal(Offset.zero);
+        final scrollPosition = _scrollController.position;
+        final screenHeight = MediaQuery.of(context).size.height;
+        
+        // Calculate where the widget is relative to the scroll view
+        final scrollViewTop = position.dy - scrollPosition.pixels;
+        final desiredTop = screenHeight * 0.15; // 15% from top
+        
+        // Calculate the offset needed
+        final offset = scrollPosition.pixels + (scrollViewTop - desiredTop);
+        
+        // Clamp to valid range
+        final clampedOffset = offset.clamp(
+          scrollPosition.minScrollExtent,
+          scrollPosition.maxScrollExtent,
+        );
+        
+        _scrollController.animateTo(
+          clampedOffset,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
   }
 
   @override
@@ -302,12 +384,16 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                     title: 'refund_request.title'.tr(),
                     backPath: '/home',
                     onHelp: () {
-                      // Unfocus all fields before starting ShowCase
-                      _unfocusAll();
+                      // Unfocus all fields and hide keyboard before starting ShowCase
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      FocusScope.of(context).unfocus();
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
                       
                       // استخدام addPostFrameCallback للتأكد من بناء كل الـ widgets
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _startShowCaseWithAutoScroll(context);
+                        if (mounted) {
+                          _startShowCaseWithAutoScroll(context);
+                        }
                       });
                     },
                   ),
@@ -475,33 +561,44 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     child: Showcase(
                                       key: _amountKey,
                                       description: 'tutorial.amount.enter'.tr(),
-                                      child: RefundAmountField(
-                                        controller: _amountController,
-                                        focusNode: _amountFocusNode,
-                                        errorText: _amountError,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            final text = value.trim();
-                                            if (text.isEmpty) {
-                                              _amountError =
-                                                  'refund_request.validation.enter_amount'
-                                                      .tr();
-                                            } else {
-                                              final amount = double.tryParse(
-                                                text,
-                                              );
-                                              if (amount == null ||
-                                                  amount < 1 ||
-                                                  amount > 100000) {
-                                                _amountError =
-                                                    'refund_request.validation.amount_range'
-                                                        .tr();
-                                              } else {
-                                                _amountError = null;
-                                              }
-                                            }
-                                          });
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (!_isShowCaseActive) {
+                                            _amountFocusNode.requestFocus();
+                                          }
                                         },
+                                        child: AbsorbPointer(
+                                          absorbing: _isShowCaseActive,
+                                          child: RefundAmountField(
+                                            controller: _amountController,
+                                            focusNode: _amountFocusNode,
+                                            errorText: _amountError,
+                                            onChanged: (value) {
+                                              if (_isShowCaseActive) return;
+                                              setState(() {
+                                                final text = value.trim();
+                                                if (text.isEmpty) {
+                                                  _amountError =
+                                                      'refund_request.validation.enter_amount'
+                                                          .tr();
+                                                } else {
+                                                  final amount = double.tryParse(
+                                                    text,
+                                                  );
+                                                  if (amount == null ||
+                                                      amount < 1 ||
+                                                      amount > 100000) {
+                                                    _amountError =
+                                                        'refund_request.validation.amount_range'
+                                                            .tr();
+                                                  } else {
+                                                    _amountError = null;
+                                                  }
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -527,19 +624,30 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                               Showcase(
                                 key: _noteKey,
                                 description: 'tutorial.note.hint'.tr(),
-                                child: NoteTextField(
-                                  controller: _noteController,
-                                  focusNode: _noteFocusNode,
-                                  maxLength: 300,
-                                  errorText: _noteError,
-                                  onChanged: (value) {
-                                    if (_noteError != null &&
-                                        value.length <= 300) {
-                                      setState(() {
-                                        _noteError = null;
-                                      });
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (!_isShowCaseActive) {
+                                      _noteFocusNode.requestFocus();
                                     }
                                   },
+                                  child: AbsorbPointer(
+                                    absorbing: _isShowCaseActive,
+                                    child: NoteTextField(
+                                      controller: _noteController,
+                                      focusNode: _noteFocusNode,
+                                      maxLength: 300,
+                                      errorText: _noteError,
+                                      onChanged: (value) {
+                                        if (_isShowCaseActive) return;
+                                        if (_noteError != null &&
+                                            value.length <= 300) {
+                                          setState(() {
+                                            _noteError = null;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 16.h),
