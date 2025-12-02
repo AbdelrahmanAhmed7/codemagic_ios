@@ -26,6 +26,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
   bool _hasLoadedInitialData = false;
+  bool _hasInitializedLocation = false;
+  bool _isShowCaseActive = false;
   String? _previousSearchText;
 
   // Showcase keys
@@ -50,6 +52,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
   void _setupSearchListener() {
     _searchController.addListener(() {
+      // Skip listener if ShowCase is active to prevent freeze
+      if (_isShowCaseActive) {
+        _previousSearchText = _searchController.text;
+        return;
+      }
+
       final currentText = _searchController.text;
 
       // لو النص اتغير من filled لـ empty، نرجع للقائمة الأصلية
@@ -85,10 +93,15 @@ class _NetworkScreenState extends State<NetworkScreen> {
   }
 
   Future<void> _initializeLocation() async {
+    // Only initialize location once per screen instance
+    if (_hasInitializedLocation) return;
+    
     final cubit = context.read<NetworkCubit>();
 
-    // Show location permission dialog
+    // Check permission status first before showing dialog
     await cubit.requestLocationWithDialog(context);
+    
+    _hasInitializedLocation = true;
   }
 
   void _onScroll() async {
@@ -125,6 +138,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return ShowCaseWidget(
@@ -158,12 +172,37 @@ class _NetworkScreenState extends State<NetworkScreen> {
                   title: 'network.title'.tr(),
                   backPath: '/home',
                   onHelp: () {
-                    ShowCaseWidget.of(context).startShowCase([
-                      _categoriesKey,
-                      _searchKey,
-                      _navigateKey,
-                      _phoneKey,
-                    ]);
+                    // Unfocus search field before starting ShowCase to prevent freeze
+                    FocusScope.of(context).unfocus();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    
+                    // Set flag to disable search listener during ShowCase
+                    setState(() {
+                      _isShowCaseActive = true;
+                    });
+                    
+                    // Use addPostFrameCallback to ensure all widgets are built
+                    // Use the context from ShowCaseWidget builder
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!mounted) return;
+                      
+                      // Start ShowCase using the context from ShowCaseWidget builder
+                      ShowCaseWidget.of(context).startShowCase([
+                        _categoriesKey,
+                        _searchKey,
+                        _navigateKey,
+                        _phoneKey,
+                      ]);
+                      
+                      // Reset flag after ShowCase completes
+                      Future.delayed(const Duration(seconds: 15), () {
+                        if (mounted) {
+                          setState(() {
+                            _isShowCaseActive = false;
+                          });
+                        }
+                      });
+                    });
                   },
                 ),
                 SizedBox(height: 16.h),
@@ -234,8 +273,9 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                             selectedCategoryId:
                                                 cubit.selectedCategoryId,
                                             onCategorySelected: (categoryId) {
-                                              // Preserve existing filters (government and city) when selecting category
+                                              // Preserve existing filters (government, city, and search) when selecting category
                                               cubit.searchProviders(
+                                                searchKey: cubit.searchKey, // Preserve current search
                                                 categoryId: categoryId,
                                                 governmentId:
                                                     cubit.selectedGovernmentId,

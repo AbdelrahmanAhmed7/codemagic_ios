@@ -318,16 +318,11 @@ class _NetworkFilterBottomSheetState extends State<NetworkFilterBottomSheet> {
               height: 50.h,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<NetworkCubit>().searchProviders(
-                    categoryId: _selectedCategoryId,
-                    governmentId: _selectedGovernmentId,
-                    cityId: _selectedCityId,
-                    resetPage: true,
-                    context: context,
-                  );
                   // تطبيق الفلترة باستخدام المعايير المحددة
+                  // Preserve current search when applying filters
                   final cubit = context.read<NetworkCubit>();
                   cubit.searchProviders(
+                    searchKey: cubit.searchKey, // Preserve current search
                     categoryId: _selectedCategoryId,
                     governmentId: _selectedGovernmentId,
                     cityId: _selectedCityId,

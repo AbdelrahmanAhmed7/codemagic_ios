@@ -550,8 +550,20 @@
     "family_members": {
       "select": "Choose the family member to continue."
     },
+    "refund_type": {
+      "select": "Select the type of refund you are requesting."
+    },
     "provider": {
-      "select": "Search and pick the provider handling your request."
+      "select": "Enter the name of the service provider."
+    },
+    "reason": {
+      "select": "Select the reason for your refund request."
+    },
+    "amount": {
+      "enter": "Enter the refund amount (between 1 and 100,000)."
+    },
+    "date": {
+      "select": "Select the service date (within the last 60 days)."
     },
     "note": {
       "hint": "Add clarifying notes (optional, up to 300 characters)."

@@ -49,10 +49,17 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
-  final GlobalKey _submitKey = GlobalKey();
+  final GlobalKey _typeKey = GlobalKey();
   final GlobalKey _providerKey = GlobalKey();
+  final GlobalKey _reasonKey = GlobalKey();
+  final GlobalKey _amountKey = GlobalKey();
+  final GlobalKey _dateKey = GlobalKey();
   final GlobalKey _noteKey = GlobalKey();
   final GlobalKey _attachKey = GlobalKey();
+  final GlobalKey _submitKey = GlobalKey();
+  
+  // Scroll controller for auto-scrolling during ShowCase
+  final ScrollController _scrollController = ScrollController();
 
   void _unfocusAll() {
     FocusScope.of(context).unfocus();
@@ -66,6 +73,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     _noteController.dispose();
     _amountFocusNode.dispose();
     _noteFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -222,6 +230,60 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     }
   }
 
+  void _startShowCaseWithAutoScroll(BuildContext context) {
+    final showcaseKeys = [
+      _familyKey,
+      _typeKey,
+      _providerKey,
+      _reasonKey,
+      _amountKey,
+      _dateKey,
+      _noteKey,
+      _attachKey,
+      _submitKey,
+    ];
+
+    // Start ShowCase
+    ShowCaseWidget.of(context).startShowCase(showcaseKeys);
+
+    // Auto-scroll to each field as ShowCase progresses
+    // ShowCase typically shows each item for 2-3 seconds
+    // We'll scroll slightly before each item is shown to ensure it's visible
+    for (int i = 0; i < showcaseKeys.length; i++) {
+      // Scroll timing: 
+      // - First item: scroll immediately (0ms)
+      // - Other items: scroll 300ms before they appear (to give time for animation)
+      // ShowCase shows each item for about 2.5 seconds
+      final int delayMs = i == 0 ? 300 : (i * 2500) + 300;
+      
+      Future.delayed(Duration(milliseconds: delayMs), () {
+        if (!mounted) return;
+        
+        // Wait for next frame to ensure widget is built
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          _scrollToShowCaseTarget(showcaseKeys[i]);
+        });
+      });
+    }
+  }
+
+  void _scrollToShowCaseTarget(GlobalKey key) {
+    if (!mounted || !_scrollController.hasClients) return;
+
+    final BuildContext? targetContext = key.currentContext;
+    if (targetContext == null) return;
+
+    // Use Scrollable.ensureVisible for reliable scrolling
+    Scrollable.ensureVisible(
+      targetContext,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      alignment: 0.3, // Position the target at 30% from top (not too high, not too low)
+      alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ShowCaseWidget(
@@ -232,6 +294,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
           onTap: _unfocusAll,
           child: SafeArea(
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -239,15 +302,12 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                     title: 'refund_request.title'.tr(),
                     backPath: '/home',
                     onHelp: () {
+                      // Unfocus all fields before starting ShowCase
+                      _unfocusAll();
+                      
                       // استخدام addPostFrameCallback للتأكد من بناء كل الـ widgets
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ShowCaseWidget.of(context).startShowCase([
-                          _familyKey,
-                          _providerKey,
-                          _noteKey,
-                          _attachKey,
-                          _submitKey,
-                        ]);
+                        _startShowCaseWithAutoScroll(context);
                       });
                     },
                   ),
@@ -297,21 +357,25 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 8.h),
-                              GestureDetector(
-                                onTap: _unfocusAll,
-                                child: RefundTypeSelector(
-                                  selectedTypeId: _selectedRefundTypeId,
-                                  onTypeSelected: (type) {
-                                    _unfocusAll();
-                                    setState(() {
-                                      _selectedRefundTypeId = type.id;
-                                      _selectedRefundTypeName = type.name;
-                                      _selectedRefundAttachments =
-                                          type.attachments;
-                                      _attachmentPaths = [];
-                                      _hasAllRequiredAttachments = false;
-                                    });
-                                  },
+                              Showcase(
+                                key: _typeKey,
+                                description: 'tutorial.refund_type.select'.tr(),
+                                child: GestureDetector(
+                                  onTap: _unfocusAll,
+                                  child: RefundTypeSelector(
+                                    selectedTypeId: _selectedRefundTypeId,
+                                    onTypeSelected: (type) {
+                                      _unfocusAll();
+                                      setState(() {
+                                        _selectedRefundTypeId = type.id;
+                                        _selectedRefundTypeName = type.name;
+                                        _selectedRefundAttachments =
+                                            type.attachments;
+                                        _attachmentPaths = [];
+                                        _hasAllRequiredAttachments = false;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 16.h),
@@ -388,56 +452,68 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 8.h),
-                              GestureDetector(
-                                onTap: _unfocusAll,
-                                child: ReasonSelector(
-                                  selectedReasonId: _selectedReasonId,
-                                  onReasonSelected: (id, name) {
-                                    _unfocusAll();
-                                    setState(() {
-                                      _selectedReasonId = id;
-                                    });
-                                  },
+                              Showcase(
+                                key: _reasonKey,
+                                description: 'tutorial.reason.select'.tr(),
+                                child: GestureDetector(
+                                  onTap: _unfocusAll,
+                                  child: ReasonSelector(
+                                    selectedReasonId: _selectedReasonId,
+                                    onReasonSelected: (id, name) {
+                                      _unfocusAll();
+                                      setState(() {
+                                        _selectedReasonId = id;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 16.h),
                               Row(
                                 children: [
                                   Expanded(
-                                    child: RefundAmountField(
-                                      controller: _amountController,
-                                      focusNode: _amountFocusNode,
-                                      errorText: _amountError,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          final text = value.trim();
-                                          if (text.isEmpty) {
-                                            _amountError =
-                                                'refund_request.validation.enter_amount'
-                                                    .tr();
-                                          } else {
-                                            final amount = double.tryParse(
-                                              text,
-                                            );
-                                            if (amount == null ||
-                                                amount < 1 ||
-                                                amount > 100000) {
+                                    child: Showcase(
+                                      key: _amountKey,
+                                      description: 'tutorial.amount.enter'.tr(),
+                                      child: RefundAmountField(
+                                        controller: _amountController,
+                                        focusNode: _amountFocusNode,
+                                        errorText: _amountError,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            final text = value.trim();
+                                            if (text.isEmpty) {
                                               _amountError =
-                                                  'refund_request.validation.amount_range'
+                                                  'refund_request.validation.enter_amount'
                                                       .tr();
                                             } else {
-                                              _amountError = null;
+                                              final amount = double.tryParse(
+                                                text,
+                                              );
+                                              if (amount == null ||
+                                                  amount < 1 ||
+                                                  amount > 100000) {
+                                                _amountError =
+                                                    'refund_request.validation.amount_range'
+                                                        .tr();
+                                              } else {
+                                                _amountError = null;
+                                              }
                                             }
-                                          }
-                                        });
-                                      },
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 16.w),
                                   Expanded(
-                                    child: RefundDatePicker(
-                                      selectedDate: _selectedDate,
-                                      onTap: _selectDate,
+                                    child: Showcase(
+                                      key: _dateKey,
+                                      description: 'tutorial.date.select'.tr(),
+                                      child: RefundDatePicker(
+                                        selectedDate: _selectedDate,
+                                        onTap: _selectDate,
+                                      ),
                                     ),
                                   ),
                                 ],
