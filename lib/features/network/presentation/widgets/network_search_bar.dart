@@ -7,7 +7,7 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/network/logic/network_cubit.dart';
 
 /// Network search bar widget with filter button
-class NetworkSearchBar extends StatelessWidget {
+class NetworkSearchBar extends StatefulWidget {
   final TextEditingController searchController;
   final VoidCallback onFilterTap;
   final Function(String) onSearchSubmitted;
@@ -20,12 +20,32 @@ class NetworkSearchBar extends StatelessWidget {
   });
 
   @override
+  State<NetworkSearchBar> createState() => _NetworkSearchBarState();
+}
+
+class _NetworkSearchBarState extends State<NetworkSearchBar> {
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: TextField(
-            controller: searchController,
+            controller: widget.searchController,
+            focusNode: _focusNode,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: 'network.search_placeholder'.tr(),
@@ -46,12 +66,20 @@ class NetworkSearchBar extends StatelessWidget {
                 vertical: 12.h,
               ),
             ),
-            onSubmitted: onSearchSubmitted,
+            onSubmitted: widget.onSearchSubmitted,
+            onTapOutside: (event) {
+              // إخفاء الكيبورد عند الضغط خارج الحقل (iOS fix)
+              _focusNode.unfocus();
+            },
           ),
         ),
         SizedBox(width: 12.w),
         GestureDetector(
-          onTap: onFilterTap,
+          onTap: () {
+            // إخفاء الكيبورد عند الضغط على زر الفلتر
+            _focusNode.unfocus();
+            widget.onFilterTap();
+          },
           child: Container(
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(

@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
@@ -10,15 +10,15 @@ import 'package:mediconsult/features/approval_request/presentation/widgets/attac
 import 'package:mediconsult/features/approval_request/presentation/widgets/family_members_selector.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/note_text_field.dart';
 import 'package:mediconsult/features/family_members/data/family_response_model.dart';
-import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_widget.dart';
-import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
-import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
-import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fields.dart';
 import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_cubit.dart';
 import 'package:mediconsult/features/refund/presentation/cubit/refund_request_state.dart';
-import 'package:mediconsult/shared/widgets/page_header.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/add_attachment_widget.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/reason_selector.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fields.dart';
+import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
+import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
 // ignore_for_file: deprecated_member_use
 
@@ -177,8 +177,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     if (mounted) {
       HapticFeedback.lightImpact();
       showAppSnackBar(
-        context, 
-        message, 
+        context,
+        message,
         isError: true,
         duration: const Duration(seconds: 2),
       );
@@ -189,8 +189,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     if (mounted) {
       HapticFeedback.selectionClick();
       showAppSnackBar(
-        context, 
-        message, 
+        context,
+        message,
         isError: false,
         duration: const Duration(seconds: 3),
       );
@@ -239,13 +239,16 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                     title: 'refund_request.title'.tr(),
                     backPath: '/home',
                     onHelp: () {
-                      ShowCaseWidget.of(context).startShowCase([
-                        _familyKey,
-                        _providerKey,
-                        _noteKey,
-                        _attachKey,
-                        _submitKey,
-                      ]);
+                      // استخدام addPostFrameCallback للتأكد من بناء كل الـ widgets
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        ShowCaseWidget.of(context).startShowCase([
+                          _familyKey,
+                          _providerKey,
+                          _noteKey,
+                          _attachKey,
+                          _submitKey,
+                        ]);
+                      });
                     },
                   ),
                   Transform.translate(
@@ -277,7 +280,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                               SizedBox(height: 12.h),
                               Showcase(
                                 key: _familyKey,
-                                description: 'tutorial.family_member.select'
+                                description: 'tutorial.family_members.select'
+                                    .tr()
                                     .tr(),
                                 child: FamilyMembersSelector(
                                   onMemberSelected: (member) {
@@ -302,7 +306,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     setState(() {
                                       _selectedRefundTypeId = type.id;
                                       _selectedRefundTypeName = type.name;
-                                      _selectedRefundAttachments = type.attachments;
+                                      _selectedRefundAttachments =
+                                          type.attachments;
                                       _attachmentPaths = [];
                                       _hasAllRequiredAttachments = false;
                                     });
@@ -363,9 +368,13 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                     setState(() {
                                       final text = value.trim();
                                       if (text.isEmpty) {
-                                        _providerError = 'refund_request.validation.enter_provider'.tr();
+                                        _providerError =
+                                            'refund_request.validation.enter_provider'
+                                                .tr();
                                       } else if (text.length < 2) {
-                                        _providerError = 'refund_request.validation.provider_min_length'.tr();
+                                        _providerError =
+                                            'refund_request.validation.provider_min_length'
+                                                .tr();
                                       } else {
                                         _providerError = null;
                                       }
@@ -403,11 +412,19 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                         setState(() {
                                           final text = value.trim();
                                           if (text.isEmpty) {
-                                            _amountError = 'refund_request.validation.enter_amount'.tr();
+                                            _amountError =
+                                                'refund_request.validation.enter_amount'
+                                                    .tr();
                                           } else {
-                                            final amount = double.tryParse(text);
-                                            if (amount == null || amount < 1 || amount > 100000) {
-                                              _amountError = 'refund_request.validation.amount_range'.tr();
+                                            final amount = double.tryParse(
+                                              text,
+                                            );
+                                            if (amount == null ||
+                                                amount < 1 ||
+                                                amount > 100000) {
+                                              _amountError =
+                                                  'refund_request.validation.amount_range'
+                                                      .tr();
                                             } else {
                                               _amountError = null;
                                             }
@@ -440,7 +457,8 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                   maxLength: 300,
                                   errorText: _noteError,
                                   onChanged: (value) {
-                                    if (_noteError != null && value.length <= 300) {
+                                    if (_noteError != null &&
+                                        value.length <= 300) {
                                       setState(() {
                                         _noteError = null;
                                       });
@@ -449,26 +467,39 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 ),
                               ),
                               SizedBox(height: 16.h),
-                              if (_selectedRefundTypeId != null &&
-                                  _selectedRefundAttachments.isNotEmpty) ...[
-                                SizedBox(height: 16.h),
-                                Showcase(
-                                  key: _attachKey,
-                                  description: 'tutorial.attachments.hint'.tr(),
-                                  child: AddAttachmentWidget(
-                                    key: ValueKey(_selectedRefundTypeId),
-                                    refundTypeName: _selectedRefundTypeName,
-                                    attachments: _selectedRefundAttachments,
-                                    onAttachmentsChanged: (paths, hasAllRequired) {
-                                      setState(() {
-                                        _attachmentPaths = paths;
-                                        _hasAllRequiredAttachments = hasAllRequired;
-                                      });
-                                    },
-                                    onAttachmentDialogClosed: _unfocusAll,
-                                  ),
+                              // إظهار attachments section دايماً للـ showcase (مخفية لو مش محدد type)
+                              Showcase(
+                                key: _attachKey,
+                                description: 'tutorial.attachments.hint'.tr(),
+                                child: Visibility(
+                                  visible:
+                                      _selectedRefundTypeId != null &&
+                                      _selectedRefundAttachments.isNotEmpty,
+                                  maintainSize: false,
+                                  maintainAnimation: false,
+                                  maintainState: false,
+                                  child:
+                                      _selectedRefundTypeId != null &&
+                                          _selectedRefundAttachments.isNotEmpty
+                                      ? AddAttachmentWidget(
+                                          key: ValueKey(_selectedRefundTypeId),
+                                          refundTypeName:
+                                              _selectedRefundTypeName,
+                                          attachments:
+                                              _selectedRefundAttachments,
+                                          onAttachmentsChanged:
+                                              (paths, hasAllRequired) {
+                                                setState(() {
+                                                  _attachmentPaths = paths;
+                                                  _hasAllRequiredAttachments =
+                                                      hasAllRequired;
+                                                });
+                                              },
+                                          onAttachmentDialogClosed: _unfocusAll,
+                                        )
+                                      : const SizedBox.shrink(),
                                 ),
-                              ],
+                              ),
                               SizedBox(height: 20.h),
                               Showcase(
                                 key: _submitKey,
@@ -481,7 +512,10 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                       listener: (context, state) {
                                         state.maybeWhen(
                                           success: (data) {
-                                            _showSuccess('refund_request.success_message'.tr());
+                                            _showSuccess(
+                                              'refund_request.success_message'
+                                                  .tr(),
+                                            );
                                             SuccessDialog.showRefund(context);
                                           },
                                           failed: (message) {

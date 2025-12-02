@@ -548,38 +548,38 @@
   },
   "tutorial": {
     "family_members": {
-      "select": "Select a family member before submitting"
+      "select": "Choose the family member to continue."
     },
     "provider": {
-      "select": "Choose a provider from the network"
+      "select": "Search and pick the provider handling your request."
     },
     "note": {
-      "hint": "Add an optional note for the request"
+      "hint": "Add clarifying notes (optional, up to 300 characters)."
     },
     "attachments": {
-      "hint": "Attach required documents or images"
+      "hint": "Upload all required documents and medical reports."
     },
     "submit": {
-      "tap": "Tap to submit your request"
+      "tap": "Review everything, then tap Submit to send the request."
     },
     "save": {
-      "tap": "Tap to save your changes"
+      "tap": "Tap Save to keep your latest changes."
     },
     "network": {
-      "categories": "Browse categories to filter providers",
-      "search": "Search or use filters to narrow results",
-      "navigate": "Open maps to navigate to provider",
-      "call": "Tap the phone number to call the provider"
+      "categories": "Browse provider categories to filter results quickly.",
+      "search": "Use search or filters to find providers near you.",
+      "navigate": "Open maps and navigate to this provider.",
+      "call": "Tap the phone number to call the provider instantly."
     },
     "profile": {
-      "personal_info": "View and edit your personal information",
-      "family_members": "Add and manage your family members",
-      "change_password": "Change your account password",
-      "language": "Change the app language",
-      "faq": "Browse frequently asked questions",
-      "contact_us": "Get in touch with our support team",
-      "terms_privacy": "Read our terms and privacy policy",
-      "log_out": "Sign out from your account"
+      "personal_info": "View and update your personal information.",
+      "family_members": "Manage your covered family members.",
+      "change_password": "Change your account password securely.",
+      "language": "Switch the app language.",
+      "faq": "Browse frequently asked questions.",
+      "contact_us": "Get in touch with our support team.",
+      "terms_privacy": "Read the terms and privacy policy.",
+      "log_out": "Sign out from your account."
     },
     "approval_history": {
       "swipe": "Swipe or tap to filter approvals",

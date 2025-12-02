@@ -1,14 +1,15 @@
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/core/constants/app_assets.dart';
+import 'package:mediconsult/core/utils/image_picker_service.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/attachments/attachment_item.dart';
 import 'package:mediconsult/features/refund/data/refund_types_reasons_models.dart';
-import 'package:mediconsult/core/utils/image_picker_service.dart';
 
 class _UploadSelection {
   final ImageProvider imageProvider;
@@ -185,7 +186,7 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
     // إزالة الـ focus فوراً بعد إغلاق الـ bottom sheet
     FocusScope.of(context).unfocus();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
-    
+
     // استدعاء الـ callback لإزالة الـ focus بعد إغلاق الـ dialog
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onAttachmentDialogClosed?.call();
@@ -384,6 +385,10 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
   }
 
   void _confirmDelete(int index) async {
+    // إخفاء الكيبورد قبل فتح الـ dialog
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
@@ -425,7 +430,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context, false),
+                      onPressed: () {
+                        // إخفاء الكيبورد عند الضغط على Cancel
+                        FocusScope.of(context).unfocus();
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        Navigator.pop(context, false);
+                      },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColors.lightGreyClr),
                         shape: RoundedRectangleBorder(
@@ -442,7 +452,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                   SizedBox(width: 12.w),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context, true),
+                      onPressed: () {
+                        // إخفاء الكيبورد عند الضغط على Delete
+                        FocusScope.of(context).unfocus();
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        Navigator.pop(context, true);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.errorClr,
                         shape: RoundedRectangleBorder(
@@ -463,6 +478,12 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
         );
       },
     );
+
+    // إخفاء الكيبورد بعد إغلاق الـ dialog
+    if (mounted) {
+      FocusScope.of(context).unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
 
     if (confirmed == true) {
       setState(() {

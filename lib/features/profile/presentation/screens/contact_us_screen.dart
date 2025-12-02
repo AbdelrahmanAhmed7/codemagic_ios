@@ -1,15 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mediconsult/core/services/url_launcher_service.dart';
-import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
-import 'package:mediconsult/features/support/presentation/cubit/contact_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
+import 'package:mediconsult/core/services/url_launcher_service.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/contact_tile.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:mediconsult/features/support/presentation/cubit/contact_cubit.dart';
+import 'package:mediconsult/features/support/presentation/cubit/contact_state.dart';
+import 'package:mediconsult/shared/widgets/page_header.dart';
 
 class ContactUsScreen extends StatefulWidget {
   const ContactUsScreen({super.key});

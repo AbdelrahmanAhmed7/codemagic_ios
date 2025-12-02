@@ -33,6 +33,8 @@ class ImagePickerService {
     double? maxHeight,
     int? imageQuality,
   }) async {
+    final ok = await AttachmentsPermissions.ensurePhotos();
+    if (!ok) return null;
     return _picker.pickImage(
       source: ImageSource.gallery,
       maxWidth: maxWidth ?? _maxWidth,
@@ -54,5 +56,3 @@ class ImagePickerService {
     );
   }
 }
-
-

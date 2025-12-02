@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
@@ -5,12 +6,11 @@ import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
 import 'package:mediconsult/features/approval_request/presentation/widgets/family_members_selector.dart';
-import 'package:mediconsult/features/chronic_medicines/widgets/lab_results_upload.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/action_required_dialog.dart';
+import 'package:mediconsult/features/chronic_medicines/widgets/lab_results_upload.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/month_header.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/monthly_medicines_selector.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/upcoming_lab_card.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:showcaseview/showcaseview.dart';
 // ignore_for_file: deprecated_member_use
@@ -105,9 +105,10 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                               ],
                             ),
                             SizedBox(height: 12.h),
-                             Showcase(
+                            Showcase(
                               key: _familyKey,
-                               description: 'tutorial.family_members.select'.tr(),
+                              description: 'tutorial.family_members.select'
+                                  .tr(),
                               child: const FamilyMembersSelector(),
                             ),
                             SizedBox(height: 24.h),
@@ -194,9 +195,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                               ),
                             ),
                             SizedBox(height: 20.h),
-                             Showcase(
+                            Showcase(
                               key: _saveKey,
-                               description: 'tutorial.save.tap'.tr(),
+                              description: 'tutorial.save.tap'.tr(),
                               child: SizedBox(
                                 width: double.infinity,
                                 height: 48.h,
