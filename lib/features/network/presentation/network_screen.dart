@@ -157,20 +157,130 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
 
   void _startShowcase() {
-    setState(() {
-      _showcaseIndex = 0;
-      _isShowCaseActive = true;
+    // Ensure search field is unfocused before starting showcase
+    FocusScope.of(context).unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    
+    // Wait a frame to ensure unfocus is processed and widgets are built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        // Get available keys and find first available widget
+        final keys = _getAvailableShowcaseKeys();
+        int startIndex = 0;
+        
+        // Find first available widget
+        for (int i = 0; i < keys.length; i++) {
+          if (keys[i].currentContext != null) {
+            startIndex = i;
+            break;
+          }
+        }
+        
+        setState(() {
+          _showcaseIndex = startIndex;
+          _isShowCaseActive = true;
+        });
+      }
     });
   }
 
   void _nextShowcase() {
-    if (_showcaseIndex < _showcaseKeys.length - 1) {
-      setState(() {
-        _showcaseIndex++;
-      });
+    final keys = _getAvailableShowcaseKeys();
+    
+    // Check if we can move to next step
+    if (_showcaseIndex < keys.length - 1) {
+      final nextIndex = _showcaseIndex + 1;
+      final nextKey = keys[nextIndex];
+      
+      // Check if the widget for next step exists
+      if (nextKey.currentContext != null) {
+        setState(() {
+          _showcaseIndex = nextIndex;
+        });
+      } else {
+        // If widget doesn't exist, skip to next available or dismiss
+        bool foundNext = false;
+        for (int i = nextIndex + 1; i < keys.length; i++) {
+          if (keys[i].currentContext != null) {
+            setState(() {
+              _showcaseIndex = i;
+            });
+            foundNext = true;
+            break;
+          }
+        }
+        
+        // If no next widget found, dismiss showcase
+        if (!foundNext) {
+          _dismissShowcase();
+        }
+      }
     } else {
       _dismissShowcase();
     }
+  }
+  
+  // Get available showcase keys based on current state
+  List<GlobalKey> _getAvailableShowcaseKeys() {
+    final keys = <GlobalKey>[];
+    
+    // Always add categories and search (they should always be available)
+    if (_categoriesKey.currentContext != null) {
+      keys.add(_categoriesKey);
+    }
+    if (_searchKey.currentContext != null) {
+      keys.add(_searchKey);
+    }
+    
+    // Only add navigate and phone keys if widgets exist
+    final cubit = context.read<NetworkCubit>();
+    final providers = cubit.currentProviders;
+    final hasProviders = providers.isNotEmpty;
+    
+    if (hasProviders) {
+      // Check if navigate widget exists
+      if (_navigateKey.currentContext != null) {
+        keys.add(_navigateKey);
+      }
+      // Check if phone widget exists
+      if (_phoneKey.currentContext != null) {
+        keys.add(_phoneKey);
+      }
+    }
+    
+    return keys;
+  }
+  
+  // Get available showcase descriptions based on current state
+  List<String> _getAvailableShowcaseDescriptions() {
+    final descriptions = <String>[];
+    
+    // Always add categories and search descriptions (they should always be available)
+    if (_categoriesKey.currentContext != null) {
+      descriptions.add('tutorial.network.categories'.tr());
+    }
+    if (_searchKey.currentContext != null) {
+      descriptions.add('tutorial.network.search'.tr());
+    }
+    
+    // Only add navigate and phone descriptions if widgets exist
+    final cubit = context.read<NetworkCubit>();
+    final providers = cubit.currentProviders;
+    final hasProviders = providers.isNotEmpty;
+    
+    if (hasProviders) {
+      // Check if navigate widget exists
+      if (_navigateKey.currentContext != null) {
+        descriptions.add('tutorial.network.navigate'.tr());
+      }
+      // Check if phone widget exists
+      if (_phoneKey.currentContext != null) {
+        descriptions.add('tutorial.network.call'.tr());
+      }
+    }
+    
+    return descriptions;
   }
 
   void _dismissShowcase() {
@@ -182,19 +292,9 @@ class _NetworkScreenState extends State<NetworkScreen> {
     _searchController.addListener(_onSearchTextChanged);
   }
 
-  List<GlobalKey> get _showcaseKeys => [
-        _categoriesKey,
-        _searchKey,
-        _navigateKey,
-        _phoneKey,
-      ];
-
-  List<String> get _showcaseDescriptions => [
-        'tutorial.network.categories'.tr(),
-        'tutorial.network.search'.tr(),
-        'Tap to navigate to provider location',
-        'Tap to call the provider',
-      ];
+  // These are now dynamic getters
+  List<GlobalKey> get _showcaseKeys => _getAvailableShowcaseKeys();
+  List<String> get _showcaseDescriptions => _getAvailableShowcaseDescriptions();
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +337,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                     // Immediately remove listener to prevent any callbacks
                     _searchController.removeListener(_onSearchTextChanged);
                     
-                    // Force unfocus search field
+                    // Force unfocus search field multiple ways to ensure it works
                     FocusScope.of(context).unfocus();
                     FocusManager.instance.primaryFocus?.unfocus();
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -252,8 +352,16 @@ class _NetworkScreenState extends State<NetworkScreen> {
                       }
                     }
                     
-                    // Wait a bit to ensure focus is cleared
-                    await Future.delayed(const Duration(milliseconds: 300));
+                    // Wait a bit to ensure focus is cleared and UI is stable
+                    await Future.delayed(const Duration(milliseconds: 200));
+                    
+                    // Force unfocus again after delay
+                    FocusScope.of(context).unfocus();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    
+                    // Wait one more frame to ensure everything is settled
+                    await Future.delayed(const Duration(milliseconds: 100));
                     
                     if (!mounted) return;
                     
@@ -363,6 +471,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                     },
                                     onFilterTap: _showFilterBottomSheet,
                                     onSearchSubmitted: (value) async {
+                                      // Ensure search field remains enabled and focusable
                                       final cubit = context
                                           .read<NetworkCubit>();
 
@@ -378,7 +487,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                       }
 
                                       // Preserve existing filters when searching
-                                      cubit.searchProviders(
+                                      await cubit.searchProviders(
                                         searchKey: value.isNotEmpty
                                             ? value
                                             : null,
@@ -389,6 +498,30 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                         resetPage: true,
                                         context: context,
                                       );
+                                      
+                                      // Ensure search field remains usable after search
+                                      // Force rebuild to ensure TextField is enabled and focusable
+                                      if (mounted) {
+                                        // Ensure showcase is not active
+                                        if (_isShowCaseActive) {
+                                          _isShowCaseActive = false;
+                                        }
+                                        setState(() {});
+                                        
+                                        // Ensure focus node is available
+                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                                          if (mounted) {
+                                            final searchBarState = _searchBarKey.currentState;
+                                            if (searchBarState != null) {
+                                              try {
+                                                (searchBarState as dynamic).forceUnfocus();
+                                              } catch (e) {
+                                                // Ignore if method doesn't exist
+                                              }
+                                            }
+                                          }
+                                        });
+                                      }
                                     },
                                   ),
                                 ),

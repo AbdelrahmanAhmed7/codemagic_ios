@@ -93,8 +93,8 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
       ];
 
   List<String> get _showcaseDescriptions => [
-        'Tap to filter refund requests',
-        'Create a new refund request',
+        'tutorial.refund_history.swipe'.tr(),
+        'tutorial.refund_history.fab'.tr(),
       ];
 
   @override

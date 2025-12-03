@@ -109,8 +109,8 @@ class _ApprovalHistoryScreenState extends State<ApprovalHistoryScreen> {
       ];
 
   List<String> get _showcaseDescriptions => [
-        'Tap to filter approval requests',
-        'Create a new approval request',
+        'tutorial.approval_history.swipe'.tr(),
+        'tutorial.approval_history.fab'.tr(),
       ];
 
   @override

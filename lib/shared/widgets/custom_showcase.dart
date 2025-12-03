@@ -98,8 +98,7 @@ class _CustomShowcaseOverlayState extends State<CustomShowcaseOverlay>
       return widget.child;
     }
 
-    final RenderBox? targetBox =
-        targetContext.findRenderObject() as RenderBox?;
+    final RenderBox? targetBox = targetContext.findRenderObject() as RenderBox?;
     if (targetBox == null) {
       return widget.child;
     }
@@ -131,7 +130,9 @@ class _CustomShowcaseOverlayState extends State<CustomShowcaseOverlay>
         ),
         // Description card - position it below or above the target based on available space
         Positioned(
-          top: targetPosition.dy + targetSize.height + 16.h < screenSize.height - 200
+          top:
+              targetPosition.dy + targetSize.height + 16.h <
+                  screenSize.height - 200
               ? targetPosition.dy + targetSize.height + 16.h
               : targetPosition.dy - 140.h,
           left: 16.w,
@@ -178,7 +179,7 @@ class _CustomShowcaseOverlayState extends State<CustomShowcaseOverlay>
                             decoration: BoxDecoration(
                               color: index == widget.currentIndex
                                   ? AppColors.primaryClr
-                                  : AppColors.greyClr.withOpacity(0.3),
+                                  : AppColors.greyClr.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(4.r),
                             ),
                           ),
@@ -216,7 +217,8 @@ class _CustomShowcaseOverlayState extends State<CustomShowcaseOverlay>
                             const SizedBox.shrink(),
                           Row(
                             children: [
-                              if (widget.currentIndex < widget.targetKeys.length - 1)
+                              if (widget.currentIndex <
+                                  widget.targetKeys.length - 1)
                                 ElevatedButton(
                                   onPressed: widget.onNext,
                                   style: ElevatedButton.styleFrom(
@@ -293,8 +295,7 @@ class _ShowcasePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Draw dark overlay covering entire screen
-    final overlayPaint = Paint()
-      ..color = Colors.black.withOpacity(0.7);
+    final overlayPaint = Paint()..color = Colors.black.withValues(alpha: 0.7);
 
     // Draw four rectangles around the target to create the hole effect
     final targetRect = Rect.fromLTWH(
@@ -323,12 +324,7 @@ class _ShowcasePainter extends CustomPainter {
 
     // Left rectangle
     canvas.drawRect(
-      Rect.fromLTWH(
-        0,
-        targetRect.top,
-        targetRect.left,
-        targetRect.height,
-      ),
+      Rect.fromLTWH(0, targetRect.top, targetRect.left, targetRect.height),
       overlayPaint,
     );
 
@@ -350,7 +346,7 @@ class _ShowcasePainter extends CustomPainter {
       ..strokeWidth = 3.0;
 
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
 
     // Draw shadow first (slightly larger)
@@ -374,4 +370,3 @@ class _ShowcasePainter extends CustomPainter {
         oldDelegate.targetSize != targetSize;
   }
 }
-

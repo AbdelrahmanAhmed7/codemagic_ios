@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -51,9 +52,34 @@ class _NetworkSearchBarState extends State<NetworkSearchBar> {
     super.didUpdateWidget(oldWidget);
     // When showcase becomes active, immediately unfocus
     if (widget.isShowCaseActive && !oldWidget.isShowCaseActive) {
+      // Unfocus immediately
       _focusNode.unfocus();
+      
+      // Also unfocus through system channels
+      FocusScope.of(context).unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      
       // Also call the callback if provided
       widget.onUnfocusRequested?.call();
+      
+      // Ensure unfocus after a frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.isShowCaseActive) {
+          _focusNode.unfocus();
+          FocusScope.of(context).unfocus();
+        }
+      });
+    }
+    
+    // When showcase becomes inactive, ensure TextField is enabled
+    if (!widget.isShowCaseActive && oldWidget.isShowCaseActive) {
+      // Force rebuild to ensure TextField is enabled
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     }
   }
 
@@ -62,15 +88,20 @@ class _NetworkSearchBarState extends State<NetworkSearchBar> {
     // Unfocus search field when showcase becomes active
     if (widget.isShowCaseActive && _focusNode.hasFocus) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
+        if (mounted && widget.isShowCaseActive) {
           _focusNode.unfocus();
+          FocusScope.of(context).unfocus();
+          FocusManager.instance.primaryFocus?.unfocus();
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
         }
       });
     }
 
-    return Row(
-      children: [
-        Expanded(
+    return AbsorbPointer(
+      absorbing: widget.isShowCaseActive,
+      child: Row(
+        children: [
+          Expanded(
           child: widget.isShowCaseActive
               ? // Replace TextField with a non-interactive widget during showcase
               IgnorePointer(
@@ -106,6 +137,8 @@ class _NetworkSearchBarState extends State<NetworkSearchBar> {
                   controller: widget.searchController,
                   focusNode: _focusNode,
                   textInputAction: TextInputAction.search,
+                  enabled: true,
+                  readOnly: false,
                   decoration: InputDecoration(
                     hintText: 'network.search_placeholder'.tr(),
                     hintStyle: AppTextStyles.font14GreyRegular(context),
@@ -114,6 +147,19 @@ class _NetworkSearchBarState extends State<NetworkSearchBar> {
                       color: AppColors.greyClr,
                       size: 20.sp,
                     ),
+                    suffixIcon: widget.searchController.text.isNotEmpty
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.clear,
+                              color: AppColors.greyClr,
+                              size: 20.sp,
+                            ),
+                            onPressed: () {
+                              widget.searchController.clear();
+                              _focusNode.requestFocus();
+                            },
+                          )
+                        : null,
                     filled: true,
                     fillColor: AppColors.lightGreyClr,
                     border: OutlineInputBorder(
@@ -130,20 +176,22 @@ class _NetworkSearchBarState extends State<NetworkSearchBar> {
                     // إخفاء الكيبورد عند الضغط خارج الحقل (iOS fix)
                     _focusNode.unfocus();
                   },
+                  onChanged: (value) {
+                    // Force rebuild to show/hide clear button
+                    setState(() {});
+                  },
                 ),
         ),
         SizedBox(width: 12.w),
-        AbsorbPointer(
-          absorbing: widget.isShowCaseActive,
-          child: GestureDetector(
-            onTap: widget.isShowCaseActive
-                ? null
-                : () {
-                    // إخفاء الكيبورد عند الضغط على زر الفلتر
-                    _focusNode.unfocus();
-                    widget.onFilterTap();
-                  },
-            child: Container(
+        GestureDetector(
+          onTap: () {
+            // Always allow filter tap unless showcase is active
+            if (widget.isShowCaseActive) return;
+            // إخفاء الكيبورد عند الضغط على زر الفلتر
+            _focusNode.unfocus();
+            widget.onFilterTap();
+          },
+          child: Container(
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
                 color: context.watch<NetworkCubit>().hasActiveFilters
@@ -160,8 +208,8 @@ class _NetworkSearchBarState extends State<NetworkSearchBar> {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

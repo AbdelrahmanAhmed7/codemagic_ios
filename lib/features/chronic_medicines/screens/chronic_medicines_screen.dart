@@ -77,7 +77,7 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
 
   List<String> get _showcaseDescriptions => [
         'tutorial.family_members.select'.tr(),
-        'Save your chronic medicines',
+        'tutorial.save.tap'.tr(),
       ];
 
   @override

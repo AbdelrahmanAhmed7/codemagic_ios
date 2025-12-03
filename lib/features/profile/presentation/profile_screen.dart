@@ -132,14 +132,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ];
 
   List<String> get _showcaseDescriptions => [
-        'View and edit your personal information',
-        'Manage your family members',
-        'Change your account password',
-        'Change app language',
-        'View frequently asked questions',
-        'Contact us for support',
-        'View terms and privacy policy',
-        'Logout from your account',
+        'tutorial.profile.personal_info'.tr(),
+        'tutorial.profile.family_members'.tr(),
+        'tutorial.profile.change_password'.tr(),
+        'tutorial.profile.language'.tr(),
+        'tutorial.profile.faq'.tr(),
+        'tutorial.profile.contact_us'.tr(),
+        'tutorial.profile.terms_privacy'.tr(),
+        'tutorial.profile.log_out'.tr(),
       ];
 
   @override
