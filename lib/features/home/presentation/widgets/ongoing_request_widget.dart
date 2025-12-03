@@ -13,13 +13,25 @@ class OngoingRequestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Filter to show only reviewing approvals and take last 3
+    // Filter to show only reviewing approvals, sort by createdDate descending (newest first), and take first 3
     final approvals = data.approvals
         .where((approval) => approval.status.toLowerCase() == 'reviewing')
         .toList()
-        .reversed
-        .take(3)
-        .toList();
+      ..sort((a, b) {
+        // Sort by createdDate descending (newest first)
+        // Parse dates and compare (assuming format is consistent)
+        try {
+          final dateA = DateTime.parse(a.createdDate);
+          final dateB = DateTime.parse(b.createdDate);
+          return dateB.compareTo(dateA); // Descending order
+        } catch (e) {
+          // If date parsing fails, sort by id descending as fallback
+          return b.id.compareTo(a.id);
+        }
+      });
+    
+    // Take first 3 (newest ones)
+    final latestApprovals = approvals.take(3).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +61,7 @@ class OngoingRequestWidget extends StatelessWidget {
         SizedBox(height: 16.h),
 
         // Check if approvals exist
-        if (approvals.isEmpty)
+        if (latestApprovals.isEmpty)
           Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 40.h),
@@ -65,7 +77,7 @@ class OngoingRequestWidget extends StatelessWidget {
             height: 140.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: approvals.length,
+              itemCount: latestApprovals.length,
               separatorBuilder: (_, __) => SizedBox(width: 12.w),
               // Performance optimizations
               cacheExtent: 500,
@@ -73,7 +85,7 @@ class OngoingRequestWidget extends StatelessWidget {
               addRepaintBoundaries: true,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                final approval = approvals[index];
+                final approval = latestApprovals[index];
                 return SizedBox(
                   width: 300.w,
                   child: OngoingRequestCard(approval: approval),

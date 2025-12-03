@@ -11,7 +11,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/refund_card.dar
 import 'package:mediconsult/features/refund/presentation/widgets/refund_empty_state.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
 import 'package:mediconsult/shared/widgets/segmented_tabs.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
 // ignore_for_file: deprecated_member_use
 
 class RefundHistoryScreen extends StatefulWidget {
@@ -28,6 +28,10 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
 
   final GlobalKey _tabsKey = GlobalKey();
   final GlobalKey _fabKey = GlobalKey();
+  
+  // Showcase state
+  bool _isShowCaseActive = false;
+  int _showcaseIndex = -1;
 
   @override
   void initState() {
@@ -62,10 +66,49 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
     super.dispose();
   }
 
+  void _startShowcase() {
+    setState(() {
+      _showcaseIndex = 0;
+      _isShowCaseActive = true;
+    });
+  }
+
+  void _nextShowcase() {
+    if (_showcaseIndex < _showcaseKeys.length - 1) {
+      setState(() {
+        _showcaseIndex++;
+      });
+    } else {
+      _dismissShowcase();
+    }
+  }
+
+  void _dismissShowcase() {
+    setState(() {
+      _showcaseIndex = -1;
+      _isShowCaseActive = false;
+    });
+  }
+
+  List<GlobalKey> get _showcaseKeys => [
+        _tabsKey,
+        _fabKey,
+      ];
+
+  List<String> get _showcaseDescriptions => [
+        'Tap to filter refund requests',
+        'Create a new refund request',
+      ];
+
   @override
   Widget build(BuildContext context) {
-    return ShowCaseWidget(
-      builder: (context) => Scaffold(
+    return CustomShowcaseOverlay(
+      targetKeys: _showcaseKeys,
+      descriptions: _showcaseDescriptions,
+      currentIndex: _showcaseIndex,
+      onNext: _nextShowcase,
+      onDismiss: _dismissShowcase,
+      child: Scaffold(
         backgroundColor: AppColors.lightGreyClr,
         body: SafeArea(
           child: Column(
@@ -74,7 +117,7 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                 title: 'refund_history.title'.tr(),
                 backPath: '/home',
                 onHelp: () {
-                  ShowCaseWidget.of(context).startShowCase([_tabsKey, _fabKey]);
+                  _startShowcase();
                 },
               ),
               Expanded(
@@ -98,9 +141,9 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
                       child: Column(
                         children: [
                           SizedBox(height: 16.h),
-                          Showcase(
+                          CustomShowcase(
                             key: _tabsKey,
-                            description: 'Tap to filter refund requests',
+                            targetKey: _tabsKey,
                             child: SegmentedTabs(
                               labels: [
                                 'approval_history.tabs.all'.tr(),
@@ -206,9 +249,9 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
             ],
           ),
         ),
-        floatingActionButton: Showcase(
+        floatingActionButton: CustomShowcase(
           key: _fabKey,
-          description: 'Create a new refund request',
+          targetKey: _fabKey,
           child: FloatingActionButton(
             onPressed: () {
               context.push('/refund-request');

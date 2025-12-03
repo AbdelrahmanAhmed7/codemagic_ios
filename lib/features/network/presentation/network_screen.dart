@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/error/app_error_handler.dart';
@@ -11,7 +12,7 @@ import 'package:mediconsult/features/network/presentation/widgets/network_filter
 import 'package:mediconsult/features/network/presentation/widgets/network_providers_list.dart';
 import 'package:mediconsult/features/network/presentation/widgets/network_search_bar.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
 // ignore_for_file: deprecated_member_use
 
 class NetworkScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
   bool _hasLoadedInitialData = false;
   bool _hasInitializedLocation = false;
   bool _isShowCaseActive = false;
+  int _showcaseIndex = -1; // -1 means showcase is not active
   String? _previousSearchText;
 
   // Showcase keys
@@ -35,6 +37,9 @@ class _NetworkScreenState extends State<NetworkScreen> {
   final GlobalKey _searchKey = GlobalKey();
   final GlobalKey _navigateKey = GlobalKey();
   final GlobalKey _phoneKey = GlobalKey();
+  
+  // Key to access NetworkSearchBar state
+  final GlobalKey _searchBarKey = GlobalKey();
 
   @override
   void initState() {
@@ -51,33 +56,44 @@ class _NetworkScreenState extends State<NetworkScreen> {
   }
 
   void _setupSearchListener() {
-    _searchController.addListener(() {
-      // Skip listener if ShowCase is active to prevent freeze
-      if (_isShowCaseActive) {
-        _previousSearchText = _searchController.text;
-        return;
-      }
+    _searchController.addListener(_onSearchTextChanged);
+  }
 
-      final currentText = _searchController.text;
+  void _onSearchTextChanged() {
+    // Skip listener if ShowCase is active to prevent freeze
+    if (_isShowCaseActive) {
+      _previousSearchText = _searchController.text;
+      return;
+    }
 
-      // لو النص اتغير من filled لـ empty، نرجع للقائمة الأصلية
-      if (currentText.isEmpty &&
-          _previousSearchText != null &&
-          _previousSearchText!.isNotEmpty &&
-          mounted) {
-        final cubit = context.read<NetworkCubit>();
-        // البحث بدون searchKey يرجع للقائمة الأصلية
-        cubit.searchProviders(
-          searchKey: null,
-          categoryId: cubit.selectedCategoryId,
-          governmentId: cubit.selectedGovernmentId,
-          cityId: cubit.selectedCityId,
-          resetPage: true,
-          context: context,
-        );
-      }
-      _previousSearchText = currentText;
-    });
+    if (!mounted) return;
+
+    final currentText = _searchController.text;
+
+    // لو النص اتغير من filled لـ empty، نرجع للقائمة الأصلية
+    if (currentText.isEmpty &&
+        _previousSearchText != null &&
+        _previousSearchText!.isNotEmpty) {
+      // Use Future.microtask to ensure this runs after current frame
+      Future.microtask(() {
+        if (!mounted || _isShowCaseActive) return;
+        try {
+          final cubit = context.read<NetworkCubit>();
+          // البحث بدون searchKey يرجع للقائمة الأصلية
+          cubit.searchProviders(
+            searchKey: null,
+            categoryId: cubit.selectedCategoryId,
+            governmentId: cubit.selectedGovernmentId,
+            cityId: cubit.selectedCityId,
+            resetPage: true,
+            context: context,
+          );
+        } catch (e) {
+          // Ignore errors during showcase
+        }
+      });
+    }
+    _previousSearchText = currentText;
   }
 
   @override
@@ -120,6 +136,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchTextChanged);
     _searchController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -139,10 +156,55 @@ class _NetworkScreenState extends State<NetworkScreen> {
   }
 
 
+  void _startShowcase() {
+    setState(() {
+      _showcaseIndex = 0;
+      _isShowCaseActive = true;
+    });
+  }
+
+  void _nextShowcase() {
+    if (_showcaseIndex < _showcaseKeys.length - 1) {
+      setState(() {
+        _showcaseIndex++;
+      });
+    } else {
+      _dismissShowcase();
+    }
+  }
+
+  void _dismissShowcase() {
+    setState(() {
+      _showcaseIndex = -1;
+      _isShowCaseActive = false;
+    });
+    // Re-add the listener
+    _searchController.addListener(_onSearchTextChanged);
+  }
+
+  List<GlobalKey> get _showcaseKeys => [
+        _categoriesKey,
+        _searchKey,
+        _navigateKey,
+        _phoneKey,
+      ];
+
+  List<String> get _showcaseDescriptions => [
+        'tutorial.network.categories'.tr(),
+        'tutorial.network.search'.tr(),
+        'Tap to navigate to provider location',
+        'Tap to call the provider',
+      ];
+
   @override
   Widget build(BuildContext context) {
-    return ShowCaseWidget(
-      builder: (context) => Scaffold(
+    return CustomShowcaseOverlay(
+      targetKeys: _showcaseKeys,
+      descriptions: _showcaseDescriptions,
+      currentIndex: _showcaseIndex,
+      onNext: _nextShowcase,
+      onDismiss: _dismissShowcase,
+      child: Scaffold(
         backgroundColor: AppColors.lightGreyClr,
         body: BlocListener<NetworkCubit, NetworkState>(
           listener: (context, state) {
@@ -171,38 +233,32 @@ class _NetworkScreenState extends State<NetworkScreen> {
                 PageHeader(
                   title: 'network.title'.tr(),
                   backPath: '/home',
-                  onHelp: () {
-                    // Unfocus search field before starting ShowCase to prevent freeze
+                  onHelp: () async {
+                    // Immediately remove listener to prevent any callbacks
+                    _searchController.removeListener(_onSearchTextChanged);
+                    
+                    // Force unfocus search field
                     FocusScope.of(context).unfocus();
                     FocusManager.instance.primaryFocus?.unfocus();
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
                     
-                    // Set flag to disable search listener during ShowCase
-                    setState(() {
-                      _isShowCaseActive = true;
-                    });
+                    // Try to unfocus through the search bar's focus node if accessible
+                    final searchBarState = _searchBarKey.currentState;
+                    if (searchBarState != null) {
+                      try {
+                        (searchBarState as dynamic).forceUnfocus();
+                      } catch (e) {
+                        // Ignore if method doesn't exist
+                      }
+                    }
                     
-                    // Use addPostFrameCallback to ensure all widgets are built
-                    // Use the context from ShowCaseWidget builder
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (!mounted) return;
-                      
-                      // Start ShowCase using the context from ShowCaseWidget builder
-                      ShowCaseWidget.of(context).startShowCase([
-                        _categoriesKey,
-                        _searchKey,
-                        _navigateKey,
-                        _phoneKey,
-                      ]);
-                      
-                      // Reset flag after ShowCase completes
-                      Future.delayed(const Duration(seconds: 15), () {
-                        if (mounted) {
-                          setState(() {
-                            _isShowCaseActive = false;
-                          });
-                        }
-                      });
-                    });
+                    // Wait a bit to ensure focus is cleared
+                    await Future.delayed(const Duration(milliseconds: 300));
+                    
+                    if (!mounted) return;
+                    
+                    // Start custom showcase
+                    _startShowcase();
                   },
                 ),
                 SizedBox(height: 16.h),
@@ -258,11 +314,9 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                       return const SizedBox.shrink();
                                     }
 
-                                    return Showcase(
+                                    return CustomShowcase(
                                       key: _categoriesKey,
-                                      description: 'tutorial.network.categories'
-                                          .tr()
-                                          .tr(),
+                                      targetKey: _categoriesKey,
                                       child: BlocBuilder<NetworkCubit, NetworkState>(
                                         buildWhen: (previous, current) => true,
                                         builder: (context, state) {
@@ -294,11 +348,19 @@ class _NetworkScreenState extends State<NetworkScreen> {
                                 SizedBox(height: 16.h),
 
                                 // Search and Filter Bar
-                                Showcase(
+                                CustomShowcase(
                                   key: _searchKey,
-                                  description: 'tutorial.network.search'.tr(),
+                                  targetKey: _searchKey,
                                   child: NetworkSearchBar(
+                                    key: _searchBarKey,
                                     searchController: _searchController,
+                                    isShowCaseActive: _isShowCaseActive,
+                                    onUnfocusRequested: () {
+                                      // Force unfocus when showcase starts
+                                      FocusScope.of(context).unfocus();
+                                      FocusManager.instance.primaryFocus?.unfocus();
+                                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                    },
                                     onFilterTap: _showFilterBottomSheet,
                                     onSearchSubmitted: (value) async {
                                       final cubit = context

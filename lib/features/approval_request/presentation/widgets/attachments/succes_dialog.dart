@@ -10,6 +10,7 @@ import 'package:mediconsult/core/utils/app_button.dart';
 import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:mediconsult/core/utils/language_helper.dart';
 import 'package:mediconsult/core/di/service_locator.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 
 class SuccessDialog extends StatelessWidget {
   final String titleKey;
@@ -74,11 +75,15 @@ class SuccessDialog extends StatelessWidget {
                 height: 48.h,
                 child: AppButton(
                   text: buttonTextKey.tr(),
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop();
-                    // Refresh home data before navigating to show the new approval request
-                    _refreshHomeData(context);
-                    context.go('/home'); 
+                    // Clear cache to force refresh
+                    await CacheService.clearCache();
+                    // Navigate to home - HomeScreen will refresh automatically
+                    // Using a unique path to force widget rebuild
+                    if (context.mounted) {
+                      context.go('/home?t=${DateTime.now().millisecondsSinceEpoch}');
+                    }
                   },
                 ),
               ),
@@ -89,25 +94,6 @@ class SuccessDialog extends StatelessWidget {
     );
   }
   
-  // Helper method to refresh home data
-  static void _refreshHomeData(BuildContext context) {
-    try {
-      // Try to get HomeCubit from context (if available in widget tree)
-      final homeCubit = context.read<HomeCubit>();
-      final lang = LanguageHelper.getLanguageCode(context);
-      homeCubit.refreshHomeInfo(lang);
-    } catch (e) {
-      // If HomeCubit is not available in context, try service locator
-      try {
-        final homeCubit = sl<HomeCubit>();
-        final lang = LanguageHelper.getLanguageCode(context);
-        homeCubit.refreshHomeInfo(lang);
-      } catch (e2) {
-        // If both fail, it's okay - data will refresh when user navigates to home
-        print('Could not refresh home data: $e2');
-      }
-    }
-  }
 
   // Helper method to show the dialog for approval
   static void show(BuildContext context) {

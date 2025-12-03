@@ -17,10 +17,8 @@ import 'package:mediconsult/features/family_members/data/family_response_model.d
 import 'package:mediconsult/features/providers/data/providers_models.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:showcaseview/showcaseview.dart';
-import 'package:mediconsult/core/di/service_locator.dart';
-import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
-import 'package:mediconsult/core/utils/language_helper.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 // ignore_for_file: deprecated_member_use
 
 class ApprovalRequestScreen extends StatefulWidget {
@@ -44,6 +42,10 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
   final GlobalKey _providerKey = GlobalKey();
   final GlobalKey _noteKey = GlobalKey();
   final GlobalKey _attachKey = GlobalKey();
+  
+  // Showcase state
+  bool _isShowCaseActive = false;
+  int _showcaseIndex = -1;
 
   @override
   void dispose() {
@@ -93,18 +95,6 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
     );
   }
 
-  void _refreshHomeData() {
-    // Refresh home data to show the newly created approval request
-    // Use service locator to get HomeCubit instance
-    try {
-      final homeCubit = sl<HomeCubit>();
-      final lang = LanguageHelper.getLanguageCode(context);
-      homeCubit.refreshHomeInfo(lang);
-    } catch (e) {
-      // If HomeCubit is not available, it's okay - the data will refresh when user navigates to home
-      print('Could not refresh home data: $e');
-    }
-  }
 
   void _showError(String message) {
     if (mounted) {
@@ -128,10 +118,55 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
     context.read<ApprovalRequestCubit>().reset();
   }
 
+  void _startShowcase() {
+    setState(() {
+      _showcaseIndex = 0;
+      _isShowCaseActive = true;
+    });
+  }
+
+  void _nextShowcase() {
+    if (_showcaseIndex < _showcaseKeys.length - 1) {
+      setState(() {
+        _showcaseIndex++;
+      });
+    } else {
+      _dismissShowcase();
+    }
+  }
+
+  void _dismissShowcase() {
+    setState(() {
+      _showcaseIndex = -1;
+      _isShowCaseActive = false;
+    });
+  }
+
+  List<GlobalKey> get _showcaseKeys => [
+        _familyKey,
+        _providerKey,
+        _noteKey,
+        _attachKey,
+        _submitKey,
+      ];
+
+  List<String> get _showcaseDescriptions => [
+        'tutorial.family_members.select'.tr(),
+        'tutorial.provider.select'.tr(),
+        'tutorial.note.hint'.tr(),
+        'tutorial.attachments.hint'.tr(),
+        'tutorial.submit.tap'.tr(),
+      ];
+
   @override
   Widget build(BuildContext context) {
-    return ShowCaseWidget(
-      builder: (context) => Scaffold(
+    return CustomShowcaseOverlay(
+      targetKeys: _showcaseKeys,
+      descriptions: _showcaseDescriptions,
+      currentIndex: _showcaseIndex,
+      onNext: _nextShowcase,
+      onDismiss: _dismissShowcase,
+      child: Scaffold(
         backgroundColor: AppColors.lightGreyClr,
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
@@ -145,13 +180,10 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                   title: 'approval_request.title'.tr(),
                   backPath: '/approval-history',
                   onHelp: () {
-                    ShowCaseWidget.of(context).startShowCase([
-                      _familyKey,
-                      _providerKey,
-                      _noteKey,
-                      _attachKey,
-                      _submitKey,
-                    ]);
+                    FocusScope.of(context).unfocus();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    _startShowcase();
                   },
                 ),
                 Expanded(
@@ -191,10 +223,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 12.h),
-                                    Showcase(
+                                    CustomShowcase(
                                       key: _familyKey,
-                                      description:
-                                          'tutorial.family_members.select'.tr(),
+                                      targetKey: _familyKey,
                                       child: FamilyMembersSelector(
                                         onMemberSelected: (member) {
                                           setState(() {
@@ -212,10 +243,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 8.h),
-                                    Showcase(
+                                    CustomShowcase(
                                       key: _providerKey,
-                                      description: 'tutorial.provider.select'
-                                          .tr(),
+                                      targetKey: _providerKey,
                                       child: ProviderSelector(
                                         onProviderSelected: (provider) {
                                           setState(() {
@@ -233,9 +263,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 8.h),
-                                    Showcase(
+                                    CustomShowcase(
                                       key: _noteKey,
-                                      description: 'tutorial.note.hint'.tr(),
+                                      targetKey: _noteKey,
                                       child: NoteTextField(
                                         maxLength: 300,
                                         controller: _noteController,
@@ -251,10 +281,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 21.h),
-                                    Showcase(
+                                    CustomShowcase(
                                       key: _attachKey,
-                                      description: 'tutorial.attachments.hint'
-                                          .tr(),
+                                      targetKey: _attachKey,
                                       child: AttachmentsSection(
                                         onAttachmentsChanged: (attachments) {
                                           setState(() {
@@ -283,9 +312,9 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 20.h),
-                                    Showcase(
+                                    CustomShowcase(
                                       key: _submitKey,
-                                      description: 'tutorial.submit.tap'.tr(),
+                                      targetKey: _submitKey,
                                       child:
                                           BlocConsumer<
                                             ApprovalRequestCubit,
@@ -296,8 +325,10 @@ class _ApprovalRequestScreenState extends State<ApprovalRequestScreen> {
                                                 initial: () {},
                                                 loading: () {},
                                                 success: (data) {
-                                                  // Refresh home data to show the new approval request
-                                                  _refreshHomeData();
+                                                  // Clear home cache to force refresh when user returns to home
+                                                  // This ensures HomeCubit will fetch fresh data instead of using cache
+                                                  CacheService.clearCache();
+                                                  // Show success dialog
                                                   SuccessDialog.show(context);
                                                   _resetForm();
                                                 },

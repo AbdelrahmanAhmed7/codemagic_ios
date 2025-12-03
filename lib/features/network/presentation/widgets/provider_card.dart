@@ -7,7 +7,7 @@ import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/features/network/data/network_provider_response_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
 
 class ProviderCard extends StatelessWidget {
   final NetworkProvider provider;
@@ -194,9 +194,9 @@ class ProviderCard extends StatelessWidget {
                           provider.mobile,
                           style: AppTextStyles.font12GreyRegular(context),
                         )
-                      : Showcase(
+                      : CustomShowcase(
                           key: phoneKey!,
-                          description: 'tutorial.network.call'.tr(),
+                          targetKey: phoneKey!,
                           child: Text(
                             provider.mobile,
                             style: AppTextStyles.font12GreyRegular(context),
@@ -206,9 +206,9 @@ class ProviderCard extends StatelessWidget {
                   // Details Button
                   navigateKey == null
                       ? _NavigateButton(onOpen: _openMaps)
-                      : Showcase(
+                      : CustomShowcase(
                           key: navigateKey!,
-                          description: 'tutorial.network.navigate'.tr(),
+                          targetKey: navigateKey!,
                           child: _NavigateButton(onOpen: _openMaps),
                         ),
                 ],

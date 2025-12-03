@@ -15,7 +15,7 @@ import 'package:mediconsult/features/profile/presentation/widgets/logout_dialog.
 import 'package:mediconsult/features/profile/presentation/widgets/profile_header_widget.dart';
 import 'package:mediconsult/features/profile/presentation/widgets/profile_section_widget.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
 // ignore_for_file: deprecated_member_use
 
 class ProfileScreen extends StatefulWidget {
@@ -34,6 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey _contactUsKey = GlobalKey();
   final GlobalKey _termsPrivacyKey = GlobalKey();
   final GlobalKey _logoutKey = GlobalKey();
+  
+  // Showcase state
+  bool _isShowCaseActive = false;
+  int _showcaseIndex = -1;
 
   @override
   void initState() {
@@ -95,10 +99,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void _startShowcase() {
+    setState(() {
+      _showcaseIndex = 0;
+      _isShowCaseActive = true;
+    });
+  }
+
+  void _nextShowcase() {
+    if (_showcaseIndex < _showcaseKeys.length - 1) {
+      setState(() {
+        _showcaseIndex++;
+      });
+    } else {
+      _dismissShowcase();
+    }
+  }
+
+  void _dismissShowcase() {
+    setState(() {
+      _showcaseIndex = -1;
+      _isShowCaseActive = false;
+    });
+  }
+
+  List<GlobalKey> get _showcaseKeys => [
+        _personalInfoKey,
+        _familyMembersKey,
+        _changePasswordKey,
+        _languageKey,
+        _faqKey,
+        _contactUsKey,
+        _termsPrivacyKey,
+        _logoutKey,
+      ];
+
+  List<String> get _showcaseDescriptions => [
+        'View and edit your personal information',
+        'Manage your family members',
+        'Change your account password',
+        'Change app language',
+        'View frequently asked questions',
+        'Contact us for support',
+        'View terms and privacy policy',
+        'Logout from your account',
+      ];
+
   @override
   Widget build(BuildContext context) {
-    return ShowCaseWidget(
-      builder: (context) => Scaffold(
+    return CustomShowcaseOverlay(
+      targetKeys: _showcaseKeys,
+      descriptions: _showcaseDescriptions,
+      currentIndex: _showcaseIndex,
+      onNext: _nextShowcase,
+      onDismiss: _dismissShowcase,
+      child: Scaffold(
         backgroundColor: AppColors.lightGreyClr,
         body: SafeArea(
           child: SingleChildScrollView(
@@ -109,16 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: 'profile.title'.tr(),
                   backPath: '/home',
                   onHelp: () {
-                    ShowCaseWidget.of(context).startShowCase([
-                      _personalInfoKey,
-                      _familyMembersKey,
-                      _changePasswordKey,
-                      _languageKey,
-                      _faqKey,
-                      _contactUsKey,
-                      _termsPrivacyKey,
-                      _logoutKey,
-                    ]);
+                    _startShowcase();
                   },
                 ),
                 Transform.translate(
@@ -148,20 +194,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ProfileSectionWidget(
                               title: 'profile.account'.tr(),
                               tiles: [
-                                Showcase(
+                                CustomShowcase(
                                   key: _personalInfoKey,
-                                  description: 'tutorial.profile.personal_info'
-                                      .tr(),
+                                  targetKey: _personalInfoKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.personal_information'.tr(),
                                     image: AppAssets.personal,
                                     route: '/personal-information',
                                   ),
                                 ),
-                                Showcase(
+                                CustomShowcase(
                                   key: _familyMembersKey,
-                                  description: 'tutorial.profile.family_members'
-                                      .tr(),
+                                  targetKey: _familyMembersKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.family_members'.tr(),
                                     image: AppAssets.familyMembers,
@@ -173,19 +217,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ProfileSectionWidget(
                               title: 'profile.settings'.tr(),
                               tiles: [
-                                Showcase(
+                                CustomShowcase(
                                   key: _changePasswordKey,
-                                  description:
-                                      'tutorial.profile.change_password'.tr(),
+                                  targetKey: _changePasswordKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.change_password'.tr(),
                                     image: AppAssets.change_password,
                                     route: '/change-password',
                                   ),
                                 ),
-                                Showcase(
+                                CustomShowcase(
                                   key: _languageKey,
-                                  description: 'tutorial.profile.language'.tr(),
+                                  targetKey: _languageKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.language'.tr(),
                                     image: AppAssets.language,
@@ -197,29 +240,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ProfileSectionWidget(
                               title: 'profile.help_support'.tr(),
                               tiles: [
-                                Showcase(
+                                CustomShowcase(
                                   key: _faqKey,
-                                  description: 'tutorial.profile.faq'.tr(),
+                                  targetKey: _faqKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.faq'.tr(),
                                     image: AppAssets.faq,
                                     route: '/faq',
                                   ),
                                 ),
-                                Showcase(
+                                CustomShowcase(
                                   key: _contactUsKey,
-                                  description: 'tutorial.profile.contact_us'
-                                      .tr(),
+                                  targetKey: _contactUsKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.contact_us'.tr(),
                                     image: AppAssets.contactUs,
                                     route: '/contact-us',
                                   ),
                                 ),
-                                Showcase(
+                                CustomShowcase(
                                   key: _termsPrivacyKey,
-                                  description: 'tutorial.profile.terms_privacy'
-                                      .tr(),
+                                  targetKey: _termsPrivacyKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.terms_privacy'.tr(),
                                     image: AppAssets.terms,
@@ -231,9 +272,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ProfileSectionWidget(
                               title: '',
                               tiles: [
-                                Showcase(
+                                CustomShowcase(
                                   key: _logoutKey,
-                                  description: 'tutorial.profile.log_out'.tr(),
+                                  targetKey: _logoutKey,
                                   child: ProfileTileWidget(
                                     title: 'profile.log_out'.tr(),
                                     image: AppAssets.logout,
