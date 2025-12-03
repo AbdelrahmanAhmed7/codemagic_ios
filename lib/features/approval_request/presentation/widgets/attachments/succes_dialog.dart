@@ -6,6 +6,7 @@ import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
+import 'package:mediconsult/core/cache/cache_service.dart';
 
 class SuccessDialog extends StatelessWidget {
   final String titleKey;
@@ -70,9 +71,15 @@ class SuccessDialog extends StatelessWidget {
                 height: 48.h,
                 child: AppButton(
                   text: buttonTextKey.tr(),
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop();
-                    context.go('/home'); 
+                    // Clear cache to force refresh
+                    await CacheService.clearCache();
+                    // Navigate to home - HomeScreen will refresh automatically
+                    // Using a unique path to force widget rebuild
+                    if (context.mounted) {
+                      context.go('/home?t=${DateTime.now().millisecondsSinceEpoch}');
+                    }
                   },
                 ),
               ),
@@ -83,6 +90,7 @@ class SuccessDialog extends StatelessWidget {
     );
   }
   
+
   // Helper method to show the dialog for approval
   static void show(BuildContext context) {
     showDialog(

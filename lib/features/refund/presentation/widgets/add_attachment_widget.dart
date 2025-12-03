@@ -385,14 +385,18 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
   }
 
   void _confirmDelete(int index) async {
-    // إخفاء الكيبورد قبل فتح الـ dialog
+    // إخفاء الكيبورد والـ focus قبل فتح الـ dialog
+    FocusManager.instance.primaryFocus?.unfocus();
     FocusScope.of(context).unfocus();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+    
+    // Wait a bit to ensure keyboard is fully hidden
+    await Future.delayed(const Duration(milliseconds: 100));
 
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
-      builder: (context) {
+      builder: (dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.r),
@@ -431,10 +435,11 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        // إخفاء الكيبورد عند الضغط على Cancel
-                        FocusScope.of(context).unfocus();
+                        // إخفاء الكيبورد والـ focus عند الضغط على Cancel
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        FocusScope.of(dialogContext).unfocus();
                         SystemChannels.textInput.invokeMethod('TextInput.hide');
-                        Navigator.pop(context, false);
+                        Navigator.pop(dialogContext, false);
                       },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColors.lightGreyClr),
@@ -453,10 +458,11 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // إخفاء الكيبورد عند الضغط على Delete
-                        FocusScope.of(context).unfocus();
+                        // إخفاء الكيبورد والـ focus عند الضغط على Delete
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        FocusScope.of(dialogContext).unfocus();
                         SystemChannels.textInput.invokeMethod('TextInput.hide');
-                        Navigator.pop(context, true);
+                        Navigator.pop(dialogContext, true);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.errorClr,
@@ -479,10 +485,24 @@ class _AddAttachmentWidgetState extends State<AddAttachmentWidget> {
       },
     );
 
-    // إخفاء الكيبورد بعد إغلاق الـ dialog
+    // إخفاء الكيبورد والـ focus بعد إغلاق الـ dialog
+    // Use delay to ensure dialog is fully closed before clearing focus
+    await Future.delayed(const Duration(milliseconds: 150));
+    
     if (mounted) {
+      // Clear focus multiple ways to ensure it's removed
+      FocusManager.instance.primaryFocus?.unfocus();
       FocusScope.of(context).unfocus();
       SystemChannels.textInput.invokeMethod('TextInput.hide');
+      
+      // Additional check after another frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          FocusManager.instance.primaryFocus?.unfocus();
+          FocusScope.of(context).unfocus();
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
+        }
+      });
     }
 
     if (confirmed == true) {

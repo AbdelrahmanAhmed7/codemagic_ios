@@ -12,7 +12,7 @@ import 'package:mediconsult/features/chronic_medicines/widgets/month_header.dart
 import 'package:mediconsult/features/chronic_medicines/widgets/monthly_medicines_selector.dart';
 import 'package:mediconsult/features/chronic_medicines/widgets/upcoming_lab_card.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
 // ignore_for_file: deprecated_member_use
 
 class ChronicMedicinesScreen extends StatefulWidget {
@@ -26,6 +26,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
   final GlobalKey<LabResultsUploadState> _labKey = GlobalKey();
   final GlobalKey _familyKey = GlobalKey();
   final GlobalKey _saveKey = GlobalKey();
+  
+  // Showcase state
+  int _showcaseIndex = -1;
 
   Future<void> _onSave() async {
     final isComplete = _labKey.currentState?.isComplete ?? false;
@@ -45,10 +48,47 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
     }
   }
 
+  void _startShowcase() {
+    setState(() {
+      _showcaseIndex = 0;
+    });
+  }
+
+  void _nextShowcase() {
+    if (_showcaseIndex < _showcaseKeys.length - 1) {
+      setState(() {
+        _showcaseIndex++;
+      });
+    } else {
+      _dismissShowcase();
+    }
+  }
+
+  void _dismissShowcase() {
+    setState(() {
+      _showcaseIndex = -1;
+    });
+  }
+
+  List<GlobalKey> get _showcaseKeys => [
+        _familyKey,
+        _saveKey,
+      ];
+
+  List<String> get _showcaseDescriptions => [
+        'tutorial.family_members.select'.tr(),
+        'tutorial.save.tap'.tr(),
+      ];
+
   @override
   Widget build(BuildContext context) {
-    return ShowCaseWidget(
-      builder: (context) => Scaffold(
+    return CustomShowcaseOverlay(
+      targetKeys: _showcaseKeys,
+      descriptions: _showcaseDescriptions,
+      currentIndex: _showcaseIndex,
+      onNext: _nextShowcase,
+      onDismiss: _dismissShowcase,
+      child: Scaffold(
         backgroundColor: AppColors.lightGreyClr,
         body: SafeArea(
           child: SingleChildScrollView(
@@ -59,9 +99,7 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                   title: 'chronic_medicines.title'.tr(),
                   backPath: '/home',
                   onHelp: () {
-                    ShowCaseWidget.of(
-                      context,
-                    ).startShowCase([_familyKey, _saveKey]);
+                    _startShowcase();
                   },
                 ),
                 Transform.translate(
@@ -105,10 +143,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                               ],
                             ),
                             SizedBox(height: 12.h),
-                            Showcase(
+                            CustomShowcase(
                               key: _familyKey,
-                              description: 'tutorial.family_members.select'
-                                  .tr(),
+                              targetKey: _familyKey,
                               child: const FamilyMembersSelector(),
                             ),
                             SizedBox(height: 24.h),
@@ -195,9 +232,9 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
                               ),
                             ),
                             SizedBox(height: 20.h),
-                            Showcase(
+                            CustomShowcase(
                               key: _saveKey,
-                              description: 'tutorial.save.tap'.tr(),
+                              targetKey: _saveKey,
                               child: SizedBox(
                                 width: double.infinity,
                                 height: 48.h,

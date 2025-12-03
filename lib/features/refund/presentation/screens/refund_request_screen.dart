@@ -19,7 +19,7 @@ import 'package:mediconsult/features/refund/presentation/widgets/refund_form_fie
 import 'package:mediconsult/features/refund/presentation/widgets/refund_type_selector.dart';
 import 'package:mediconsult/shared/widgets/app_snack_bar.dart';
 import 'package:mediconsult/shared/widgets/page_header.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:mediconsult/shared/widgets/custom_showcase.dart';
 // ignore_for_file: deprecated_member_use
 
 class RefundRequestScreen extends StatefulWidget {
@@ -49,14 +49,29 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
 
   // Showcase keys
   final GlobalKey _familyKey = GlobalKey();
-  final GlobalKey _submitKey = GlobalKey();
+  final GlobalKey _typeKey = GlobalKey();
   final GlobalKey _providerKey = GlobalKey();
+  final GlobalKey _reasonKey = GlobalKey();
+  final GlobalKey _amountKey = GlobalKey();
+  final GlobalKey _dateKey = GlobalKey();
   final GlobalKey _noteKey = GlobalKey();
   final GlobalKey _attachKey = GlobalKey();
+  final GlobalKey _submitKey = GlobalKey();
+  final GlobalKey _scrollViewKey = GlobalKey();
+  
+  // Scroll controller for auto-scrolling during ShowCase
+  final ScrollController _scrollController = ScrollController();
+  
+  // Flag to track if ShowCase is active
+  bool _isShowCaseActive = false;
+  int _showcaseIndex = -1; // -1 means showcase is not active
 
   void _unfocusAll() {
-    FocusScope.of(context).unfocus();
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    if (!_isShowCaseActive) {
+      FocusScope.of(context).unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
   }
 
   @override
@@ -66,6 +81,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     _noteController.dispose();
     _amountFocusNode.dispose();
     _noteFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -222,16 +238,201 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
     }
   }
 
+  void _startShowcase() {
+    // Unfocus all fields and hide keyboard before starting ShowCase
+    FocusManager.instance.primaryFocus?.unfocus();
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    
+    setState(() {
+      _showcaseIndex = 0;
+      _isShowCaseActive = true;
+    });
+    
+    // Auto-scroll to first item
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _isShowCaseActive) {
+        _scrollToShowCaseTarget(_showcaseKeys[0]);
+      }
+    });
+  }
+
+  void _nextShowcase() {
+    if (_showcaseIndex < _showcaseKeys.length - 1) {
+      setState(() {
+        _showcaseIndex++;
+      });
+      
+      // Auto-scroll to current item
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _isShowCaseActive) {
+          _scrollToShowCaseTarget(_showcaseKeys[_showcaseIndex]);
+        }
+      });
+    } else {
+      _dismissShowcase();
+    }
+  }
+
+  void _dismissShowcase() {
+    setState(() {
+      _showcaseIndex = -1;
+      _isShowCaseActive = false;
+    });
+    // Ensure focus is cleared after ShowCase
+    FocusManager.instance.primaryFocus?.unfocus();
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
+  List<GlobalKey> get _showcaseKeys => [
+        _familyKey,
+        _typeKey,
+        _providerKey,
+        _reasonKey,
+        _amountKey,
+        _dateKey,
+        _noteKey,
+        _attachKey,
+        _submitKey,
+      ];
+
+  List<String> get _showcaseDescriptions => [
+        'tutorial.family_members.select'.tr(),
+        'tutorial.refund_type.select'.tr(),
+        'tutorial.provider.select'.tr(),
+        'tutorial.reason.select'.tr(),
+        'tutorial.amount.enter'.tr(),
+        'tutorial.date.select'.tr(),
+        'tutorial.note.hint'.tr(),
+        'tutorial.attachments.hint'.tr(),
+        'tutorial.submit.tap'.tr(),
+      ];
+
+  void _scrollToShowCaseTarget(GlobalKey key) {
+    if (!mounted || !_isShowCaseActive) return;
+    
+    // Wait for scroll controller to be ready
+    if (!_scrollController.hasClients) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted && _isShowCaseActive) {
+          _scrollToShowCaseTarget(key);
+        }
+      });
+      return;
+    }
+
+    final BuildContext? targetContext = key.currentContext;
+    if (targetContext == null) {
+      // Retry if context is not available yet
+      Future.delayed(const Duration(milliseconds: 150), () {
+        if (mounted && _isShowCaseActive) {
+          _scrollToShowCaseTarget(key);
+        }
+      });
+      return;
+    }
+
+    // Use manual scrolling directly - more reliable with ShowCaseWidget
+    _manualScrollToTarget(targetContext);
+  }
+
+  void _manualScrollToTarget(BuildContext targetContext) {
+    if (!_scrollController.hasClients || !mounted || !_isShowCaseActive) return;
+    
+    final RenderObject? targetRenderObject = targetContext.findRenderObject();
+    if (targetRenderObject == null || targetRenderObject is! RenderBox) {
+      return;
+    }
+
+    final targetBox = targetRenderObject;
+    final scrollViewContext = _scrollViewKey.currentContext;
+    
+    if (scrollViewContext == null) return;
+    
+    final RenderObject? scrollRenderObject = scrollViewContext.findRenderObject();
+    if (scrollRenderObject == null || scrollRenderObject is! RenderBox) {
+      return;
+    }
+
+    final scrollBox = scrollRenderObject;
+    
+    // Get global positions
+    final targetGlobalPos = targetBox.localToGlobal(Offset.zero);
+    final scrollGlobalPos = scrollBox.localToGlobal(Offset.zero);
+    
+    // Calculate where the target is relative to the scroll view's visible top
+    // This is the position in screen coordinates
+    final targetRelativeToScrollView = targetGlobalPos.dy - scrollGlobalPos.dy;
+    
+    final currentScroll = _scrollController.position.pixels;
+    
+    // Calculate desired position (25% from top of visible viewport)
+    final screenHeight = MediaQuery.of(context).size.height;
+    final safeAreaTop = MediaQuery.of(context).padding.top;
+    final desiredScreenY = screenHeight * 0.25 + safeAreaTop;
+    
+    // The target's position in the scrollable content coordinate system
+    // = current scroll offset + where it appears relative to scroll view top
+    final targetInScrollContent = currentScroll + targetRelativeToScrollView;
+    
+    // To place target at desiredScreenY, we need:
+    // newScroll + (target position in content - newScroll) = desiredScreenY
+    // Simplifying: targetInScrollContent - newScroll = desiredScreenY - scrollGlobalPos.dy
+    // So: newScroll = targetInScrollContent - (desiredScreenY - scrollGlobalPos.dy)
+    final scrollViewTopOnScreen = scrollGlobalPos.dy;
+    final newScroll = targetInScrollContent - (desiredScreenY - scrollViewTopOnScreen);
+    
+    // Clamp to valid range
+    final scrollPosition = _scrollController.position;
+    final clamped = newScroll.clamp(
+      scrollPosition.minScrollExtent,
+      scrollPosition.maxScrollExtent,
+    );
+    
+    // Scroll if needed (more than 5 pixels difference)
+    final scrollDiff = (clamped - currentScroll).abs();
+    if (scrollDiff > 5) {
+      // Use jumpTo for immediate positioning, then smooth animate
+      _scrollController.jumpTo(clamped);
+      
+      // Smooth animation after a brief delay
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted && _isShowCaseActive && _scrollController.hasClients) {
+          try {
+            _scrollController.animateTo(
+              clamped,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+            );
+          } catch (e) {
+            // Ignore errors during animation
+          }
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ShowCaseWidget(
-      builder: (context) => Scaffold(
+    return CustomShowcaseOverlay(
+      targetKeys: _showcaseKeys,
+      descriptions: _showcaseDescriptions,
+      currentIndex: _showcaseIndex,
+      onNext: _nextShowcase,
+      onDismiss: _dismissShowcase,
+      child: Scaffold(
         backgroundColor: AppColors.lightGreyClr,
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
           onTap: _unfocusAll,
           child: SafeArea(
             child: SingleChildScrollView(
+              key: _scrollViewKey,
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -239,15 +440,16 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                     title: 'refund_request.title'.tr(),
                     backPath: '/home',
                     onHelp: () {
+                      // Unfocus all fields and hide keyboard before starting ShowCase
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      FocusScope.of(context).unfocus();
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      
                       // استخدام addPostFrameCallback للتأكد من بناء كل الـ widgets
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ShowCaseWidget.of(context).startShowCase([
-                          _familyKey,
-                          _providerKey,
-                          _noteKey,
-                          _attachKey,
-                          _submitKey,
-                        ]);
+                        if (mounted) {
+                          _startShowcase();
+                        }
                       });
                     },
                   ),
@@ -278,11 +480,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 12.h),
-                              Showcase(
+                              CustomShowcase(
                                 key: _familyKey,
-                                description: 'tutorial.family_members.select'
-                                    .tr()
-                                    .tr(),
+                                targetKey: _familyKey,
                                 child: FamilyMembersSelector(
                                   onMemberSelected: (member) {
                                     setState(() {
@@ -297,21 +497,25 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 8.h),
-                              GestureDetector(
-                                onTap: _unfocusAll,
-                                child: RefundTypeSelector(
-                                  selectedTypeId: _selectedRefundTypeId,
-                                  onTypeSelected: (type) {
-                                    _unfocusAll();
-                                    setState(() {
-                                      _selectedRefundTypeId = type.id;
-                                      _selectedRefundTypeName = type.name;
-                                      _selectedRefundAttachments =
-                                          type.attachments;
-                                      _attachmentPaths = [];
-                                      _hasAllRequiredAttachments = false;
-                                    });
-                                  },
+                              CustomShowcase(
+                                key: _typeKey,
+                                targetKey: _typeKey,
+                                child: GestureDetector(
+                                  onTap: _unfocusAll,
+                                  child: RefundTypeSelector(
+                                    selectedTypeId: _selectedRefundTypeId,
+                                    onTypeSelected: (type) {
+                                      _unfocusAll();
+                                      setState(() {
+                                        _selectedRefundTypeId = type.id;
+                                        _selectedRefundTypeName = type.name;
+                                        _selectedRefundAttachments =
+                                            type.attachments;
+                                        _attachmentPaths = [];
+                                        _hasAllRequiredAttachments = false;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 16.h),
@@ -320,9 +524,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 8.h),
-                              Showcase(
+                              CustomShowcase(
                                 key: _providerKey,
-                                description: 'tutorial.provider.select'.tr(),
+                                targetKey: _providerKey,
                                 child: TextField(
                                   controller: _providerController,
                                   autofocus: false,
@@ -388,56 +592,79 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 8.h),
-                              GestureDetector(
-                                onTap: _unfocusAll,
-                                child: ReasonSelector(
-                                  selectedReasonId: _selectedReasonId,
-                                  onReasonSelected: (id, name) {
-                                    _unfocusAll();
-                                    setState(() {
-                                      _selectedReasonId = id;
-                                    });
-                                  },
+                              CustomShowcase(
+                                key: _reasonKey,
+                                targetKey: _reasonKey,
+                                child: GestureDetector(
+                                  onTap: _unfocusAll,
+                                  child: ReasonSelector(
+                                    selectedReasonId: _selectedReasonId,
+                                    onReasonSelected: (id, name) {
+                                      _unfocusAll();
+                                      setState(() {
+                                        _selectedReasonId = id;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 16.h),
                               Row(
                                 children: [
                                   Expanded(
-                                    child: RefundAmountField(
-                                      controller: _amountController,
-                                      focusNode: _amountFocusNode,
-                                      errorText: _amountError,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          final text = value.trim();
-                                          if (text.isEmpty) {
-                                            _amountError =
-                                                'refund_request.validation.enter_amount'
-                                                    .tr();
-                                          } else {
-                                            final amount = double.tryParse(
-                                              text,
-                                            );
-                                            if (amount == null ||
-                                                amount < 1 ||
-                                                amount > 100000) {
-                                              _amountError =
-                                                  'refund_request.validation.amount_range'
-                                                      .tr();
-                                            } else {
-                                              _amountError = null;
-                                            }
+                                    child: CustomShowcase(
+                                      key: _amountKey,
+                                      targetKey: _amountKey,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (!_isShowCaseActive) {
+                                            _amountFocusNode.requestFocus();
                                           }
-                                        });
-                                      },
+                                        },
+                                        child: AbsorbPointer(
+                                          absorbing: _isShowCaseActive,
+                                          child: RefundAmountField(
+                                            controller: _amountController,
+                                            focusNode: _amountFocusNode,
+                                            errorText: _amountError,
+                                            onChanged: (value) {
+                                              if (_isShowCaseActive) return;
+                                              setState(() {
+                                                final text = value.trim();
+                                                if (text.isEmpty) {
+                                                  _amountError =
+                                                      'refund_request.validation.enter_amount'
+                                                          .tr();
+                                                } else {
+                                                  final amount = double.tryParse(
+                                                    text,
+                                                  );
+                                                  if (amount == null ||
+                                                      amount < 1 ||
+                                                      amount > 100000) {
+                                                    _amountError =
+                                                        'refund_request.validation.amount_range'
+                                                            .tr();
+                                                  } else {
+                                                    _amountError = null;
+                                                  }
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 16.w),
                                   Expanded(
-                                    child: RefundDatePicker(
-                                      selectedDate: _selectedDate,
-                                      onTap: _selectDate,
+                                    child: CustomShowcase(
+                                      key: _dateKey,
+                                      targetKey: _dateKey,
+                                      child: RefundDatePicker(
+                                        selectedDate: _selectedDate,
+                                        onTap: _selectDate,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -448,29 +675,40 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 style: AppTextStyles.font14BlackMedium(context),
                               ),
                               SizedBox(height: 8.h),
-                              Showcase(
+                              CustomShowcase(
                                 key: _noteKey,
-                                description: 'tutorial.note.hint'.tr(),
-                                child: NoteTextField(
-                                  controller: _noteController,
-                                  focusNode: _noteFocusNode,
-                                  maxLength: 300,
-                                  errorText: _noteError,
-                                  onChanged: (value) {
-                                    if (_noteError != null &&
-                                        value.length <= 300) {
-                                      setState(() {
-                                        _noteError = null;
-                                      });
+                                targetKey: _noteKey,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (!_isShowCaseActive) {
+                                      _noteFocusNode.requestFocus();
                                     }
                                   },
+                                  child: AbsorbPointer(
+                                    absorbing: _isShowCaseActive,
+                                    child: NoteTextField(
+                                      controller: _noteController,
+                                      focusNode: _noteFocusNode,
+                                      maxLength: 300,
+                                      errorText: _noteError,
+                                      onChanged: (value) {
+                                        if (_isShowCaseActive) return;
+                                        if (_noteError != null &&
+                                            value.length <= 300) {
+                                          setState(() {
+                                            _noteError = null;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 16.h),
                               // إظهار attachments section دايماً للـ showcase (مخفية لو مش محدد type)
-                              Showcase(
+                              CustomShowcase(
                                 key: _attachKey,
-                                description: 'tutorial.attachments.hint'.tr(),
+                                targetKey: _attachKey,
                                 child: Visibility(
                                   visible:
                                       _selectedRefundTypeId != null &&
@@ -501,9 +739,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                                 ),
                               ),
                               SizedBox(height: 20.h),
-                              Showcase(
+                              CustomShowcase(
                                 key: _submitKey,
-                                description: 'tutorial.submit.tap'.tr(),
+                                targetKey: _submitKey,
                                 child:
                                     BlocConsumer<
                                       RefundRequestCubit,

@@ -26,16 +26,69 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // call home info when the screen is opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkPermissionsAndLoadData();
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  bool _hasLoadedOnce = false;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Refresh when app comes to foreground
+    if (state == AppLifecycleState.resumed && _hasLoadedOnce) {
+      _refreshIfNeeded();
+    }
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Always refresh when dependencies change if we've loaded data at least once
+    // This ensures data is refreshed when returning to this screen
+    if (_hasLoadedOnce) {
+      // Use a small delay to ensure navigation is complete
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          _refreshIfNeeded();
+        }
+      });
+    }
+  }
+
+  void _refreshIfNeeded() {
+    // Always refresh when called - don't check time threshold
+    // This ensures data is always fresh when returning to home screen
+    if (_hasLoadedOnce && mounted) {
+      final cubit = context.read<HomeCubit>();
+      final state = cubit.state;
+      // Only refresh if we have loaded data (not initial/loading state)
+      state.when(
+        initial: () {},
+        loading: () {},
+        loaded: (_) {
+          // Refresh data when returning to home screen to show newly created approval requests
+          cubit.refreshHomeInfo(LanguageHelper.getLanguageCode(context));
+        },
+        failed: (_) {},
+      );
+    }
   }
   
   Future<void> _checkPermissionsAndLoadData() async {
@@ -61,6 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               /// when the data is loaded, show the page with the real data
               loaded: (model) {
+                // Mark that we've loaded data at least once
+                if (!_hasLoadedOnce) {
+                  _hasLoadedOnce = true;
+                }
                 final data = model.data;
                 return RefreshIndicator(
                   onRefresh: () async {

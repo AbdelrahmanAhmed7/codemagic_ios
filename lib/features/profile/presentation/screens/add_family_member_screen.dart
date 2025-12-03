@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
@@ -18,8 +19,8 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _nationalIdController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  String _selectedRelationship = 'Spouse';
-  String _selectedGender = 'Male';
+  String _selectedRelationship = 'spouse';
+  String _selectedGender = 'male';
 
   @override
   void dispose() {
@@ -37,7 +38,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageHeader(title: 'Add Member', backPath: '/family-members'),
+            PageHeader(title: 'family_members.add_member'.tr(), backPath: '/family-members'),
             Expanded(
               child: Transform.translate(
                 offset: Offset(0, -20.h),
@@ -124,7 +125,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
             ),
           ),
           SizedBox(height: 8.h),
-          Text('Add Member photo', style: AppTextStyles.font14BlackMedium(context)),
+          Text('family_members.add_member_photo'.tr(), style: AppTextStyles.font14BlackMedium(context)),
         ],
       ),
     );
@@ -135,52 +136,52 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ProfileAppTextField(
-          label: 'Full Name',
+          label: 'family_members.full_name'.tr(),
           controller: _nameController,
           isRequired: true,
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Full name is required';
+              return 'family_members.validation.full_name_required'.tr();
             }
             return null;
           },
         ),
         SizedBox(height: 16.h),
         ProfileAppTextField(
-          label: 'National ID',
+          label: 'family_members.national_id'.tr(),
           controller: _nationalIdController,
           isRequired: true,
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'National ID is required';
+              return 'family_members.validation.national_id_required'.tr();
             }
             if (value.length < 14) {
-              return 'National ID must be 14 digits';
+              return 'family_members.validation.national_id_length'.tr();
             }
             return null;
           },
         ),
         SizedBox(height: 16.h),
         AppDateField(
-          label: 'Date of Birth',
+          label: 'family_members.date_of_birth'.tr(),
           controller: _dobController,
           isRequired: true,
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Date of birth is required';
+              return 'family_members.validation.dob_required'.tr();
             }
             return null;
           },
         ),
         SizedBox(height: 16.h),
         AppDropdownField<String>(
-          label: 'Relationship',
+          label: 'family_members.relationship'.tr(),
           value: _selectedRelationship,
-          items: const [
-            DropdownMenuItem(value: 'Spouse', child: Text('Spouse')),
-            DropdownMenuItem(value: 'Son', child: Text('Son')),
-            DropdownMenuItem(value: 'Daughter', child: Text('Daughter')),
-            DropdownMenuItem(value: 'Parent', child: Text('Parent')),
+          items: [
+            DropdownMenuItem(value: 'spouse', child: Text('family_members.relationships.spouse'.tr())),
+            DropdownMenuItem(value: 'son', child: Text('family_members.relationships.son'.tr())),
+            DropdownMenuItem(value: 'daughter', child: Text('family_members.relationships.daughter'.tr())),
+            DropdownMenuItem(value: 'parent', child: Text('family_members.relationships.parent'.tr())),
           ],
           onChanged: (value) {
             setState(() {
@@ -190,7 +191,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
           isRequired: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Relationship is required';
+              return 'family_members.validation.relationship_required'.tr();
             }
             return null;
           },
@@ -206,7 +207,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
           isRequired: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Gender is required';
+              return 'family_members.validation.gender_required'.tr();
             }
             return null;
           },
@@ -221,7 +222,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
       child: Column(
         children: [
           AppButton(
-            text: 'Add Member',
+            text: 'family_members.add_member'.tr(),
             onPressed: _addFamilyMember,
           ),
           SizedBox(height: 12.h),
@@ -236,7 +237,7 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
                   side: BorderSide(color: AppColors.greyClr),
                 ),
               ),
-              child: Text('Cancel', style: AppTextStyles.font14BlackMedium(context)),
+              child: Text('family_members.cancel'.tr(), style: AppTextStyles.font14BlackMedium(context)),
             ),
           ),
         ],
@@ -258,8 +259,8 @@ class _AddFamilyMemberScreenState extends State<AddFamilyMemberScreen> {
       
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Family member added successfully!'),
+        SnackBar(
+          content: Text('family_members.success_message'.tr()),
           backgroundColor: Colors.green,
         ),
       );

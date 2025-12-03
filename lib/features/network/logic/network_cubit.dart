@@ -118,13 +118,14 @@ class NetworkCubit extends Cubit<NetworkState> {
   /// Only shows dialog if permission is not already granted
   /// Handles "Allow Once" case: if permission was granted but now denied, it means "Allow Once" expired
   Future<void> requestLocationWithDialog(BuildContext context) async {
-    // Check permission status first
+    // Check permission status first - this is the critical check to prevent repeated dialogs
     LocationPermission permission = await Geolocator.checkPermission();
     
     // If permission is already granted (whileInUse or always), get location directly
+    // DO NOT show dialog in this case
     if (permission == LocationPermission.whileInUse || 
         permission == LocationPermission.always) {
-      // Permission already granted, get location directly
+      // Permission already granted, get location directly without showing dialog
       await getUserLocation();
       // If location retrieved successfully, load providers
       if (_userLatitude != null && _userLongitude != null) {
@@ -133,13 +134,13 @@ class NetworkCubit extends Cubit<NetworkState> {
         // Location failed, load random providers
         _loadRandomProviders(context);
       }
-      return;
+      return; // Exit early - do not show dialog
     }
     
     // If permission is denied forever, don't show dialog again
     if (permission == LocationPermission.deniedForever) {
       _loadRandomProviders(context);
-      return;
+      return; // Exit early - do not show dialog
     }
     
     // Permission is denied or not determined
@@ -156,7 +157,22 @@ class NetworkCubit extends Cubit<NetworkState> {
       _userLongitude = null;
     }
     
-    // Show dialog to request permission
+    // Double-check permission status before showing dialog (defensive programming)
+    // This ensures we never show the dialog if permission was granted between checks
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.whileInUse || 
+        permission == LocationPermission.always) {
+      // Permission was granted between checks, get location directly
+      await getUserLocation();
+      if (_userLatitude != null && _userLongitude != null) {
+        await searchProviders(resetPage: true, context: context);
+      } else {
+        _loadRandomProviders(context);
+      }
+      return; // Exit early - do not show dialog
+    }
+    
+    // Only show dialog if permission is still not granted
     await LocationPermissionDialog.show(
       context,
       onEnablePressed: () async {
@@ -213,22 +229,29 @@ class NetworkCubit extends Cubit<NetworkState> {
       // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
 
-      // Handle "Allow Once" case: if permission was granted before but now is denied,
-      // it means user chose "Allow Once" previously
-      if (permission == LocationPermission.denied) {
-        // Check if we have cached location from previous "Allow Once" session
-        // If not, request permission again (user might choose "Allow Once" again or grant permanently)
+      // If permission is already granted, skip requesting and go directly to getting location
+      if (permission == LocationPermission.whileInUse || 
+          permission == LocationPermission.always) {
+        // Permission already granted, proceed to get location
+      } else if (permission == LocationPermission.deniedForever) {
+        // Permission denied forever, cannot get location
+        emit(const NetworkState.locationPermissionDenied());
+        return;
+      } else if (permission == LocationPermission.denied) {
+        // Permission denied, request it
+        // Handle "Allow Once" case: if permission was granted before but now is denied,
+        // it means user chose "Allow Once" previously
         permission = await Geolocator.requestPermission();
 
         if (permission == LocationPermission.denied) {
           emit(const NetworkState.locationPermissionDenied());
           return;
         }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        emit(const NetworkState.locationPermissionDenied());
-        return;
+        
+        if (permission == LocationPermission.deniedForever) {
+          emit(const NetworkState.locationPermissionDenied());
+          return;
+        }
       }
 
       // Get current position with timeout
