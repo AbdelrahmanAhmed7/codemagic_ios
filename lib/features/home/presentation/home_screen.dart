@@ -46,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   bool _hasLoadedOnce = false;
-  DateTime? _lastRefreshTime;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -57,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  String? _previousRoute;
 
   @override
   void didChangeDependencies() {
@@ -87,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         loaded: (_) {
           // Refresh data when returning to home screen to show newly created approval requests
           cubit.refreshHomeInfo(LanguageHelper.getLanguageCode(context));
-          _lastRefreshTime = DateTime.now();
         },
         failed: (_) {},
       );
@@ -120,7 +117,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 // Mark that we've loaded data at least once
                 if (!_hasLoadedOnce) {
                   _hasLoadedOnce = true;
-                  _lastRefreshTime = DateTime.now();
                 }
                 final data = model.data;
                 return RefreshIndicator(

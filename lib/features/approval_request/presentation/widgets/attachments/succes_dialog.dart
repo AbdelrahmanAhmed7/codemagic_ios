@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mediconsult/core/constants/app_assets.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
 import 'package:mediconsult/core/utils/app_button.dart';
-import 'package:mediconsult/features/home/presentation/cubit/cubit/home_cubit.dart';
-import 'package:mediconsult/core/utils/language_helper.dart';
-import 'package:mediconsult/core/di/service_locator.dart';
 import 'package:mediconsult/core/cache/cache_service.dart';
 
 class SuccessDialog extends StatelessWidget {

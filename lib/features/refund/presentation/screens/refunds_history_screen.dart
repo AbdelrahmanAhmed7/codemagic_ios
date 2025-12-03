@@ -30,7 +30,6 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   final GlobalKey _fabKey = GlobalKey();
   
   // Showcase state
-  bool _isShowCaseActive = false;
   int _showcaseIndex = -1;
 
   @override
@@ -69,7 +68,6 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   void _startShowcase() {
     setState(() {
       _showcaseIndex = 0;
-      _isShowCaseActive = true;
     });
   }
 
@@ -86,7 +84,6 @@ class _RefundHistoryScreenState extends State<RefundHistoryScreen> {
   void _dismissShowcase() {
     setState(() {
       _showcaseIndex = -1;
-      _isShowCaseActive = false;
     });
   }
 

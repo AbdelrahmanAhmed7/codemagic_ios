@@ -345,7 +345,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       return;
     }
 
-    final targetBox = targetRenderObject as RenderBox;
+    final targetBox = targetRenderObject;
     final scrollViewContext = _scrollViewKey.currentContext;
     
     if (scrollViewContext == null) return;
@@ -355,7 +355,7 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
       return;
     }
 
-    final scrollBox = scrollRenderObject as RenderBox;
+    final scrollBox = scrollRenderObject;
     
     // Get global positions
     final targetGlobalPos = targetBox.localToGlobal(Offset.zero);

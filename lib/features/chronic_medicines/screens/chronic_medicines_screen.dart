@@ -28,7 +28,6 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
   final GlobalKey _saveKey = GlobalKey();
   
   // Showcase state
-  bool _isShowCaseActive = false;
   int _showcaseIndex = -1;
 
   Future<void> _onSave() async {
@@ -52,7 +51,6 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
   void _startShowcase() {
     setState(() {
       _showcaseIndex = 0;
-      _isShowCaseActive = true;
     });
   }
 
@@ -69,7 +67,6 @@ class _ChronicMedicinesScreenState extends State<ChronicMedicinesScreen> {
   void _dismissShowcase() {
     setState(() {
       _showcaseIndex = -1;
-      _isShowCaseActive = false;
     });
   }
 

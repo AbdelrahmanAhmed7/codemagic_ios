@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconsult/core/theming/app_colors.dart';
 import 'package:mediconsult/core/theming/app_text_styles.dart';
-import 'dart:ui' as ui;
 
 /// Custom showcase widget that wraps a target widget
 /// The actual highlighting is done by CustomShowcaseOverlay
@@ -109,8 +108,6 @@ class _CustomShowcaseOverlayState extends State<CustomShowcaseOverlay>
     final Offset targetPosition = targetBox.localToGlobal(Offset.zero);
 
     final screenSize = MediaQuery.of(context).size;
-    final safeAreaTop = MediaQuery.of(context).padding.top;
-    final safeAreaBottom = MediaQuery.of(context).padding.bottom;
 
     return Stack(
       children: [
@@ -157,7 +154,7 @@ class _CustomShowcaseOverlayState extends State<CustomShowcaseOverlay>
                     borderRadius: BorderRadius.circular(16.r),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
+                        color: Colors.black.withValues(alpha: 0.15),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),

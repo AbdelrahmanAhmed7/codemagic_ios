@@ -36,7 +36,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey _logoutKey = GlobalKey();
   
   // Showcase state
-  bool _isShowCaseActive = false;
   int _showcaseIndex = -1;
 
   @override
@@ -102,7 +101,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _startShowcase() {
     setState(() {
       _showcaseIndex = 0;
-      _isShowCaseActive = true;
     });
   }
 
@@ -119,7 +117,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _dismissShowcase() {
     setState(() {
       _showcaseIndex = -1;
-      _isShowCaseActive = false;
     });
   }
 
