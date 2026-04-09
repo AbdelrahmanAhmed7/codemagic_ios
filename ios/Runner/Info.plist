@@ -1,116 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>MediConsult App</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>mediconsult</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<true/>
+	<key>FirebaseMessagingAutoInitEnabled</key>
+	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>CFBundleDevelopmentRegion</key>
-		<string>$(DEVELOPMENT_LANGUAGE)</string>
-		<key>CFBundleDisplayName</key>
-		<string>Mediconsult</string>
-		<key>CFBundleIconName</key>
-		<string>AppIcon</string>
-		<key>CFBundleExecutable</key>
-		<string>$(EXECUTABLE_NAME)</string>
-		<key>CFBundleIdentifier</key>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-		<key>CFBundleInfoDictionaryVersion</key>
-		<string>6.0</string>
-		<key>CFBundleName</key>
-		<string>mediconsult</string>
-		<key>CFBundlePackageType</key>
-		<string>APPL</string>
-		<key>CFBundleShortVersionString</key>
-		<string>$(FLUTTER_BUILD_NAME)</string>
-		<key>CFBundleSignature</key>
-		<string>????</string>
-		<key>CFBundleVersion</key>
-		<string>$(FLUTTER_BUILD_NUMBER)</string>
-		<key>LSRequiresIPhoneOS</key>
-		<true/>
-		<key>UILaunchStoryboardName</key>
-		<string>LaunchScreen</string>
-		<key>UIMainStoryboardFile</key>
-		<string>Main</string>
-		<key>UISupportedInterfaceOrientations</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
-		</array>
-		<key>UISupportedInterfaceOrientations~ipad</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationPortraitUpsideDown</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
-		</array>
-		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true/>
-		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true/>
-		<key>UIStatusBarHidden</key>
-		<false/>
-		<key>NSCameraUsageDescription</key>
-		<string>This app requires camera access to take photos for attachments.</string>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app requires photo library access to upload attachments.</string>
-		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>This app requires permission to save photos for document uploads.</string>
-		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>This app requires location access to find nearby healthcare providers.</string>
-		<!-- Removed NSLocationAlwaysUsageDescription - not needed, only using whenInUse -->
-		
-		<!-- Firebase Configuration -->
-		<key>FirebaseCrashlyticsCollectionEnabled</key>
-		<true/>
-		<key>FirebaseMessagingAutoInitEnabled</key>
-		<true/>
-		
-		<!-- App Store Configuration -->
-		<key>ITSAppUsesNonExemptEncryption</key>
-		<false/>
-		
-		<!-- Network Security -->
-		<key>NSAppTransportSecurity</key>
+		<key>NSExceptionDomains</key>
 		<dict>
-			<!-- Removed NSAllowsArbitraryLoads - App Store rejects apps with this -->
-			<!-- Only allow specific exceptions if absolutely necessary -->
-			<key>NSExceptionDomains</key>
+			<key>mediconsulteg.com</key>
 			<dict>
-				<key>mediconsulteg.com</key>
-				<dict>
-					<key>NSIncludesSubdomains</key>
-					<true/>
-					<key>NSExceptionRequiresForwardSecrecy</key>
-					<false/>
-				</dict>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
 			</dict>
 		</dict>
-		
-		<!-- Push Notifications -->
-		<key>UIBackgroundModes</key>
-		<array>
-			<string>fetch</string>
-			<string>remote-notification</string>
-		</array>
-		
-		<!-- Additional Permissions (only include if actually used) -->
-		<!-- Removed unused permissions to avoid App Store rejection:
-		     - NSMicrophoneUsageDescription (not used)
-		     - NSContactsUsageDescription (not used)
-		     - NSCalendarsUsageDescription (not used)
-		     - NSRemindersUsageDescription (not used)
-		     - File Sharing (not needed)
-		-->
-		
-		<!-- Location Accuracy (iOS 14+) -->
-		<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-		<dict>
-			<key>FindProviders</key>
-			<string>Allow location access to find nearby healthcare providers</string>
-		</dict>
-		
-		<!-- Network Usage -->
-		<key>NSLocalNetworkUsageDescription</key>
-		<string>This app requires network access to connect to healthcare services.</string>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app does not use calendar access. This permission is required by system libraries.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires camera access to take photos for attachments.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This app does not use contacts access. This permission is required by system libraries.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app requires network access to connect to healthcare services.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app requires location access to find nearby healthcare providers. We only use location when the app is in use.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>FindProviders</key>
+		<string>Allow location access to find nearby healthcare providers</string>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires location access to find nearby healthcare providers.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app requires permission to save photos for document uploads.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires photo library access to upload attachments.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
 </plist>
