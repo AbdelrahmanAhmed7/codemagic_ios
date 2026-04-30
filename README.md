@@ -177,3 +177,4 @@ flutter build ios --release
 
 للاستفسارات والدعم الفني، يرجى التواصل مع فريق التطوير.
 # codemagic_ios
+# codemagic_ios
