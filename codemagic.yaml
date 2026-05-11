@@ -27,6 +27,8 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.mediconsulteg.com
+        provisioning_profile: $PROVISIONING_PROFILE
+        certificate: $CERTIFICATE_PRIVATE_KEY
 
     triggering:
       events:
