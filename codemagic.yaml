@@ -1,0 +1,94 @@
+workflows:
+  ios-release:
+    name: iOS Release - App Store
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      # -------------------------------------------------------
+      # Environment variables — set these in Codemagic dashboard
+      # under App Settings > Environment variables
+      # -------------------------------------------------------
+      # APP_STORE_CONNECT_ISSUER_ID       → App Store Connect > Users > Keys > Issuer ID
+      # APP_STORE_CONNECT_KEY_IDENTIFIER  → Key ID from the same page
+      # APP_STORE_CONNECT_PRIVATE_KEY     → Content of the .p8 file (paste as multiline)
+      # CERTIFICATE_PRIVATE_KEY           → Private key of your Distribution certificate
+      groups:
+        - app_store_credentials   # group containing the 4 vars above
+      vars:
+        BUNDLE_ID: "com.mediconsulteg.com"
+        XCODE_WORKSPACE: "ios/Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+        APP_STORE_APPLE_ID: "6744910718"  # your numeric App ID from App Store Connect
+
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mediconsulteg.com
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: "v*"
+          include: true
+
+    scripts:
+      # 1. Flutter dependencies
+      - name: Get Flutter packages
+        script: flutter pub get
+
+      # 2. Install CocoaPods dependencies
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install --repo-update
+
+      # 3. Set build number from Codemagic build number
+      - name: Set build number
+        script: |
+          BUILD_NUMBER=$PROJECT_BUILD_NUMBER
+          cd ios
+          agvtool new-version -all $BUILD_NUMBER
+
+      # 4. Build Flutter iOS release
+      - name: Build iOS release
+        script: |
+          flutter build ios --release --no-codesign
+
+      # 5. Code sign and create IPA
+      - name: Create IPA
+        script: |
+          xcode-project use-profiles
+          xcodebuild \
+            -workspace "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/Runner.xcarchive" \
+            archive \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=S8BLT67G9A
+          xcode-project build-ipa \
+            --workspace "$XCODE_WORKSPACE" \
+            --archive-path "$CM_BUILD_DIR/Runner.xcarchive"
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+
+    publishing:
+      app_store_connect:
+        auth: integration  # uses APP_STORE_CONNECT_* vars from environment
+        submit_to_testflight: true
+        submit_to_app_store: false  # change to true when ready for full release
+        beta_groups:
+          - "Internal Testers"
+      email:
+        recipients:
+          - abdelrahmandev7@gmail.com
+        notify:
+          success: true
+          failure: true
