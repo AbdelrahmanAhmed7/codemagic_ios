@@ -81,9 +81,11 @@ workflows:
 
     publishing:
       app_store_connect:
-        auth: integration  # uses APP_STORE_CONNECT_* vars from environment
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
-        submit_to_app_store: false  # change to true when ready for full release
+        submit_to_app_store: false
         beta_groups:
           - "Internal Testers"
       email:
