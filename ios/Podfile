@@ -63,8 +63,8 @@ post_install do |installer|
       end
       
       # Code Signing - Add Development Team for all Pods (including Privacy Extensions)
-      config.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
-      config.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
+      config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+      config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
       config.build_settings['DEVELOPMENT_TEAM'] = 'T44DDJPM9D'
       
       # Architecture settings
