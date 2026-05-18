@@ -375,7 +375,10 @@ class PushNotificationService {
   Future<void> _setupTokenHandling() async {
     try {
       // Get initial token
-      _currentToken = await _messaging.getToken();
+      _currentToken = await _messaging.getToken().timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => null,
+      );
       if (_currentToken != null) {
         if (kDebugMode) debugPrint('FCM Token: $_currentToken');
         _tokenController.add(_currentToken!);

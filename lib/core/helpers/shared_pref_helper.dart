@@ -45,7 +45,11 @@ class SharedPrefHelper {
 
   // ---------------------- Flutter Secure Storage ----------------------
 
-  static const _secureStorage = FlutterSecureStorage();
+  static const _secureStorage = FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+    ),
+  );
 
   static Future<void> setSecuredString(String key, String value) async {
     if (kDebugMode) debugPrint("SecureStorage : set $key = $value");

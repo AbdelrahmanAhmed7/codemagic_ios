@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -29,19 +31,11 @@ Future<void> main() async {
   // تهيئة خدمات Firebase
   await FirebaseCrashlyticsService.instance.initialize();
 
-  // إرسال رسالة اختبار لتفعيل Crashlytics Console
-  await FirebaseCrashlyticsService.instance.log(
-    'App started successfully - ${DateTime.now()}',
+  unawaited(
+    FirebaseCrashlyticsService.instance.log(
+      'App started successfully - ${DateTime.now()}',
+    ),
   );
-
-  // إرسال خطأ اختبار لتفعيل Dashboard (فقط في Release mode)
-  if (!kDebugMode) {
-    await FirebaseCrashlyticsService.instance.sendTestError();
-  }
-
-  await ConnectivityService.instance.initialize();
-
-  await PushNotificationService.instance.initialize();
 
   await Future.wait<void>([
     setupServiceLocator(),
@@ -49,20 +43,6 @@ Future<void> main() async {
     checkOnboardingStatus(),
   ]);
 
-  // Send Firebase token if user is logged in
-  if (isLoggedInUser) {
-    // Get saved language or use default 'ar'
-    final savedLocale = await SharedPrefHelper.getString('locale');
-    final lang = (savedLocale.isEmpty) ? 'ar' : savedLocale;
-
-    // Send token in background (non-blocking)
-    FirebaseTokenService.instance.sendTokenToBackend(lang);
-
-    // Listen to token refresh and send to backend
-    FirebaseTokenService.instance.listenToTokenRefresh(lang);
-  }
-
-  // Get saved language for EasyLocalization
   final savedLocale = await SharedPrefHelper.getString('locale');
   final startLocale = savedLocale.isNotEmpty
       ? Locale(savedLocale)
@@ -73,12 +53,33 @@ Future<void> main() async {
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: startLocale, // Use saved locale
+      startLocale: startLocale,
       useOnlyLangCode: true,
       saveLocale: true,
       child: const MediConsultApp(),
     ),
   );
+
+  // Non-critical services — must not block first frame (native splash removal).
+  unawaited(_initializePostLaunchServices(savedLocale));
+}
+
+Future<void> _initializePostLaunchServices(String savedLocale) async {
+  if (!kDebugMode) {
+    unawaited(FirebaseCrashlyticsService.instance.sendTestError());
+  }
+
+  unawaited(ConnectivityService.instance.initialize());
+
+  final pushReady = await PushNotificationService.instance
+      .initialize()
+      .timeout(const Duration(seconds: 15), onTimeout: () => false);
+
+  if (!pushReady || !isLoggedInUser) return;
+
+  final lang = savedLocale.isEmpty ? 'ar' : savedLocale;
+  unawaited(FirebaseTokenService.instance.sendTokenToBackend(lang));
+  FirebaseTokenService.instance.listenToTokenRefresh(lang);
 }
 
 checkIfLoggedInUser() async {
@@ -111,7 +112,13 @@ Future<void> _clearDataOnReinstall() async {
   final hasInstalledBefore = prefs.getBool(key) ?? false;
 
   if (!hasInstalledBefore) {
-    await SharedPrefHelper.clearAllSecuredData();
+    try {
+      await SharedPrefHelper.clearAllSecuredData().timeout(
+        const Duration(seconds: 5),
+      );
+    } catch (_) {
+      // Keychain can hang on iOS if access groups mismatch; don't block launch.
+    }
     await SharedPrefHelper.clearAllData();
 
     await prefs.setBool(key, true);

@@ -11,7 +11,7 @@
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.mediconsult.app</string>
+		<string>$(AppIdentifierPrefix)com.mediconsulteg.com</string>
 	</array>
 </dict>
 </plist>

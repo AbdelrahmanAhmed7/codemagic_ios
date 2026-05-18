@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '10939381120',
     projectId: 'mediconsultapp-b1fc9',
     storageBucket: 'mediconsultapp-b1fc9.firebasestorage.app',
-    iosBundleId: 'com.mediconsult.app',
+    iosBundleId: 'com.mediconsulteg.com',
   );
 
 }
