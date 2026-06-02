@@ -124,12 +124,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     ),
                                   ),
                                   const TextSpan(
-                                    text: 'Medi',
+                                    text: 'MCI Egypt',
                                     style: TextStyle(color: Colors.blue),
-                                  ),
-                                  const TextSpan(
-                                    text: 'Consult',
-                                    style: TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),

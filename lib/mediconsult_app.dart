@@ -17,7 +17,7 @@ class MediConsultApp extends StatelessWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
-        title: 'MediConsult',
+        title: 'MCI Egypt',
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,

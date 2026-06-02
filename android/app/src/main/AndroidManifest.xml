@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     
     <application
-        android:label="mediconsult"
+        android:label="MCI Egypt"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
