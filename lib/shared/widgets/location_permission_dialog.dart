@@ -6,12 +6,10 @@ import 'package:easy_localization/easy_localization.dart';
 
 class LocationPermissionDialog extends StatelessWidget {
   final VoidCallback? onEnablePressed;
-  final VoidCallback? onMaybeLaterPressed;
 
   const LocationPermissionDialog({
     super.key,
     this.onEnablePressed,
-    this.onMaybeLaterPressed,
   });
 
   @override
@@ -20,9 +18,7 @@ class LocationPermissionDialog extends StatelessWidget {
       canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          // Handle back button press - treat it as "Maybe Later"
-          Navigator.of(context).pop();
-          onMaybeLaterPressed?.call();
+          // Back button does nothing — user must press Continue
         }
       },
       child: Dialog(
@@ -90,7 +86,7 @@ class LocationPermissionDialog extends StatelessWidget {
             
             SizedBox(height: 32.h),
             
-            // Enable Location Access Button
+            // Continue Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -112,32 +108,6 @@ class LocationPermissionDialog extends StatelessWidget {
                 ),
               ),
             ),
-            
-            SizedBox(height: 12.h),
-            
-            // Maybe Later Button
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  onMaybeLaterPressed?.call();
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-                child: Text(
-                  'location_permission.maybe_later'.tr(),
-                  style: AppTextStyles.font14GreyRegular(context).copyWith(
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -156,7 +126,6 @@ class LocationPermissionDialog extends StatelessWidget {
       barrierDismissible: false,
       builder: (context) => LocationPermissionDialog(
         onEnablePressed: onEnablePressed,
-        onMaybeLaterPressed: onMaybeLaterPressed,
       ),
     );
   }

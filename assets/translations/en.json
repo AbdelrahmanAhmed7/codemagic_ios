@@ -650,7 +650,7 @@
   "location_permission": {
     "title": "Allow Location Access",
     "message": "Allow MCI Mobile to access your location to quickly find doctors, hospitals, and pharmacies within your area.",
-    "enable_button": "Enable Location Access",
+    "enable_button": "Continue",
     "maybe_later": "MAYBE LATER"
   }
 }
