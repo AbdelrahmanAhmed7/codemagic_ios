@@ -47,9 +47,9 @@ dependencies:
   cached_network_image: ^3.4.1
   
   # Firebase Services
-  firebase_core: ^4.1.1
-  firebase_messaging: ^16.0.3
-  firebase_crashlytics: ^5.0.4
+  firebase_core: ^4.10.0
+  firebase_messaging: ^16.3.0
+  firebase_crashlytics: ^5.2.3
   
   # Location & Maps
   latlong2: ^0.9.1
